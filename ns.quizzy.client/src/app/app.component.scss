@@ -4,11 +4,21 @@
     text-align: center;
 }
 
-th, td {
+th,
+td {
     padding-left: 1rem;
     padding-right: 1rem;
 }
 
 table {
     margin: 0 auto;
+}
+
+.logo-container {
+    display: flex;
+
+    .logo {
+        margin: 0 auto;
+        max-height: 3.125em;
+    }
 }

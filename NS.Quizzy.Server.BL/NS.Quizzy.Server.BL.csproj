@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NS.Quizzy.Server.DAL\NS.Quizzy.Server.DAL.csproj" />
+    <ProjectReference Include="..\NS.Quizzy.Server.Models\NS.Quizzy.Server.Models.csproj" />
+  </ItemGroup>
+
+</Project>

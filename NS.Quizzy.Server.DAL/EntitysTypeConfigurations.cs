@@ -1,0 +1,194 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+using NS.Quizzy.Server.DAL.Attributes;
+using NS.Quizzy.Server.DAL.Entities;
+using NS.Security;
+using System.Reflection;
+
+namespace NS.Quizzy.Server.DAL
+{
+    internal static class EntitysTypeConfigurations
+    {
+        private static readonly SecurityLogic _securityLogic = new("678rfrgf789plkfmk_NS.Quizzy.Server.DAL_890kjnfdd66");
+
+        internal static void SetConfigurations(this ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ClassEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ExamEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ClassExamEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ExamTypeEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionnaireEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var entity = modelBuilder.Entity(entityType.ClrType);
+                int columnOrder = 1;
+                foreach (var property in entityType.GetProperties())
+                {
+                    var columnOrderAttribute = property.PropertyInfo?.GetCustomAttribute<DBColumnOrderAttribute>();
+                    entity.Property(property.Name).HasColumnOrder(columnOrderAttribute?.Order ?? columnOrder++);
+                }
+            }
+        }
+
+        internal abstract class BaseEntityTypeConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity
+        {
+            public virtual void Configure(EntityTypeBuilder<TEntity> entity)
+            {
+                entity
+                      .HasKey(x => x.Id);
+                entity
+                    .Property(x => x.Id)
+                    .HasColumnType("uniqueidentifier")
+                    .ValueGeneratedOnAdd()
+                    .HasDefaultValueSql("(NewId())");
+
+                entity
+                    .Property(p => p.CreatedTime)
+                    .ValueGeneratedOnAdd()
+                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+                entity
+                    .Property(p => p.ModifiedTime)
+                    .ValueGeneratedOnAdd()
+                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+                entity
+                    .Property(p => p.IsDeleted)
+                    .HasDefaultValue(false);
+            }
+        }
+
+        internal class UserEntityConfiguration : BaseEntityTypeConfiguration<User>
+        {
+            public override void Configure(EntityTypeBuilder<User> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Users");
+
+                entity.HasIndex(p => p.Email).IsUnique(true);
+                entity.Property(e => e.Email).IsRequired(true);
+                entity
+                    .Property(e => e.Password)
+                    .HasConversion(v => UsersPasswordToDBValue(v), dbv => UsersPasswordFromDBValue(dbv));
+                entity.Property(e => e.FullName).IsRequired(true);
+                entity.HasData(InitialData.UserEntityData.GetData());
+            }
+            private static string UsersPasswordFromDBValue(string dbValue)
+            {
+                if (string.IsNullOrWhiteSpace(dbValue))
+                {
+                    return string.Empty;
+                }
+                return _securityLogic.Decrypt(dbValue);
+            }
+
+            private static string UsersPasswordToDBValue(string value)
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return string.Empty;
+                }
+                return _securityLogic.Encrypt(value);
+            }
+        }
+
+        internal class ClassEntityConfiguration : BaseEntityTypeConfiguration<Class>
+        {
+            public override void Configure(EntityTypeBuilder<Class> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Classes");
+
+                entity.HasIndex(p => p.Name).IsUnique(true);
+                entity
+                    .HasOne(c => c.Parent)
+                    .WithMany(c => c.Children)
+                    .HasForeignKey(c => c.ParentId);
+
+                entity.HasData(InitialData.ClassEntityData.GetData());
+
+            }
+        }
+
+        internal class ExamEntityConfiguration : BaseEntityTypeConfiguration<Exam>
+        {
+            public override void Configure(EntityTypeBuilder<Exam> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Exams");
+
+                entity
+                    .HasOne(c => c.Questionnaire)
+                    .WithMany(c => c.Exams)
+                    .HasForeignKey(c => c.QuestionnaireId);
+            }
+        }
+
+        internal class ClassExamEntityConfiguration : BaseEntityTypeConfiguration<ClassExam>
+        {
+            public override void Configure(EntityTypeBuilder<ClassExam> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("ClassExams");
+
+                entity
+                    .HasOne(c => c.Exam)
+                    .WithMany(c => c.ClassExams)
+                    .HasForeignKey(c => c.ExamId);
+
+                entity
+                    .HasOne(c => c.Class)
+                    .WithMany(c => c.ClassExams)
+                    .HasForeignKey(c => c.ClassId);
+            }
+        }
+
+        internal class ExamTypeEntityConfiguration : BaseEntityTypeConfiguration<ExamType>
+        {
+            public override void Configure(EntityTypeBuilder<ExamType> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("ExamTypes");
+                entity.HasIndex(p => p.Name).IsUnique(true);
+                entity.Property(p => p.Name).IsRequired(true);
+
+                entity.HasData(InitialData.ExamTypeEntityData.GetData());
+            }
+        }
+
+        internal class QuestionnaireEntityConfiguration : BaseEntityTypeConfiguration<Questionnaire>
+        {
+            public override void Configure(EntityTypeBuilder<Questionnaire> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Questionnaires");
+                entity.HasIndex(p => p.Number).IsUnique(true);
+                entity.Property(p => p.Number).IsRequired(true);
+                entity.Property(p => p.SubjectId).IsRequired(true);
+                entity.Property(p => p.Duration).IsRequired(true);
+                entity.Property(p => p.DurationWithExtra).IsRequired(true);
+
+                entity
+                  .HasOne(c => c.Subject)
+                  .WithMany(c => c.Questionnaires)
+                  .HasForeignKey(c => c.SubjectId);
+
+            }
+        }
+
+        internal class SubjectEntityConfiguration : BaseEntityTypeConfiguration<Subject>
+        {
+            public override void Configure(EntityTypeBuilder<Subject> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Subjects");
+                entity.HasIndex(p => p.Name).IsUnique(true);
+                entity.Property(p => p.Name).IsRequired(true);
+
+                entity.HasData(InitialData.SubjectEntityData.GetData());
+
+            }
+        }
+    }
+}
