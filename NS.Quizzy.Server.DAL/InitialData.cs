@@ -6,7 +6,7 @@ namespace NS.Quizzy.Server.DAL
     {
         public static readonly DateTime StartActionTime = DateTime.Now;
         public static readonly Guid SystemUserId = Guid.Parse("4320E74B-5821-4A30-94B7-CC88DDDC45EE");
-        public static readonly Guid AdminUserId = Guid.Parse("B900D543-90AB-4E7A-83BA-B961918DCC8C");
+
         public static class UserEntityData
         {
             public static readonly User systemUser = new()
@@ -21,7 +21,7 @@ namespace NS.Quizzy.Server.DAL
             };
             public static readonly User adminUser = new()
             {
-                Id = AdminUserId,
+                Id = Guid.Parse("B900D543-90AB-4E7A-83BA-B961918DCC8C"),
                 Password = "30496^#3267%$",
                 FullName = "Admin",
                 Email = "Nashef90@Gmail.com",

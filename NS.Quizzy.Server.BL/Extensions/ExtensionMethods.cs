@@ -15,6 +15,7 @@ namespace NS.Quizzy.Server.BL.Extensions
         {
             services.AddQuizzyDALServices();
 
+            services.AddHttpContextAccessor();
             services.AddSingleton<JwtHelper>();
             var jwtHelper = services.BuildServiceProvider().GetRequiredService<JwtHelper>();
             services
@@ -37,6 +38,7 @@ namespace NS.Quizzy.Server.BL.Extensions
                         // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                         ClockSkew = TimeSpan.Zero,
                     };
+
                     options.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = context =>
@@ -48,13 +50,29 @@ namespace NS.Quizzy.Server.BL.Extensions
                         {
                             Console.WriteLine("Token validated successfully");
                             return Task.CompletedTask;
+                        },
+                        OnMessageReceived = context =>
+                        {
+                            var token = context.Request.Cookies[Consts.AUTH_TOKEN_KEY];
+                            if (string.IsNullOrEmpty(token))
+                            {
+                                token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                            }
+
+                            if (!string.IsNullOrEmpty(token))
+                            {
+                                context.Token = token;
+                            }
+
+                            Console.WriteLine("Custom token retrieval logic executed");
+                            return Task.CompletedTask;
                         }
                     };
                 });
 
             services.AddScoped<IClassExamService, ClassExamService>();
             services.AddScoped<IClassService, ClassService>();
-            services.AddScoped<IExamService, ExamService>();
+            services.AddScoped<IExamsService, ExamsService>();
             services.AddScoped<IExamTypeService, ExamTypeService>();
             services.AddScoped<IQuestionnaireService, QuestionnaireService>();
             services.AddScoped<ISubjectService, SubjectService>();
