@@ -8,14 +8,15 @@ import { RootComponent } from './coponents/root/root.component';
 import { ExamListFilterComponent } from './coponents/exam-list-filter/exam-list-filter.component';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatInputModule } from '@angular/material/input';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
-  MatDialogModule, MatButtonModule
+  MatDialogModule, MatButtonModule, MatInputModule
 ];
 
 @NgModule({
@@ -34,6 +35,8 @@ const matModules = [
   providers: [
     provideHttpClient(),
   ],
-  bootstrap: [RootComponent]
+  bootstrap: [
+    RootComponent
+  ]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ExamListFilterComponent } from '../exam-list-filter/exam-list-filter.component';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-exams',
@@ -10,21 +10,16 @@ import { ExamListFilterComponent } from '../exam-list-filter/exam-list-filter.co
 export class ExamsComponent {
 
   constructor(
-    private readonly dialog: MatDialog,
+    private readonly dialogService: DialogService,
   ) { }
 
   openFilter() {
-    const dialogRef = this.dialog.open(ExamListFilterComponent, {
-      height: '80vh',
-      width: '80vw',
-      disableClose: true,
-    });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   // if (result !== undefined) {
-    //   //   // this.animal.set(result);
-    //   // }
-    // });
+    const dialogRef = this.dialogService.openExamListFilterDialog()
+      .then(result => {
+        console.log('The dialog was closed');
+        if (result !== undefined) {
+          // this.animal.set(result);
+        }
+      });
   }
 }
