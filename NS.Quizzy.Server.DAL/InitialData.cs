@@ -9,7 +9,7 @@ namespace NS.Quizzy.Server.DAL
         public static readonly Guid AdminUserId = Guid.Parse("B900D543-90AB-4E7A-83BA-B961918DCC8C");
         public static class UserEntityData
         {
-            public static readonly User SystemUser = new()
+            public static readonly User systemUser = new()
             {
                 Id = SystemUserId,
                 Password = "$Ns#Quizzy*(@2024&",
@@ -19,7 +19,7 @@ namespace NS.Quizzy.Server.DAL
                 ModifiedTime = StartActionTime,
                 IsDeleted = true,
             };
-            public static readonly User AdminUser = new()
+            public static readonly User adminUser = new()
             {
                 Id = AdminUserId,
                 Password = "30496^#3267%$",
@@ -29,12 +29,23 @@ namespace NS.Quizzy.Server.DAL
                 ModifiedTime = StartActionTime,
                 IsDeleted = false,
             };
+            public static readonly User sajiUser = new()
+            {
+                Id = Guid.Parse("2325B8AE-F12A-43D8-BE46-7041E57C9283"),
+                Password = "BTWhVV8jqmP95G0w",
+                FullName = "Saji Nashef",
+                Email = "saji.nashef@gmail.com",
+                CreatedTime = StartActionTime,
+                ModifiedTime = StartActionTime,
+                IsDeleted = false,
+            };
             public static List<User> GetData()
             {
                 return
                 [
-                    SystemUser,
-                    AdminUser
+                    systemUser,
+                    adminUser,
+                    sajiUser
                 ];
             }
         }

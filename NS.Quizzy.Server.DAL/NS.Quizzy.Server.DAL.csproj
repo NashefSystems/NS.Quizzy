@@ -21,6 +21,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
 		<PackageReference Include="NS.Security" Version="1.0.0" />
+		<PackageReference Include="NS.Shared.EFDBAudit" Version="1.0.3" />
 		<PackageReference Include="QRCoder" Version="1.6.0" />
 	</ItemGroup>
 

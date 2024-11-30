@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NS.Shared.EFDBAudit.Extentions;
 
 namespace NS.Quizzy.Server.DAL.Extensions
 {
     public static class ExtensionMethods
     {
-        public static IServiceCollection AddDALServices(this IServiceCollection services)
+        public static IServiceCollection AddQuizzyDALServices(this IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(
+            services.AddDbContextWithNSDBAudit<AppDbContext>(
                 (provider, options) =>
                 {
                     var configuration = provider.GetRequiredService<IConfiguration>();
