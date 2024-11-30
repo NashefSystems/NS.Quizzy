@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.BL.MappingProfiles;
 using NS.Quizzy.Server.BL.Services;
 using NS.Quizzy.Server.DAL.Extensions;
 
@@ -14,6 +16,7 @@ namespace NS.Quizzy.Server.BL.Extensions
         public static IServiceCollection AddQuizzyBLServices(this IServiceCollection services)
         {
             services.AddQuizzyDALServices();
+            services.AddMappingProfiles();
 
             services.AddHttpContextAccessor();
             services.AddSingleton<JwtHelper>();
@@ -71,11 +74,11 @@ namespace NS.Quizzy.Server.BL.Extensions
                 });
 
             services.AddScoped<IClassExamService, ClassExamService>();
-            services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<IClassesService, ClassesService>();
             services.AddScoped<IExamsService, ExamsService>();
-            services.AddScoped<IExamTypeService, ExamTypeService>();
-            services.AddScoped<IQuestionnaireService, QuestionnaireService>();
-            services.AddScoped<ISubjectService, SubjectService>();
+            services.AddScoped<IExamTypesService, ExamTypesService>();
+            services.AddScoped<IQuestionnairesService, QuestionnairesService>();
+            services.AddScoped<ISubjectsService, SubjectsService>();
             services.AddScoped<IAccountService, AccountService>();
 
             return services;
@@ -91,6 +94,19 @@ namespace NS.Quizzy.Server.BL.Extensions
             //app.UseAuthorization();
 
             return app;
+        }
+
+        private static IServiceCollection AddMappingProfiles(this IServiceCollection services)
+        {
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            return services;
         }
     }
 }

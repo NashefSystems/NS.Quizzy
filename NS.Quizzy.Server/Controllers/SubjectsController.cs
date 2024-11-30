@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.Models.DTOs;
 using NS.Quizzy.Server.Models.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,12 +14,20 @@ namespace NS.Quizzy.Server.Controllers
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
-    public class SecureController : ControllerBase
+    public class SubjectsController : ControllerBase
     {
-        [HttpGet("data")]
-        public IActionResult GetData()
+        private readonly ISubjectsService _service;
+        public SubjectsController(ISubjectsService service)
         {
-            return Ok(new { Message = "This is a secure endpoint" });
+            _service = service;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<SubjectDto>>> GetAllAsync()
+        {
+            var res = await _service.GetAllAsync();
+            return Ok(res);
         }
     }
 }

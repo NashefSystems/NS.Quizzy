@@ -27,7 +27,6 @@ namespace NS.Quizzy.Server.DAL
                 Email = "Nashef90@Gmail.com",
                 CreatedTime = StartActionTime,
                 ModifiedTime = StartActionTime,
-                IsDeleted = false,
             };
             public static readonly User sajiUser = new()
             {
@@ -37,7 +36,6 @@ namespace NS.Quizzy.Server.DAL
                 Email = "saji.nashef@gmail.com",
                 CreatedTime = StartActionTime,
                 ModifiedTime = StartActionTime,
-                IsDeleted = false,
             };
             public static List<User> GetData()
             {
@@ -74,7 +72,6 @@ namespace NS.Quizzy.Server.DAL
                         ItemOrder = i + 1,
                         CreatedTime = StartActionTime,
                         ModifiedTime = StartActionTime,
-                        IsDeleted = true,
                     });
                 }
                 return res;
@@ -119,7 +116,6 @@ namespace NS.Quizzy.Server.DAL
                         ItemOrder = i + 1,
                         CreatedTime = StartActionTime,
                         ModifiedTime = StartActionTime,
-                        IsDeleted = true,
                     });
                 }
                 return res;
@@ -192,7 +188,6 @@ namespace NS.Quizzy.Server.DAL
                         ParentId = parentId,
                         CreatedTime = StartActionTime,
                         ModifiedTime = StartActionTime,
-                        IsDeleted = true,
                     });
                 }
                 return res;

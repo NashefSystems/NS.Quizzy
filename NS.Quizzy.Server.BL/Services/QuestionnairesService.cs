@@ -8,29 +8,29 @@ using System.Threading.Tasks;
 
 namespace NS.Quizzy.Server.BL.Services
 {
-    internal class SubjectService : ISubjectService
+    internal class QuestionnairesService : IQuestionnairesService
     {
         public Task DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<SubjectDto>> GetAllAsync()
+        public Task<List<QuestionnaireDto>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<SubjectDto> GetAsync(Guid id)
+        public Task<QuestionnaireDto> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<SubjectDto> InsertAsync(SubjectDto model)
+        public Task<QuestionnaireDto> InsertAsync(QuestionnaireDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<SubjectDto> UpdateAsync(Guid id, SubjectDto model)
+        public Task<QuestionnaireDto> UpdateAsync(Guid id, QuestionnaireDto model)
         {
             throw new NotImplementedException();
         }

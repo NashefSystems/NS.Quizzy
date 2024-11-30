@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NS.Quizzy.Server.BL.Services
 {
-    internal class ExamTypeService : IExamTypeService
+    internal class ExamTypesService : IExamTypesService
     {
         public Task DeleteAsync(Guid id)
         {

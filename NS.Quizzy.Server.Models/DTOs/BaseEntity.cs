@@ -1,13 +1,10 @@
-﻿namespace NS.Quizzy.Server.Models.DTOs
+﻿using Newtonsoft.Json;
+
+namespace NS.Quizzy.Server.Models.DTOs
 {
     public class BaseEntityDto
     {
+        [JsonProperty(Order = int.MinValue)]
         public Guid Id { get; set; }
-
-        public DateTimeOffset CreatedTime { get; set; }
-
-        public DateTimeOffset ModifiedTime { get; set; }
-
-        public bool IsDeleted { get; set; }
     }
 }

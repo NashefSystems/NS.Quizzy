@@ -1,0 +1,222 @@
+@font-face {
+    font-family: ploni-demi-bold;
+    src: url(../../assets/fonts/ploni-demibold-aaa.otf) format("opentype");
+  }
+
+  @font-face {
+    font-family: ploni-bold;
+    src: url(../../assets/fonts/ploni-bold-aaa.otf) format("opentype");
+  }
+
+  @font-face {
+    font-family: ibm-plex-sans-hebrew-bold;
+    src: url(../../assets/fonts/IBMPlexSansHebrew-Bold.ttf) format("truetype");
+  }
+
+  @font-face {
+    font-family: ibm-plex-sans-hebrew-medium;
+    src: url(../../assets/fonts/IBMPlexSansHebrew-Medium.ttf) format("truetype");
+  }
+
+  @font-face {
+    font-family: ibm-plex-sans-hebrew-regular;
+    src: url(../../assets/fonts/IBMPlexSansHebrew-Regular.ttf) format("truetype");
+  }
+
+  // Heading
+  .H600 {
+    font-family: ploni-demi-bold;
+    font-size: 3rem;
+    line-height: 95%;
+    letter-spacing: -0.06rem;
+  }
+
+  .H500 {
+    font-family: ploni-demi-bold;
+    font-size: 2.5rem;
+    line-height: 100%;
+    letter-spacing: 0;
+  }
+
+  .H400 {
+    font-family: ploni-demi-bold;
+    font-size: 2rem;
+    line-height: 100%;
+    letter-spacing: 0;
+  }
+
+  .H300 {
+    font-family: ploni-demi-bold;
+    font-size: 1.5rem;
+    line-height: 100%;
+    letter-spacing: 0;
+  }
+
+  .H200 {
+    font-family: ploni-demi-bold;
+    font-size: 1.25rem;
+    line-height: 100%;
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+
+  .H100 {
+    font-family: ploni-demi-bold;
+    font-size: 1rem;
+    line-height: 110%;
+    letter-spacing: 0;
+  }
+
+  //Paragraph
+  .P300-B {
+    font-family: ibm-plex-sans-hebrew-bold;
+    font-size: 1rem;
+    line-height: 130%;
+    letter-spacing: 0%;
+  }
+
+  .P300-M {
+    font-family: ibm-plex-sans-hebrew-medium;
+    font-size: 1rem;
+    line-height: 130%;
+    letter-spacing: 0%;
+  }
+
+  .P300 {
+    font-family: ibm-plex-sans-hebrew-regular;
+    font-size: 1rem;
+    line-height: 130%;
+    letter-spacing: 0%;
+  }
+
+  .P200-B {
+    font-family: ibm-plex-sans-hebrew-bold;
+    font-size: 0.875rem;
+    line-height: 130%;
+    letter-spacing: 1%;
+    font-weight: 700;
+  }
+
+  .P200-M {
+    font-family: ibm-plex-sans-hebrew-medium;
+    font-size: 0.875rem;
+    line-height: 130%;
+    letter-spacing: 1%;
+    font-weight: 500;
+  }
+
+  .P200 {
+    font-family: ibm-plex-sans-hebrew-regular;
+    font-size: 0.875rem;
+    line-height: 130%;
+    letter-spacing: 1%;
+  }
+
+  .P100-B {
+    font-family: ibm-plex-sans-hebrew-bold;
+    font-size: 0.75rem;
+    line-height: 130%;
+    letter-spacing: 1%;
+  }
+
+  .P100-M {
+    font-family: ibm-plex-sans-hebrew-medium;
+    font-size: 0.75rem;
+    line-height: 130%;
+    letter-spacing: 1%;
+  }
+
+  .P100 {
+    font-family: ibm-plex-sans-hebrew-regular;
+    font-size: 0.75rem;
+    line-height: 130%;
+    letter-spacing: 1%;
+  }
+
+  //Label
+  .L300-B {
+    font-family: ploni-bold;
+    font-size: 1rem !important;
+    line-height: 100% !important;
+    letter-spacing: 0%;
+    font-weight: 700;
+
+  }
+
+  .L300 {
+    font-family: ibm-plex-sans-hebrew-medium;
+    font-size: 1rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+
+  .L200-B {
+    font-family: ibm-plex-sans-hebrew-bold;
+    font-size: 0.875rem;
+    line-height: 100%;
+    letter-spacing: 1%;
+    font-weight: 700;
+  }
+
+  .L200-M {
+    font-family: ibm-plex-sans-hebrew-medium;
+    font-size: 0.875rem;
+    line-height: 100%;
+    letter-spacing: 1%;
+  }
+
+  .L100-B {
+    font-family: ibm-plex-sans-hebrew-bold;
+    font-size: 0.75rem;
+    line-height: 100%;
+    letter-spacing: 1%;
+  }
+
+  .L100-M {
+    font-family: ibm-plex-sans-hebrew-medium;
+    font-size: 0.75rem;
+    line-height: 100%;
+    letter-spacing: 1%;
+  }
+
+  .L100 {
+    font-family: ibm-plex-sans-hebrew-regular;
+    font-size: 0.75rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+
+  .L90-B {
+    font-family: ibm-plex-sans-hebrew-bold;
+    font-size: 0.625rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+
+  .L90 {
+    font-family: ibm-plex-sans-hebrew-medium;
+    font-size: 0.625rem;
+    line-height: 100%;
+    letter-spacing: 0%;
+  }
+
+  .lobbies-subtitle {
+    font-family: ploni-demi-bold;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 600;
+    gap: 16px;
+    margin-top: 1rem;
+  }
+
+  .left-text {
+    text-align: left;
+  }
+
+  .center-text {
+    text-align: center;
+  }
+
+  .right-text {
+    text-align: right;
+  }

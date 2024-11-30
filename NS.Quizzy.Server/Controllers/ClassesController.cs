@@ -14,24 +14,17 @@ namespace NS.Quizzy.Server.Controllers
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
-    public class ExamsController : ControllerBase
+    public class ClassesController : ControllerBase
     {
-        private readonly IExamsService _service;
-        public ExamsController(IExamsService service)
+        private readonly IClassesService _service;
+        public ClassesController(IClassesService service)
         {
             _service = service;
         }
 
-        [HttpPost("Filter")]
-        [AllowAnonymous]
-        public async Task<ActionResult<List<ExamDto>>> FilterAsync([FromBody] FilterRequest filter)
-        {
-            var res = await _service.FilterAsync(filter);
-            return Ok(res);
-        }
-
         [HttpGet]
-        public async Task<ActionResult<List<ExamDto>>> GetAllAsync()
+        [AllowAnonymous]
+        public async Task<ActionResult<List<SubjectDto>>> GetAllAsync()
         {
             var res = await _service.GetAllAsync();
             return Ok(res);
