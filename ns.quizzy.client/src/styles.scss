@@ -1,3 +1,5 @@
+@import './assets/styles/colors.scss';
+@import './assets/styles/fonts.scss';
 @import './assets/styles/typography.scss';
 
 html,
@@ -5,6 +7,24 @@ body {
     padding: 0;
     margin: 0;
     direction: rtl;
-    font-family: ploni-bold;
-    font-size: 1rem !important;
+    font-family: ploni-regular-aaa;
+    font-size: 1em;
+    box-sizing: border-box;
+    background-color: $primary-dark-8;
+
+    * {
+        box-sizing: border-box;
+    }
+}
+
+.app-dialog-container{
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    max-width: 90vw; /* Optional: Ensure the dialog doesn't overflow the screen width */
+    max-height: 90vh; /* Optional: Ensure the dialog doesn't overflow the screen height */
+    overflow: auto; /* Optional: Enable scrolling for large content */
+  
 }

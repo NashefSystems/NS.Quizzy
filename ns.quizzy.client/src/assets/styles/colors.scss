@@ -1,0 +1,154 @@
+// new colors
+// PRIMARY BRAND
+$primary: #5538D8;
+$primary-dark: #393945;
+$primary-white: #FFFFFF;
+
+// SHADES
+$dark-400: #75757D;
+$default-300: #D7D7DA;
+$light-200: #EFEFEF;
+$lighter-100: #F9F9F9;
+$primary-light-50: #F5F2FF;
+$primary-dark-8: #39394514;
+
+
+// STATES
+$error: #D44323;
+$success: #00D2C3;
+$warning: #FEB500;
+$disabled: #B6B6B6;
+$bad-score: #FE7A00;
+$gradient-red: #E72E55;
+
+//SHADOWS
+$card: 0px 2px 6px 0px rgba(57, 57, 69, 0.08);
+
+//GRADIENT
+$gradient-primary: linear-gradient(322.68deg, $gradient-red -3.22%, $primary 74.77%);
+
+
+.primary {
+    color: $primary;
+}
+
+.primary-bc {
+    background-color: $primary;
+}
+
+.primary-light-50 {
+    color: $primary-light-50;
+}
+
+.primary-light-50-bc {
+    background: $primary-light-50;
+}
+
+.primary-white {
+    color: $primary-white;
+}
+
+.primary-white-bc {
+    background: $primary-white;
+}
+
+.disabled {
+    color: $disabled;
+}
+
+.disabled-bc {
+    background-color: $disabled;
+}
+
+.success {
+    color: $success;
+}
+
+.success-bc {
+    background-color: $success;
+}
+
+.light-200-bc {
+    background-color: $light-200;
+    border: 1px solid $default-300;
+}
+
+.primary-dark {
+    color: $primary-dark;
+}
+
+.primary-dark-bc {
+    background-color: $primary-dark;
+}
+
+.dark-400 {
+    color: $dark-400;
+}
+
+.dark-400-bc {
+    background-color: $dark-400;
+}
+
+.warning {
+    color: $warning;
+}
+
+.warning-bc {
+    background-color: $warning;
+}
+
+.error {
+    color: $error;
+}
+
+.error-bc {
+    background-color: $error;
+}
+
+.lighter-100 {
+    color: $lighter-100;
+}
+
+.lighter-100-bc {
+    background-color: $lighter-100;
+}
+
+.primary-light-50 {
+    color: $primary-light-50;
+}
+
+.primary-light-50-bc {
+    background-color: $primary-light-50;
+}
+
+.bad-score {
+    color: $bad-score;
+}
+
+.bad-score-bc {
+    background-color: $bad-score;
+}
+
+.primary-dark-8 {
+    color: $primary-dark-8;
+}
+
+.primary-dark-8-bc {
+    background-color: $primary-dark-8;
+}
+
+.gradient-bc {
+    background: $gradient-primary;
+}
+
+// old colors
+$black: #000000;
+$gray: #3c3c3c;
+$dark-red: #ff5a5a;
+$light-white: #f4f6f9;
+$black-light: #393945;
+
+$commentary-improvement: #00D2C333;
+$commentary-regressed: #D443231A;
+$commentary-new: #FEB5001A;
+$commentary-improvement-score: #00D2C31A;

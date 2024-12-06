@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Models.Models;
 using Swashbuckle.AspNetCore.Annotations;
@@ -31,6 +32,13 @@ namespace NS.Quizzy.Server.Controllers
                 });
             }
             return Ok(res);
+        }
+
+        [HttpPost("Test")]
+        public ActionResult<string> Test()
+        {
+            var json = JsonConvert.SerializeObject("This value from test method");
+            return Ok(json);
         }
     }
 }
