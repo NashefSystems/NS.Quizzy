@@ -1,17 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { BackendBaseService } from './backend-base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService {
-  readonly baseUrl = '/api/account';
-  constructor(
-    private readonly http: HttpClient
-  ) { }
+export class AccountService extends BackendBaseService {
+  controllerName: string = 'account';
 
   getTest() {
-    return this.http.post<string>(`${this.baseUrl}/test`, null);
+    return this.http.post<string>(`${this.getBaseUrl()}/test`, null);
   }
 
 }

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NS.Quizzy.Server.Models.Models
+namespace NS.Quizzy.Server.BL.Interfaces
 {
-    public class FilterRequest
+    public interface ITestService
     {
+        Task<object> TestAsync();
     }
 }

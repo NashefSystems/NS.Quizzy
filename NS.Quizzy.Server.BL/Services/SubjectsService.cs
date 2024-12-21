@@ -29,7 +29,11 @@ namespace NS.Quizzy.Server.BL.Services
 
         public async Task<List<SubjectDto>> GetAllAsync()
         {
-            var items = await _appDbContext.Subjects.Where(x => x.IsDeleted == false).OrderBy(x => x.Name).ToListAsync();
+            var items = await _appDbContext.Subjects
+                .Where(x => x.IsDeleted == false)
+                .OrderBy(x => x.ItemOrder)
+                .ThenBy(x => x.Name)
+                .ToListAsync();
             return _mapper.Map<List<SubjectDto>>(items);
         }
 

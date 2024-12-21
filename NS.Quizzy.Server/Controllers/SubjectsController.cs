@@ -5,8 +5,6 @@ using NS.Quizzy.Server.Models.DTOs;
 using NS.Quizzy.Server.Models.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace NS.Quizzy.Server.Controllers
 {
     [ApiController]
@@ -24,6 +22,7 @@ namespace NS.Quizzy.Server.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<SubjectDto>))]
         public async Task<ActionResult<List<SubjectDto>>> GetAllAsync()
         {
             var res = await _service.GetAllAsync();

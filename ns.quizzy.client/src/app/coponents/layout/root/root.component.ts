@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { AppSettingsService } from '../../../services/app-settings.service';
 
 @Component({
@@ -7,18 +7,14 @@ import { AppSettingsService } from '../../../services/app-settings.service';
   styleUrl: './root.component.scss'
 })
 export class RootComponent implements AfterViewInit, OnInit {
+  private readonly appSettingsService = inject(AppSettingsService);
   appContainerClasses = {
     "app-container": true,
     "large-screen": false
   };
 
-  constructor(
-    private readonly appSettingsService: AppSettingsService,
-  ) {
-    document.documentElement.style.setProperty("--app-max-width", appSettingsService.appMaxWidth + "px");
-  }
-
   ngOnInit(): void {
+    document.documentElement.style.setProperty("--app-max-width", this.appSettingsService.appMaxWidth + "px");
     this.onResize();
   }
 

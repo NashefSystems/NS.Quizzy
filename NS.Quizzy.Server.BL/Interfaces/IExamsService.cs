@@ -5,6 +5,6 @@ namespace NS.Quizzy.Server.BL.Interfaces
 {
     public interface IExamsService : IBaseService<ExamDto>
     {
-        Task<List<ExamDto>> FilterAsync(FilterRequest filter);
+        Task<List<ExamDto>> FilterAsync(DateTimeOffset? dtFrom, DateTimeOffset? dtTo, List<Guid>? classIds, List<Guid>? subjectIds);
     }
 }

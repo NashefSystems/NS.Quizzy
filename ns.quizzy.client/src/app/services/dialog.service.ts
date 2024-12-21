@@ -1,5 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AppSettingsService } from './app-settings.service';
 
@@ -7,10 +7,8 @@ import { AppSettingsService } from './app-settings.service';
   providedIn: 'root'
 })
 export class DialogService {
-  constructor(
-    private dialog: MatDialog,
-    private readonly appSettingsService: AppSettingsService
-  ) { }
+  private readonly dialog = inject(MatDialog);
+  private readonly appSettingsService = inject(AppSettingsService);
 
   public openDialog(component: ComponentType<any>, data: any, disableClose: boolean = true) {
     let width = window.innerWidth;
@@ -25,9 +23,9 @@ export class DialogService {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = disableClose;
       dialogConfig.autoFocus = true;
-      dialogConfig.minWidth = width * 0.5;
-      dialogConfig.maxWidth = width * 0.8;
-      dialogConfig.maxHeight = height * 0.8;
+      dialogConfig.minWidth = width * 0.9;
+      dialogConfig.maxWidth = width * 0.9;
+      dialogConfig.maxHeight = height * 0.9;
       dialogConfig.data = data;
 
       this.dialog

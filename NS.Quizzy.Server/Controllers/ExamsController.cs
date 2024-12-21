@@ -5,8 +5,6 @@ using NS.Quizzy.Server.Models.DTOs;
 using NS.Quizzy.Server.Models.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace NS.Quizzy.Server.Controllers
 {
     [ApiController]
@@ -22,18 +20,13 @@ namespace NS.Quizzy.Server.Controllers
             _service = service;
         }
 
-        [HttpPost("Filter")]
-        [AllowAnonymous]
-        public async Task<ActionResult<List<ExamDto>>> FilterAsync([FromBody] FilterRequest filter)
-        {
-            var res = await _service.FilterAsync(filter);
-            return Ok(res);
-        }
 
         [HttpGet]
-        public async Task<ActionResult<List<ExamDto>>> GetAllAsync()
+        [AllowAnonymous]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<ExamDto>))]
+        public async Task<ActionResult<List<ExamDto>>> GetAllAsync([FromQuery(Name = "from")] DateTimeOffset? dtFrom, [FromQuery(Name = "to")] DateTimeOffset? dtTo, [FromQuery(Name = "classes")] List<Guid>? classIds, [FromQuery(Name = "subjects")] List<Guid>? subjectIds)
         {
-            var res = await _service.GetAllAsync();
+            var res = await _service.FilterAsync(dtFrom, dtTo, classIds, subjectIds);
             return Ok(res);
         }
     }

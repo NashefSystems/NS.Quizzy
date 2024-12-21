@@ -17,6 +17,7 @@ namespace NS.Quizzy.Server
                 .AddControllers()
                 .AddNewtonsoftJson(opts =>
                 {
+                    opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     opts.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
 

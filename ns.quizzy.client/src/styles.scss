@@ -2,6 +2,13 @@
 @import './assets/styles/fonts.scss';
 @import './assets/styles/typography.scss';
 
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+    --mdc-typography-font-family: ploni-regular-aaa;
+    --mdc-linear-progress-active-indicator-height: 3px;
+    --mdc-linear-progress-track-height: 3px;
+}
+
 html,
 body {
     padding: 0;
@@ -17,14 +24,27 @@ body {
     }
 }
 
-.app-dialog-container{
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    margin: 0 !important;
-    max-width: 90vw; /* Optional: Ensure the dialog doesn't overflow the screen width */
-    max-height: 90vh; /* Optional: Ensure the dialog doesn't overflow the screen height */
-    overflow: auto; /* Optional: Enable scrolling for large content */
-  
+.app-btn {
+    border-radius: 1.5em !important;
+    padding: 1em !important;
+
+    .mdc-button__label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon {
+            width: 1em;
+            height: 1em;
+            margin-inline-end: 0.2em;
+        }
+    }
+}
+
+.mdc-dialog__container {
+    direction: rtl;
+}
+
+.mat-content.mat-content-hide-toggle {
+    margin-right: 0px !important;
 }

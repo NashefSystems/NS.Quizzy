@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ExamListFilterComponent } from '../exam-list-filter/exam-list-filter.component';
+import { Component, inject, OnInit } from '@angular/core';
 import { DialogService } from '../../services/dialog.service';
-import { AccountService } from '../../services/account.service';
-import { TestDialogComponent } from '../dialogs/test-dialog/test-dialog.component';
+import { HeaderService } from '../../services/header.service';
+import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
+import { ClassesService } from '../../services/classes.service';
+import { SubjectsService } from '../../services/subjects.service';
+import { ClassDto } from '../../../models/backend-models/class.dto';
+import { SubjectDto } from '../../../models/backend-models/subject.dto';
+import { FilterDialogData, FilterDialogResult } from './filter-dialog/filter-dialog-data';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-exams',
@@ -10,30 +15,52 @@ import { TestDialogComponent } from '../dialogs/test-dialog/test-dialog.componen
   styleUrl: './exams.component.scss'
 })
 export class ExamsComponent implements OnInit {
-  apiValue = "init";
+  private readonly dialogService = inject(DialogService);
+  private readonly headerService = inject(HeaderService);
+  private readonly classesService = inject(ClassesService);
+  private readonly subjectsService = inject(SubjectsService);
 
-  constructor(
-    private readonly dialogService: DialogService,
-    private readonly accountService: AccountService,
-  ) { }
+  classes: ClassDto[];
+  subjects: SubjectDto[];
+
+  filterClassIds: string[] = [];
+  filterSubjectIds: string[] = [];
+
+  testValue: any;
 
   ngOnInit(): void {
-    this.accountService.getTest().subscribe({
-      next: (result) => {
-        this.apiValue = result;
-      },
-      error: (error) => {
-        console.error(error);
+    this.headerService.setHeaderTitle("מערך בחינות");
+    forkJoin({
+      classes: this.classesService.getAll(),
+      subjects: this.subjectsService.getAll()
+    }).subscribe({
+      next: ({ classes, subjects }) => {
+        this.classes = classes;
+        this.subjects = subjects;
+        //  this.openFilter();
       }
-    });
+    })
   }
 
   openFilter() {
-    const dialogRef = this.dialogService.openDialog(TestDialogComponent, null)
+    const dialogData: FilterDialogData = {
+      classes: this.classes,
+      subjects: this.subjects,
+      oldResult: {
+        classIds: this.filterClassIds,
+        subjectIds: this.filterSubjectIds,
+      }
+    }
+    this.dialogService
+      .openDialog(FilterDialogComponent, dialogData)
       .then(result => {
-        console.log('The dialog was closed', result);
-        if (result !== undefined) {
-          // this.animal.set(result);
+        var res = result as FilterDialogResult;
+        this.filterClassIds = [...res.classIds];
+        this.filterSubjectIds = [...res.subjectIds];
+        this.testValue = {
+          time: new Date(),
+          filterClassIds: this.filterClassIds,
+          filterSubjectIds: this.filterSubjectIds
         }
       });
   }

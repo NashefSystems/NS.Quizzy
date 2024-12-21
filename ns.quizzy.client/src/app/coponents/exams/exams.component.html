@@ -1,5 +1,10 @@
-<app-header [title]="'מערך בחינות'"></app-header>
 <div class="exam-list">
-    <button mat-raised-button (click)="openFilter()">סינון</button>
-    <div>{{apiValue}}</div>
+    <button class="app-btn" mat-raised-button (click)="openFilter()">
+        <img src="assets/icons/filter.svg" alt="filter" class="icon" />
+        סינון
+    </button>
+    <br> <br> <br> <br>
+    <div style="padding-top: 10px;" dir="ltr">
+        <ngx-json-viewer [json]="testValue"></ngx-json-viewer>
+    </div>
 </div>

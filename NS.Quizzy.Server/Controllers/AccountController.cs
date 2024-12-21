@@ -33,12 +33,5 @@ namespace NS.Quizzy.Server.Controllers
             }
             return Ok(res);
         }
-
-        [HttpPost("Test")]
-        public ActionResult<string> Test()
-        {
-            var json = JsonConvert.SerializeObject("This value from test method");
-            return Ok(json);
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NS.Quizzy.Server.DAL.Entities;
+using System;
 
 namespace NS.Quizzy.Server.DAL
 {
@@ -124,71 +125,110 @@ namespace NS.Quizzy.Server.DAL
 
         public static class ClassEntityData
         {
+            class DivisionInfo
+            {
+                public string Id { get; set; }
+                public string Name { get; set; }
+                public Dictionary<string, string> Classes { get; set; }
+            }
             public static List<Class> GetData()
             {
-                var classDic = new Dictionary<string, string>()
+                var data = new List<DivisionInfo>
                 {
-                    { "10", "438EC849-71CB-46B0-93B6-0147B85C5564" },
-                    { "1001", "E5928D27-ABBF-49B9-A34B-0329B754CD76" },
-                    { "1002", "CE0BD2FF-3444-435B-A17D-03AE94936904" },
-                    { "1003", "167CE96A-A9F0-4910-862A-19BC0BCDF820" },
-                    { "1004", "CBEA4226-569B-4EC0-A330-26E2094FE2A7" },
-                    { "1005", "F6845989-9704-4A39-A5D2-31F6A0DF9CB3" },
-                    { "1006", "F093A8A6-91D2-46F4-BC8D-42A489FC75F6" },
-                    { "1007", "8E1F2E5E-7597-494F-BDE9-5B290918C202" },
-                    { "1008", "B096C5E7-76C6-405C-A044-5FBDBE222A3C" },
-                    { "1009", "5B107D79-7DF7-4F6D-8BD4-608230492E07" },
-                    { "1010", "7D88B6FE-F3F3-4282-B475-82B2908E9FE0" },
-                    { "1011", "859C1031-C539-4DEB-ADFF-93BCFEC85774" },
-                    { "11", "BD904A61-1129-42FB-AAB4-A6B7C3DBC037" },
-                    { "1101", "494920F9-F6D9-405C-9536-AFE619749CCD" },
-                    { "1102", "C3424585-63A2-4E52-940A-B8979557B6CE" },
-                    { "1103", "C3F075C7-93CE-4122-AB7C-B989CF8E6786" },
-                    { "1104", "21E2F08F-9793-40AA-98A0-BBF3A8759E40" },
-                    { "1105", "782CB34D-7091-4E9E-9BDA-C30D11E1A64D" },
-                    { "1106", "36B9D045-AC87-4C29-99AF-CCC4755B13CC" },
-                    { "1107", "49211014-42B9-4486-B6A3-FB9CC7E57426" },
-                    { "1108", "D514EF35-7024-4836-BE29-02E5F5B3BBCB" },
-                    { "1109", "081057A2-16DF-4E2B-9E90-0CDC0DFFF8F9" },
-                    { "1110", "B641E55E-5A1E-42E9-8ACB-1356340C87F5" },
-                    { "1111", "2A3C8F01-ECC2-42C0-8251-16FCD68944F5" },
-                    { "12", "9C9F2AAC-66E7-4AC0-A407-23698CCED44A" },
-                    { "1201", "CA5695ED-4D8A-485F-9072-29DCBC29BF84" },
-                    { "1202", "EBBB2B2E-4833-4860-8843-40F9CF852BE7" },
-                    { "1203", "7A9808BD-2D4E-48E2-8692-67D44EF962CE" },
-                    { "1204", "8C70D35A-9A3A-4BC6-8412-778F72338C63" },
-                    { "1205", "F48DD2F8-9A66-4052-B31C-793E60DF5004" },
-                    { "1206", "46C5B044-5020-4F7F-900C-93623BE8BBAF" },
-                    { "1207", "91B2C738-8E6C-4334-BC20-9778EF792AF4" },
-                    { "1208", "D22D38B9-0398-4AAE-8EA7-A13237CACE64" },
-                    { "1209", "1A9C42C2-148B-4DA9-8620-A4B70336F451" },
-                    { "1210", "EBB4D04C-E099-48C8-AE3C-B123354E250C" },
-                    { "1211", "A238C990-8FEF-4E94-8BF4-B1E9DC818DDE" },
-                    { "13", "CDE133C3-0E33-4BCB-BEE0-CC7D93AE3CB9" },
-                    { "14", "2BDDC474-2779-4BB3-A73D-DF90CD8F4C24" },
-                };
-                var res = new List<Class>();
-                for (var i = 0; i < classDic.Count; i++)
-                {
-                    var kvp = classDic.ElementAt(i);
-                    Guid? parentId = null;
-                    if (kvp.Key.Length == 4)
+                    new()
                     {
-                        var parentClass = kvp.Key.Substring(0, 2);
-                        if (classDic.TryGetValue(parentClass, out string? parentClassId))
+                        Id = "438EC849-71CB-46B0-93B6-0147B85C5564",
+                        Name = "שכבה י'",
+                        Classes = new Dictionary<string, string>()
                         {
-                            parentId = Guid.Parse(parentClassId);
+                            { "י' 1", "E5928D27-ABBF-49B9-A34B-0329B754CD76" },
+                            { "י' 2", "CE0BD2FF-3444-435B-A17D-03AE94936904" },
+                            { "י' 3", "167CE96A-A9F0-4910-862A-19BC0BCDF820" },
+                            { "י' 4", "CBEA4226-569B-4EC0-A330-26E2094FE2A7" },
+                            { "י' 5", "F6845989-9704-4A39-A5D2-31F6A0DF9CB3" },
+                            { "י' 6", "F093A8A6-91D2-46F4-BC8D-42A489FC75F6" },
+                            { "י' 7", "8E1F2E5E-7597-494F-BDE9-5B290918C202" },
+                            { "י' 8", "B096C5E7-76C6-405C-A044-5FBDBE222A3C" },
+                            { "י' 9", "5B107D79-7DF7-4F6D-8BD4-608230492E07" },
+                            { "י' 10", "7D88B6FE-F3F3-4282-B475-82B2908E9FE0" },
+                            { "י' 11", "859C1031-C539-4DEB-ADFF-93BCFEC85774" },
                         }
+                    },
+                    new()
+                    {
+                        Id = "BD904A61-1129-42FB-AAB4-A6B7C3DBC037",
+                       Name = "שכבה י\"א",
+                        Classes = new Dictionary<string, string>()
+                        {
+                            { "י\"א 1", "494920F9-F6D9-405C-9536-AFE619749CCD" },
+                            { "י\"א 2", "C3424585-63A2-4E52-940A-B8979557B6CE" },
+                            { "י\"א 3", "C3F075C7-93CE-4122-AB7C-B989CF8E6786" },
+                            { "י\"א 4", "21E2F08F-9793-40AA-98A0-BBF3A8759E40" },
+                            { "י\"א 5", "782CB34D-7091-4E9E-9BDA-C30D11E1A64D" },
+                            { "י\"א 6", "36B9D045-AC87-4C29-99AF-CCC4755B13CC" },
+                            { "י\"א 7", "49211014-42B9-4486-B6A3-FB9CC7E57426" },
+                            { "י\"א 8", "D514EF35-7024-4836-BE29-02E5F5B3BBCB" },
+                            { "י\"א 9", "081057A2-16DF-4E2B-9E90-0CDC0DFFF8F9" },
+                            { "י\"א 10", "B641E55E-5A1E-42E9-8ACB-1356340C87F5" },
+                            { "י\"א 11", "2A3C8F01-ECC2-42C0-8251-16FCD68944F5" },
+                        }
+                    },
+                    new()
+                    {
+                        Id = "9C9F2AAC-66E7-4AC0-A407-23698CCED44A",
+                          Name = "שכבה י\"ב",
+                        Classes = new Dictionary<string, string>()
+                        {
+                            { "י\"ב 01", "CA5695ED-4D8A-485F-9072-29DCBC29BF84" },
+                            { "י\"ב 02", "EBBB2B2E-4833-4860-8843-40F9CF852BE7" },
+                            { "י\"ב 03", "7A9808BD-2D4E-48E2-8692-67D44EF962CE" },
+                            { "י\"ב 04", "8C70D35A-9A3A-4BC6-8412-778F72338C63" },
+                            { "י\"ב 05", "F48DD2F8-9A66-4052-B31C-793E60DF5004" },
+                            { "י\"ב 06", "46C5B044-5020-4F7F-900C-93623BE8BBAF" },
+                            { "י\"ב 07", "91B2C738-8E6C-4334-BC20-9778EF792AF4" },
+                            { "י\"ב 08", "D22D38B9-0398-4AAE-8EA7-A13237CACE64" },
+                            { "י\"ב 09", "1A9C42C2-148B-4DA9-8620-A4B70336F451" },
+                            { "י\"ב 10", "EBB4D04C-E099-48C8-AE3C-B123354E250C" },
+                            { "י\"ב 11", "A238C990-8FEF-4E94-8BF4-B1E9DC818DDE" },
+                        }
+                    },
+                    new()
+                    {
+                        Id = "CDE133C3-0E33-4BCB-BEE0-CC7D93AE3CB9",
+                          Name = "שכבה י\"ג",
+                        Classes = []
+                    },
+                    new()
+                    {
+                        Id = "2BDDC474-2779-4BB3-A73D-DF90CD8F4C24",
+                          Name = "שכבה י\"ד",
+                        Classes = []
                     }
+                };
 
+                var res = new List<Class>();
+                foreach (var division in data)
+                {
+                    var divisionId = Guid.Parse(division.Id);
                     res.Add(new()
                     {
-                        Id = Guid.Parse(kvp.Value),
-                        Name = kvp.Key,
-                        ParentId = parentId,
+                        Id = divisionId,
+                        Name = division.Name,
                         CreatedTime = StartActionTime,
                         ModifiedTime = StartActionTime,
                     });
+
+                    foreach (var classInfo in division.Classes)
+                    {
+                        res.Add(new()
+                        {
+                            Id = Guid.Parse(classInfo.Value),
+                            Name = classInfo.Key,
+                            ParentId = divisionId,
+                            CreatedTime = StartActionTime,
+                            ModifiedTime = StartActionTime,
+                        });
+                    }
                 }
                 return res;
             }

@@ -1,0 +1,23 @@
+<mat-accordion *ngIf="items?.length">
+    @for (parent of items; track parent; let parentIdx = $index) {
+    <mat-expansion-panel [disabled]="!parent?.children?.length">
+        <mat-expansion-panel-header>
+            <mat-checkbox color="primary" [checked]="isParentChecked(parent)"
+                [indeterminate]="isParentPartiallyComplete(parent)" (click)="$event.stopPropagation()"
+                (change)="toggleParentSelection(parent, $event.checked)">
+                <mat-label>{{parent.text}}</mat-label>
+            </mat-checkbox>
+        </mat-expansion-panel-header>
+        <ul *ngIf="parent?.children?.length">
+            @for (child of parent.children; track child; let childIdx = $index) {
+            <li>
+                <mat-checkbox color="primary" [checked]="isChildChecked(child, parent.id)"
+                    (change)="toggleChildSelection(parent, child, $event.checked)">
+                    <mat-label>{{child.text}}</mat-label>
+                </mat-checkbox>
+            </li>
+            }
+        </ul>
+    </mat-expansion-panel>
+    }
+</mat-accordion>

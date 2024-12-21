@@ -80,6 +80,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<IQuestionnairesService, QuestionnairesService>();
             services.AddScoped<ISubjectsService, SubjectsService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ITestService, TestService>();
 
             return services;
         }
