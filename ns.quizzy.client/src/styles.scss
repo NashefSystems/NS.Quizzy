@@ -1,10 +1,11 @@
-@import './assets/styles/colors.scss';
-@import './assets/styles/fonts.scss';
-@import './assets/styles/typography.scss';
+@use './assets/styles/material-icons.scss' as materialIcons;
+@use './assets/styles/global.scss' as global;
+@use './assets/styles/colors.scss' as colors;
+@use './assets/styles/fonts.scss' as fonts;
+@use './assets/styles/typography.scss' as typography;
 
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
 :root {
-    --mdc-typography-font-family: ploni-regular-aaa;
+    --mdc-dialog-container-shape: 1rem;
     --mdc-linear-progress-active-indicator-height: 3px;
     --mdc-linear-progress-track-height: 3px;
 }
@@ -13,14 +14,14 @@ html,
 body {
     padding: 0;
     margin: 0;
-    direction: rtl;
-    font-family: ploni-regular-aaa;
+    font-family: global.$fontFamily !important;
     font-size: 1em;
     box-sizing: border-box;
-    background-color: $primary-dark-8;
+    background-color: colors.$primary-dark-8;
 
     * {
         box-sizing: border-box;
+        font-family: global.$fontFamily !important;
     }
 }
 
@@ -41,10 +42,60 @@ body {
     }
 }
 
-.mdc-dialog__container {
-    direction: rtl;
-}
-
 .mat-content.mat-content-hide-toggle {
     margin-right: 0px !important;
+}
+
+.mat-mdc-menu-panel[direction='rtl'] {
+    text-align: right;
+
+    * {
+        gap: 0.5rem;
+        text-align: right;
+    }
+}
+
+.mat-dialog-border-radius-0rem {
+    .mat-mdc-dialog-surface {
+        border-radius: 0rem;
+    }
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    display: none;
+    width: 0;
+}
+
+.mat-dialog-border-without-radius {
+    .mat-mdc-dialog-surface {
+        border-radius: 0;
+    }
+}
+
+.full-dialog-large-screen {
+    .mat-mdc-dialog-surface {
+        border: global.$largeScreenBorder;
+    }
+}
+
+.full-dialog {
+    .mat-mdc-dialog-surface {
+        background-color: colors.$lighter-100;
+        padding: 1rem;
+    }
+}
+
+.app-dialog {
+    direction: var(--app-dir);
+}
+
+mat-snack-bar-container.no-panel {
+    .mdc-snackbar__label {
+        padding: 0 !important;
+    }
+}
+
+.full-width {
+    width: 100%;
 }

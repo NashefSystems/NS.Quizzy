@@ -1,0 +1,5 @@
+@use './fonts.scss' as fonts;
+@use './colors.scss' as colors;
+
+$fontFamily: ploni-regular-aaa, sans-serif;
+$largeScreenBorder: 2px solid colors.$largeScreenBorderColor;

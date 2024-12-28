@@ -1,0 +1,16 @@
+<div class="page-container">
+    <header>
+        <button mat-stroked-button (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            {{'MAIN_MENU.LOGOUT'|translate}}
+        </button>
+
+        <button mat-icon-button mat-dialog-close cdkFocusInitial>
+            <mat-icon>close</mat-icon>
+        </button>
+    </header>
+    <img src="assets/images/logo.png">
+    <app-language-selector></app-language-selector>
+
+
+</div>

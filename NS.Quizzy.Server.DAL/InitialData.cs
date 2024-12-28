@@ -20,6 +20,7 @@ namespace NS.Quizzy.Server.DAL
                 ModifiedTime = StartActionTime,
                 IsDeleted = true,
             };
+
             public static readonly User adminUser = new()
             {
                 Id = Guid.Parse("B900D543-90AB-4E7A-83BA-B961918DCC8C"),
@@ -29,6 +30,7 @@ namespace NS.Quizzy.Server.DAL
                 CreatedTime = StartActionTime,
                 ModifiedTime = StartActionTime,
             };
+
             public static readonly User sajiUser = new()
             {
                 Id = Guid.Parse("2325B8AE-F12A-43D8-BE46-7041E57C9283"),
@@ -38,6 +40,7 @@ namespace NS.Quizzy.Server.DAL
                 CreatedTime = StartActionTime,
                 ModifiedTime = StartActionTime,
             };
+
             public static List<User> GetData()
             {
                 return
@@ -231,6 +234,28 @@ namespace NS.Quizzy.Server.DAL
                     }
                 }
                 return res;
+            }
+        }
+
+        public static class AppSettingEntityData
+        {
+            internal static List<AppSetting> GetData()
+            {
+                return new List<AppSetting>
+                {
+                    new()
+                    {
+                        Id = Guid.Parse("795B0B48-4238-4D27-BE60-3DD2CB66E424"),
+                        Key = "SavePasswordOnRememberMe",
+                        Target = DALEnums.AppSettingTargets.Client,
+                        ValueType = DALEnums.AppSettingValueTypes.Boolean,
+                        Value = "true",
+                        IsSecured = false,
+                        CreatedTime = StartActionTime,
+                        ModifiedTime = StartActionTime,
+                        IsDeleted=false,
+                    }
+                };
             }
         }
     }

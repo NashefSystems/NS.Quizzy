@@ -1,0 +1,19 @@
+{
+    "DIR": "rtl",
+    "LOGIN": {
+        "TITLE": "התחברות",
+        "EMAIL": "דואר אלקטרוני",
+        "PASSWORD": "סיסמה",
+        "REMEMBER_ME": "זכור אותי",
+        "LOGIN_BUTTON": "התחבר",
+        "EMAIL_REQUIRED": "נדרש להזין דואר אלקטרוני.",
+        "EMAIL_INVALID": "אנא הזן כתובת דוא\"ל תקינה.",
+        "PASSWORD_REQUIRED": "יש להזין סיסמה.",
+        "INVALID_CREDENTIALS": "פרטי הזדהות שגויים",
+        "LOGIN_SUCCESSFULLY": "ברוך שובך, {{fullName}}!"
+    },
+    "MAIN_MENU": {
+        "LOGOUT": "התנתק"
+    },
+    "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}"
+}

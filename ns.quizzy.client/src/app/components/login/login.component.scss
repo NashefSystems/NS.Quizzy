@@ -1,0 +1,26 @@
+.page-container {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    header {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    img {
+        max-width: 50%;
+        margin-bottom: 2rem;
+    }
+
+    form {
+        width: 80%;
+
+        .login-btn {
+            margin-top: 1rem;
+        }
+    }
+}

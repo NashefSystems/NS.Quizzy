@@ -4,6 +4,7 @@ using NS.Quizzy.Server.DAL.Attributes;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Security;
 using System.Reflection;
+using static NS.Quizzy.Server.DAL.DALEnums;
 
 namespace NS.Quizzy.Server.DAL
 {
@@ -20,6 +21,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new ExamTypeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionnaireEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new AppSettingEntityConfiguration());
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -74,6 +76,7 @@ namespace NS.Quizzy.Server.DAL
                 entity.Property(e => e.FullName).IsRequired(true);
                 entity.HasData(InitialData.UserEntityData.GetData());
             }
+
             private static string UsersPasswordFromDBValue(string dbValue)
             {
                 if (string.IsNullOrWhiteSpace(dbValue))
@@ -188,6 +191,46 @@ namespace NS.Quizzy.Server.DAL
 
                 entity.HasData(InitialData.SubjectEntityData.GetData());
 
+            }
+        }
+
+        internal class AppSettingEntityConfiguration : BaseEntityTypeConfiguration<AppSetting>
+        {
+            public override void Configure(EntityTypeBuilder<AppSetting> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("AppSettings");
+                entity.HasIndex(p => p.Key).IsUnique(true);
+
+                entity
+                    .Property(e => e.ValueType)
+                    .IsRequired(true)
+                    .HasConversion(v => EnumToDBValue(v), dbv => EnumFromDBValue<AppSettingValueTypes>(dbv));
+
+                entity
+                    .Property(e => e.Target)
+                    .IsRequired(true)
+                    .HasConversion(v => EnumToDBValue(v), dbv => EnumFromDBValue<AppSettingTargets>(dbv));
+
+                entity.HasData(InitialData.AppSettingEntityData.GetData());
+            }
+
+            private static T? EnumFromDBValue<T>(string? dbValue)
+            {
+                if (string.IsNullOrWhiteSpace(dbValue))
+                {
+                    return default;
+                }
+                return (T)Enum.Parse(typeof(T), dbValue);
+            }
+
+            private static string? EnumToDBValue<T>(T value) where T : Enum
+            {
+                if (value == null)
+                {
+                    return null;
+                }
+                return value.ToString();
             }
         }
     }

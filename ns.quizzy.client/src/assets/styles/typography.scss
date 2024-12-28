@@ -1,37 +1,46 @@
-@import './fonts.scss';
-@import './colors.scss';
+@use './fonts.scss' as fonts;
 
-// Heading
+// Headings
 .H600 {
-    font-family: ploni-demi-bold;
+    font-family: ploni-regular-aaa;
+    //font-family: ploni-demi-bold;
+    font-weight: bold;
     font-size: 3rem;
     line-height: 95%;
     letter-spacing: -0.06rem;
 }
 
 .H500 {
-    font-family: ploni-demi-bold;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-demi-bold;
+    font-weight: bold;
     font-size: 2.5rem;
     line-height: 100%;
     letter-spacing: 0;
 }
 
 .H400 {
-    font-family: ploni-demi-bold;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-demi-bold;
+    font-weight: bold;
     font-size: 2rem;
     line-height: 100%;
     letter-spacing: 0;
 }
 
 .H300 {
-    font-family: ploni-demi-bold;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-demi-bold;
+    font-weight: bold;
     font-size: 1.5rem;
     line-height: 100%;
     letter-spacing: 0;
 }
 
 .H200 {
-    font-family: ploni-demi-bold;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-demi-bold;
+    font-weight: bold;
     font-size: 1.25rem;
     line-height: 100%;
     letter-spacing: 0;
@@ -39,22 +48,27 @@
 }
 
 .H100 {
-    font-family: ploni-demi-bold;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-demi-bold;
+    font-weight: bold;
     font-size: 1rem;
     line-height: 110%;
     letter-spacing: 0;
 }
 
-//Paragraph
+// Paragraphs
 .P300-B {
-    font-family: ploni-bold-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-bold-aaa;
+    font-weight: bold;
     font-size: 1rem;
     line-height: 130%;
     letter-spacing: 0%;
 }
 
 .P300-M {
-    font-family: ploni-medium-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-medium-aaa;
     font-size: 1rem;
     line-height: 130%;
     letter-spacing: 0%;
@@ -68,7 +82,9 @@
 }
 
 .P200-B {
-    font-family: ploni-bold-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-bold-aaa;
+    font-weight: bold;
     font-size: 0.875rem;
     line-height: 130%;
     letter-spacing: 1%;
@@ -76,7 +92,8 @@
 }
 
 .P200-M {
-    font-family: ploni-medium-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-medium-aaa;
     font-size: 0.875rem;
     line-height: 130%;
     letter-spacing: 1%;
@@ -91,14 +108,17 @@
 }
 
 .P100-B {
-    font-family: ploni-bold-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-bold-aaa;
+    font-weight: bold;
     font-size: 0.75rem;
     line-height: 130%;
     letter-spacing: 1%;
 }
 
 .P100-M {
-    font-family: ploni-medium-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-medium-aaa;
     font-size: 0.75rem;
     line-height: 130%;
     letter-spacing: 1%;
@@ -111,25 +131,30 @@
     letter-spacing: 1%;
 }
 
-//Label
+// Labels
 .L300-B {
-    font-family: ploni-bold;
-    font-size: 1rem !important;
-    line-height: 100% !important;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-bold;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 100%;
     letter-spacing: 0%;
     font-weight: 700;
 
 }
 
 .L300 {
-    font-family: ploni-medium-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-medium-aaa;
     font-size: 1rem;
     line-height: 100%;
     letter-spacing: 0%;
 }
 
 .L200-B {
-    font-family: ploni-bold-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-bold-aaa;
+    font-weight: bold;
     font-size: 0.875rem;
     line-height: 100%;
     letter-spacing: 1%;
@@ -137,21 +162,25 @@
 }
 
 .L200-M {
-    font-family: ploni-medium-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-medium-aaa;
     font-size: 0.875rem;
     line-height: 100%;
     letter-spacing: 1%;
 }
 
 .L100-B {
-    font-family: ploni-bold-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-bold-aaa;
+    font-weight: bold;
     font-size: 0.75rem;
     line-height: 100%;
     letter-spacing: 1%;
 }
 
 .L100-M {
-    font-family: ploni-medium-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-medium-aaa;
     font-size: 0.75rem;
     line-height: 100%;
     letter-spacing: 1%;
@@ -165,19 +194,23 @@
 }
 
 .L90-B {
-    font-family: ploni-bold-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-bold-aaa;
+    font-weight: bold;
     font-size: 0.625rem;
     line-height: 100%;
     letter-spacing: 0%;
 }
 
 .L90 {
-    font-family: ploni-medium-aaa;
+    font-family: ploni-regular-aaa;
+    // font-family: ploni-medium-aaa;
     font-size: 0.625rem;
     line-height: 100%;
     letter-spacing: 0%;
 }
 
+// text aligns
 .left-text {
     text-align: left;
 }

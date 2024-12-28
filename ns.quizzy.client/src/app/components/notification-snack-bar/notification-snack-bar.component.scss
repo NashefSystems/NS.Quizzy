@@ -1,0 +1,52 @@
+@use "sass:color";
+
+.snack-bar-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    gap: 0.5rem;
+
+    .snack-bar-icon {
+        font-size: 1rem;
+    }
+
+    .snack-bar-message {
+        width: 100%;
+    }
+
+    .snack-bar-close {
+        $colseIconColor: white;
+        color: inherit;
+        color: $colseIconColor;
+        cursor: pointer;
+
+        &:hover {
+            //color: darken($colseIconColor, 20%);
+            color: color.adjust($colseIconColor, $lightness: -20%);
+        }
+    }
+
+    &.info {
+        color: #72b7f0;
+    }
+
+    &.success {
+        color: #82dc85;
+    }
+
+    &.warning {
+        color: #ffb84e;
+    }
+
+    &.error {
+        color: #ff9e97;
+    }
+
+    &.fatal {
+        color: #f15a4f;
+    }
+}

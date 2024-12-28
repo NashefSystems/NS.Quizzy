@@ -1,0 +1,40 @@
+@use '../../../../assets/styles/colors.scss' as colors;
+
+.header-container {
+    border-bottom: 1px solid colors.$default-300;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    .body-container {
+        padding: 0 1rem;
+        height: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        >div {
+            width: 100%;
+        }
+
+        .page-title {
+            text-align: center;
+        }
+
+        .menu {
+            display: flex;
+            align-content: center;
+            justify-content: flex-end;
+
+        }
+
+        .website-icon {
+            display: flex;
+            align-content: center;
+
+            img {
+                max-height: 40px;
+            }
+        }
+    }
+}

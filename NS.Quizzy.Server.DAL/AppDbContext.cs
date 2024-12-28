@@ -13,6 +13,7 @@ namespace NS.Quizzy.Server.DAL
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ClassExam> ClassExams { get; set; }
+        public DbSet<AppSetting> AppSettings { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ExamsComponent } from './coponents/exams/exams.component';
+import { ExamsComponent } from './components/exams/exams.component';
 
 const routes: Routes = [
   {
@@ -12,7 +12,6 @@ const routes: Routes = [
     pathMatch: 'full',
     redirectTo: '/',
   }
-
 ];
 
 @NgModule({

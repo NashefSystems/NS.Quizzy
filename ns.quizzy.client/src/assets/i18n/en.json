@@ -1,0 +1,19 @@
+{
+    "DIR": "ltr",
+    "LOGIN": {
+        "TITLE": "Login",
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "REMEMBER_ME": "Remember Me",
+        "LOGIN_BUTTON": "Login",
+        "EMAIL_REQUIRED": "Email is required.",
+        "EMAIL_INVALID": "Please enter a valid email address.",
+        "PASSWORD_REQUIRED": "Password is required.",
+        "INVALID_CREDENTIALS": "Invalid credentials",
+        "LOGIN_SUCCESSFULLY": "Welcome back, {{fullName}}!"
+    },
+    "MAIN_MENU": {
+        "LOGOUT": "Logout"
+    },
+    "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}"
+}

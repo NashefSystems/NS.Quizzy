@@ -22,7 +22,6 @@ namespace NS.Quizzy.Server
                 });
 
             builder.Services.AddSwaggerGenNewtonsoftSupport();
-            builder.Services.AddQuizzyBLServices();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -67,6 +66,8 @@ namespace NS.Quizzy.Server
                     }
                 });
             });
+
+            builder.Services.AddQuizzyBLServices(builder.Configuration);
 
             var app = builder.Build();
 

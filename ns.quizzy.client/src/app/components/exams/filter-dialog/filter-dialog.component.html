@@ -1,0 +1,15 @@
+<h2 mat-dialog-title class="center-text">סינון מערך בחינות</h2>
+<mat-dialog-content class="fill-dialog-width">
+    <div class="classes-container">
+        <mat-card-title class="H00 primary-dark">כיתות</mat-card-title>
+        <app-checkbox-tree [items]="classTree" [(selectedIds)]="result.classIds"></app-checkbox-tree>
+    </div>
+    <div class="subjects-container">
+        <mat-card-title class="H200 primary-dark">מקצוע</mat-card-title>
+        <app-checkbox-tree [items]="subjectTree" [(selectedIds)]="result.subjectIds"></app-checkbox-tree>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-stroked-button (click)="onCloseClick()">בטל</button>
+    <button color="primary" mat-flat-button [mat-dialog-close]="result" cdkFocusInitial>סנן</button>
+</mat-dialog-actions>

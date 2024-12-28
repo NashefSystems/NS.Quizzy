@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Models.Models;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,6 +8,7 @@ namespace NS.Quizzy.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
     public class AccountController : ControllerBase
     {
@@ -19,9 +20,8 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPost("Login")]
-        [ProducesResponseType(typeof(GlobalErrorResponse), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
-        public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest loginRequest)
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserDetailsDto))]
+        public async Task<ActionResult<UserDetailsDto>> LoginAsync([FromBody] LoginRequest loginRequest)
         {
             var res = await _accountService.LoginAsync(loginRequest);
             if (res == null)
@@ -32,6 +32,24 @@ namespace NS.Quizzy.Server.Controllers
                 });
             }
             return Ok(res);
+        }
+
+        [HttpGet("Details")]
+        [Authorize]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserDetailsDto))]
+        public async Task<ActionResult<UserDetailsDto>> GetDetailsAsync()
+        {
+            var res = await _accountService.GetDetailsAsync();
+            return Ok(res);
+        }
+
+        [HttpDelete("Logout")]
+        [Authorize]
+        [SwaggerResponse(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Logout()
+        {
+            await _accountService.LogoutAsync();
+            return NoContent();
         }
     }
 }

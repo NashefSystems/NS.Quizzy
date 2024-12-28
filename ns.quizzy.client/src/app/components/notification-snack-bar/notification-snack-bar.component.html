@@ -1,0 +1,5 @@
+<div [ngClass]="data.type" class="snack-bar-container">
+    <span class="snack-bar-icon">{{ getIcon(data.type) }}</span>
+    <span class="snack-bar-message" [innerHTML]="data.message | translate"></span>
+    <span class="snack-bar-close" (click)="closeSnackBar()">✖</span>
+</div>

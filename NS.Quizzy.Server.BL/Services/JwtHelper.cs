@@ -28,18 +28,20 @@ namespace NS.Quizzy.Server.BL.Services
             _expiresInMinutes = jwtSection.GetValue<double>("ExpiresInMinutes");
         }
 
-        public string GenerateToken(Guid userId, string email, string fullName)
+        public (Guid tokenId, string token) GenerateToken(Guid userId, string email, string fullName)
         {
             var expires = DateTime.Now.AddMinutes(_expiresInMinutes);
-            var tokenId = Guid.NewGuid().ToString();
+            var tokenId = Guid.NewGuid();
+            var tokenIdStr = tokenId.ToString();
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier,  userId.ToString()),
                 new Claim(ClaimTypes.Name, fullName),
                 new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.Sid, tokenId),
+                new Claim(ClaimTypes.Sid, tokenIdStr),
                 new Claim(ClaimTypes.Role, "Admin"),
-                new Claim(JwtRegisteredClaimNames.Jti, tokenId)
+                new Claim(JwtRegisteredClaimNames.Jti, tokenIdStr)
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -54,7 +56,7 @@ namespace NS.Quizzy.Server.BL.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token);
+            return (tokenId, tokenHandler.WriteToken(token));
         }
     }
 }
