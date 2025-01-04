@@ -4,7 +4,7 @@ import { inject, Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export abstract class BackendBaseService {
+export abstract class BaseService {
   protected readonly httpClient = inject(HttpClient);
   protected abstract controllerName: string;
 

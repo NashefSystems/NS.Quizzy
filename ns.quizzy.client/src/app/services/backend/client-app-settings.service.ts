@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BackendBaseService } from './backend-base.service';
+import { BaseService } from './base.service';
 import { ClientAppSettingsResponse } from '../../models/backend/client-app-settings.response';
 import { of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientAppSettingsService extends BackendBaseService {
+export class ClientAppSettingsService extends BaseService {
   controllerName: string = 'ClientAppSettings';
   clientAppSettingsResponseCache: ClientAppSettingsResponse | null = null;
 

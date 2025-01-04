@@ -12,5 +12,12 @@
     <img src="assets/images/logo.png">
     <app-language-selector></app-language-selector>
 
-
+    <div class="button-grid">
+        <button mat-button *ngFor="let item of menuItems" class="button-item" mat-dialog-close [routerLink]="item.routerLink">
+            <div class="button-content">
+                <mat-icon class="icon">{{item.icon}}</mat-icon>
+                <span>{{item.text | translate}}</span>
+            </div>
+        </button>
+    </div>
 </div>

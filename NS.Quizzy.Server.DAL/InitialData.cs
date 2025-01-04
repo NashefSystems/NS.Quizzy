@@ -1,5 +1,4 @@
 ﻿using NS.Quizzy.Server.DAL.Entities;
-using System;
 
 namespace NS.Quizzy.Server.DAL
 {
@@ -18,6 +17,8 @@ namespace NS.Quizzy.Server.DAL
                 Email = "Nashef.Systems@Gmail.com",
                 CreatedTime = StartActionTime,
                 ModifiedTime = StartActionTime,
+                Role = DALEnums.Roles.SuperAdmin,
+                TwoFactorSecretKey = "97F1AFCD316343B4B2D492A10B036680",
                 IsDeleted = true,
             };
 
@@ -29,6 +30,7 @@ namespace NS.Quizzy.Server.DAL
                 Email = "Nashef90@Gmail.com",
                 CreatedTime = StartActionTime,
                 ModifiedTime = StartActionTime,
+                Role = DALEnums.Roles.Developer,
             };
 
             public static readonly User sajiUser = new()
@@ -39,6 +41,7 @@ namespace NS.Quizzy.Server.DAL
                 Email = "saji.nashef@gmail.com",
                 CreatedTime = StartActionTime,
                 ModifiedTime = StartActionTime,
+                Role = DALEnums.Roles.Admin,
             };
 
             public static List<User> GetData()

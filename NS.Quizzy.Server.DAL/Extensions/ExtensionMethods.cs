@@ -21,5 +21,25 @@ namespace NS.Quizzy.Server.DAL.Extensions
             );
             return services;
         }
+
+        public static T? ToEnumValue<T>(this string? dbValue)
+        {
+            if (string.IsNullOrWhiteSpace(dbValue))
+            {
+                return default;
+            }
+            return (T)Enum.Parse(typeof(T), dbValue);
+        }
+
+        public static string? ToStringValue<T>(this T? value) where T : Enum
+        {
+            if (value == null)
+            {
+                return null;
+            }
+            return value.ToString();
+        }
     }
 }
+
+

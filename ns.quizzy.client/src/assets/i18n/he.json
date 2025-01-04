@@ -13,7 +13,28 @@
         "LOGIN_SUCCESSFULLY": "ברוך שובך, {{fullName}}!"
     },
     "MAIN_MENU": {
-        "LOGOUT": "התנתק"
+        "LOGOUT": "התנתק",
+        "ITEMS": {
+            "CLASS_LIST": "כיתות",
+            "EXAM_LIST": "מבחנים",
+            "EXAM_TYPE_LIST": "סוגי מבחנים",
+            "QUESTIONNAIRE_LIST": "שאלונים",
+            "SUBJECT_LIST": "נושאים"
+        }
+    },
+    "TABLE": {
+        "SEARCH": "חפש",
+        "SEARCH_PLACEHOLDER": "חיפוש...",
+        "EMPTY_STATUS": "🤔</br>לא מצאנו תוצאות תואמות</br>נסה שוב!",
+        "ACTIONS": {
+            "ADD": "הוספת פריט חדש",
+            "EDIT": "עריכה",
+            "DELETE": "מחיקה"
+        }
+    },
+    "SUBJECT_AREA": {
+        "NAME": "נושא",
+        "ITEM_ORDER": "סדר הופעה"
     },
     "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}"
 }

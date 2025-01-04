@@ -3,7 +3,7 @@ import { DialogService } from '../../services/dialog.service';
 import { HeaderService } from '../../services/header.service';
 import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
 import { ClassesService } from '../../services/classes.service';
-import { SubjectsService } from '../../services/subjects.service';
+import { SubjectsService } from '../../services/backend/subjects.service';
 import { ClassDto } from '../../../models/backend-models/class.dto';
 import { SubjectDto } from '../../../models/backend-models/subject.dto';
 import { FilterDialogData, FilterDialogResult } from './filter-dialog/filter-dialog-data';
@@ -34,7 +34,7 @@ export class ExamsComponent implements OnInit {
     this.headerService.setHeaderTitle("מערך בחינות");
     forkJoin({
       classes: this.classesService.getAll(),
-      subjects: this.subjectsService.getAll()
+      subjects: this.subjectsService.get()
     }).subscribe({
       next: ({ classes, subjects }) => {
         this.classes = classes;

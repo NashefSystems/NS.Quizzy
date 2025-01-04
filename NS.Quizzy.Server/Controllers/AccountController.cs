@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Models.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -20,8 +21,8 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPost("Login")]
-        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserDetailsDto))]
-        public async Task<ActionResult<UserDetailsDto>> LoginAsync([FromBody] LoginRequest loginRequest)
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(LoginResponse))]
+        public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest loginRequest)
         {
             var res = await _accountService.LoginAsync(loginRequest);
             if (res == null)
@@ -29,6 +30,21 @@ namespace NS.Quizzy.Server.Controllers
                 return Unauthorized(new GlobalErrorResponse()
                 {
                     Message = "Invalid credentials"
+                });
+            }
+            return Ok(res);
+        }
+
+        [HttpPost("VerifyOTP")]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserDetailsDto))]
+        public async Task<ActionResult<UserDetailsDto>> LoginAsync([FromBody] VerifyOTPRequest request)
+        {
+            var res = await _accountService.VerifyOTP(request);
+            if (res == null)
+            {
+                return BadRequest(new GlobalErrorResponse()
+                {
+                    Message = "Invalid OTP"
                 });
             }
             return Ok(res);

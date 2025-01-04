@@ -12,10 +12,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
   MatDialogModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatCardModule,
-  MatExpansionModule, MatProgressBarModule, MatSidenavModule, MatMenuModule, MatSnackBarModule
+  MatExpansionModule, MatProgressBarModule, MatSidenavModule, MatMenuModule, MatSnackBarModule,
+  MatTableModule, MatPaginatorModule,
 ];
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -34,14 +37,17 @@ import { PrettyJsonPipe } from './pipes/pretty-json.pipe';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { FilterDialogComponent } from './components/exams/filter-dialog/filter-dialog.component';
 import { CheckboxTreeComponent } from './components/checkbox-tree/checkbox-tree.component';
-import { QuestionnaireListComponent } from './components/questionnaires/questionnaire-list/questionnaire-list.component';
-import { QuestionnaireInsertOrUpdateComponent } from './components/questionnaires/questionnaire-insert-or-update/questionnaire-insert-or-update.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
 import { NotificationSnackBarComponent } from './components/notification-snack-bar/notification-snack-bar.component';
 import { TestComponent } from './components/test/test.component';
+import { ExamListComponent } from './components/exam-area/exam-list/exam-list.component';
+import { ClassListComponent } from './components/class-area/class-list/class-list.component';
+import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
+import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
+import { TableComponent } from './components/table/table.component';
 
 
 // Factory function for HttpLoader
@@ -57,14 +63,17 @@ export function HttpLoaderFactory(http: HttpClient) {
     FilterDialogComponent,
     PrettyJsonPipe,
     CheckboxTreeComponent,
-    QuestionnaireListComponent,
-    QuestionnaireInsertOrUpdateComponent,
     LoginComponent,
     LogoutComponent,
     MainMenuComponent,
     LanguageSelectorComponent,
     NotificationSnackBarComponent,
     TestComponent,
+    ExamListComponent,
+    ClassListComponent,
+    ExamTypeListComponent,
+    SubjectListComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,

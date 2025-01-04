@@ -14,6 +14,7 @@ namespace NS.Quizzy.Server.DAL.Entities
         public string Key { get; set; }
         public AppSettingTargets Target { get; set; }
         public AppSettingValueTypes ValueType { get; set; }
+       
         [SensitiveData(SensitiveDataMode.Sha1)]
         public string Value { get; set; }
         public bool IsSecured { get; set; }

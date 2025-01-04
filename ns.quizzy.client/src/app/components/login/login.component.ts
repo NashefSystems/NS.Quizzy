@@ -7,6 +7,7 @@ import { LoginRequest } from '../../models/backend/login.request';
 import { NotificationsService } from '../../services/notifications.service';
 import { LocalStorageKeys } from '../../enums/local-storage-keys.enum';
 import { MatDialogRef } from '@angular/material/dialog';
+import { LoginSteps } from './login-steps.enum';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,8 @@ export class LoginComponent implements OnInit {
   private readonly _accountService = inject(AccountService);
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _dialogRef = inject(MatDialogRef<LoginComponent>);
+  LoginSteps = LoginSteps;
+  step = LoginSteps.UserNameAndPassword;
 
   hidePassword = true;
   loginForm: FormGroup = this._fb.group({
@@ -42,7 +45,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
+  onLoginSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password, rememberMe } = this.loginForm.value;
 
@@ -54,6 +57,7 @@ export class LoginComponent implements OnInit {
               storageValue.password = password;
             }
             this._storageService.setSensitiveLocalStorage(LocalStorageKeys.loginInfo, storageValue);
+            this.step = LoginSteps.OTP;
           }
         });
       } else {
@@ -67,7 +71,7 @@ export class LoginComponent implements OnInit {
       };
       this._accountService.login(loginRequest).subscribe({
         next: (responseBody) => {
-          this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY",{fullName:responseBody.fullName});
+          this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: responseBody.fullName });
           this._dialogRef.close();
         },
         error: (error) => {

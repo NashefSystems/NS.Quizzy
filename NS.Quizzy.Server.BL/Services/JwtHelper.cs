@@ -20,10 +20,11 @@ namespace NS.Quizzy.Server.BL.Services
 
         public JwtHelper(IConfiguration configuration)
         {
+            _issuer = configuration.GetValue<string>("AppIssuer") ?? "";
+
             var jwtSection = configuration.GetSection("Jwt") ?? throw new Exception("Jwt section not found");
-            var key = jwtSection.GetValue<string>("Key") ?? throw new Exception("Jwt key not found");
-            _key = Encoding.UTF8.GetBytes(key);
-            _issuer = jwtSection.GetValue<string>("Issuer") ?? "";
+            var keyStr = jwtSection.GetValue<string>("Key") ?? throw new Exception("Jwt key not found");
+            _key = Encoding.UTF8.GetBytes(keyStr);
             _audience = jwtSection.GetValue<string>("Audience") ?? "";
             _expiresInMinutes = jwtSection.GetValue<double>("ExpiresInMinutes");
         }

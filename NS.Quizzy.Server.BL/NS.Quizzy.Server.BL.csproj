@@ -10,11 +10,12 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="NS.Security" Version="1.0.0" />
     <PackageReference Include="NS.Shared.CacheProvider" Version="1.0.9" />
+    <PackageReference Include="Otp.NET" Version="1.4.0" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NS.Quizzy.Server.DAL\NS.Quizzy.Server.DAL.csproj" />
-    <ProjectReference Include="..\NS.Quizzy.Server.Models\NS.Quizzy.Server.Models.csproj" />
   </ItemGroup>
 
 </Project>

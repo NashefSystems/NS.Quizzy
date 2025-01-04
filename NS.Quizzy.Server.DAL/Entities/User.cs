@@ -1,5 +1,6 @@
 ﻿using NS.Shared.Logging;
 using NS.Shared.Logging.Attributes;
+using static NS.Quizzy.Server.DAL.DALEnums;
 
 namespace NS.Quizzy.Server.DAL.Entities
 {
@@ -9,5 +10,7 @@ namespace NS.Quizzy.Server.DAL.Entities
         [SensitiveData(SensitiveDataMode.Sha1)]
         public string Password { get; set; }
         public string FullName { get; set; }
+        public Roles Role { get; set; }
+        public string? TwoFactorSecretKey { get; set; }
     }
 }

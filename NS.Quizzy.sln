@@ -7,11 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NS.Quizzy.Server", "NS.Quiz
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ns.quizzy.client", "ns.quizzy.client\ns.quizzy.client.esproj", "{6FF5CEE2-693D-4DA4-BE06-00E0C06D8323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NS.Quizzy.Server.BL", "NS.Quizzy.Server.BL\NS.Quizzy.Server.BL.csproj", "{363ED32B-8246-4BC3-A5EC-B7A2FBB3FC5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NS.Quizzy.Server.BL", "NS.Quizzy.Server.BL\NS.Quizzy.Server.BL.csproj", "{363ED32B-8246-4BC3-A5EC-B7A2FBB3FC5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NS.Quizzy.Server.Models", "NS.Quizzy.Server.Models\NS.Quizzy.Server.Models.csproj", "{1F3FD7E6-CDF3-4751-A334-8DFCC8F98BFC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NS.Quizzy.Server.DAL", "NS.Quizzy.Server.DAL\NS.Quizzy.Server.DAL.csproj", "{FBC2B8FA-B3F0-4B3F-BDFD-F257AC7778D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NS.Quizzy.Server.DAL", "NS.Quizzy.Server.DAL\NS.Quizzy.Server.DAL.csproj", "{FBC2B8FA-B3F0-4B3F-BDFD-F257AC7778D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{4D5FCF87-B81A-42F4-97B1-1DD23EB56742}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,10 +36,6 @@ Global
 		{363ED32B-8246-4BC3-A5EC-B7A2FBB3FC5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{363ED32B-8246-4BC3-A5EC-B7A2FBB3FC5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{363ED32B-8246-4BC3-A5EC-B7A2FBB3FC5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F3FD7E6-CDF3-4751-A334-8DFCC8F98BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F3FD7E6-CDF3-4751-A334-8DFCC8F98BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F3FD7E6-CDF3-4751-A334-8DFCC8F98BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F3FD7E6-CDF3-4751-A334-8DFCC8F98BFC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBC2B8FA-B3F0-4B3F-BDFD-F257AC7778D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBC2B8FA-B3F0-4B3F-BDFD-F257AC7778D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBC2B8FA-B3F0-4B3F-BDFD-F257AC7778D9}.Release|Any CPU.ActiveCfg = Release|Any CPU

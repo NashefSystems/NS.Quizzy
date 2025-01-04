@@ -1,9 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
-import { AuthenticatUserService } from '../services/authenticat-user.service';
+import { AccountService } from '../services/backend/account.service';
 
 export const adminUserGuard: CanActivateFn = (route, state) => {
-  const authenticatUserService = inject(AuthenticatUserService);
-
-  return !!(authenticatUserService.getUser()?.id);
+  const accountService = inject(AccountService);
+  return accountService.isAuthenticatedUser();
 };

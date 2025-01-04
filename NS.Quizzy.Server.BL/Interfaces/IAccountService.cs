@@ -1,11 +1,13 @@
-﻿using NS.Quizzy.Server.Models.Models;
+﻿using NS.Quizzy.Server.BL.Models;
+using NS.Quizzy.Server.Models.Models;
 
 namespace NS.Quizzy.Server.BL.Interfaces
 {
     public interface IAccountService
     {
         Task<UserDetailsDto> GetDetailsAsync();
-        Task<UserDetailsDto?> LoginAsync(LoginRequest loginRequest);
+        Task<LoginResponse?> LoginAsync(LoginRequest loginRequest);
+        Task<UserDetailsDto?> VerifyOTP(VerifyOTPRequest request);
         Task LogoutAsync();
     }
 }

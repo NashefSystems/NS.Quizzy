@@ -13,7 +13,28 @@
         "LOGIN_SUCCESSFULLY": "Welcome back, {{fullName}}!"
     },
     "MAIN_MENU": {
-        "LOGOUT": "Logout"
+        "LOGOUT": "Logout",
+        "ITEMS": {
+            "CLASS_LIST": "Classes",
+            "EXAM_LIST": "Exams",
+            "EXAM_TYPE_LIST": "Exam types",
+            "QUESTIONNAIRE_LIST": "Questionnaires",
+            "SUBJECT_LIST": "Subjects"
+        }
+    },
+    "TABLE": {
+        "SEARCH": "Search",
+        "SEARCH_PLACEHOLDER": "Search...",
+        "EMPTY_STATUS": "🤔</br>No matching results found</br>Try again!",
+        "ACTIONS": {
+            "ADD": "Add New Item",
+            "EDIT": "Edit",
+            "DELETE": "delete"
+        }
+    },
+    "SUBJECT_AREA": {
+        "NAME": "Subject",
+        "ITEM_ORDER": "Item order"
     },
     "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}"
 }

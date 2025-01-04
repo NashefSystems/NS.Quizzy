@@ -99,3 +99,11 @@ mat-snack-bar-container.no-panel {
 .full-width {
     width: 100%;
 }
+
+.rtl {
+    direction: rtl;
+
+    * {
+        direction: rtl;
+    }
+}

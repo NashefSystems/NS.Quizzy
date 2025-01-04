@@ -5,6 +5,7 @@ using NS.Quizzy.Server.DAL.Entities;
 using NS.Security;
 using System.Reflection;
 using static NS.Quizzy.Server.DAL.DALEnums;
+using NS.Quizzy.Server.DAL.Extensions;
 
 namespace NS.Quizzy.Server.DAL
 {
@@ -70,9 +71,19 @@ namespace NS.Quizzy.Server.DAL
 
                 entity.HasIndex(p => p.Email).IsUnique(true);
                 entity.Property(e => e.Email).IsRequired(true);
+
                 entity
                     .Property(e => e.Password)
                     .HasConversion(v => UsersPasswordToDBValue(v), dbv => UsersPasswordFromDBValue(dbv));
+
+                entity
+                   .Property(e => e.Role)
+                   .IsRequired(true)
+                   .HasDefaultValue(Roles.Student)
+                   .HasConversion(v => v.ToStringValue(), dbv => dbv.ToEnumValue<Roles>());
+
+                entity.Property(e => e.TwoFactorSecretKey).HasMaxLength(50);
+
                 entity.Property(e => e.FullName).IsRequired(true);
                 entity.HasData(InitialData.UserEntityData.GetData());
             }
@@ -205,32 +216,14 @@ namespace NS.Quizzy.Server.DAL
                 entity
                     .Property(e => e.ValueType)
                     .IsRequired(true)
-                    .HasConversion(v => EnumToDBValue(v), dbv => EnumFromDBValue<AppSettingValueTypes>(dbv));
+                    .HasConversion(v => v.ToStringValue(), dbv => dbv.ToEnumValue<AppSettingValueTypes>());
 
                 entity
                     .Property(e => e.Target)
                     .IsRequired(true)
-                    .HasConversion(v => EnumToDBValue(v), dbv => EnumFromDBValue<AppSettingTargets>(dbv));
+                    .HasConversion(v => v.ToStringValue(), dbv => dbv.ToEnumValue<AppSettingTargets>());
 
                 entity.HasData(InitialData.AppSettingEntityData.GetData());
-            }
-
-            private static T? EnumFromDBValue<T>(string? dbValue)
-            {
-                if (string.IsNullOrWhiteSpace(dbValue))
-                {
-                    return default;
-                }
-                return (T)Enum.Parse(typeof(T), dbValue);
-            }
-
-            private static string? EnumToDBValue<T>(T value) where T : Enum
-            {
-                if (value == null)
-                {
-                    return null;
-                }
-                return value.ToString();
             }
         }
     }

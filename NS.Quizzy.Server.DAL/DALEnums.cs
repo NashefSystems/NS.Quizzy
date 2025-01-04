@@ -25,5 +25,13 @@ namespace NS.Quizzy.Server.DAL
             String,
             Object,
         }
+
+        public enum Roles
+        {
+            Student,
+            Admin,
+            Developer,
+            SuperAdmin
+        }
     }
 }
