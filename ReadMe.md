@@ -7,19 +7,14 @@ dotnet tool install --global dotnet-ef
 dotnet add package Microsoft.EntityFrameworkCore.Tools
 ```
 
-#### ➕ To create a new migration:
+#### ➕ To add a new migration:
 ```bash
 dotnet ef migrations add "Initialization DataBase" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
-#### ❌ To remove all migrations:
+#### ❌ To remove last migrations:
 ```bash
 dotnet ef migrations remove -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\ -y
-```
-
-#### To add a new migration:
-```
-dotnet ef migrations add <<MigrationName>> -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
 #### To generate migration script:

@@ -2,24 +2,25 @@
 using NS.Quizzy.Server.BL.Interfaces;
 using OtpNet;
 using QRCoder;
-using static System.Net.WebRequestMethods;
 
 namespace NS.Quizzy.Server.BL.Services
 {
     internal class OTPService : IOTPService
     {
         private readonly string _appName;
-        private readonly string _issuer;
 
         public OTPService(IConfiguration configuration)
         {
             _appName = configuration.GetValue<string>("AppName") ?? "";
-            _issuer = configuration.GetValue<string>("AppIssuer") ?? "";
         }
 
-        public string GenerateQRCode(string secretKey, string email)
+        public string GetTwoFactorUrl(string secretKey, string email)
         {
-            var url = $"otpauth://totp/{_appName}:{email}?secret={secretKey}&issuer={_issuer}";
+            return $"otpauth://totp/{_appName}:{email}?secret={secretKey}&issuer={_appName}";
+        }
+
+        public string GenerateQRCode(string url)
+        {
             using var qrGenerator = new QRCodeGenerator();
             using var qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
             using var qrCode = new PngByteQRCode(qrCodeData);
@@ -28,14 +29,14 @@ namespace NS.Quizzy.Server.BL.Services
 
         public string GenerateSecretKey()
         {
-            var key = KeyGeneration.GenerateRandomKey(40);
+            var key = KeyGeneration.GenerateRandomKey(20);
             return Base32Encoding.ToString(key);
         }
 
         public bool VerifyOTP(string twoFactorSecretKey, string otp)
         {
             var totp = new Totp(Base32Encoding.ToBytes(twoFactorSecretKey));
-            return totp.VerifyTotp(otp, out _);
+            return totp.VerifyTotp(otp, out _, VerificationWindow.RfcSpecifiedNetworkDelay);
         }
     }
 }

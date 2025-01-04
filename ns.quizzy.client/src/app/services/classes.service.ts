@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ClassDto } from '../../models/backend-models/class.dto';
+import { IClassDto } from '../models/backend/class.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class ClassesService {
   readonly baseUrl = '/api/classes';
 
   getAll() {
-    return this.http.get<ClassDto[]>(`${this.baseUrl}`);
+    return this.http.get<IClassDto[]>(`${this.baseUrl}`);
   }
 
 }

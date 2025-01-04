@@ -48,39 +48,63 @@ namespace NS.Quizzy.Server.BL.Services
                 RequestId = _logger.GetGuid(),
                 RequiresTwoFactor = true,
             };
-            await _cacheProvider.SetOrUpdateAsync(GetOTPCacheKey(res.RequestId), user.Id, TimeSpan.FromHours(1));
 
             if (string.IsNullOrWhiteSpace(user.TwoFactorSecretKey))
             {
-                user.TwoFactorSecretKey = _otpService.GenerateSecretKey();
-                _appDbContext.SaveChanges();
-
-                res.TwoFactorSecretKey = user.TwoFactorSecretKey;
-                res.QrCode = _otpService.GenerateQRCode(user.TwoFactorSecretKey, user.Email);
+                var secretKey = _otpService.GenerateSecretKey();
+                res.TwoFactorSecretKey = secretKey;
+                res.TwoFactorUrl = _otpService.GetTwoFactorUrl(secretKey, user.Email);
+                res.TwoFactorQrCode = _otpService.GenerateQRCode(res.TwoFactorUrl);
                 _logger.Info($"Generated secret key");
             }
+
+            var cacheInfo = new TwoFactorCacheInfo()
+            {
+                UserId = user.Id,
+                TwoFactorSecretKey = res.TwoFactorSecretKey,
+            };
+            await _cacheProvider.SetOrUpdateAsync(GetTwoFactorCacheKey(res.RequestId), cacheInfo, TimeSpan.FromHours(1));
 
             return res;
         }
 
-        private static string GetOTPCacheKey(string requestId)
+        private static string GetTwoFactorCacheKey(string requestId)
         {
-            return $"OTP:Quizzy:{requestId}";
+            return $"TwoFactor:Quizzy:{requestId}";
         }
 
         public async Task<UserDetailsDto?> VerifyOTP(VerifyOTPRequest request)
         {
-            var userId = await _cacheProvider.GetAsync<Guid?>(GetOTPCacheKey(request.Id));
-            if (userId == null || userId == Guid.Empty)
+            var twoFactorCacheKey = GetTwoFactorCacheKey(request.Id);
+            var cacheInfo = await _cacheProvider.GetAsync<TwoFactorCacheInfo?>(twoFactorCacheKey);
+            if (cacheInfo?.UserId == null || cacheInfo.UserId == Guid.Empty)
             {
                 return null;
             }
 
-            var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == userId && x.IsDeleted == false);
-            if (user == null || string.IsNullOrWhiteSpace(user.TwoFactorSecretKey) || !_otpService.VerifyOTP(user.TwoFactorSecretKey, request.OTP))
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == cacheInfo.UserId && x.IsDeleted == false);
+            if (user == null)
             {
                 return null;
             }
+
+            var twoFactorSecretKey = user.TwoFactorSecretKey;
+            if (string.IsNullOrWhiteSpace(twoFactorSecretKey))
+            {
+                twoFactorSecretKey = cacheInfo.TwoFactorSecretKey;
+            }
+
+            if (!_otpService.VerifyOTP(twoFactorSecretKey ?? "", request.Token))
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(user.TwoFactorSecretKey) && !string.IsNullOrWhiteSpace(cacheInfo.TwoFactorSecretKey))
+            {
+                user.TwoFactorSecretKey = cacheInfo.TwoFactorSecretKey;
+                await _appDbContext.SaveChangesAsync();
+            }
+            await _cacheProvider.DeleteAsync(twoFactorCacheKey);
 
             var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName);
 

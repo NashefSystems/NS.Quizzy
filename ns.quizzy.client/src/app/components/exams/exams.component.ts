@@ -4,8 +4,8 @@ import { HeaderService } from '../../services/header.service';
 import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
 import { ClassesService } from '../../services/classes.service';
 import { SubjectsService } from '../../services/backend/subjects.service';
-import { ClassDto } from '../../../models/backend-models/class.dto';
-import { SubjectDto } from '../../../models/backend-models/subject.dto';
+import { IClassDto } from '../../models/backend/class.dto';
+import { ISubjectDto } from '../../models/backend/subject.dto';
 import { FilterDialogData, FilterDialogResult } from './filter-dialog/filter-dialog-data';
 import { forkJoin } from 'rxjs';
 import { OpenDialogPayload } from '../../models/dialog/open-dialog.payload';
@@ -22,8 +22,8 @@ export class ExamsComponent implements OnInit {
   private readonly classesService = inject(ClassesService);
   private readonly subjectsService = inject(SubjectsService);
 
-  classes: ClassDto[];
-  subjects: SubjectDto[];
+  classes: IClassDto[];
+  subjects: ISubjectDto[];
 
   filterClassIds: string[] = [];
   filterSubjectIds: string[] = [];

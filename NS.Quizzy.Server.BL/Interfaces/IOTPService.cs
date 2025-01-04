@@ -8,7 +8,8 @@ namespace NS.Quizzy.Server.BL.Interfaces
 {
     internal interface IOTPService
     {
-        string GenerateQRCode(string secretKey, string email);
+        string GetTwoFactorUrl(string secretKey, string email);
+        string GenerateQRCode(string url);
         string GenerateSecretKey();
         bool VerifyOTP(string twoFactorSecretKey, string oTP);
     }

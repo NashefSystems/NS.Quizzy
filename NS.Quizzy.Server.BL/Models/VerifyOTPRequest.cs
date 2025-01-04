@@ -8,6 +8,6 @@ namespace NS.Quizzy.Server.BL.Models
         public string Id { get; set; }
 
         [Required]
-        public string OTP { get; set; }
+        public string Token { get; set; }
     }
 }

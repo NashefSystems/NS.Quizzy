@@ -48,6 +48,7 @@ import { ClassListComponent } from './components/class-area/class-list/class-lis
 import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
 import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
 import { TableComponent } from './components/table/table.component';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 
 // Factory function for HttpLoader
@@ -90,6 +91,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    QRCodeComponent,
   ],
   providers: [
     provideHttpClient(),

@@ -1,9 +1,9 @@
-import { ClassDto } from "../../../../models/backend-models/class.dto";
-import { SubjectDto } from "../../../../models/backend-models/subject.dto";
+import { IClassDto } from "../../../models/backend/class.dto";
+import { ISubjectDto } from "../../../models/backend/subject.dto";
 
 export class FilterDialogData {
-    classes: ClassDto[];
-    subjects: SubjectDto[];
+    classes: IClassDto[];
+    subjects: ISubjectDto[];
     oldResult: FilterDialogResult;
 }
 

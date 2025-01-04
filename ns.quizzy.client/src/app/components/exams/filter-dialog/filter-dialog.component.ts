@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FilterDialogData, FilterDialogResult } from './filter-dialog-data';
-import { ClassDto } from '../../../../models/backend-models/class.dto';
+import { IClassDto } from '../../../models/backend/class.dto';
 import { ICheckboxTreeItem } from '../../checkbox-tree/checkbox-tree-item';
 
 @Component({
@@ -23,7 +23,7 @@ export class FilterDialogComponent implements OnInit {
     this.subjectTree = this.data.subjects.map(c => ({ id: c.id, text: c.name, children: [] }));
   }
 
-  getCheckboxTreeItem(item: ClassDto): ICheckboxTreeItem {
+  getCheckboxTreeItem(item: IClassDto): ICheckboxTreeItem {
     return {
       id: item.id,
       text: item.name,

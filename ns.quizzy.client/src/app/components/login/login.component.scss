@@ -1,9 +1,13 @@
 .page-container {
     display: flex;
-    gap: 1rem;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    $maxHeight: calc(var(--app-dialog-max-height) - 2.1rem);
+    height: $maxHeight;
+    max-height: $maxHeight;
+    justify-content: flex-start;
+    overflow-y: hidden;
+
 
     header {
         display: flex;
@@ -11,16 +15,33 @@
         width: 100%;
     }
 
-    img {
-        max-width: 50%;
-        margin-bottom: 2rem;
-    }
 
-    form {
-        width: 80%;
+    .page-body {
+        height: 100%;
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        overflow-y: auto;
 
-        .login-btn {
-            margin-top: 1rem;
+        .logo {
+            max-width: 50%;
+            margin-bottom: 2rem;
+        }
+
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form {
+            width: 80%;
+
+            .login-btn {
+                margin-top: 1rem;
+            }
         }
     }
 }

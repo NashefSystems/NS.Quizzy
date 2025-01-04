@@ -1,19 +1,32 @@
 {
     "DIR": "ltr",
+    "ERRORS": {
+        "FIELD_REQUIRED": "Field is required"
+    },
     "LOGIN": {
-        "TITLE": "Login",
+        "TITLE": "Log in",
         "EMAIL": "Email",
         "PASSWORD": "Password",
         "REMEMBER_ME": "Remember Me",
-        "LOGIN_BUTTON": "Login",
+        "LOGIN_BUTTON": "Log in",
         "EMAIL_REQUIRED": "Email is required.",
         "EMAIL_INVALID": "Please enter a valid email address.",
         "PASSWORD_REQUIRED": "Password is required.",
         "INVALID_CREDENTIALS": "Invalid credentials",
-        "LOGIN_SUCCESSFULLY": "Welcome back, {{fullName}}!"
+        "LOGIN_SUCCESSFULLY": "Welcome back, {{fullName}}!",
+        "TWO_FACTOR": {
+            "TITLE": "Two-Factor Authentication",
+            "SETUP": {
+                "LINE_1": "1. Install an authenticator app on your mobile device",
+                "LINE_2": "2. Scan the following QR code in your authenticator app",
+                "LINE_3": "3. Enter the code from your authenticator app below"
+            },
+            "TOKEN_TITLE": "Enter an authenticator app code:",
+            "ERROR": "Invalid authentication token entered!<br>Please use the token provided by your authentication app on your phone."
+        }
     },
     "MAIN_MENU": {
-        "LOGOUT": "Logout",
+        "LOGOUT": "Log out",
         "ITEMS": {
             "CLASS_LIST": "Classes",
             "EXAM_LIST": "Exams",

@@ -8,6 +8,8 @@ import { NotificationsService } from '../../services/notifications.service';
 import { LocalStorageKeys } from '../../enums/local-storage-keys.enum';
 import { MatDialogRef } from '@angular/material/dialog';
 import { LoginSteps } from './login-steps.enum';
+import { LoginResponse } from '../../models/backend/login.response';
+import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
 
 @Component({
   selector: 'app-login',
@@ -25,12 +27,17 @@ export class LoginComponent implements OnInit {
   private readonly _dialogRef = inject(MatDialogRef<LoginComponent>);
   LoginSteps = LoginSteps;
   step = LoginSteps.UserNameAndPassword;
+  loginResponse: LoginResponse | null = null;
 
   hidePassword = true;
   loginForm: FormGroup = this._fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
     rememberMe: [false]
+  });
+
+  twoFactorForm: FormGroup = this._fb.group({
+    token: ['', [Validators.required]]
   });
 
   ngOnInit(): void {
@@ -46,46 +53,74 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginSubmit(): void {
-    if (this.loginForm.valid) {
-      const { email, password, rememberMe } = this.loginForm.value;
+    if (!this.loginForm.valid) {
+      return;
+    }
+    const { email, password, rememberMe } = this.loginForm.value;
 
-      if (rememberMe) {
-        const storageValue = { email: email, password: '' };
-        this._clientAppSettingsService.get().subscribe({
-          next: (data) => {
-            if (data.SavePasswordOnRememberMe) {
-              storageValue.password = password;
-            }
-            this._storageService.setSensitiveLocalStorage(LocalStorageKeys.loginInfo, storageValue);
-            this.step = LoginSteps.OTP;
+    if (rememberMe) {
+      const storageValue = { email: email, password: '' };
+      this._clientAppSettingsService.get().subscribe({
+        next: (data) => {
+          if (data.SavePasswordOnRememberMe) {
+            storageValue.password = password;
           }
-        });
-      } else {
-        // Clear local storage if remember me is unchecked
-        this._storageService.removeLocalStorage(LocalStorageKeys.loginInfo);
-      }
-
-      const loginRequest: LoginRequest = {
-        email: email,
-        password: password
-      };
-      this._accountService.login(loginRequest).subscribe({
-        next: (responseBody) => {
-          this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: responseBody.fullName });
-          this._dialogRef.close();
-        },
-        error: (error) => {
-          if (error?.status === 401) {
-            this._notificationsService.error("LOGIN.INVALID_CREDENTIALS");
-            return;
-          }
-          const msg = error?.message;
-          this._notificationsService.fatal('UNEXPECTED_ERROR', { message: msg });
+          this._storageService.setSensitiveLocalStorage(LocalStorageKeys.loginInfo, storageValue);
         }
       });
+    } else {
+      // Clear local storage if remember me is unchecked
+      this._storageService.removeLocalStorage(LocalStorageKeys.loginInfo);
     }
+
+    const loginRequest: LoginRequest = {
+      email: email,
+      password: password
+    };
+    this._accountService.login(loginRequest).subscribe({
+      next: (responseBody) => {
+        this.loginResponse = responseBody;
+        if (responseBody.requiresTwoFactor) {
+          this.step = LoginSteps.OTP;
+        } else {
+          this._accountService.getDetails().subscribe({
+            next: (data) => {
+              this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: data.fullName });
+              this._dialogRef.close();
+            }
+          })
+        }
+      },
+      error: (error) => {
+        if (error?.status === 401) {
+          this._notificationsService.error("LOGIN.INVALID_CREDENTIALS");
+          return;
+        }
+        const msg = error?.message;
+        this._notificationsService.fatal('UNEXPECTED_ERROR', { message: msg });
+      }
+    });
   }
 
+  onVerifyOTP() {
+    if (!this.loginForm.valid) {
+      return;
+    }
+    const { token } = this.twoFactorForm.value;
+    const request: VerifyOTPRequest = {
+      id: this.loginResponse?.requestId ?? '',
+      token: token,
+    };
+    this._accountService.verifyOTP(request).subscribe({
+      next: (responseBody) => {
+        this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: responseBody.fullName });
+        this._dialogRef.close();
+      },
+      error: (error) => {
+        this._notificationsService.error('LOGIN.TWO_FACTOR.ERROR');
+      }
+    });
+  }
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }

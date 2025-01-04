@@ -2,7 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { UserDetailsDto } from '../../models/backend/user-details.dto';
 import { LoginRequest } from '../../models/backend/login.request';
+import { LoginResponse } from '../../models/backend/login.response';
 import { BehaviorSubject, of, tap } from 'rxjs';
+import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +24,12 @@ export class AccountService extends BaseService {
   }
 
   login(request: LoginRequest) {
-    return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/Login`, request)
+    this.userSubject.next(null)
+    return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
+  }
+
+  verifyOTP(request: VerifyOTPRequest) {
+    return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/VerifyOTP`, request)
       .pipe(tap({
         next: (data) => this.userSubject.next(data),
         error: () => this.userSubject.next(null),
@@ -33,6 +40,7 @@ export class AccountService extends BaseService {
     if (this.userSubject.value) {
       return of(this.userSubject.value);
     }
+    
     return this.httpClient.get<UserDetailsDto>(`${this.getBaseUrl()}/Details`)
       .pipe(tap({
         next: (data) => this.userSubject.next(data),

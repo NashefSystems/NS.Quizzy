@@ -13,6 +13,7 @@ using NS.Quizzy.Server.BL.Services;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
 using NS.Security;
+using NS.Shared.CacheProvider.Extensions;
 using NS.Shared.Logging;
 using NS.Shared.Logging.Extensions;
 using System.Security.Claims;
@@ -25,6 +26,7 @@ namespace NS.Quizzy.Server.BL.Extensions
         {
             ArgumentNullException.ThrowIfNull(services);
             services.AddNSLogger(configuration);
+            services.AddNSCacheProvider();
             services.AddQuizzyDALServices();
             services.AddMappingProfiles();
 
@@ -91,6 +93,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<ISubjectsService, SubjectsService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAppSettingsService, AppSettingsService>();
+            services.AddScoped<IOTPService, OTPService>();
             services.AddScoped<ITestService, TestService>();
 
             return services;
