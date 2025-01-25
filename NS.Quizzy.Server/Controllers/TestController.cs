@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Models.Models;
+using NS.Shared.Logging.Attributes;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace NS.Quizzy.Server.Controllers
@@ -8,6 +9,7 @@ namespace NS.Quizzy.Server.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
+    [LoggingAPICallInfo]
     public class TestController : ControllerBase
     {
         private readonly ITestService _testService;

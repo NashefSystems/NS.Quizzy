@@ -1,13 +1,11 @@
-﻿using NS.Quizzy.Server.Models.DTOs;
-
-namespace NS.Quizzy.Server.BL.Interfaces
+﻿namespace NS.Quizzy.Server.BL.Interfaces
 {
-    public interface IBaseService<T> where T : BaseEntityDto
+    public interface IBaseService<PayloadDto, Dto>
     {
-        Task<List<T>> GetAllAsync();
-        Task<T> GetAsync(Guid id);
-        Task<T> InsertAsync(T model);
-        Task<T> UpdateAsync(Guid id, T model);
-        Task DeleteAsync(Guid id);
+        Task<List<Dto>> GetAllAsync();
+        Task<Dto?> GetAsync(Guid id);
+        Task<Dto> InsertAsync(PayloadDto model);
+        Task<Dto?> UpdateAsync(Guid id, PayloadDto model);
+        Task<bool> DeleteAsync(Guid id);
     }
 }

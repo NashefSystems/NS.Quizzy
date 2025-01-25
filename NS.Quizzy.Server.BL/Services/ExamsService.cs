@@ -23,11 +23,6 @@ namespace NS.Quizzy.Server.BL.Services
             _mapper = mapper;
         }
 
-        public Task DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<ExamDto>> FilterAsync(DateTimeOffset? dtFrom, DateTimeOffset? dtTo, List<Guid>? classIds, List<Guid>? subjectIds)
         {
             dtFrom ??= new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
@@ -58,17 +53,22 @@ namespace NS.Quizzy.Server.BL.Services
             throw new NotImplementedException("Get all");
         }
 
-        public Task<ExamDto> GetAsync(Guid id)
+        public Task<ExamDto?> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ExamDto> InsertAsync(ExamDto model)
+        public Task<ExamDto> InsertAsync(ExamPayloadDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ExamDto> UpdateAsync(Guid id, ExamDto model)
+        public Task<ExamDto?> UpdateAsync(Guid id, ExamPayloadDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }

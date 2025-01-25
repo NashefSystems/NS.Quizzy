@@ -1,0 +1,27 @@
+<app-back-button></app-back-button>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'SUBJECT_AREA.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" autocomplete="off" />
+        <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            <ng-container *ngIf="form.get('name')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'SUBJECT_AREA.ITEM_ORDER' | translate }}</mat-label>
+        <input matInput formControlName="itemOrder" autocomplete="off" inputmode="numeric" type="number" />
+        <mat-error *ngIf="form.get('itemOrder')?.invalid && form.get('itemOrder')?.touched">
+            <ng-container *ngIf="form.get('itemOrder')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <button mat-stroked-button color="primary" class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+        {{ id ? 'Update' : 'Add' | translate }}
+    </button>
+</form>

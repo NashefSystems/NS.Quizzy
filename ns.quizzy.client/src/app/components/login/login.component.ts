@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
         } else {
           this._accountService.getDetails().subscribe({
             next: (data) => {
-              this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: data.fullName });
+              this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: data?.fullName });
               this._dialogRef.close();
             }
           })
@@ -96,8 +96,7 @@ export class LoginComponent implements OnInit {
           this._notificationsService.error("LOGIN.INVALID_CREDENTIALS");
           return;
         }
-        const msg = error?.message;
-        this._notificationsService.fatal('UNEXPECTED_ERROR', { message: msg });
+        this._notificationsService.httpErrorHandler(error);
       }
     });
   }
@@ -108,7 +107,7 @@ export class LoginComponent implements OnInit {
     }
     const { token } = this.twoFactorForm.value;
     const request: VerifyOTPRequest = {
-      id: this.loginResponse?.requestId ?? '',
+      id: this.loginResponse?.contextId ?? '',
       token: token,
     };
     this._accountService.verifyOTP(request).subscribe({

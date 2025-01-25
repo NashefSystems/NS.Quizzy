@@ -17,11 +17,11 @@ export class MainMenuComponent implements OnInit {
 
   ngOnInit(): void {
     this.menuItems = [
-      { text: 'MAIN_MENU.ITEMS.EXAM_LIST', icon: 'rule', routerLink: 'exam-list' },
-      { text: 'MAIN_MENU.ITEMS.CLASS_LIST', icon: 'school', routerLink: 'class-list' },
-      { text: 'MAIN_MENU.ITEMS.QUESTIONNAIRE_LIST', icon: 'dynamic_form', routerLink: 'questionnaire-list' },
-      { text: 'MAIN_MENU.ITEMS.EXAM_TYPE_LIST', icon: 'format_size', routerLink: 'exam-type-list' },
-      { text: 'MAIN_MENU.ITEMS.SUBJECT_LIST', icon: 'category', routerLink: 'subject-list' },
+      { text: 'MAIN_MENU.ITEMS.EXAM_LIST', icon: 'rule', routerLink: 'exams' },
+      { text: 'MAIN_MENU.ITEMS.CLASS_LIST', icon: 'school', routerLink: 'classes' },
+      { text: 'MAIN_MENU.ITEMS.QUESTIONNAIRE_LIST', icon: 'dynamic_form', routerLink: 'questionnaires' },
+      { text: 'MAIN_MENU.ITEMS.EXAM_TYPE_LIST', icon: 'format_size', routerLink: 'exam-types' },
+      { text: 'MAIN_MENU.ITEMS.SUBJECT_LIST', icon: 'category', routerLink: 'subjects' },
       { text: 'Developer', icon: 'code_blocks', routerLink: 'test' },
     ]
   }

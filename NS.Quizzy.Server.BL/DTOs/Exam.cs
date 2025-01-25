@@ -1,13 +1,20 @@
-﻿namespace NS.Quizzy.Server.Models.DTOs
+﻿using Newtonsoft.Json;
+
+namespace NS.Quizzy.Server.Models.DTOs
 {
-    public class ExamDto : BaseEntityDto
+    public class ExamPayloadDto
     {
         public Guid QuestionnaireId { get; set; }
         public Guid ExamTypeId { get; set; }
         public DateTime StartTime { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan DurationWithExtra { get; set; }
-      
+    }
+
+    public class ExamDto : ExamPayloadDto, IBaseEntityDto
+    {
+        [JsonProperty(Order = int.MinValue)]
+        public Guid Id { get; set; }
 
         public virtual QuestionnaireDto Questionnaire { get; set; }
         public virtual ExamTypeDto ExamType { get; set; }

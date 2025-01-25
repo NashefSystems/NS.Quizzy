@@ -49,6 +49,10 @@ import { ExamTypeListComponent } from './components/exam-type-area/exam-type-lis
 import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
 import { TableComponent } from './components/table/table.component';
 import { QRCodeComponent } from 'angularx-qrcode';
+import { SubjectAddOrEditComponent } from './components/subject-area/subject-add-or-edit/subject-add-or-edit.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { BackButtonComponent } from './components/back-button/back-button.component';
+import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-type-add-or-edit/exam-type-add-or-edit.component';
 
 
 // Factory function for HttpLoader
@@ -75,6 +79,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ExamTypeListComponent,
     SubjectListComponent,
     TableComponent,
+    SubjectAddOrEditComponent,
+    ConfirmDialogComponent,
+    BackButtonComponent,
+    ExamTypeAddOrEditComponent,
   ],
   imports: [
     BrowserModule,

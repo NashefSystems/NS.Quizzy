@@ -49,5 +49,20 @@
         "NAME": "נושא",
         "ITEM_ORDER": "סדר הופעה"
     },
-    "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}"
+    "EXAM_TYPE_AREA": {
+        "NAME": "סוג בחינה",
+        "ITEM_ORDER": "סדר הופעה"
+    },
+    "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}",
+    "CONFIRM_DELETE_DIALOG": {
+        "CONFIRM_DELETE": "האם אתה בטוח שברצונך למחוק את '{{itemName}}'?",
+        "CONFIRM": "אישור",
+        "CANCEL": "ביטול"
+    },
+    "Add": "הוסף",
+    "Update": "עדכן",
+    "ITEM_ADDED_SUCCESSFULLY": "פריט נוסף בהצלחה",
+    "ITEM_UPDATED_SUCCESSFULLY": "פריט עודכן בהצלחה",
+    "Subject already exists": "הנושא כבר קיים",
+    "Exam type already exists": "סוג הבחינה כבר קיים"
 }

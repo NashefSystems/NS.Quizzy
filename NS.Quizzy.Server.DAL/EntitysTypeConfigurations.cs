@@ -69,7 +69,7 @@ namespace NS.Quizzy.Server.DAL
                 base.Configure(entity);
                 entity.ToTable("Users");
 
-                entity.HasIndex(p => p.Email).IsUnique(true);
+                entity.HasIndex(p => p.Email).IsUnique(true).HasFilter("IsDeleted = '0'");
                 entity.Property(e => e.Email).IsRequired(true);
 
                 entity
@@ -114,7 +114,7 @@ namespace NS.Quizzy.Server.DAL
                 base.Configure(entity);
                 entity.ToTable("Classes");
 
-                entity.HasIndex(p => p.Name).IsUnique(true);
+                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
                 entity
                     .HasOne(c => c.Parent)
                     .WithMany(c => c.Children)
@@ -164,7 +164,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("ExamTypes");
-                entity.HasIndex(p => p.Name).IsUnique(true);
+                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
                 entity.Property(p => p.Name).IsRequired(true);
 
                 entity.HasData(InitialData.ExamTypeEntityData.GetData());
@@ -177,7 +177,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("Questionnaires");
-                entity.HasIndex(p => p.Number).IsUnique(true);
+                entity.HasIndex(p => p.Number).IsUnique(true).HasFilter("IsDeleted = '0'");
                 entity.Property(p => p.Number).IsRequired(true);
                 entity.Property(p => p.SubjectId).IsRequired(true);
                 entity.Property(p => p.Duration).IsRequired(true);
@@ -197,7 +197,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("Subjects");
-                entity.HasIndex(p => p.Name).IsUnique(true);
+                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
                 entity.Property(p => p.Name).IsRequired(true);
 
                 entity.HasData(InitialData.SubjectEntityData.GetData());
@@ -211,7 +211,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("AppSettings");
-                entity.HasIndex(p => p.Key).IsUnique(true);
+                entity.HasIndex(p => p.Key).IsUnique(true).HasFilter("IsDeleted = '0'");
 
                 entity
                     .Property(e => e.ValueType)

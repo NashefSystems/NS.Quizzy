@@ -2,6 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using NS.Quizzy.Server.BL.Extensions;
+using NS.Shared.Logging.Extensions;
 
 namespace NS.Quizzy.Server
 {
@@ -87,8 +88,29 @@ namespace NS.Quizzy.Server
             app.UseQuizzyBL();
             app.UseAuthorization();
 
-
+            app.UseExceptionHandler("/error"); // Centralized exception handling.
             app.MapControllers();
+            app.MapDefaultControllerRoute();
+
+            #region RequestResponseLoggingMiddleware
+            // Must call Middleware after calling `app.UseRouting()` or `app.MapControllers()`
+            app.UseRequestResponseLoggingMiddleware((logBag, apiCallInfoData) =>
+            {
+                logBag.AddOrUpdateParameter("Method", apiCallInfoData.Method);
+                logBag.AddOrUpdateParameter("URL", apiCallInfoData.GetFullURL());
+                logBag.AddOrUpdateParameter("StatusCode", apiCallInfoData.StatusCode);
+                logBag.AddOrUpdateParameter("IsSuccessful", apiCallInfoData.IsSuccessful());
+                logBag.Exception = apiCallInfoData.Exception;
+                if (!apiCallInfoData.IsSuccessful())
+                {
+                    logBag.AddOrUpdateParameter("RequestBody", apiCallInfoData.RequestBody);
+                    logBag.AddOrUpdateParameter("ResponseBody", apiCallInfoData.ResponseBody);
+                }
+                return Task.CompletedTask;
+            });
+            #endregion
+            app.UseCatchingExceptionMiddleware();
+
 
             app.MapFallbackToFile("/index.html");
 

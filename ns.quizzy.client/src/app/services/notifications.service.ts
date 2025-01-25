@@ -31,6 +31,16 @@ export class NotificationsService {
         this.notify(message, messageParams, 'fatal', duration);
     }
 
+    httpErrorHandler(err: any) {
+        const msg = err?.error?.message || err?.message;
+        if (err?.status < 500) {
+            this.error(this._appTranslateService.translate(msg));
+            return;
+        }
+        console.log(err);
+        this.fatal('UNEXPECTED_ERROR', { message: this._appTranslateService.translate(msg) });
+    }
+
     private notify(message: string, messageParams: { [key: string]: any } = {}, type: NotificationSnackBarType, duration: number = 3000): void {
         const data: INotificationSnackBarData = {
             message: this._appTranslateService.translate(message, messageParams),

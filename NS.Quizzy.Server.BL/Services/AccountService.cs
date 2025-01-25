@@ -33,19 +33,18 @@ namespace NS.Quizzy.Server.BL.Services
         {
             var user = await _appDbContext.Users.FirstOrDefaultAsync(x =>
                 x.IsDeleted == false &&
-                x.Email.ToUpper() == loginRequest.Email.ToUpper() &&
-                x.Password == loginRequest.Password
+                x.Email.ToUpper() == loginRequest.Email.ToUpper()
             );
 
-            if (user == null)
+            if (user == null || user.Password != loginRequest.Password)
             {
-                _logger.Error($"Login error", new { loginRequest });
+                _logger.Error($"Login error", new { loginRequest, UserId = user?.Id, UserEmail = user?.Email });
                 return null;
             }
 
             var res = new LoginResponse()
             {
-                RequestId = _logger.GetGuid(),
+                ContextId = _logger.GetContextId(),
                 RequiresTwoFactor = true,
             };
 
@@ -63,7 +62,7 @@ namespace NS.Quizzy.Server.BL.Services
                 UserId = user.Id,
                 TwoFactorSecretKey = res.TwoFactorSecretKey,
             };
-            await _cacheProvider.SetOrUpdateAsync(GetTwoFactorCacheKey(res.RequestId), cacheInfo, TimeSpan.FromHours(1));
+            await _cacheProvider.SetOrUpdateAsync(GetTwoFactorCacheKey(res.ContextId), cacheInfo, TimeSpan.FromHours(1));
 
             return res;
         }
@@ -130,12 +129,14 @@ namespace NS.Quizzy.Server.BL.Services
         public async Task<UserDetailsDto> GetDetailsAsync()
         {
             var userId = _httpContextAccessor.HttpContext.GetUserId();
+            var tokenId = _httpContextAccessor.HttpContext.GetTokenId();
             var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == userId);
             return new UserDetailsDto()
             {
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
+                TokenId = tokenId
             };
         }
 

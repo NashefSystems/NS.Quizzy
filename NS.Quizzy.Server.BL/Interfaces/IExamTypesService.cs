@@ -2,7 +2,7 @@
 
 namespace NS.Quizzy.Server.BL.Interfaces
 {
-    public interface IExamTypesService : IBaseService<ExamTypeDto>
+    public interface IExamTypesService : IBaseService<ExamTypePayloadDto, ExamTypeDto>
     {
     }
 }

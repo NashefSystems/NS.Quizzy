@@ -8,6 +8,8 @@ import { SubjectListComponent } from './components/subject-area/subject-list/sub
 import { ClassListComponent } from './components/class-area/class-list/class-list.component';
 import { TestComponent } from './components/test/test.component';
 import { adminUserGuard } from './guards/admin-user.guard';
+import { SubjectAddOrEditComponent } from './components/subject-area/subject-add-or-edit/subject-add-or-edit.component';
+import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-type-add-or-edit/exam-type-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -16,28 +18,48 @@ const routes: Routes = [
     component: ExamsComponent,
   },
   {
-    path: 'exam-list',
+    path: 'exams',
     component: ExamListComponent,
     canActivate: [adminUserGuard]
   },
   {
-    path: 'class-list',
+    path: 'classes',
     component: ClassListComponent,
     canActivate: [adminUserGuard]
   },
   {
-    path: 'questionnaire-list',
+    path: 'questionnaires',
     component: QuestionnaireListComponent,
     canActivate: [adminUserGuard]
   },
   {
-    path: 'exam-type-list',
+    path: 'exam-types',
     component: ExamTypeListComponent,
     canActivate: [adminUserGuard]
   },
   {
-    path: 'subject-list',
+    path: 'exam-types/new',
+    component: ExamTypeAddOrEditComponent,
+    canActivate: [adminUserGuard]
+  },
+  {
+    path: 'exam-types/edit/:id',
+    component: ExamTypeAddOrEditComponent,
+    canActivate: [adminUserGuard]
+  },
+  {
+    path: 'subjects',
     component: SubjectListComponent,
+    canActivate: [adminUserGuard]
+  },
+  {
+    path: 'subjects/new',
+    component: SubjectAddOrEditComponent,
+    canActivate: [adminUserGuard]
+  },
+  {
+    path: 'subjects/edit/:id',
+    component: SubjectAddOrEditComponent,
     canActivate: [adminUserGuard]
   },
   {

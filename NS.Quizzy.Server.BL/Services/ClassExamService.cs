@@ -10,27 +10,27 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class ClassExamService : IClassExamService
     {
-        public Task DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<List<ClassExamDto>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<ClassExamDto> GetAsync(Guid id)
+        public Task<ClassExamDto?> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ClassExamDto> InsertAsync(ClassExamDto model)
+        public Task<ClassExamDto> InsertAsync(ClassExamPayloadDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ClassExamDto> UpdateAsync(Guid id, ClassExamDto model)
+        public Task<ClassExamDto?> UpdateAsync(Guid id, ClassExamPayloadDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }

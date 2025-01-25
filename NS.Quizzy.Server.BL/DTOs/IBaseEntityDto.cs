@@ -2,7 +2,7 @@
 
 namespace NS.Quizzy.Server.Models.DTOs
 {
-    public class BaseEntityDto
+    public interface IBaseEntityDto
     {
         [JsonProperty(Order = int.MinValue)]
         public Guid Id { get; set; }

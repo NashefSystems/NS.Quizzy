@@ -16,10 +16,6 @@ namespace NS.Quizzy.Server.BL.Services
             _appDbContext = appDbContext;
             _mapper = mapper;
         }
-        public Task DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<List<ClassDto>> GetAllAsync()
         {
@@ -31,17 +27,22 @@ namespace NS.Quizzy.Server.BL.Services
             return _mapper.Map<List<ClassDto>>(items);
         }
 
-        public Task<ClassDto> GetAsync(Guid id)
+        public Task<ClassDto?> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ClassDto> InsertAsync(ClassDto model)
+        public Task<ClassDto> InsertAsync(ClassPayloadDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ClassDto> UpdateAsync(Guid id, ClassDto model)
+        public Task<ClassDto?> UpdateAsync(Guid id, ClassPayloadDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }

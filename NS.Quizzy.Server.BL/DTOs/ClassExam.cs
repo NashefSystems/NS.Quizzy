@@ -1,11 +1,19 @@
-﻿namespace NS.Quizzy.Server.Models.DTOs
+﻿using Newtonsoft.Json;
+
+namespace NS.Quizzy.Server.Models.DTOs
 {
-    public class ClassExamDto : BaseEntityDto
+    public class ClassExamPayloadDto
     {
         public Guid ClassId { get; set; }
-        public virtual ClassDto Class { get; set; }
-
         public Guid ExamId { get; set; }
+    }
+
+    public class ClassExamDto : IBaseEntityDto
+    {
+        [JsonProperty(Order = int.MinValue)]
+        public Guid Id { get; set; }
+
+        public virtual ClassDto Class { get; set; }
         public virtual ExamDto Exam { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 export class LoginResponse {
     requiresTwoFactor: boolean;
-    requestId!: string;
+    contextId!: string;
     twoFactorUrl!: string;
     twoFactorQrCode!: string;
     twoFactorSecretKey!: string;

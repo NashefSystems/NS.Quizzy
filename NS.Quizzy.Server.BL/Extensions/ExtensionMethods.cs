@@ -9,12 +9,14 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.MappingProfiles;
+using NS.Quizzy.Server.BL.Middlewares;
 using NS.Quizzy.Server.BL.Services;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
 using NS.Security;
 using NS.Shared.CacheProvider.Extensions;
 using NS.Shared.Logging;
+using NS.Shared.Logging.Configs;
 using NS.Shared.Logging.Extensions;
 using System.Security.Claims;
 
@@ -22,10 +24,26 @@ namespace NS.Quizzy.Server.BL.Extensions
 {
     public static class ExtensionMethods
     {
+        public static IApplicationBuilder UseCatchingExceptionMiddleware(this IApplicationBuilder app)
+        {
+            app?.UseMiddleware<CatchingExceptionMiddleware>();
+            return app;
+        }
+
         public static IServiceCollection AddQuizzyBLServices(this IServiceCollection services, IConfiguration configuration)
         {
             ArgumentNullException.ThrowIfNull(services);
-            services.AddNSLogger(configuration);
+
+            #region NSLogger
+            var loggerConfig = configuration.GetSection("NSLoggerConfig").Get<NSLoggerConfig>();
+            if (loggerConfig != null)
+            {
+                loggerConfig.GetUserId = (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+                loggerConfig.GetTokenId = (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Sid)?.Value;
+            }
+            services.AddNSLogger(loggerConfig);
+            #endregion
+
             services.AddNSCacheProvider();
             services.AddQuizzyDALServices();
             services.AddMappingProfiles();

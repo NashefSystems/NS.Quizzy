@@ -8,12 +8,16 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
     {
         public MappingProfile()
         {
-            CreateMap<BaseEntity, BaseEntityDto>()
+            CreateMap<BaseEntity, IBaseEntityDto>()
                 .ForMember(des => des.Id, opt => opt.MapFrom(y => y.Id));
 
             CreateMap<Subject, SubjectDto>()
                 .ForMember(des => des.Name, opt => opt.MapFrom(y => y.Name))
                 .ForMember(des => des.ItemOrder, opt => opt.MapFrom(y => y.ItemOrder));
+
+            CreateMap<ExamType, ExamTypeDto>()
+              .ForMember(des => des.Name, opt => opt.MapFrom(y => y.Name))
+              .ForMember(des => des.ItemOrder, opt => opt.MapFrom(y => y.ItemOrder));
 
             CreateMap<Class, ClassDto>()
                .ForMember(des => des.Name, opt => opt.MapFrom(y => y.Name))

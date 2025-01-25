@@ -8,6 +8,7 @@ namespace NS.Quizzy.Server.Models.Models
 {
     public class GlobalErrorResponse
     {
-        public string Message { get; set; }
+        public string? Message { get; set; }
+        public string? ContextId { get; set; }
     }
 }

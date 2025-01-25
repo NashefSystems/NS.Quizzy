@@ -1,0 +1,12 @@
+<div mat-dialog-title>
+  <mat-icon color="warn" style="vertical-align: middle; margin-right: 8px;">delete</mat-icon>
+  {{ 'CONFIRM_DELETE_DIALOG.CONFIRM_DELETE' | translate:{ itemName: data.itemName } }}
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="cancel()">
+    {{ 'CONFIRM_DELETE_DIALOG.CANCEL' | translate }}
+  </button>
+  <button mat-flat-button color="warn" (click)="confirm()">
+    {{ 'CONFIRM_DELETE_DIALOG.CONFIRM' | translate }}
+  </button>
+</div>

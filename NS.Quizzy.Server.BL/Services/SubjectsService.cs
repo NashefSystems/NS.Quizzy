@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.Models.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -22,11 +18,6 @@ namespace NS.Quizzy.Server.BL.Services
             _mapper = mapper;
         }
 
-        public Task DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<SubjectDto>> GetAllAsync()
         {
             var items = await _appDbContext.Subjects
@@ -37,19 +28,62 @@ namespace NS.Quizzy.Server.BL.Services
             return _mapper.Map<List<SubjectDto>>(items);
         }
 
-        public Task<SubjectDto> GetAsync(Guid id)
+        public async Task<SubjectDto?> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var item = await _appDbContext.Subjects.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            if (item == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<SubjectDto>(item);
         }
 
-        public Task<SubjectDto> InsertAsync(SubjectDto model)
+        public async Task<SubjectDto> InsertAsync(SubjectPayloadDto model)
         {
-            throw new NotImplementedException();
+            var exists = await _appDbContext.Subjects.AnyAsync(x => x.IsDeleted == false && x.Name == model.Name);
+            if (exists)
+            {
+                throw new BadRequestException("Subject already exists");
+            }
+
+            var item = new DAL.Entities.Subject()
+            {
+                Name = model.Name,
+                ItemOrder = model.ItemOrder
+            };
+            await _appDbContext.Subjects.AddAsync(item);
+            await _appDbContext.SaveChangesAsync();
+
+            return _mapper.Map<SubjectDto>(item);
         }
 
-        public Task<SubjectDto> UpdateAsync(Guid id, SubjectDto model)
+        public async Task<SubjectDto?> UpdateAsync(Guid id, SubjectPayloadDto model)
         {
-            throw new NotImplementedException();
+            var item = await _appDbContext.Subjects.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            if (item == null)
+            {
+                return null;
+            }
+
+            item.Name = model.Name;
+            item.ItemOrder = model.ItemOrder;
+            await _appDbContext.SaveChangesAsync();
+
+            return _mapper.Map<SubjectDto>(item);
+        }
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var item = await _appDbContext.Subjects.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            if (item == null)
+            {
+                return false;
+            }
+
+            item.IsDeleted = true;
+            await _appDbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

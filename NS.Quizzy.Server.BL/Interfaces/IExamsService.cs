@@ -3,7 +3,7 @@ using NS.Quizzy.Server.Models.Models;
 
 namespace NS.Quizzy.Server.BL.Interfaces
 {
-    public interface IExamsService : IBaseService<ExamDto>
+    public interface IExamsService : IBaseService<ExamPayloadDto, ExamDto>
     {
         Task<List<ExamDto>> FilterAsync(DateTimeOffset? dtFrom, DateTimeOffset? dtTo, List<Guid>? classIds, List<Guid>? subjectIds);
     }

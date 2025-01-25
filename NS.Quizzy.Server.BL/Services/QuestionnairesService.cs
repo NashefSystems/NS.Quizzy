@@ -10,27 +10,27 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class QuestionnairesService : IQuestionnairesService
     {
-        public Task DeleteAsync(Guid id)
+         public Task<List<QuestionnaireDto>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<QuestionnaireDto>> GetAllAsync()
+        public Task<QuestionnaireDto?> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<QuestionnaireDto> GetAsync(Guid id)
+        public Task<QuestionnaireDto> InsertAsync(QuestionnairePayloadDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<QuestionnaireDto> InsertAsync(QuestionnaireDto model)
+        public Task<QuestionnaireDto?> UpdateAsync(Guid id, QuestionnairePayloadDto model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<QuestionnaireDto> UpdateAsync(Guid id, QuestionnaireDto model)
+        public Task<bool> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
