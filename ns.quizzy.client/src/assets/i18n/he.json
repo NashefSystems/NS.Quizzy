@@ -3,6 +3,24 @@
     "ERRORS": {
         "FIELD_REQUIRED": "שדה חובה"
     },
+    "PAGE_TITLES": {
+        "EXAM_SCHEDULE": "מערך בחינות",
+        "EXAM_LIST": "בחינות",
+        "EXAM_ADD": "הוספת בחינה",
+        "EXAM_EDIT": "עריכת בחינה",
+        "CLASS_LIST": "כיתות",
+        "CLASS_ADD": "הוספת כיתה",
+        "CLASS_EDIT": "עריכת כיתה",
+        "QUESTIONNAIRE_LIST": "שאלונים",
+        "QUESTIONNAIRE_ADD": "הוספת שאלון",
+        "QUESTIONNAIRE_EDIT": "עריכת שאלון",
+        "EXAM_TYPE_LIST": "סוגי מבחנים",
+        "EXAM_TYPE_ADD": "הוספת סוג בחינה",
+        "EXAM_TYPE_EDIT": "עריכת סוג בחינה",
+        "SUBJECT_LIST": "נושאים",
+        "SUBJECT_ADD": "הוספת נושא",
+        "SUBJECT_EDIT": "עריכת נושא"
+    },
     "LOGIN": {
         "TITLE": "התחברות",
         "EMAIL": "דואר אלקטרוני",
@@ -28,6 +46,7 @@
     "MAIN_MENU": {
         "LOGOUT": "התנתק",
         "ITEMS": {
+            "EXAM_SCHEDULE": "מערך בחינות",
             "CLASS_LIST": "כיתות",
             "EXAM_LIST": "מבחנים",
             "EXAM_TYPE_LIST": "סוגי מבחנים",

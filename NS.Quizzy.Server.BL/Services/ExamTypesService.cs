@@ -4,11 +4,6 @@ using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.Models.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NS.Quizzy.Server.BL.Services
 {

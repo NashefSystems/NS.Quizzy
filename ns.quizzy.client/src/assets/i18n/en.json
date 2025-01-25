@@ -3,6 +3,24 @@
     "ERRORS": {
         "FIELD_REQUIRED": "Field is required"
     },
+    "PAGE_TITLES": {
+        "EXAM_SCHEDULE": "Exam schedule",
+        "EXAM_LIST": "Exams",
+        "EXAM_ADD": "Adding an exam",
+        "EXAM_EDIT": "Editing an exam",
+        "CLASS_LIST": "Classes",
+        "CLASS_ADD": "Adding a class",
+        "CLASS_EDIT": "Editing a class",
+        "QUESTIONNAIRE_LIST": "Questionnaires",
+        "QUESTIONNAIRE_ADD": "Adding a questionnaire",
+        "QUESTIONNAIRE_EDIT": "Editing a questionnaire",
+        "EXAM_TYPE_LIST": "Exam types",
+        "EXAM_TYPE_ADD": "Adding an exam type",
+        "EXAM_TYPE_EDIT": "Editing an exam type",
+        "SUBJECT_LIST": "Subjects",
+        "SUBJECT_ADD": "Adding a subject",
+        "SUBJECT_EDIT": "Editing a subject"
+    },
     "LOGIN": {
         "TITLE": "Log in",
         "EMAIL": "Email",
@@ -28,6 +46,7 @@
     "MAIN_MENU": {
         "LOGOUT": "Log out",
         "ITEMS": {
+            "EXAM_SCHEDULE": "Exam schedule",
             "CLASS_LIST": "Classes",
             "EXAM_LIST": "Exams",
             "EXAM_TYPE_LIST": "Exam types",

@@ -16,55 +16,182 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     component: ExamsComponent,
+    data: {
+      page_title: "PAGE_TITLES.EXAM_SCHEDULE"
+    }
   },
   {
     path: 'exams',
-    component: ExamListComponent,
-    canActivate: [adminUserGuard]
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ExamListComponent,
+        data: {
+          page_title: "PAGE_TITLES.EXAM_LIST"
+        }
+      }, {
+        path: 'new',
+        component: TestComponent,
+        // component: ExamAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.EXAM_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: TestComponent,
+        // component: ExamAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.EXAM_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/exams',
+      }
+    ]
   },
   {
     path: 'classes',
-    component: ClassListComponent,
-    canActivate: [adminUserGuard]
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ClassListComponent,
+        data: {
+          page_title: "PAGE_TITLES.CLASS_LIST"
+        }
+      }, {
+        path: 'new',
+        component: TestComponent,
+        // component: ClassAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.CLASS_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: TestComponent,
+        // component: ClassAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.CLASS_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/classes',
+      }
+    ]
   },
   {
     path: 'questionnaires',
-    component: QuestionnaireListComponent,
-    canActivate: [adminUserGuard]
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: QuestionnaireListComponent,
+        data: {
+          page_title: "PAGE_TITLES.QUESTIONNAIRE_LIST"
+        }
+      }, {
+        path: 'new',
+        component: TestComponent,
+        // component: QuestionnaireAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.QUESTIONNAIRE_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: TestComponent,
+        // component: QuestionnaireAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.QUESTIONNAIRE_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/questionnaires',
+      }
+    ]
   },
   {
     path: 'exam-types',
-    component: ExamTypeListComponent,
-    canActivate: [adminUserGuard]
-  },
-  {
-    path: 'exam-types/new',
-    component: ExamTypeAddOrEditComponent,
-    canActivate: [adminUserGuard]
-  },
-  {
-    path: 'exam-types/edit/:id',
-    component: ExamTypeAddOrEditComponent,
-    canActivate: [adminUserGuard]
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: ExamTypeListComponent,
+        data: {
+          page_title: "PAGE_TITLES.EXAM_TYPE_LIST"
+        }
+      }, {
+        path: 'new',
+        component: ExamTypeAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.EXAM_TYPE_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: ExamTypeAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.EXAM_TYPE_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/exam-types',
+      }
+    ]
   },
   {
     path: 'subjects',
-    component: SubjectListComponent,
-    canActivate: [adminUserGuard]
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: SubjectListComponent,
+        data: {
+          page_title: "PAGE_TITLES.SUBJECT_LIST"
+        }
+      }, {
+        path: 'new',
+        component: SubjectAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.SUBJECT_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: SubjectAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.SUBJECT_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/subjects',
+      }
+    ]
   },
   {
-    path: 'subjects/new',
-    component: SubjectAddOrEditComponent,
-    canActivate: [adminUserGuard]
-  },
-  {
-    path: 'subjects/edit/:id',
-    component: SubjectAddOrEditComponent,
-    canActivate: [adminUserGuard]
-  },
-  {
-    path: 'test',
+    path: 'developer',
     component: TestComponent,
+    data: {
+      page_title: "Developer"
+    }
   },
   {
     path: '**',

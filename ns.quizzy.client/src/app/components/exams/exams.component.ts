@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DialogService } from '../../services/dialog.service';
-import { HeaderService } from '../../services/header.service';
 import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
 import { ClassesService } from '../../services/classes.service';
 import { SubjectsService } from '../../services/backend/subjects.service';
@@ -18,7 +17,6 @@ import { OpenDialogPayload } from '../../models/dialog/open-dialog.payload';
 })
 export class ExamsComponent implements OnInit {
   private readonly dialogService = inject(DialogService);
-  private readonly headerService = inject(HeaderService);
   private readonly classesService = inject(ClassesService);
   private readonly subjectsService = inject(SubjectsService);
 
@@ -31,7 +29,6 @@ export class ExamsComponent implements OnInit {
   testValue: any;
 
   ngOnInit(): void {
-    this.headerService.setHeaderTitle("מערך בחינות");
     forkJoin({
       classes: this.classesService.getAll(),
       subjects: this.subjectsService.get()
