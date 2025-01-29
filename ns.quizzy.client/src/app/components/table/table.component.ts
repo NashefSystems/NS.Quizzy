@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { TableColumnInfo } from './table-column-info';
 
 @Component({
   selector: 'app-table',
@@ -11,7 +12,7 @@ import { MatTableDataSource } from '@angular/material/table';
 export class TableComponent {
   @Input() emptyStatusFeatureEnabled: boolean = true;
   @Input() items: any[] = [];
-  @Input() columns: { [key: string]: string } = {};
+  @Input() columns: TableColumnInfo[] = [];
   @Output() add = new EventEmitter<void>();
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
@@ -24,8 +25,12 @@ export class TableComponent {
   }
 
   ngOnChanges(): void {
-    this.displayedColumns = [...Object.keys(this.columns)];
+    this.displayedColumns = this.columns.map(x => x.key);
     this.dataSource.data = this.items;
+  }
+
+  getColumnInfo(key: string) {
+    return this.columns.find(x => x.key === key);
   }
 
   addNewItem(): void {

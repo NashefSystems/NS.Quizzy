@@ -2,33 +2,49 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExamTypesService } from '../../../services/backend/exam-types.service';
-import { IExamTypePayloadDto } from '../../../models/backend/exam-type.dto';
+import { ClassesService } from '../../../services/backend/classes.service';
+import { IClassPayloadDto } from '../../../models/backend/class.dto';
+import { GradesService } from '../../../services/backend/grades.service';
+import { IGradeDto } from '../../../models/backend/grade.dto';
 
 @Component({
-  selector: 'app-exam-type-add-or-edit',
+  selector: 'app-class-add-or-edit',
   standalone: false,
 
-  templateUrl: './exam-type-add-or-edit.component.html',
-  styleUrl: './exam-type-add-or-edit.component.scss'
+  templateUrl: './class-add-or-edit.component.html',
+  styleUrl: './class-add-or-edit.component.scss'
 })
-export class ExamTypeAddOrEditComponent implements OnInit {
+export class ClassAddOrEditComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
-  private readonly _examTypesService = inject(ExamTypesService);
+  private readonly _gradesService = inject(GradesService);
+  private readonly _classesService = inject(ClassesService);
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _router = inject(Router);
   private readonly _activatedRoute = inject(ActivatedRoute);
   id: string | null = null;
+  grades: IGradeDto[] = [];
 
   form: FormGroup = this._fb.group({
     name: ['', [Validators.required]],
-    itemOrder: ['', [Validators.required]],
+    gradeId: ['', [Validators.required]],
+    code: ['', [Validators.required, Validators.min(1)]],
+    fullCode: [''],
   });
+
+  onFullCodeChange() {
+    const { gradeId, code } = this.form.value;
+    const gradeCode = this.grades.find(x => x.id === gradeId)?.code || 0;
+    const fullCode = gradeCode * 100 + code;
+    this.form.setValue({ ...this.form.value, fullCode: fullCode });
+  }
 
   ngOnInit(): void {
     this._activatedRoute.paramMap.subscribe(params => {
       this.id = params.get('id');
       this.loadDataFromId(this.id);
+    });
+    this._gradesService.get().subscribe({
+      next: (data) => this.grades = data
     });
   }
 
@@ -37,7 +53,7 @@ export class ExamTypeAddOrEditComponent implements OnInit {
       return;
     }
 
-    this._examTypesService.getById(id).subscribe({
+    this._classesService.getById(id).subscribe({
       next: data => {
         const newValue = { ...this.form.value, ...data };
         this.form.setValue(newValue);
@@ -49,15 +65,16 @@ export class ExamTypeAddOrEditComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    const { name, itemOrder } = this.form.value;
+    const { name, gradeId, code } = this.form.value;
 
-    const payload: IExamTypePayloadDto = {
+    const payload: IClassPayloadDto = {
       name: name,
-      itemOrder: itemOrder
+      gradeId: gradeId,
+      code: code
     };
 
     if (this.id) {
-      this._examTypesService.update(this.id, payload).subscribe({
+      this._classesService.update(this.id, payload).subscribe({
         next: responseBody => {
           this._notificationsService.success('ITEM_UPDATED_SUCCESSFULLY');
           this.navigateToList();
@@ -67,7 +84,7 @@ export class ExamTypeAddOrEditComponent implements OnInit {
         }
       });
     } else {
-      this._examTypesService.insert(payload).subscribe({
+      this._classesService.insert(payload).subscribe({
         next: responseBody => {
           this._notificationsService.success('ITEM_ADDED_SUCCESSFULLY');
           this.navigateToList();
@@ -80,6 +97,6 @@ export class ExamTypeAddOrEditComponent implements OnInit {
   }
 
   navigateToList() {
-    this._router.navigate(['/exam-types']);
+    this._router.navigate(['/classes']);
   }
 }

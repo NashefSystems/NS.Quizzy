@@ -48,14 +48,20 @@ namespace NS.Quizzy.Server.BL.Services
             return _mapper.Map<List<ExamDto>>(data);
         }
 
-        public Task<List<ExamDto>> GetAllAsync()
+        public async Task<List<ExamDto>> GetAllAsync()
         {
-            throw new NotImplementedException("Get all");
+            return await FilterAsync(null, null, null, null);
         }
 
-        public Task<ExamDto?> GetAsync(Guid id)
+        public async Task<ExamDto?> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var item = await _appDbContext.Exams.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            if (item == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<ExamDto>(item);
         }
 
         public Task<ExamDto> InsertAsync(ExamPayloadDto model)

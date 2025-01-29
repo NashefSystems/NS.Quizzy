@@ -6,7 +6,7 @@ namespace NS.Quizzy.Server.Models.DTOs
     {
         public Guid QuestionnaireId { get; set; }
         public Guid ExamTypeId { get; set; }
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan DurationWithExtra { get; set; }
     }

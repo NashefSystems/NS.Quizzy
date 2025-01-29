@@ -2,9 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ExamTypesService } from '../../../services/backend/exam-types.service';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
-import { ISubjectDto } from '../../../models/backend/subject.dto';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
+import { TableColumnInfo } from '../../table/table-column-info';
 
 @Component({
   selector: 'app-exam-type-list',
@@ -19,11 +20,16 @@ export class ExamTypeListComponent implements OnInit {
   private readonly _dialogService = inject(DialogService);
 
 
-  items: ISubjectDto[];
-  columns: { [key: string]: string } = {
-    'name': 'EXAM_TYPE_AREA.NAME',
-    'itemOrder': 'EXAM_TYPE_AREA.ITEM_ORDER'
-  };
+  items: IExamTypeDto[];
+  columns: TableColumnInfo[] = [
+    {
+      key: 'name',
+      title: 'EXAM_TYPE_AREA.NAME'
+    }, {
+      key: 'itemOrder',
+      title: 'EXAM_TYPE_AREA.ITEM_ORDER'
+    }
+  ];
 
   ngOnInit(): void {
     this.loadData();
@@ -39,11 +45,11 @@ export class ExamTypeListComponent implements OnInit {
     this._router.navigate(['/exam-types/new']);
   };
 
-  onEdit(item: ISubjectDto) {
+  onEdit(item: IExamTypeDto) {
     this._router.navigate([`/exam-types/edit/${item?.id}`]);
   };
 
-  onDelete(item: ISubjectDto) {
+  onDelete(item: IExamTypeDto) {
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,

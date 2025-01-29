@@ -104,6 +104,7 @@ namespace NS.Quizzy.Server.BL.Extensions
                 });
 
             services.AddScoped<IClassExamService, ClassExamService>();
+            services.AddScoped<IGradesService, GradesService>();
             services.AddScoped<IClassesService, ClassesService>();
             services.AddScoped<IExamsService, ExamsService>();
             services.AddScoped<IExamTypesService, ExamTypesService>();

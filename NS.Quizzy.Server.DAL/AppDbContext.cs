@@ -6,14 +6,16 @@ namespace NS.Quizzy.Server.DAL
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Class> Classes { get; set; }
-        public DbSet<Exam> Exams { get; set; }
+        public DbSet<AppSetting> AppSettings { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
         public DbSet<ExamType> ExamTypes { get; set; }
         public DbSet<Questionnaire> Questionnaires { get; set; }
-        public DbSet<Subject> Subjects { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<Grade> Grades { get; set; }
+        public DbSet<GradeExam> GradeExams { get; set; }
+        public DbSet<Class> Classes { get; set; }
         public DbSet<ClassExam> ClassExams { get; set; }
-        public DbSet<AppSetting> AppSettings { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }

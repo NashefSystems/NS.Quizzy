@@ -1,0 +1,48 @@
+<app-back-button></app-back-button>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'CLASS_AREA.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" autocomplete="off" />
+        <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            <ng-container *ngIf="form.get('name')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'CLASS_AREA.GRADE_ID' | translate }}</mat-label>
+        <mat-select formControlName="gradeId" (selectionChange)="onFullCodeChange()">
+            <mat-option [dir]="'DIR' | translate" *ngFor="let grade of grades"
+                [value]="grade.id">{{grade.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('gradeId')?.invalid && form.get('gradeId')?.touched">
+            <ng-container *ngIf="form.get('gradeId')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'CLASS_AREA.CODE' | translate }}</mat-label>
+        <input matInput formControlName="code" autocomplete="off" type="number" min="1" (change)="onFullCodeChange()" />
+        <mat-error *ngIf="form.get('code')?.invalid && form.get('code')?.touched">
+            <ng-container *ngIf="form.get('code')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+            <ng-container *ngIf="form.get('code')?.errors?.['min']">
+                {{ 'ERRORS.MIN' | translate : form.get('code')?.errors?.['min'] }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'CLASS_AREA.FULL_CODE' | translate }}</mat-label>
+        <input matInput formControlName="fullCode" autocomplete="off" type="number" readonly />
+    </mat-form-field>
+
+    <button mat-stroked-button color="primary" class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+        {{ id ? 'Update' : 'Add' | translate }}
+    </button>
+</form>

@@ -1,12 +1,14 @@
 <div [ngClass]="appContainerClasses">
     <div class="app-sub-component">
-        <app-header>
-            <div class="loading-container">
-                <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+        <ng-content *ngIf="isReady">
+            <app-header>
+                <div class="loading-container">
+                    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+                </div>
+            </app-header>
+            <div class="page">
+                <router-outlet></router-outlet>
             </div>
-        </app-header>
-        <div class="page">
-            <router-outlet></router-outlet>
-        </div>
+        </ng-content>
     </div>
 </div>

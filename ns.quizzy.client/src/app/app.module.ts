@@ -14,11 +14,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
   MatDialogModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatCardModule,
   MatExpansionModule, MatProgressBarModule, MatSidenavModule, MatMenuModule, MatSnackBarModule,
-  MatTableModule, MatPaginatorModule,
+  MatTableModule, MatPaginatorModule, MatSelectModule
 ];
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -44,7 +45,6 @@ import { LanguageSelectorComponent } from './components/language-selector/langua
 import { NotificationSnackBarComponent } from './components/notification-snack-bar/notification-snack-bar.component';
 import { TestComponent } from './components/test/test.component';
 import { ExamListComponent } from './components/exam-area/exam-list/exam-list.component';
-import { ClassListComponent } from './components/class-area/class-list/class-list.component';
 import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
 import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
 import { TableComponent } from './components/table/table.component';
@@ -53,6 +53,10 @@ import { SubjectAddOrEditComponent } from './components/subject-area/subject-add
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
 import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-type-add-or-edit/exam-type-add-or-edit.component';
+import { ClassListComponent } from './components/class-area/class-list/class-list.component';
+import { ClassAddOrEditComponent } from './components/class-area/class-add-or-edit/class-add-or-edit.component';
+import { GradeListComponent } from './components/grade-area/grade-list/grade-list.component';
+import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-edit/grade-add-or-edit.component';
 
 
 // Factory function for HttpLoader
@@ -75,7 +79,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     NotificationSnackBarComponent,
     TestComponent,
     ExamListComponent,
-    ClassListComponent,
     ExamTypeListComponent,
     SubjectListComponent,
     TableComponent,
@@ -83,6 +86,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmDialogComponent,
     BackButtonComponent,
     ExamTypeAddOrEditComponent,
+    ClassListComponent,
+    ClassAddOrEditComponent,
+    GradeListComponent,
+    GradeAddOrEditComponent,
   ],
   imports: [
     BrowserModule,

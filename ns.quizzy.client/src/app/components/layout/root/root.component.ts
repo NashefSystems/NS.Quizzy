@@ -11,7 +11,7 @@ import { AppTranslateService } from '../../../services/app-translate.service';
 export class RootComponent implements AfterViewInit, OnInit {
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _appTranslateService = inject(AppTranslateService);
-
+  isReady = false;
   isLoading = false;
   appContainerClasses = {
     "app-container": true,
@@ -31,6 +31,7 @@ export class RootComponent implements AfterViewInit, OnInit {
       next: (dir) => {
         document.documentElement.style.setProperty("--app-dir", dir);
         document.documentElement.setAttribute("dir", dir);
+        this.isReady = !!dir;
       }
     });
 

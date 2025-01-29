@@ -20,6 +20,7 @@ export class MainMenuComponent implements OnInit {
       { text: 'MAIN_MENU.ITEMS.EXAM_SCHEDULE', icon: 'calendar_month', routerLink: '' },
       { text: 'MAIN_MENU.ITEMS.EXAM_LIST', icon: 'rule', routerLink: 'exams' },
       { text: 'MAIN_MENU.ITEMS.QUESTIONNAIRE_LIST', icon: 'dynamic_form', routerLink: 'questionnaires' },
+      { text: 'MAIN_MENU.ITEMS.GRADE_LIST', icon: 'groups', routerLink: 'grades' },
       { text: 'MAIN_MENU.ITEMS.CLASS_LIST', icon: 'school', routerLink: 'classes' },
       { text: 'MAIN_MENU.ITEMS.EXAM_TYPE_LIST', icon: 'format_size', routerLink: 'exam-types' },
       { text: 'MAIN_MENU.ITEMS.SUBJECT_LIST', icon: 'category', routerLink: 'subjects' },

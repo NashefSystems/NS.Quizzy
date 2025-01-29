@@ -10,6 +10,9 @@ import { TestComponent } from './components/test/test.component';
 import { adminUserGuard } from './guards/admin-user.guard';
 import { SubjectAddOrEditComponent } from './components/subject-area/subject-add-or-edit/subject-add-or-edit.component';
 import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-type-add-or-edit/exam-type-add-or-edit.component';
+import { ClassAddOrEditComponent } from './components/class-area/class-add-or-edit/class-add-or-edit.component';
+import { GradeListComponent } from './components/grade-area/grade-list/grade-list.component';
+import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-edit/grade-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -55,6 +58,38 @@ const routes: Routes = [
     ]
   },
   {
+    path: 'grades',
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: GradeListComponent,
+        data: {
+          page_title: "PAGE_TITLES.GRADE_LIST"
+        }
+      }, {
+        path: 'new',
+        component: GradeAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.GRADE_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: GradeAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.GRADE_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/grades',
+      }
+    ]
+  },
+  {
     path: 'classes',
     canActivate: [adminUserGuard],
     children: [
@@ -67,16 +102,14 @@ const routes: Routes = [
         }
       }, {
         path: 'new',
-        component: TestComponent,
-        // component: ClassAddOrEditComponent,
+        component: ClassAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.CLASS_ADD"
         }
       },
       {
         path: 'edit/:id',
-        component: TestComponent,
-        // component: ClassAddOrEditComponent,
+        component: ClassAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.CLASS_EDIT"
         }

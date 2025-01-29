@@ -8,6 +8,9 @@
         "EXAM_LIST": "Exams",
         "EXAM_ADD": "Adding an exam",
         "EXAM_EDIT": "Editing an exam",
+        "GRADE_LIST": "Grades",
+        "GRADE_ADD": "Adding a grade",
+        "GRADE_EDIT": "Editing a grade",
         "CLASS_LIST": "Classes",
         "CLASS_ADD": "Adding a class",
         "CLASS_EDIT": "Editing a class",
@@ -47,6 +50,7 @@
         "LOGOUT": "Log out",
         "ITEMS": {
             "EXAM_SCHEDULE": "Exam schedule",
+            "GRADE_LIST": "Grades",
             "CLASS_LIST": "Classes",
             "EXAM_LIST": "Exams",
             "EXAM_TYPE_LIST": "Exam types",
@@ -71,6 +75,16 @@
     "EXAM_TYPE_AREA": {
         "NAME": "Exam type",
         "ITEM_ORDER": "Item order"
+    },
+    "GRADE_AREA": {
+        "NAME": "Name",
+        "CODE": "Grade code"
+    },
+    "CLASS_AREA": {
+        "NAME": "Name",
+        "GRADE_ID": "Parent",
+        "CODE": "Class code",
+        "FULL_CODE": "Class full code"
     },
     "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {

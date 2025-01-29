@@ -1,13 +1,20 @@
 {
     "DIR": "rtl",
     "ERRORS": {
-        "FIELD_REQUIRED": "שדה חובה"
+        "FIELD_REQUIRED": "שדה חובה",
+        "MIN": "הערך חייב להיות לפחות {{min}}",
+        "MAX": "הערך חייב להיות לכל היותר {{max}}",
+        "MIN_LENGTH": "הטקסט שהוזן קצר מדי, יש להזין לפחות {requiredLength} תווים",
+        "MAX_LENGTH": "הטקסט שהוזן ארוך מדי, יש להזין עד {requiredLength} תווים בלבד"
     },
     "PAGE_TITLES": {
         "EXAM_SCHEDULE": "מערך בחינות",
         "EXAM_LIST": "בחינות",
         "EXAM_ADD": "הוספת בחינה",
         "EXAM_EDIT": "עריכת בחינה",
+        "GRADE_LIST": "שכבות",
+        "GRADE_ADD": "הוספת שכבה",
+        "GRADE_EDIT": "עריכת שכבה",
         "CLASS_LIST": "כיתות",
         "CLASS_ADD": "הוספת כיתה",
         "CLASS_EDIT": "עריכת כיתה",
@@ -47,6 +54,7 @@
         "LOGOUT": "התנתק",
         "ITEMS": {
             "EXAM_SCHEDULE": "מערך בחינות",
+            "GRADE_LIST": "שכבות",
             "CLASS_LIST": "כיתות",
             "EXAM_LIST": "מבחנים",
             "EXAM_TYPE_LIST": "סוגי מבחנים",
@@ -72,6 +80,16 @@
         "NAME": "סוג בחינה",
         "ITEM_ORDER": "סדר הופעה"
     },
+    "GRADE_AREA": {
+        "NAME": "שם",
+        "CODE": "קוד שכבה"
+    },
+    "CLASS_AREA": {
+        "NAME": "כיתה",
+        "GRADE_ID": "שכבה",
+        "CODE": "קוד כיתה",
+        "FULL_CODE": "קוד כיתה מלא"
+    },
     "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
         "CONFIRM_DELETE": "האם אתה בטוח שברצונך למחוק את '{{itemName}}'?",
@@ -83,5 +101,6 @@
     "ITEM_ADDED_SUCCESSFULLY": "פריט נוסף בהצלחה",
     "ITEM_UPDATED_SUCCESSFULLY": "פריט עודכן בהצלחה",
     "Subject already exists": "הנושא כבר קיים",
-    "Exam type already exists": "סוג הבחינה כבר קיים"
+    "Exam type already exists": "סוג הבחינה כבר קיים",
+    "Class already exists": "כיתה כבר קיימת"
 }

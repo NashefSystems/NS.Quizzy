@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DialogService } from '../../services/dialog.service';
 import { FilterDialogComponent } from './filter-dialog/filter-dialog.component';
-import { ClassesService } from '../../services/classes.service';
 import { SubjectsService } from '../../services/backend/subjects.service';
 import { IClassDto } from '../../models/backend/class.dto';
 import { ISubjectDto } from '../../models/backend/subject.dto';
 import { FilterDialogData, FilterDialogResult } from './filter-dialog/filter-dialog-data';
 import { forkJoin } from 'rxjs';
 import { OpenDialogPayload } from '../../models/dialog/open-dialog.payload';
+import { ClassesService } from '../../services/backend/classes.service';
 
 @Component({
   selector: 'app-exams',
@@ -30,7 +30,7 @@ export class ExamsComponent implements OnInit {
 
   ngOnInit(): void {
     forkJoin({
-      classes: this.classesService.getAll(),
+      classes: this.classesService.get(),
       subjects: this.subjectsService.get()
     }).subscribe({
       next: ({ classes, subjects }) => {

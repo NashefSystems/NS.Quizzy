@@ -1,8 +1,12 @@
 import { IBaseEntityDto } from './base-entity.dto';
 
 export interface IClassPayloadDto {
+    gradeId: string;
     name: string;
-    children: IClassDto[];
+    code: number;
 }
 
-export interface IClassDto extends IClassPayloadDto, IBaseEntityDto { }
+export interface IClassDto extends IClassPayloadDto, IBaseEntityDto {
+    fullCode: number;
+    children: IClassDto[];
+}

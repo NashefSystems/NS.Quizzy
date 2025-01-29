@@ -2,49 +2,39 @@
 
 namespace NS.Quizzy.Server.DAL
 {
-    public static class InitialData
+    internal static class InitialData
     {
-        public static readonly DateTime StartActionTime = DateTime.Now;
-        public static readonly Guid SystemUserId = Guid.Parse("4320E74B-5821-4A30-94B7-CC88DDDC45EE");
-
-        public static class UserEntityData
+        internal static class UserEntityData
         {
-            public static readonly User systemUser = new()
+            internal static readonly User systemUser = new()
             {
-                Id = SystemUserId,
+                Id = Guid.Parse("4320E74B-5821-4A30-94B7-CC88DDDC45EE"),
                 Password = "$Ns#Quizzy*(@2024&",
                 FullName = "System",
                 Email = "Nashef.Systems@Gmail.com",
-                CreatedTime = StartActionTime,
-                ModifiedTime = StartActionTime,
                 Role = DALEnums.Roles.SuperAdmin,
                 TwoFactorSecretKey = "97F1AFCD316343B4B2D492A10B036680",
                 IsDeleted = true,
             };
-
-            public static readonly User adminUser = new()
+            internal static readonly User adminUser = new()
             {
                 Id = Guid.Parse("B900D543-90AB-4E7A-83BA-B961918DCC8C"),
                 Password = "30496^#3267%$",
                 FullName = "Admin",
                 Email = "Nashef90@Gmail.com",
-                CreatedTime = StartActionTime,
-                ModifiedTime = StartActionTime,
+                TwoFactorSecretKey = "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO",
                 Role = DALEnums.Roles.Developer,
             };
-
-            public static readonly User sajiUser = new()
+            internal static readonly User sajiUser = new()
             {
                 Id = Guid.Parse("2325B8AE-F12A-43D8-BE46-7041E57C9283"),
                 Password = "BTWhVV8jqmP95G0w",
                 FullName = "Saji Nashef",
                 Email = "saji.nashef@gmail.com",
-                CreatedTime = StartActionTime,
-                ModifiedTime = StartActionTime,
                 Role = DALEnums.Roles.Admin,
             };
 
-            public static List<User> GetData()
+            internal static List<User> GetData()
             {
                 return
                 [
@@ -55,18 +45,18 @@ namespace NS.Quizzy.Server.DAL
             }
         }
 
-        public static class ExamTypeEntityData
+        internal static class ExamTypeEntityData
         {
-            public static List<ExamType> GetData()
+            internal static List<ExamType> GetData()
             {
                 var examTypeDic = new Dictionary<string, string>()
                 {
-                    { "מתכונת", "DBDD71F4-D784-4ECD-B013-1D81A07C79AB"},
-                    { "מתכונת I", "095CE522-087B-48C1-83EE-35541EE672F6"},
-                    { "מתכונת II", "2E50B781-6DBA-4F05-8888-3B16EF618B0B"},
-                    { "מתכונת III", "9ECB8ECD-4314-4A67-A843-756CDBC49296"},
-                    { "בגרות", "FA73C215-82D0-4BCD-BE22-B0EABB950315"},
-                    { "סימולציה", "9B936387-A52D-4256-8F44-C28F75FD15D5" }
+                    { "DBDD71F4-D784-4ECD-B013-1D81A07C79AB", "מתכונת" },
+                    { "095CE522-087B-48C1-83EE-35541EE672F6", "מתכונת I" },
+                    { "2E50B781-6DBA-4F05-8888-3B16EF618B0B", "מתכונת II" },
+                    { "9ECB8ECD-4314-4A67-A843-756CDBC49296", "מתכונת III" },
+                    { "FA73C215-82D0-4BCD-BE22-B0EABB950315", "בגרות" },
+                    { "9B936387-A52D-4256-8F44-C28F75FD15D5", "סימולציה" },
                 };
                 var res = new List<ExamType>();
                 for (var i = 0; i < examTypeDic.Count; i++)
@@ -74,42 +64,40 @@ namespace NS.Quizzy.Server.DAL
                     var kvp = examTypeDic.ElementAt(i);
                     res.Add(new()
                     {
-                        Id = Guid.Parse(kvp.Value),
-                        Name = kvp.Key,
+                        Id = Guid.Parse(kvp.Key),
+                        Name = kvp.Value,
                         ItemOrder = i + 1,
-                        CreatedTime = StartActionTime,
-                        ModifiedTime = StartActionTime,
                     });
                 }
                 return res;
             }
         }
 
-        public static class SubjectEntityData
+        internal static class SubjectEntityData
         {
-            public static List<Subject> GetData()
+            internal static List<Subject> GetData()
             {
                 var subjectDic = new Dictionary<string, string>()
                 {
-                    {"ערבית", "9B8F8B4E-19FE-4F98-A9E1-0234D8331F24"},
-                    {"עברית", "C21FE042-8AC9-4832-8E5B-04BB7DA03EED"},
-                    {"אנגלית", "2F51A0AF-BBCE-4292-98F6-283628079F26"},
-                    {"מתמטיקה", "4E092BA1-95F8-4DF3-A8B8-34D75175F0A0"},
-                    {"אזרחות", "30C570B2-E338-4505-AB1A-480F1776F9B8"},
-                    {"היסטוריה", "55F0178A-8339-47A2-AE3F-4C2B859FD52D"},
-                    {"דת האיסלם", "B91976CB-943A-4BD7-8177-508C72D0FB06"},
-                    {"כימיה", "F74C6FF8-47B1-4383-A932-735ADD064955"},
-                    {"ביולוגיה", "81E4F556-C783-4E66-A816-751C3765E501"},
-                    {"מדעי הבריאות", "9671ED50-624E-4A3B-9E25-B22D4CBDD09D"},
-                    {"מדעי הסביבה", "5BD83139-BBDF-4D76-A289-BAAC22CA831C"},
-                    {"תקשוב", "EBFA96FB-150D-49D3-A688-BFA1C8035014"},
-                    {"מדעי המחשב", "8659E673-60E2-4FE4-9D83-C3DF37FA5B96"},
-                    {"פיזיקה", "964E0673-821E-4F31-A29D-C9F587F8FB02"},
-                    {"מדעי ההנדסה", "4E5A656F-13DC-4CE7-8504-CF67954C95AE"},
-                    {"מערכות חשמל", "1ADFD42F-AAC6-4CA5-8458-CFEB2FD42903"},
-                    {"הנדסאים", "D506C818-3300-4783-BB2E-E7005EEF269F"},
-                    {"טכנאים", "EFF998D1-EB15-4C10-BD82-E7B861E71923"},
-                    {"חינוך תעבורתי", "0157322F-40F3-4E07-B65A-EBC1B408E644"},
+                    { "9B8F8B4E-19FE-4F98-A9E1-0234D8331F24", "ערבית" },
+                    { "C21FE042-8AC9-4832-8E5B-04BB7DA03EED", "עברית" },
+                    { "2F51A0AF-BBCE-4292-98F6-283628079F26", "אנגלית" },
+                    { "4E092BA1-95F8-4DF3-A8B8-34D75175F0A0", "מתמטיקה" },
+                    { "30C570B2-E338-4505-AB1A-480F1776F9B8", "אזרחות" },
+                    { "55F0178A-8339-47A2-AE3F-4C2B859FD52D", "היסטוריה" },
+                    { "B91976CB-943A-4BD7-8177-508C72D0FB06", "דת האיסלם" },
+                    { "F74C6FF8-47B1-4383-A932-735ADD064955", "כימיה" },
+                    { "81E4F556-C783-4E66-A816-751C3765E501", "ביולוגיה" },
+                    { "9671ED50-624E-4A3B-9E25-B22D4CBDD09D", "מדעי הבריאות" },
+                    { "5BD83139-BBDF-4D76-A289-BAAC22CA831C", "מדעי הסביבה" },
+                    { "EBFA96FB-150D-49D3-A688-BFA1C8035014", "תקשוב" },
+                    { "8659E673-60E2-4FE4-9D83-C3DF37FA5B96", "מדעי המחשב" },
+                    { "964E0673-821E-4F31-A29D-C9F587F8FB02", "פיזיקה" },
+                    { "4E5A656F-13DC-4CE7-8504-CF67954C95AE", "מדעי ההנדסה" },
+                    { "1ADFD42F-AAC6-4CA5-8458-CFEB2FD42903", "מערכות חשמל" },
+                    { "D506C818-3300-4783-BB2E-E7005EEF269F", "הנדסאים" },
+                    { "EFF998D1-EB15-4C10-BD82-E7B861E71923", "טכנאים" },
+                    { "0157322F-40F3-4E07-B65A-EBC1B408E644", "חינוך תעבורתי" },
 
                 };
                 var res = new List<Subject>();
@@ -118,134 +106,248 @@ namespace NS.Quizzy.Server.DAL
                     var kvp = subjectDic.ElementAt(i);
                     res.Add(new()
                     {
-                        Id = Guid.Parse(kvp.Value),
-                        Name = kvp.Key,
+                        Id = Guid.Parse(kvp.Key),
+                        Name = kvp.Value,
                         ItemOrder = i + 1,
-                        CreatedTime = StartActionTime,
-                        ModifiedTime = StartActionTime,
                     });
                 }
                 return res;
             }
         }
 
-        public static class ClassEntityData
+        internal static class GradeEntityData
         {
-            class DivisionInfo
+            internal static Guid GRADE_10_ID = Guid.Parse("438EC849-71CB-46B0-93B6-0147B85C5564");
+            internal static Guid GRADE_11_ID = Guid.Parse("BD904A61-1129-42FB-AAB4-A6B7C3DBC037");
+            internal static Guid GRADE_12_ID = Guid.Parse("9C9F2AAC-66E7-4AC0-A407-23698CCED44A");
+            internal static Guid GRADE_13_ID = Guid.Parse("CDE133C3-0E33-4BCB-BEE0-CC7D93AE3CB9");
+            internal static Guid GRADE_14_ID = Guid.Parse("2BDDC474-2779-4BB3-A73D-DF90CD8F4C24");
+            internal static List<Grade> GetData()
             {
-                public string Id { get; set; }
-                public string Name { get; set; }
-                public Dictionary<string, string> Classes { get; set; }
-            }
-            public static List<Class> GetData()
-            {
-                var data = new List<DivisionInfo>
-                {
-                    new()
-                    {
-                        Id = "438EC849-71CB-46B0-93B6-0147B85C5564",
-                        Name = "שכבה י'",
-                        Classes = new Dictionary<string, string>()
-                        {
-                            { "י' 1", "E5928D27-ABBF-49B9-A34B-0329B754CD76" },
-                            { "י' 2", "CE0BD2FF-3444-435B-A17D-03AE94936904" },
-                            { "י' 3", "167CE96A-A9F0-4910-862A-19BC0BCDF820" },
-                            { "י' 4", "CBEA4226-569B-4EC0-A330-26E2094FE2A7" },
-                            { "י' 5", "F6845989-9704-4A39-A5D2-31F6A0DF9CB3" },
-                            { "י' 6", "F093A8A6-91D2-46F4-BC8D-42A489FC75F6" },
-                            { "י' 7", "8E1F2E5E-7597-494F-BDE9-5B290918C202" },
-                            { "י' 8", "B096C5E7-76C6-405C-A044-5FBDBE222A3C" },
-                            { "י' 9", "5B107D79-7DF7-4F6D-8BD4-608230492E07" },
-                            { "י' 10", "7D88B6FE-F3F3-4282-B475-82B2908E9FE0" },
-                            { "י' 11", "859C1031-C539-4DEB-ADFF-93BCFEC85774" },
-                        }
-                    },
-                    new()
-                    {
-                        Id = "BD904A61-1129-42FB-AAB4-A6B7C3DBC037",
-                       Name = "שכבה י\"א",
-                        Classes = new Dictionary<string, string>()
-                        {
-                            { "י\"א 1", "494920F9-F6D9-405C-9536-AFE619749CCD" },
-                            { "י\"א 2", "C3424585-63A2-4E52-940A-B8979557B6CE" },
-                            { "י\"א 3", "C3F075C7-93CE-4122-AB7C-B989CF8E6786" },
-                            { "י\"א 4", "21E2F08F-9793-40AA-98A0-BBF3A8759E40" },
-                            { "י\"א 5", "782CB34D-7091-4E9E-9BDA-C30D11E1A64D" },
-                            { "י\"א 6", "36B9D045-AC87-4C29-99AF-CCC4755B13CC" },
-                            { "י\"א 7", "49211014-42B9-4486-B6A3-FB9CC7E57426" },
-                            { "י\"א 8", "D514EF35-7024-4836-BE29-02E5F5B3BBCB" },
-                            { "י\"א 9", "081057A2-16DF-4E2B-9E90-0CDC0DFFF8F9" },
-                            { "י\"א 10", "B641E55E-5A1E-42E9-8ACB-1356340C87F5" },
-                            { "י\"א 11", "2A3C8F01-ECC2-42C0-8251-16FCD68944F5" },
-                        }
-                    },
-                    new()
-                    {
-                        Id = "9C9F2AAC-66E7-4AC0-A407-23698CCED44A",
-                          Name = "שכבה י\"ב",
-                        Classes = new Dictionary<string, string>()
-                        {
-                            { "י\"ב 01", "CA5695ED-4D8A-485F-9072-29DCBC29BF84" },
-                            { "י\"ב 02", "EBBB2B2E-4833-4860-8843-40F9CF852BE7" },
-                            { "י\"ב 03", "7A9808BD-2D4E-48E2-8692-67D44EF962CE" },
-                            { "י\"ב 04", "8C70D35A-9A3A-4BC6-8412-778F72338C63" },
-                            { "י\"ב 05", "F48DD2F8-9A66-4052-B31C-793E60DF5004" },
-                            { "י\"ב 06", "46C5B044-5020-4F7F-900C-93623BE8BBAF" },
-                            { "י\"ב 07", "91B2C738-8E6C-4334-BC20-9778EF792AF4" },
-                            { "י\"ב 08", "D22D38B9-0398-4AAE-8EA7-A13237CACE64" },
-                            { "י\"ב 09", "1A9C42C2-148B-4DA9-8620-A4B70336F451" },
-                            { "י\"ב 10", "EBB4D04C-E099-48C8-AE3C-B123354E250C" },
-                            { "י\"ב 11", "A238C990-8FEF-4E94-8BF4-B1E9DC818DDE" },
-                        }
-                    },
-                    new()
-                    {
-                        Id = "CDE133C3-0E33-4BCB-BEE0-CC7D93AE3CB9",
-                          Name = "שכבה י\"ג",
-                        Classes = []
-                    },
-                    new()
-                    {
-                        Id = "2BDDC474-2779-4BB3-A73D-DF90CD8F4C24",
-                          Name = "שכבה י\"ד",
-                        Classes = []
-                    }
-                };
-
-                var res = new List<Class>();
-                foreach (var division in data)
-                {
-                    var divisionId = Guid.Parse(division.Id);
-                    res.Add(new()
-                    {
-                        Id = divisionId,
-                        Name = division.Name,
-                        CreatedTime = StartActionTime,
-                        ModifiedTime = StartActionTime,
-                    });
-
-                    foreach (var classInfo in division.Classes)
-                    {
-                        res.Add(new()
-                        {
-                            Id = Guid.Parse(classInfo.Value),
-                            Name = classInfo.Key,
-                            ParentId = divisionId,
-                            CreatedTime = StartActionTime,
-                            ModifiedTime = StartActionTime,
-                        });
-                    }
-                }
-                return res;
+                return [
+                    new(){ Id = GRADE_10_ID, Code = 10, Name = "שכבה י'" },
+                    new(){ Id = GRADE_11_ID, Code = 11, Name = "שכבה י\"א" },
+                    new(){ Id = GRADE_12_ID, Code = 12, Name = "שכבה י\"ב" },
+                    new(){ Id = GRADE_13_ID, Code = 13, Name = "שכבה י\"ג" },
+                    new(){ Id = GRADE_14_ID, Code = 14, Name = "שכבה י\"ד" },
+                ];
             }
         }
 
-        public static class AppSettingEntityData
+        internal static class ClassEntityData
+        {
+            internal static List<Class> GetData()
+            {
+                return
+                [
+                    new(){
+                        Id = Guid.Parse("E5928D27-ABBF-49B9-A34B-0329B754CD76"),
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Code = 1,
+                        Name = "י' 1"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("CE0BD2FF-3444-435B-A17D-03AE94936904"),
+                        Code = 2,
+                        Name = "י' 2"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("167CE96A-A9F0-4910-862A-19BC0BCDF820"),
+                        Code = 3,
+                        Name = "י' 3"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("CBEA4226-569B-4EC0-A330-26E2094FE2A7"),
+                        Code = 4,
+                        Name = "י' 4"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("F6845989-9704-4A39-A5D2-31F6A0DF9CB3"),
+                        Code = 5,
+                        Name = "י' 5"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("F093A8A6-91D2-46F4-BC8D-42A489FC75F6"),
+                        Code = 6,
+                        Name = "י' 6"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("8E1F2E5E-7597-494F-BDE9-5B290918C202"),
+                        Code = 7,
+                        Name = "י' 7"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("B096C5E7-76C6-405C-A044-5FBDBE222A3C"),
+                        Code = 8,
+                        Name = "י' 8"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("5B107D79-7DF7-4F6D-8BD4-608230492E07"),
+                        Code = 9,
+                        Name = "י' 9"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("7D88B6FE-F3F3-4282-B475-82B2908E9FE0"),
+                        Code = 10,
+                        Name = "י' 10"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_10_ID,
+                        Id = Guid.Parse("859C1031-C539-4DEB-ADFF-93BCFEC85774"),
+                        Code = 11,
+                        Name = "י' 11"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("494920F9-F6D9-405C-9536-AFE619749CCD"),
+                        Code = 1,
+                        Name = "י\"א 1"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("C3424585-63A2-4E52-940A-B8979557B6CE"),
+                        Code = 2,
+                        Name = "י\"א 2"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("C3F075C7-93CE-4122-AB7C-B989CF8E6786"),
+                        Code = 3,
+                        Name = "י\"א 3"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("21E2F08F-9793-40AA-98A0-BBF3A8759E40"),
+                        Code = 4,
+                        Name = "י\"א 4"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("782CB34D-7091-4E9E-9BDA-C30D11E1A64D"),
+                        Code = 5,
+                        Name = "י\"א 5"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("36B9D045-AC87-4C29-99AF-CCC4755B13CC"),
+                        Code = 6,
+                        Name = "י\"א 6"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("49211014-42B9-4486-B6A3-FB9CC7E57426"),
+                        Code = 7,
+                        Name = "י\"א 7"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("D514EF35-7024-4836-BE29-02E5F5B3BBCB"),
+                        Code = 8,
+                        Name = "י\"א 8"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("081057A2-16DF-4E2B-9E90-0CDC0DFFF8F9"),
+                        Code = 9,
+                        Name = "י\"א 9"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("B641E55E-5A1E-42E9-8ACB-1356340C87F5"),
+                        Code = 10,
+                        Name = "י\"א 10"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_11_ID,
+                        Id = Guid.Parse("2A3C8F01-ECC2-42C0-8251-16FCD68944F5"),
+                        Code = 11,
+                        Name = "י\"א 11"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("CA5695ED-4D8A-485F-9072-29DCBC29BF84"),
+                        Code = 1,
+                        Name = "י\"ב 1"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("EBBB2B2E-4833-4860-8843-40F9CF852BE7"),
+                        Code = 2,
+                        Name = "י\"ב 2"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("7A9808BD-2D4E-48E2-8692-67D44EF962CE"),
+                        Code = 3,
+                        Name = "י\"ב 3"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("8C70D35A-9A3A-4BC6-8412-778F72338C63"),
+                        Code = 4,
+                        Name = "י\"ב 4"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("F48DD2F8-9A66-4052-B31C-793E60DF5004"),
+                        Code = 5,
+                        Name = "י\"ב 5"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("46C5B044-5020-4F7F-900C-93623BE8BBAF"),
+                        Code = 6,
+                        Name = "י\"ב 6"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("91B2C738-8E6C-4334-BC20-9778EF792AF4"),
+                        Code = 7,
+                        Name = "י\"ב 7"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("D22D38B9-0398-4AAE-8EA7-A13237CACE64"),
+                        Code = 8,
+                        Name = "י\"ב 8"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("1A9C42C2-148B-4DA9-8620-A4B70336F451"),
+                        Code = 9,
+                        Name = "י\"ב 9"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("EBB4D04C-E099-48C8-AE3C-B123354E250C"),
+                        Code = 10,
+                        Name = "י\"ב 10"
+                    },
+                    new(){
+                        GradeId = GradeEntityData.GRADE_12_ID,
+                        Id = Guid.Parse("A238C990-8FEF-4E94-8BF4-B1E9DC818DDE"),
+                        Code = 11,
+                        Name = "י\"ב 11"
+                    },
+                ];
+            }
+        }
+
+        internal static class AppSettingEntityData
         {
             internal static List<AppSetting> GetData()
             {
-                return new List<AppSetting>
-                {
+                return
+                [
                     new()
                     {
                         Id = Guid.Parse("795B0B48-4238-4D27-BE60-3DD2CB66E424"),
@@ -254,11 +356,9 @@ namespace NS.Quizzy.Server.DAL
                         ValueType = DALEnums.AppSettingValueTypes.Boolean,
                         Value = "true",
                         IsSecured = false,
-                        CreatedTime = StartActionTime,
-                        ModifiedTime = StartActionTime,
-                        IsDeleted=false,
+                        IsDeleted = false,
                     }
-                };
+                ];
             }
         }
     }

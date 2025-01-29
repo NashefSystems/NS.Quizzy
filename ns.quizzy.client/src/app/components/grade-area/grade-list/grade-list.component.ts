@@ -1,34 +1,35 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ISubjectDto } from '../../../models/backend/subject.dto';
-import { SubjectsService } from '../../../services/backend/subjects.service';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { TableColumnInfo } from '../../table/table-column-info';
+import { GradesService } from '../../../services/backend/grades.service';
+import { IGradeDto } from '../../../models/backend/grade.dto';
 
 @Component({
-  selector: 'app-subject-list',
+  selector: 'app-grade-list',
   standalone: false,
 
-  templateUrl: './subject-list.component.html',
-  styleUrl: './subject-list.component.scss'
+  templateUrl: './grade-list.component.html',
+  styleUrl: './grade-list.component.scss'
 })
-export class SubjectListComponent implements OnInit {
-  private readonly _subjectsService = inject(SubjectsService);
+export class GradeListComponent implements OnInit {
+  private readonly _gradesService = inject(GradesService);
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
 
 
-  items: ISubjectDto[];
+  items: IGradeDto[];
   columns: TableColumnInfo[] = [
     {
       key: 'name',
-      title: 'EXAM_TYPE_AREA.NAME'
-    }, {
-      key: 'itemOrder',
-      title: 'EXAM_TYPE_AREA.ITEM_ORDER'
-    }
+      title: 'GRADE_AREA.NAME'
+    },
+    {
+      key: 'code',
+      title: 'GRADE_AREA.CODE'
+    },
   ];
 
   ngOnInit(): void {
@@ -36,20 +37,20 @@ export class SubjectListComponent implements OnInit {
   }
 
   loadData() {
-    this._subjectsService.get().subscribe({
+    this._gradesService.get().subscribe({
       next: (responseBody) => this.items = responseBody
     });
   }
 
   onAdd() {
-    this._router.navigate(['/subjects/new']);
+    this._router.navigate(['/grades/new']);
   };
 
-  onEdit(item: ISubjectDto) {
-    this._router.navigate([`/subjects/edit/${item?.id}`]);
+  onEdit(item: IGradeDto) {
+    this._router.navigate([`/grades/edit/${item?.id}`]);
   };
 
-  onDelete(item: ISubjectDto) {
+  onDelete(item: IGradeDto) {
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,
@@ -61,7 +62,7 @@ export class SubjectListComponent implements OnInit {
       .openDialog(dialogPayload)
       .then(isConfirmed => {
         if (isConfirmed) {
-          this._subjectsService.delete(item.id).subscribe({
+          this._gradesService.delete(item.id).subscribe({
             next: () => this.loadData()
           });
         }

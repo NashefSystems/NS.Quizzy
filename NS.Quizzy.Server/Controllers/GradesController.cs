@@ -13,18 +13,18 @@ namespace NS.Quizzy.Server.Controllers
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
     [LoggingAPICallInfo]
-    public class ClassesController : ControllerBase
+    public class GradesController : ControllerBase
     {
-        private readonly IClassesService _service;
-        public ClassesController(IClassesService service)
+        private readonly IGradesService _service;
+        public GradesController(IGradesService service)
         {
             _service = service;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<ClassDto>))]
-        public async Task<ActionResult<List<ClassDto>>> GetAllAsync()
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<GradeDto>))]
+        public async Task<ActionResult<List<GradeDto>>> GetAllAsync()
         {
             var res = await _service.GetAllAsync();
             return Ok(res);
@@ -32,8 +32,8 @@ namespace NS.Quizzy.Server.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(ClassDto))]
-        public async Task<ActionResult<ClassDto>> GetAsync(Guid id)
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(GradeDto))]
+        public async Task<ActionResult<GradeDto>> GetAsync(Guid id)
         {
             var res = await _service.GetAsync(id);
             if (res == null)
@@ -46,8 +46,8 @@ namespace NS.Quizzy.Server.Controllers
         [HttpPost]
         [Authorize]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
-        [SwaggerResponse(StatusCodes.Status201Created, null, typeof(ClassDto))]
-        public async Task<ActionResult<ClassDto>> InsertAsync([FromBody] ClassPayloadDto payload)
+        [SwaggerResponse(StatusCodes.Status201Created, null, typeof(GradeDto))]
+        public async Task<ActionResult<GradeDto>> InsertAsync([FromBody] GradePayloadDto payload)
         {
             var res = await _service.InsertAsync(payload);
             if (res == null)
@@ -62,8 +62,8 @@ namespace NS.Quizzy.Server.Controllers
         [HttpPut("{id}")]
         [Authorize]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
-        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(ClassDto))]
-        public async Task<ActionResult<ClassDto>> UpdateAsync(Guid id, [FromBody] ClassPayloadDto payload)
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(GradeDto))]
+        public async Task<ActionResult<GradeDto>> UpdateAsync(Guid id, [FromBody] GradePayloadDto payload)
         {
             var res = await _service.UpdateAsync(id, payload);
             if (res == null)
@@ -77,7 +77,7 @@ namespace NS.Quizzy.Server.Controllers
         [Authorize]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
         [SwaggerResponse(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<ClassDto>> DeleteAsync(Guid id)
+        public async Task<ActionResult<GradeDto>> DeleteAsync(Guid id)
         {
             var res = await _service.DeleteAsync(id);
             if (!res)

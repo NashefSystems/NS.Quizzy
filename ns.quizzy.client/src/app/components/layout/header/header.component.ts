@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
         if (!value) {
           return;
         }
-        this.title = this._appTranslateService.translate(value);
+        this.title = value;
       }
     });
 

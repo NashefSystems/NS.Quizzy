@@ -16,9 +16,11 @@ namespace NS.Quizzy.Server.DAL
         internal static void SetConfigurations(this ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new ClassEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ExamEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ClassEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ClassExamEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new GradeEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new GradeExamEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ExamTypeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionnaireEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
@@ -107,24 +109,6 @@ namespace NS.Quizzy.Server.DAL
             }
         }
 
-        internal class ClassEntityConfiguration : BaseEntityTypeConfiguration<Class>
-        {
-            public override void Configure(EntityTypeBuilder<Class> entity)
-            {
-                base.Configure(entity);
-                entity.ToTable("Classes");
-
-                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
-                entity
-                    .HasOne(c => c.Parent)
-                    .WithMany(c => c.Children)
-                    .HasForeignKey(c => c.ParentId);
-
-                entity.HasData(InitialData.ClassEntityData.GetData());
-
-            }
-        }
-
         internal class ExamEntityConfiguration : BaseEntityTypeConfiguration<Exam>
         {
             public override void Configure(EntityTypeBuilder<Exam> entity)
@@ -136,6 +120,23 @@ namespace NS.Quizzy.Server.DAL
                     .HasOne(c => c.Questionnaire)
                     .WithMany(c => c.Exams)
                     .HasForeignKey(c => c.QuestionnaireId);
+            }
+        }
+
+        internal class ClassEntityConfiguration : BaseEntityTypeConfiguration<Class>
+        {
+            public override void Configure(EntityTypeBuilder<Class> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Classes");
+
+                entity.HasIndex(p => new { p.Name, p.GradeId }).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity
+                    .HasOne(c => c.Grade)
+                    .WithMany(c => c.Classes)
+                    .HasForeignKey(c => c.GradeId);
+
+                entity.HasData(InitialData.ClassEntityData.GetData());
             }
         }
 
@@ -155,6 +156,37 @@ namespace NS.Quizzy.Server.DAL
                     .HasOne(c => c.Class)
                     .WithMany(c => c.ClassExams)
                     .HasForeignKey(c => c.ClassId);
+            }
+        }
+
+        internal class GradeEntityConfiguration : BaseEntityTypeConfiguration<Grade>
+        {
+            public override void Configure(EntityTypeBuilder<Grade> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Grades");
+
+                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasData(InitialData.GradeEntityData.GetData());
+            }
+        }
+
+        internal class GradeExamEntityConfiguration : BaseEntityTypeConfiguration<GradeExam>
+        {
+            public override void Configure(EntityTypeBuilder<GradeExam> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("GradeExams");
+
+                entity
+                    .HasOne(c => c.Exam)
+                    .WithMany(c => c.GradeExams)
+                    .HasForeignKey(c => c.ExamId);
+
+                entity
+                    .HasOne(c => c.Grade)
+                    .WithMany(c => c.GradeExams)
+                    .HasForeignKey(c => c.GradeId);
             }
         }
 
