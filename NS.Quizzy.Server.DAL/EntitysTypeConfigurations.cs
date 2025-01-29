@@ -209,11 +209,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("Questionnaires");
-                entity.HasIndex(p => p.Number).IsUnique(true).HasFilter("IsDeleted = '0'");
-                entity.Property(p => p.Number).IsRequired(true);
-                entity.Property(p => p.SubjectId).IsRequired(true);
-                entity.Property(p => p.Duration).IsRequired(true);
-                entity.Property(p => p.DurationWithExtra).IsRequired(true);
+                entity.HasIndex(p => p.Code).IsUnique(true).HasFilter("IsDeleted = '0'");
 
                 entity
                   .HasOne(c => c.Subject)
@@ -230,7 +226,6 @@ namespace NS.Quizzy.Server.DAL
                 base.Configure(entity);
                 entity.ToTable("Subjects");
                 entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
-                entity.Property(p => p.Name).IsRequired(true);
 
                 entity.HasData(InitialData.SubjectEntityData.GetData());
 

@@ -9,10 +9,16 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
         public MappingProfile()
         {
             CreateMap<BaseEntity, IBaseEntityDto>();
-            CreateMap<Subject, SubjectDto>();
-            CreateMap<ExamType, ExamTypeDto>();
+            //CreateMap<AppSetting, AppSettingDto>();
             CreateMap<Class, ClassDto>();
+            CreateMap<ClassExam, ClassExamDto>();
+            CreateMap<Exam, ExamDto>();
+            CreateMap<ExamType, ExamTypeDto>();
             CreateMap<Grade, GradeDto>();
+            CreateMap<GradeExam, GradeExamDto>();
+            CreateMap<Questionnaire, QuestionnaireDto>();
+            CreateMap<Subject, SubjectDto>();
+            CreateMap<User, UserDto>();
         }
     }
 }

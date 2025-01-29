@@ -66,6 +66,11 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
+            if (await _appDbContext.ExamTypes.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Name == model.Name))
+            {
+                throw new BadRequestException("There is another exam type with the same name");
+            }
+
             item.Name = model.Name;
             item.ItemOrder = model.ItemOrder;
             await _appDbContext.SaveChangesAsync();

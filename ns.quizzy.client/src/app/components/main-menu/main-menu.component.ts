@@ -6,7 +6,6 @@ import { IMenuItemInfo } from './menu-item-info';
 @Component({
   selector: 'app-main-menu',
   standalone: false,
-
   templateUrl: './main-menu.component.html',
   styleUrl: './main-menu.component.scss'
 })

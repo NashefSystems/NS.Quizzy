@@ -5,7 +5,6 @@ import { AppSettingsService } from '../../services/app-settings.service';
 @Component({
   selector: 'app-test',
   standalone: false,
-
   templateUrl: './test.component.html',
   styleUrl: './test.component.scss'
 })

@@ -18,7 +18,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             var questionnaire = new DAL.Entities.Questionnaire()
             {
-                Number = 10000 + rnd.Next(8888),
+                Code = (uint)(10000 + rnd.Next(8888)),
                 Name = "ערבית למתקדמים",
                 SubjectId = Guid.Parse("9B8F8B4E-19FE-4F98-A9E1-0234D8331F24"),
                 Duration = TimeSpan.FromMinutes(30),

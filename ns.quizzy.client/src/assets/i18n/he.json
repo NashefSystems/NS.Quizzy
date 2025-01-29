@@ -65,7 +65,7 @@
     "TABLE": {
         "SEARCH": "חפש",
         "SEARCH_PLACEHOLDER": "חיפוש...",
-        "EMPTY_STATUS": "🤔</br>לא מצאנו תוצאות תואמות</br>נסה שוב!",
+        "EMPTY_STATUS": "🤔</br>לא מצאנו תוצאות תואמות</br>אנא נסה שוב!",
         "ACTIONS": {
             "ADD": "הוספת פריט חדש",
             "EDIT": "עריכה",
@@ -85,10 +85,17 @@
         "CODE": "קוד שכבה"
     },
     "CLASS_AREA": {
-        "NAME": "כיתה",
+        "NAME": "שם",
         "GRADE_ID": "שכבה",
         "CODE": "קוד כיתה",
         "FULL_CODE": "קוד כיתה מלא"
+    },
+    "QUESTIONNAIRE_AREA": {
+        "CODE": "קוד שאלון",
+        "NAME": "שם",
+        "SUBJECT_ID": "נושא",
+        "DURATION": "משך הבחינה",
+        "DURATION_WITH_EXTRA": "משך הבחינה עם תוספת זמן"
     },
     "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
@@ -96,8 +103,8 @@
         "CONFIRM": "אישור",
         "CANCEL": "ביטול"
     },
-    "Add": "הוסף",
-    "Update": "עדכן",
+    "ADD": "הוסף",
+    "UPDATE": "עדכן",
     "ITEM_ADDED_SUCCESSFULLY": "פריט נוסף בהצלחה",
     "ITEM_UPDATED_SUCCESSFULLY": "פריט עודכן בהצלחה",
     "Subject already exists": "הנושא כבר קיים",

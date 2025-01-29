@@ -123,6 +123,11 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
+            if (await _appDbContext.Classes.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Name == model.Name && x.GradeId == model.GradeId))
+            {
+                throw new BadRequestException("There is another class with the same name and grade");
+            }
+
             var gradeDic = await _appDbContext.Grades
                 .AsNoTracking()
                 .Where(x => x.Id == model.GradeId && x.IsDeleted == false)

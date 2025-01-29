@@ -5,7 +5,6 @@ import { INotificationSnackBarData } from './notification-snack-bar.data';
 @Component({
   selector: 'app-notification-snack-bar',
   standalone: false,
-
   templateUrl: './notification-snack-bar.component.html',
   styleUrl: './notification-snack-bar.component.scss'
 })

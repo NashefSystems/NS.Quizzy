@@ -2,7 +2,7 @@
 {
     public class Questionnaire : BaseEntity
     {
-        public int Number { get; set; }
+        public uint Code { get; set; }
         public string Name { get; set; }
         public Guid SubjectId { get; set; }
         public TimeSpan Duration { get; set; }

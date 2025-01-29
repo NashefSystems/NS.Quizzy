@@ -8,7 +8,6 @@ import { IGradePayloadDto } from '../../../models/backend/grade.dto';
 @Component({
   selector: 'app-grade-add-or-edit',
   standalone: false,
-
   templateUrl: './grade-add-or-edit.component.html',
   styleUrl: './grade-add-or-edit.component.scss'
 })
@@ -39,7 +38,11 @@ export class GradeAddOrEditComponent implements OnInit {
 
     this._gradesService.getById(id).subscribe({
       next: data => {
-        const newValue = { ...this.form.value, ...data };
+        const { name, code } = data;
+        const newValue = {
+          ...this.form.value,
+          name, code
+        };
         this.form.setValue(newValue);
       }
     });

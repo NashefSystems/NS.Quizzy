@@ -13,6 +13,7 @@ import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-typ
 import { ClassAddOrEditComponent } from './components/class-area/class-add-or-edit/class-add-or-edit.component';
 import { GradeListComponent } from './components/grade-area/grade-list/grade-list.component';
 import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-edit/grade-add-or-edit.component';
+import { QuestionnaireAddOrEditComponent } from './components/questionnaire-area/questionnaire-add-or-edit/questionnaire-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -134,16 +135,14 @@ const routes: Routes = [
         }
       }, {
         path: 'new',
-        component: TestComponent,
-        // component: QuestionnaireAddOrEditComponent,
+        component: QuestionnaireAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.QUESTIONNAIRE_ADD"
         }
       },
       {
         path: 'edit/:id',
-        component: TestComponent,
-        // component: QuestionnaireAddOrEditComponent,
+        component: QuestionnaireAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.QUESTIONNAIRE_EDIT"
         }

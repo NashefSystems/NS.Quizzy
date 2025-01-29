@@ -23,8 +23,8 @@
             </ng-container>
         </mat-error>
     </mat-form-field>
-    
+
     <button mat-stroked-button color="primary" class="full-width" [disabled]="form.invalid" cdkFocusInitial>
-        {{ id ? 'Update' : 'Add' | translate }}
+        {{ (id ? 'UPDATE' : 'ADD') | translate }}
     </button>
 </form>

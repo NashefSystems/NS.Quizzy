@@ -88,7 +88,6 @@ namespace NS.Quizzy.Server
             app.UseQuizzyBL();
             app.UseAuthorization();
 
-            app.UseExceptionHandler("/error"); // Centralized exception handling.
             app.MapControllers();
             app.MapDefaultControllerRoute();
 

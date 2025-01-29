@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-subject-add-or-edit',
   standalone: false,
-
   templateUrl: './subject-add-or-edit.component.html',
   styleUrl: './subject-add-or-edit.component.scss'
 })
@@ -39,7 +38,11 @@ export class SubjectAddOrEditComponent implements OnInit {
 
     this._subjectsService.getById(id).subscribe({
       next: data => {
-        const newValue = { ...this.form.value, ...data };
+        const { name, itemOrder } = data;
+        const newValue = {
+          ...this.form.value,
+          name, itemOrder
+        };
         this.form.setValue(newValue);
       }
     });

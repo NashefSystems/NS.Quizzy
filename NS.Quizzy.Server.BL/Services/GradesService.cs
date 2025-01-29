@@ -64,6 +64,12 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 return null;
             }
+
+            if (await _appDbContext.Grades.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Name == model.Name))
+            {
+                throw new BadRequestException("There is another grade with the same name");
+            }
+
             item.Code = model.Code;
             item.Name = model.Name;
             await _appDbContext.SaveChangesAsync();

@@ -10,7 +10,6 @@ import { IGradeDto } from '../../../models/backend/grade.dto';
 @Component({
   selector: 'app-grade-list',
   standalone: false,
-
   templateUrl: './grade-list.component.html',
   styleUrl: './grade-list.component.scss'
 })

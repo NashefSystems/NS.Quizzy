@@ -4,8 +4,7 @@ import { ConfirmDialogData } from './confirm-dialog.data';
 
 @Component({
   selector: 'app-confirm-dialog',
-  standalone: false,
-  
+  standalone: false,  
   templateUrl: './confirm-dialog.component.html',
   styleUrl: './confirm-dialog.component.scss'
 })

@@ -5,7 +5,6 @@ import { TableColumnInfo } from './table-column-info';
 @Component({
   selector: 'app-table',
   standalone: false,
-
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss'
 })

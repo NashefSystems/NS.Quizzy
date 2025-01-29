@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-exam-list',
-  standalone: false,
-  
+  standalone: false,  
   templateUrl: './exam-list.component.html',
   styleUrl: './exam-list.component.scss'
 })

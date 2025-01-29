@@ -61,7 +61,7 @@
     "TABLE": {
         "SEARCH": "Search",
         "SEARCH_PLACEHOLDER": "Search...",
-        "EMPTY_STATUS": "🤔</br>No matching results found</br>Try again!",
+        "EMPTY_STATUS": "🤔</br>No matching results found</br>Please try again!",
         "ACTIONS": {
             "ADD": "Add New Item",
             "EDIT": "Edit",
@@ -82,9 +82,16 @@
     },
     "CLASS_AREA": {
         "NAME": "Name",
-        "GRADE_ID": "Parent",
+        "GRADE_ID": "Grade",
         "CODE": "Class code",
         "FULL_CODE": "Class full code"
+    },
+    "QUESTIONNAIRE_AREA": {
+        "CODE": "Questionnaire code",
+        "NAME": "Name",
+        "SUBJECT_ID": "Subject",
+        "DURATION": "Exam duration",
+        "DURATION_WITH_EXTRA": "Exam duration with extra time"
     },
     "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
@@ -92,8 +99,8 @@
         "CONFIRM": "Confirm",
         "CANCEL": "Cancel"
     },
-    "Add": "Add",
-    "Update": "Update",
+    "ADD": "Add",
+    "UPDATE": "Update",
     "ITEM_ADDED_SUCCESSFULLY": "Item added successfully",
     "ITEM_UPDATED_SUCCESSFULLY": "Item updated successfully"
 }

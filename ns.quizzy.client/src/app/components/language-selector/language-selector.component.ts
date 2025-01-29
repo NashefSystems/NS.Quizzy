@@ -5,7 +5,6 @@ import { AppTranslateService } from '../../services/app-translate.service';
 @Component({
   selector: 'app-language-selector',
   standalone: false,
-
   templateUrl: './language-selector.component.html',
   styleUrl: './language-selector.component.scss'
 })

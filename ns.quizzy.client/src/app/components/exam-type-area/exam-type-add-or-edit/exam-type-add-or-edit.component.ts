@@ -8,7 +8,6 @@ import { IExamTypePayloadDto } from '../../../models/backend/exam-type.dto';
 @Component({
   selector: 'app-exam-type-add-or-edit',
   standalone: false,
-
   templateUrl: './exam-type-add-or-edit.component.html',
   styleUrl: './exam-type-add-or-edit.component.scss'
 })
@@ -39,7 +38,11 @@ export class ExamTypeAddOrEditComponent implements OnInit {
 
     this._examTypesService.getById(id).subscribe({
       next: data => {
-        const newValue = { ...this.form.value, ...data };
+        const { name, itemOrder } = data;
+        const newValue = {
+          ...this.form.value,
+          name, itemOrder
+        };
         this.form.setValue(newValue);
       }
     });

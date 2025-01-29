@@ -1,6 +1,6 @@
 <app-back-button></app-back-button>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    
+
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'SUBJECT_AREA.NAME' | translate }}</mat-label>
         <input matInput formControlName="name" autocomplete="off" />
@@ -22,6 +22,6 @@
     </mat-form-field>
 
     <button mat-stroked-button color="primary" class="full-width" [disabled]="form.invalid" cdkFocusInitial>
-        {{ id ? 'Update' : 'Add' | translate }}
+        {{ (id ? 'UPDATE' : 'ADD') | translate }}
     </button>
 </form>

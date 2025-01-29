@@ -10,7 +10,6 @@ import { TableColumnInfo } from '../../table/table-column-info';
 @Component({
   selector: 'app-exam-type-list',
   standalone: false,
-
   templateUrl: './exam-type-list.component.html',
   styleUrl: './exam-type-list.component.scss'
 })

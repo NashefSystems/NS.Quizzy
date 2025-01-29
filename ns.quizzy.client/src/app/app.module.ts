@@ -57,6 +57,8 @@ import { ClassListComponent } from './components/class-area/class-list/class-lis
 import { ClassAddOrEditComponent } from './components/class-area/class-add-or-edit/class-add-or-edit.component';
 import { GradeListComponent } from './components/grade-area/grade-list/grade-list.component';
 import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-edit/grade-add-or-edit.component';
+import { QuestionnaireAddOrEditComponent } from './components/questionnaire-area/questionnaire-add-or-edit/questionnaire-add-or-edit.component';
+import { QuestionnaireListComponent } from './components/questionnaire-area/questionnaire-list/questionnaire-list.component';
 
 
 // Factory function for HttpLoader
@@ -90,6 +92,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ClassAddOrEditComponent,
     GradeListComponent,
     GradeAddOrEditComponent,
+    QuestionnaireListComponent,
+    QuestionnaireAddOrEditComponent,
   ],
   imports: [
     BrowserModule,

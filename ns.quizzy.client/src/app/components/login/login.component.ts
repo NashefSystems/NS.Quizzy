@@ -14,7 +14,6 @@ import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
 @Component({
   selector: 'app-login',
   standalone: false,
-
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

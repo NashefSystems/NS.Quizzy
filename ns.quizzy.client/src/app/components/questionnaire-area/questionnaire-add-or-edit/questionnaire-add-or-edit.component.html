@@ -1,0 +1,63 @@
+<app-back-button></app-back-button>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'QUESTIONNAIRE_AREA.CODE' | translate }}</mat-label>
+        <input matInput formControlName="code" autocomplete="off" type="number" min="1" />
+        <mat-error *ngIf="form.get('code')?.invalid && form.get('code')?.touched">
+            <ng-container *ngIf="form.get('code')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+            <ng-container *ngIf="form.get('code')?.errors?.['min']">
+                {{ 'ERRORS.MIN' | translate : form.get('code')?.errors?.['min'] }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'QUESTIONNAIRE_AREA.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" autocomplete="off" />
+        <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            <ng-container *ngIf="form.get('name')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'QUESTIONNAIRE_AREA.SUBJECT_ID' | translate }}</mat-label>
+        <mat-select formControlName="subjectId">
+            <mat-option [dir]="'DIR' | translate" *ngFor="let subject of subjects"
+                [value]="subject.id">{{subject.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('subjectId')?.invalid && form.get('subjectId')?.touched">
+            <ng-container *ngIf="form.get('subjectId')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'QUESTIONNAIRE_AREA.DURATION' | translate }}</mat-label>
+        <input matInput formControlName="duration" autocomplete="off" type="time" />
+        <mat-error *ngIf="form.get('duration')?.invalid && form.get('duration')?.touched">
+            <ng-container *ngIf="form.get('duration')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'QUESTIONNAIRE_AREA.DURATION_WITH_EXTRA' | translate }}</mat-label>
+        <input matInput formControlName="durationWithExtra" autocomplete="off" type="time" />
+        <mat-error *ngIf="form.get('durationWithExtra')?.invalid && form.get('durationWithExtra')?.touched">
+            <ng-container *ngIf="form.get('durationWithExtra')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+    
+    <button mat-stroked-button color="primary" class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+        {{ (id ? 'UPDATE' : 'ADD') | translate }}
+    </button>
+</form>

@@ -1,41 +1,35 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { QuestionnairesService } from '../../../services/backend/questionnaires.service';
 import { NotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClassesService } from '../../../services/backend/classes.service';
-import { IClassPayloadDto } from '../../../models/backend/class.dto';
-import { GradesService } from '../../../services/backend/grades.service';
-import { IGradeDto } from '../../../models/backend/grade.dto';
+import { IQuestionnairePayloadDto } from '../../../models/backend/questionnaire.dto';
+import { ISubjectDto } from '../../../models/backend/subject.dto';
+import { SubjectsService } from '../../../services/backend/subjects.service';
 
 @Component({
-  selector: 'app-class-add-or-edit',
+  selector: 'app-questionnaire-add-or-edit',
   standalone: false,
-  templateUrl: './class-add-or-edit.component.html',
-  styleUrl: './class-add-or-edit.component.scss'
+  templateUrl: './questionnaire-add-or-edit.component.html',
+  styleUrl: './questionnaire-add-or-edit.component.scss'
 })
-export class ClassAddOrEditComponent implements OnInit {
+export class QuestionnaireAddOrEditComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
-  private readonly _gradesService = inject(GradesService);
-  private readonly _classesService = inject(ClassesService);
+  private readonly _questionnairesService = inject(QuestionnairesService);
+  private readonly _subjectsService = inject(SubjectsService);
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _router = inject(Router);
   private readonly _activatedRoute = inject(ActivatedRoute);
   id: string | null = null;
-  grades: IGradeDto[] = [];
+  subjects: ISubjectDto[] = [];
 
   form: FormGroup = this._fb.group({
-    name: ['', [Validators.required]],
-    gradeId: ['', [Validators.required]],
     code: ['', [Validators.required, Validators.min(1)]],
-    fullCode: [''],
+    name: ['', [Validators.required]],
+    subjectId: ['', [Validators.required]],
+    duration: ['', [Validators.required]],
+    durationWithExtra: ['', [Validators.required]],
   });
-
-  onFullCodeChange() {
-    const { gradeId, code } = this.form.value;
-    const gradeCode = this.grades.find(x => x.id === gradeId)?.code || 0;
-    const fullCode = gradeCode * 100 + code;
-    this.form.setValue({ ...this.form.value, fullCode: fullCode });
-  }
 
   ngOnInit(): void {
     this._activatedRoute.paramMap.subscribe(params => {
@@ -45,16 +39,16 @@ export class ClassAddOrEditComponent implements OnInit {
   }
 
   loadDataFromId(id: string | null) {
-    this._gradesService.get().subscribe({
-      next: (data) => {
-        this.grades = data;
+    this._subjectsService.get().subscribe({
+      next: (responseBody) => {
+        this.subjects = responseBody;
         if (id) {
-          this._classesService.getById(id).subscribe({
+          this._questionnairesService.getById(id).subscribe({
             next: data => {
-              const { name, gradeId, code, fullCode } = data;
+              const { code, name, subjectId, duration, durationWithExtra } = data;
               const newValue = {
                 ...this.form.value,
-                name, gradeId, code, fullCode
+                code, name, subjectId, duration, durationWithExtra
               };
               this.form.setValue(newValue);
             }
@@ -62,22 +56,24 @@ export class ClassAddOrEditComponent implements OnInit {
         }
       }
     });
+
   }
 
   onSubmit() {
     if (!this.form.valid) {
       return;
     }
-    const { name, gradeId, code } = this.form.value;
-
-    const payload: IClassPayloadDto = {
-      name: name,
-      gradeId: gradeId,
-      code: code
+    const { code, name, subjectId, duration, durationWithExtra } = this.form.value;
+    const payload: IQuestionnairePayloadDto = {
+      code,
+      name,
+      subjectId,
+      duration,
+      durationWithExtra,
     };
 
     if (this.id) {
-      this._classesService.update(this.id, payload).subscribe({
+      this._questionnairesService.update(this.id, payload).subscribe({
         next: responseBody => {
           this._notificationsService.success('ITEM_UPDATED_SUCCESSFULLY');
           this.navigateToList();
@@ -87,7 +83,7 @@ export class ClassAddOrEditComponent implements OnInit {
         }
       });
     } else {
-      this._classesService.insert(payload).subscribe({
+      this._questionnairesService.insert(payload).subscribe({
         next: responseBody => {
           this._notificationsService.success('ITEM_ADDED_SUCCESSFULLY');
           this.navigateToList();
@@ -100,6 +96,6 @@ export class ClassAddOrEditComponent implements OnInit {
   }
 
   navigateToList() {
-    this._router.navigate(['/classes']);
+    this._router.navigate(['/questionnaires']);
   }
 }

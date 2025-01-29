@@ -10,7 +10,6 @@ import { TableColumnInfo } from '../../table/table-column-info';
 @Component({
   selector: 'app-subject-list',
   standalone: false,
-
   templateUrl: './subject-list.component.html',
   styleUrl: './subject-list.component.scss'
 })
