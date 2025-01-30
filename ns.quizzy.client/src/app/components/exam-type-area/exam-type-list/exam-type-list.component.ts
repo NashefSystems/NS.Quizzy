@@ -3,9 +3,9 @@ import { ExamTypesService } from '../../../services/backend/exam-types.service';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../global-area/confirm-dialog/confirm-dialog.component';
 import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
-import { TableColumnInfo } from '../../table/table-column-info';
+import { TableColumnInfo } from '../../global-area/table/table-column-info';
 
 @Component({
   selector: 'app-exam-type-list',

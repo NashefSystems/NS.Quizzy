@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Location } from '@angular/common';
-import { AppTranslateService } from '../../services/app-translate.service';
-import { Directions } from '../../enums/directions.enum';
+import { AppTranslateService } from '../../../services/app-translate.service';
+import { Directions } from '../../../enums/directions.enum';
 
 @Component({
   selector: 'app-back-button',

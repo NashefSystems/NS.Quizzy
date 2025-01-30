@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { NotificationSnackBarComponent } from '../components/notification-snack-bar/notification-snack-bar.component';
-import { INotificationSnackBarData, NotificationSnackBarType } from '../components/notification-snack-bar/notification-snack-bar.data';
+import { NotificationSnackBarComponent } from '../components/global-area/notification-snack-bar/notification-snack-bar.component';
+import { INotificationSnackBarData, NotificationSnackBarType } from '../components/global-area/notification-snack-bar/notification-snack-bar.data';
 import { AppTranslateService } from './app-translate.service';
 
 @Injectable({

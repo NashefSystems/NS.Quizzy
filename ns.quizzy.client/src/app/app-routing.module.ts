@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ExamsComponent } from './components/exams/exams.component';
 import { ExamListComponent } from './components/exam-area/exam-list/exam-list.component';
 import { QuestionnaireListComponent } from './components/questionnaire-area/questionnaire-list/questionnaire-list.component';
 import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
@@ -14,12 +13,13 @@ import { ClassAddOrEditComponent } from './components/class-area/class-add-or-ed
 import { GradeListComponent } from './components/grade-area/grade-list/grade-list.component';
 import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-edit/grade-add-or-edit.component';
 import { QuestionnaireAddOrEditComponent } from './components/questionnaire-area/questionnaire-add-or-edit/questionnaire-add-or-edit.component';
+import { ExamScheduleHomeComponent } from './components/exam-schedule-area/exam-schedule-home/exam-schedule-home.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: ExamsComponent,
+    component: ExamScheduleHomeComponent,
     data: {
       page_title: "PAGE_TITLES.EXAM_SCHEDULE"
     }

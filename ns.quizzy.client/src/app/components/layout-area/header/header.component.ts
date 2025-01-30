@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DialogService } from '../../../services/dialog.service';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
-import { LoginComponent } from '../../login/login.component';
-import { MainMenuComponent } from '../../main-menu/main-menu.component';
+import { LoginComponent } from '../../auth-area/login/login.component';
+import { MainMenuComponent } from '../../global-area/main-menu/main-menu.component';
 import { AccountService } from '../../../services/backend/account.service';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';

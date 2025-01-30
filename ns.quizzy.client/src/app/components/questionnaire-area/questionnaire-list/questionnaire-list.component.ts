@@ -1,14 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { IGradeDto } from '../../../models/backend/grade.dto';
 import { IQuestionnaireDto } from '../../../models/backend/questionnaire.dto';
-import { TableColumnInfo } from '../../table/table-column-info';
+import { TableColumnInfo } from '../../global-area/table/table-column-info';
 import { SubjectsService } from '../../../services/backend/subjects.service';
 import { QuestionnairesService } from '../../../services/backend/questionnaires.service';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { ISubjectDto } from '../../../models/backend/subject.dto';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../global-area/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-questionnaire-list',

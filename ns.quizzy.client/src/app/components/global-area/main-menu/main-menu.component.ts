@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AccountService } from '../../services/backend/account.service';
+import { AccountService } from '../../../services/backend/account.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { IMenuItemInfo } from './menu-item-info';
 

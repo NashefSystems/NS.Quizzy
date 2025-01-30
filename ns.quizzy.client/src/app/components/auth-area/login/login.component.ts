@@ -1,15 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { StorageService } from '../../services/storage.service';
-import { ClientAppSettingsService } from '../../services/backend/client-app-settings.service';
-import { AccountService } from '../../services/backend/account.service';
-import { LoginRequest } from '../../models/backend/login.request';
-import { NotificationsService } from '../../services/notifications.service';
-import { LocalStorageKeys } from '../../enums/local-storage-keys.enum';
+import { StorageService } from '../../../services/storage.service';
+import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
+import { AccountService } from '../../../services/backend/account.service';
+import { LoginRequest } from '../../../models/backend/login.request';
+import { NotificationsService } from '../../../services/notifications.service';
+import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
 import { MatDialogRef } from '@angular/material/dialog';
 import { LoginSteps } from './login-steps.enum';
-import { LoginResponse } from '../../models/backend/login.response';
-import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
+import { LoginResponse } from '../../../models/backend/login.response';
+import { VerifyOTPRequest } from '../../../models/backend/verify-otp.request';
 
 @Component({
   selector: 'app-login',

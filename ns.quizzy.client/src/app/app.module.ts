@@ -31,27 +31,24 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { ExamsComponent } from './components/exams/exams.component';
-import { RootComponent } from './components/layout/root/root.component';
+import { RootComponent } from './components/layout-area/root/root.component';
+import { HeaderComponent } from './components/layout-area/header/header.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { PrettyJsonPipe } from './pipes/pretty-json.pipe';
-import { HeaderComponent } from './components/layout/header/header.component';
-import { FilterDialogComponent } from './components/exams/filter-dialog/filter-dialog.component';
-import { CheckboxTreeComponent } from './components/checkbox-tree/checkbox-tree.component';
-import { LoginComponent } from './components/login/login.component';
-import { LogoutComponent } from './components/logout/logout.component';
-import { MainMenuComponent } from './components/main-menu/main-menu.component';
-import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
-import { NotificationSnackBarComponent } from './components/notification-snack-bar/notification-snack-bar.component';
+import { LoginComponent } from './components/auth-area/login/login.component';
+import { LogoutComponent } from './components/auth-area/logout/logout.component';
+import { MainMenuComponent } from './components/global-area/main-menu/main-menu.component';
+import { LanguageSelectorComponent } from './components/global-area/language-selector/language-selector.component';
+import { NotificationSnackBarComponent } from './components/global-area/notification-snack-bar/notification-snack-bar.component';
 import { TestComponent } from './components/test/test.component';
 import { ExamListComponent } from './components/exam-area/exam-list/exam-list.component';
 import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
 import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
-import { TableComponent } from './components/table/table.component';
+import { TableComponent } from './components/global-area/table/table.component';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { SubjectAddOrEditComponent } from './components/subject-area/subject-add-or-edit/subject-add-or-edit.component';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
-import { BackButtonComponent } from './components/back-button/back-button.component';
+import { ConfirmDialogComponent } from './components/global-area/confirm-dialog/confirm-dialog.component';
+import { BackButtonComponent } from './components/global-area/back-button/back-button.component';
 import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-type-add-or-edit/exam-type-add-or-edit.component';
 import { ClassListComponent } from './components/class-area/class-list/class-list.component';
 import { ClassAddOrEditComponent } from './components/class-area/class-add-or-edit/class-add-or-edit.component';
@@ -59,6 +56,9 @@ import { GradeListComponent } from './components/grade-area/grade-list/grade-lis
 import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-edit/grade-add-or-edit.component';
 import { QuestionnaireAddOrEditComponent } from './components/questionnaire-area/questionnaire-add-or-edit/questionnaire-add-or-edit.component';
 import { QuestionnaireListComponent } from './components/questionnaire-area/questionnaire-list/questionnaire-list.component';
+import { ExamScheduleListComponent } from './components/exam-schedule-area/exam-schedule-list/exam-schedule-list.component';
+import { ExamScheduleHomeComponent } from './components/exam-schedule-area/exam-schedule-home/exam-schedule-home.component';
+import { ExamScheduleCalendarComponent } from './components/exam-schedule-area/exam-schedule-calendar/exam-schedule-calendar.component';
 
 
 // Factory function for HttpLoader
@@ -69,11 +69,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     RootComponent,
-    ExamsComponent,
     HeaderComponent,
-    FilterDialogComponent,
     PrettyJsonPipe,
-    CheckboxTreeComponent,
     LoginComponent,
     LogoutComponent,
     MainMenuComponent,
@@ -94,6 +91,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     GradeAddOrEditComponent,
     QuestionnaireListComponent,
     QuestionnaireAddOrEditComponent,
+    ExamScheduleListComponent,
+    ExamScheduleHomeComponent,
+    ExamScheduleCalendarComponent,
   ],
   imports: [
     BrowserModule,

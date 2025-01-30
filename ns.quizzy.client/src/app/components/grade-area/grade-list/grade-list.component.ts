@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
-import { TableColumnInfo } from '../../table/table-column-info';
+import { ConfirmDialogComponent } from '../../global-area/confirm-dialog/confirm-dialog.component';
+import { TableColumnInfo } from '../../global-area/table/table-column-info';
 import { GradesService } from '../../../services/backend/grades.service';
 import { IGradeDto } from '../../../models/backend/grade.dto';
 

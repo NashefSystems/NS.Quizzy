@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AppLanguages } from '../../enums/app-languages.enum';
-import { AppTranslateService } from '../../services/app-translate.service';
+import { AppLanguages } from '../../../enums/app-languages.enum';
+import { AppTranslateService } from '../../../services/app-translate.service';
 
 @Component({
   selector: 'app-language-selector',
