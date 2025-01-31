@@ -14,6 +14,7 @@ import { GradeListComponent } from './components/grade-area/grade-list/grade-lis
 import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-edit/grade-add-or-edit.component';
 import { QuestionnaireAddOrEditComponent } from './components/questionnaire-area/questionnaire-add-or-edit/questionnaire-add-or-edit.component';
 import { ExamScheduleHomeComponent } from './components/exam-schedule-area/exam-schedule-home/exam-schedule-home.component';
+import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/exam-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -37,16 +38,14 @@ const routes: Routes = [
         }
       }, {
         path: 'new',
-        component: TestComponent,
-        // component: ExamAddOrEditComponent,
+        component: ExamAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.EXAM_ADD"
         }
       },
       {
         path: 'edit/:id',
-        component: TestComponent,
-        // component: ExamAddOrEditComponent,
+        component: ExamAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.EXAM_EDIT"
         }

@@ -62,11 +62,11 @@ export class QuestionnaireListComponent implements OnInit {
     this._router.navigate(['/questionnaires/new']);
   };
 
-  onEdit(item: IGradeDto) {
+  onEdit(item: IQuestionnaireDto) {
     this._router.navigate([`/questionnaires/edit/${item?.id}`]);
   };
 
-  onDelete(item: IGradeDto) {
+  onDelete(item: IQuestionnaireDto) {
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,

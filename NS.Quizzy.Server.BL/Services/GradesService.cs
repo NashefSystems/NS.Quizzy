@@ -43,7 +43,7 @@ namespace NS.Quizzy.Server.BL.Services
             var exists = await _appDbContext.Grades.AnyAsync(x => x.IsDeleted == false && x.Name == model.Name);
             if (exists)
             {
-                throw new BadRequestException("Grade already exists");
+                throw new ConflictException("Grade already exists");
             }
 
             var item = new DAL.Entities.Grade()
@@ -67,7 +67,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             if (await _appDbContext.Grades.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Name == model.Name))
             {
-                throw new BadRequestException("There is another grade with the same name");
+                throw new ConflictException("There is another grade with the same name");
             }
 
             item.Code = model.Code;

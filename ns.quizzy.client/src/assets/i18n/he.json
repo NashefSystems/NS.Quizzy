@@ -97,6 +97,15 @@
         "DURATION": "משך הבחינה",
         "DURATION_WITH_EXTRA": "משך הבחינה עם תוספת זמן"
     },
+    "EXAM_AREA": {
+        "START_TIME": "זמן הבחינה",
+        "EXAM_TYPE": "סוג בחינה",
+        "QUESTIONNAIRE": "שאלון",
+        "DURATION": "משך הבחינה",
+        "DURATION_WITH_EXTRA": "משך הבחינה עם תוספת זמן",
+        "GRADES": "שכבות",
+        "CLASSES": "כיתות"
+    },
     "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
         "CONFIRM_DELETE": "האם אתה בטוח שברצונך למחוק את '{{itemName}}'?",

@@ -44,7 +44,7 @@ namespace NS.Quizzy.Server.BL.Services
         {
             if (await _appDbContext.Questionnaires.AnyAsync(x => x.IsDeleted == false && x.Code == model.Code))
             {
-                throw new BadRequestException("Questionnaire already exists");
+                throw new ConflictException("Questionnaire already exists");
             }
 
             var item = new DAL.Entities.Questionnaire()
@@ -71,7 +71,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             if (await _appDbContext.Questionnaires.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Code == model.Code))
             {
-                throw new BadRequestException("There is another questionnaire with the same code");
+                throw new ConflictException("There is another questionnaire with the same code");
             }
 
             item.Code = model.Code;

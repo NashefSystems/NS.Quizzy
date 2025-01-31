@@ -44,7 +44,7 @@ namespace NS.Quizzy.Server.BL.Services
             var exists = await _appDbContext.ExamTypes.AnyAsync(x => x.IsDeleted == false && x.Name == model.Name);
             if (exists)
             {
-                throw new BadRequestException("Exam type already exists");
+                throw new ConflictException("Exam type already exists");
             }
 
             var item = new DAL.Entities.ExamType()
@@ -68,7 +68,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             if (await _appDbContext.ExamTypes.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Name == model.Name))
             {
-                throw new BadRequestException("There is another exam type with the same name");
+                throw new ConflictException("There is another exam type with the same name");
             }
 
             item.Name = model.Name;

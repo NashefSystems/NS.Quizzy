@@ -44,7 +44,7 @@ namespace NS.Quizzy.Server.BL.Services
             var exists = await _appDbContext.Subjects.AnyAsync(x => x.IsDeleted == false && x.Name == model.Name);
             if (exists)
             {
-                throw new BadRequestException("Subject already exists");
+                throw new ConflictException("Subject already exists");
             }
 
             var item = new DAL.Entities.Subject()
@@ -68,7 +68,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             if (await _appDbContext.Subjects.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Name == model.Name))
             {
-                throw new BadRequestException("There is another subject with the same name");
+                throw new ConflictException("There is another subject with the same name");
             }
 
             item.Name = model.Name;

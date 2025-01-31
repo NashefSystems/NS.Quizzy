@@ -29,6 +29,8 @@
     "angularx-qrcode": "^19.0.0",
     "crypto-js": "^4.2.0",
     "jest-editor-support": "*",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.47",
     "ngx-json-viewer": "^3.2.1",
     "run-script-os": "*",
     "rxjs": "~7.8.0",

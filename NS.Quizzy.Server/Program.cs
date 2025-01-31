@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using NS.Quizzy.Server.BL.Extensions;
@@ -16,6 +17,7 @@ namespace NS.Quizzy.Server
 
             builder.Services
                 .AddControllers()
+                .CustomConfigureApiBehaviorOptions()
                 .AddNewtonsoftJson(opts =>
                 {
                     opts.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -90,6 +92,10 @@ namespace NS.Quizzy.Server
 
             app.MapControllers();
             app.MapDefaultControllerRoute();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
 
             #region RequestResponseLoggingMiddleware
             // Must call Middleware after calling `app.UseRouting()` or `app.MapControllers()`

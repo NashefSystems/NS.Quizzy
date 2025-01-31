@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.MappingProfiles;
-using NS.Quizzy.Server.BL.Middlewares;
 using NS.Quizzy.Server.BL.Services;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
@@ -24,12 +23,6 @@ namespace NS.Quizzy.Server.BL.Extensions
 {
     public static class ExtensionMethods
     {
-        public static IApplicationBuilder UseCatchingExceptionMiddleware(this IApplicationBuilder app)
-        {
-            app?.UseMiddleware<CatchingExceptionMiddleware>();
-            return app;
-        }
-
         public static IServiceCollection AddQuizzyBLServices(this IServiceCollection services, IConfiguration configuration)
         {
             ArgumentNullException.ThrowIfNull(services);
@@ -103,7 +96,6 @@ namespace NS.Quizzy.Server.BL.Extensions
                     };
                 });
 
-            services.AddScoped<IClassExamService, ClassExamService>();
             services.AddScoped<IGradesService, GradesService>();
             services.AddScoped<IClassesService, ClassesService>();
             services.AddScoped<IExamsService, ExamsService>();

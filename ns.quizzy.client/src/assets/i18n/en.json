@@ -93,6 +93,15 @@
         "DURATION": "Exam duration",
         "DURATION_WITH_EXTRA": "Exam duration with extra time"
     },
+    "EXAM_AREA": {
+        "START_TIME": "Exam time",
+        "EXAM_TYPE": "Exam Type",
+        "QUESTIONNAIRE": "Questionnaire",
+        "DURATION": "Exam duration",
+        "DURATION_WITH_EXTRA": "Exam duration with extra time",
+        "GRADES": "Grades",
+        "CLASSES": "Classes"
+    },
     "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
         "CONFIRM_DELETE": "Are you sure you want to delete '{{itemName}}'?",

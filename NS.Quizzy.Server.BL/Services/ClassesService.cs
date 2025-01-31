@@ -82,7 +82,7 @@ namespace NS.Quizzy.Server.BL.Services
             var exists = await _appDbContext.Classes.AnyAsync(x => x.IsDeleted == false && x.Name == model.Name && x.GradeId == model.GradeId);
             if (exists)
             {
-                throw new BadRequestException("Class already exists");
+                throw new ConflictException("Class already exists");
             }
 
             var gradeDic = await _appDbContext.Grades
@@ -125,7 +125,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             if (await _appDbContext.Classes.AnyAsync(x => x.IsDeleted == false && x.Id != id && x.Name == model.Name && x.GradeId == model.GradeId))
             {
-                throw new BadRequestException("There is another class with the same name and grade");
+                throw new ConflictException("There is another class with the same name and grade");
             }
 
             var gradeDic = await _appDbContext.Grades

@@ -43,7 +43,7 @@ export class NotificationsService {
 
     private notify(message: string, messageParams: { [key: string]: any } = {}, type: NotificationSnackBarType, duration: number = 3000): void {
         const data: INotificationSnackBarData = {
-            message: this._appTranslateService.translate(message, messageParams),
+            message: this._appTranslateService.translate(message, messageParams).replaceAll("\n", "<br>"),
             type: type
         };
         const config: MatSnackBarConfig = {
