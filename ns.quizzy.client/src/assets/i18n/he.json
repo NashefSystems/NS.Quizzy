@@ -106,6 +106,16 @@
         "GRADES": "שכבות",
         "CLASSES": "כיתות"
     },
+    "EXAM_SCHEDULE_AREA": {
+        "FROM_DATE": "מתאריך",
+        "TO_DATE": "עד תאריך",
+        "EXAM_TYPES": "סוגי מבחן",
+        "QUESTIONNAIRES": "שאלונים",
+        "GRADES": "שכבות",
+        "CLASSES": "כיתות",
+        "LIST": "רשימה",
+        "CALENDAR": "לוח שנה"
+    },
     "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
         "CONFIRM_DELETE": "האם אתה בטוח שברצונך למחוק את '{{itemName}}'?",
@@ -114,6 +124,7 @@
     },
     "ADD": "הוסף",
     "UPDATE": "עדכן",
+    "FILTER": "סינון",
     "ITEM_ADDED_SUCCESSFULLY": "פריט נוסף בהצלחה",
     "ITEM_UPDATED_SUCCESSFULLY": "פריט עודכן בהצלחה",
     "Subject already exists": "הנושא כבר קיים",

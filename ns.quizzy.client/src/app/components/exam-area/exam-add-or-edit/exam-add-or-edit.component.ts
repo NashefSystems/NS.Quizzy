@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClassesService } from '../../../services/backend/classes.service';
-import { IClassDto, IClassPayloadDto } from '../../../models/backend/class.dto';
+import { IClassDto } from '../../../models/backend/class.dto';
 import { GradesService } from '../../../services/backend/grades.service';
 import { IGradeDto } from '../../../models/backend/grade.dto';
 import { IQuestionnaireDto } from '../../../models/backend/questionnaire.dto';

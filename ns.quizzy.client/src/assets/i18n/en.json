@@ -102,6 +102,16 @@
         "GRADES": "Grades",
         "CLASSES": "Classes"
     },
+    "EXAM_SCHEDULE_AREA": {
+        "FROM_DATE": "From date",
+        "TO_DATE": "To date",
+        "EXAM_TYPES": "Exam types",
+        "QUESTIONNAIRES": "Questionnaires",
+        "GRADES": "Grades",
+        "CLASSES": "Classes",
+        "LIST": "List",
+        "CALENDAR": "Calendar"
+    },
     "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
         "CONFIRM_DELETE": "Are you sure you want to delete '{{itemName}}'?",
@@ -110,6 +120,7 @@
     },
     "ADD": "Add",
     "UPDATE": "Update",
+    "FILTER": "Filter",
     "ITEM_ADDED_SUCCESSFULLY": "Item added successfully",
     "ITEM_UPDATED_SUCCESSFULLY": "Item updated successfully"
 }

@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IExamDto } from '../../../models/backend/exam.dto';
+import { IGradeDto } from '../../../models/backend/grade.dto';
+import { IClassDto } from '../../../models/backend/class.dto';
+import { IQuestionnaireDto } from '../../../models/backend/questionnaire.dto';
+import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
 
 @Component({
   selector: 'app-exam-schedule-list',
   standalone: false,
-  
+
   templateUrl: './exam-schedule-list.component.html',
   styleUrl: './exam-schedule-list.component.scss'
 })
 export class ExamScheduleListComponent {
-
+  @Input() exams: IExamDto[] = [];
+  @Input() grades: IGradeDto[] = [];
+  @Input() classes: IClassDto[] = [];
+  @Input() questionnaires: IQuestionnaireDto[] = [];
+  @Input() examTypes: IExamTypeDto[] = [];
 }

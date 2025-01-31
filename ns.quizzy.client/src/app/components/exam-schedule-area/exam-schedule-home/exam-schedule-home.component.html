@@ -1,1 +1,13 @@
-<p>exam-schedule-home works!</p>
+<button mat-stroked-button color="primary" (click)="onFilter()">
+    {{ 'FILTER' | translate }}
+</button>
+<mat-tab-group>
+    <mat-tab [label]="'EXAM_SCHEDULE_AREA.LIST' | translate">
+        <app-exam-schedule-list [exams]="exams" [grades]="grades" [classes]="classes" [questionnaires]="questionnaires"
+            [examTypes]="examTypes"></app-exam-schedule-list>
+    </mat-tab>
+    <mat-tab [label]="'EXAM_SCHEDULE_AREA.CALENDAR' | translate">
+        <app-exam-schedule-calendar [exams]="exams" [grades]="grades" [classes]="classes" [questionnaires]="questionnaires"
+        [examTypes]="examTypes"></app-exam-schedule-calendar>
+    </mat-tab>
+</mat-tab-group>

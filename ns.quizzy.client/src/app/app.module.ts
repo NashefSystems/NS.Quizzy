@@ -15,11 +15,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTabsModule } from '@angular/material/tabs';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
   MatDialogModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatCardModule,
   MatExpansionModule, MatProgressBarModule, MatSidenavModule, MatMenuModule, MatSnackBarModule,
-  MatTableModule, MatPaginatorModule, MatSelectModule
+  MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule
 ];
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -60,6 +61,7 @@ import { ExamScheduleListComponent } from './components/exam-schedule-area/exam-
 import { ExamScheduleHomeComponent } from './components/exam-schedule-area/exam-schedule-home/exam-schedule-home.component';
 import { ExamScheduleCalendarComponent } from './components/exam-schedule-area/exam-schedule-calendar/exam-schedule-calendar.component';
 import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/exam-add-or-edit.component';
+import { ExamScheduleFilterComponent } from './components/exam-schedule-area/exam-schedule-filter/exam-schedule-filter.component';
 
 
 // Factory function for HttpLoader
@@ -96,6 +98,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ExamScheduleHomeComponent,
     ExamScheduleCalendarComponent,
     ExamAddOrEditComponent,
+    ExamScheduleFilterComponent,
   ],
   imports: [
     BrowserModule,
