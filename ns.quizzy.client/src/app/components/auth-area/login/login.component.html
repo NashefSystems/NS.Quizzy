@@ -6,7 +6,7 @@
     </header>
     <div class="page-body">
         <img class="logo" src="assets/images/logo.png">
-        <app-language-selector></app-language-selector>
+        <!-- <app-language-selector></app-language-selector> -->
         <ng-container *ngIf="step === LoginSteps.UserNameAndPassword">
             <label class="H200">{{ 'LOGIN.TITLE' | translate }}</label>
             <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
