@@ -12,8 +12,8 @@ using NS.Quizzy.Server.DAL;
 namespace NS.Quizzy.Server.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250129205130_2025-01-29_Changes")]
-    partial class _20250129_Changes
+    [Migration("20250201105622_Initialization DataBase")]
+    partial class InitializationDataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -29,6 +29,9 @@ dotnet ef migrations list -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 
 #### To apply the migrations:
 ```
+$env:DOTNET_ENVIRONMENT="Development"
 dotnet ef database update -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\ --configuration Debug
+
+$env:DOTNET_ENVIRONMENT="Release"
 dotnet ef database update -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\ --configuration Release
 ```
