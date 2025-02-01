@@ -13,6 +13,8 @@ import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
 import { forkJoin } from 'rxjs';
 import moment from 'moment';
 import { TimePipe } from '../../../pipes/time.pipe';
+import { ISubjectDto } from '../../../models/backend/subject.dto';
+import { SubjectsService } from '../../../services/backend/subjects.service';
 
 @Component({
   selector: 'app-exam-list',
@@ -24,12 +26,14 @@ export class ExamListComponent implements OnInit {
   private readonly _examsService = inject(ExamsService);
   private readonly _examTypesService = inject(ExamTypesService);
   private readonly _questionnairesService = inject(QuestionnairesService);
+  private readonly _subjectsService = inject(SubjectsService);
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
   private readonly _timePipe = inject(TimePipe);
 
   filterCompletedExams = true;
   questionnaires: IQuestionnaireDto[];
+  subjects: ISubjectDto[];
   examTypes: IExamTypeDto[];
   items: IExamDto[];
   columns: TableColumnInfo[] = [
@@ -42,11 +46,15 @@ export class ExamListComponent implements OnInit {
       key: 'questionnaireId',
       title: 'EXAM_AREA.QUESTIONNAIRE',
       converter: (item: IExamDto) => {
-        const element = this.questionnaires?.find(x => x.id === item.questionnaireId);
-        if (!element) {
+        const questionnaire = this.questionnaires?.find(x => x.id === item.questionnaireId);
+        if (!questionnaire) {
           return '';
         }
-        return `(${element.code}) ${element.name}`;
+        const subject = this.subjects?.find(x => x.id === questionnaire.subjectId);
+        if (!subject) {
+          return `(${questionnaire.code}) ${questionnaire.name}`;
+        }
+        return `(${questionnaire.code}) ${questionnaire.name} [${subject.name}]`;
       }
     },
     {
@@ -70,9 +78,11 @@ export class ExamListComponent implements OnInit {
 
   loadData() {
     forkJoin([
+      this._subjectsService.get(),
       this._questionnairesService.get(),
       this._examTypesService.get(),
-    ]).subscribe(([questionnaires, examTypes]) => {
+    ]).subscribe(([subjects, questionnaires, examTypes]) => {
+      this.subjects = subjects;
       this.questionnaires = questionnaires;
       this.examTypes = examTypes;
 
