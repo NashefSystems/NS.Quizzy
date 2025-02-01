@@ -124,4 +124,20 @@ export class ExamScheduleListComponent {
   onFilterClick() {
     this.onFilter.emit();
   }
+
+  getClasses(ids: string[]) {
+    if (!ids?.length || !this.classes?.length) {
+      return '';
+    }
+    var names = this.classes.filter(x => ids.includes(x.id)).map(x => x.name);
+    return names.join(' | ');
+  }
+
+  getGrades(ids?: string[]) {
+    if (!ids?.length || !this.grades?.length) {
+      return '';
+    }
+    var names = this.grades.filter(x => ids.includes(x.id)).map(x => x.name);
+    return names.join(' | ');
+  }
 }

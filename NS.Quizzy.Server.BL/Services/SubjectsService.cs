@@ -10,7 +10,7 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class SubjectsService : ISubjectsService
     {
-        const string CACHE_KEY = "Quizzy:Subjects";
+        const string CACHE_KEY = "Subjects";
         private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;

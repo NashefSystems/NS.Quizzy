@@ -38,7 +38,6 @@ import { HeaderComponent } from './components/layout-area/header/header.componen
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { PrettyJsonPipe } from './pipes/pretty-json.pipe';
 import { LoginComponent } from './components/auth-area/login/login.component';
-import { LogoutComponent } from './components/auth-area/logout/logout.component';
 import { MainMenuComponent } from './components/global-area/main-menu/main-menu.component';
 import { LanguageSelectorComponent } from './components/global-area/language-selector/language-selector.component';
 import { NotificationSnackBarComponent } from './components/global-area/notification-snack-bar/notification-snack-bar.component';
@@ -80,7 +79,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     PrettyJsonPipe,
     TimePipe,
     LoginComponent,
-    LogoutComponent,
     MainMenuComponent,
     LanguageSelectorComponent,
     NotificationSnackBarComponent,

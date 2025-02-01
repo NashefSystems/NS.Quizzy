@@ -124,6 +124,8 @@ export class ExamScheduleHomeComponent {
               return;
             case DialogAction.CLEAR:
               this.setDefaultFilterData();
+              this._storageService.removeLocalStorage(LocalStorageKeys.examFilterData);
+
               break;
             case DialogAction.SUBMIT:
               if (dialogResult.filterResult) {

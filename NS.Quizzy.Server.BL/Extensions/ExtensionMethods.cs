@@ -37,7 +37,10 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddNSLogger(loggerConfig);
             #endregion
 
-            services.AddNSCacheProvider();
+            var appName = configuration.GetValue<string>("AppName");
+            var environment = configuration.GetValue<string>("Environment");
+            var cachePrefix = $"{appName}:{environment}";
+            services.AddNSCacheProvider(cachePrefix);
             services.AddQuizzyDALServices();
             services.AddMappingProfiles();
 

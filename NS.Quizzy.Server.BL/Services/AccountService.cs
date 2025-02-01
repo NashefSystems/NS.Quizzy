@@ -69,7 +69,7 @@ namespace NS.Quizzy.Server.BL.Services
 
         private static string GetTwoFactorCacheKey(string requestId)
         {
-            return $"TwoFactor:Quizzy:{requestId}";
+            return $"TwoFactor:{requestId}";
         }
 
         public async Task<UserDetailsDto?> VerifyOTP(VerifyOTPRequest request)

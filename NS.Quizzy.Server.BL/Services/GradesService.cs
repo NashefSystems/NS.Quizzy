@@ -10,7 +10,7 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class GradesService : IGradesService
     {
-        const string CACHE_KEY = "Quizzy:Grades";
+        const string CACHE_KEY = "Grades";
         private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;

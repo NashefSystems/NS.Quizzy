@@ -10,7 +10,7 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class ExamTypesService : IExamTypesService
     {
-        const string CACHE_KEY = "Quizzy:ExamTypes";
+        const string CACHE_KEY = "ExamTypes";
         private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;

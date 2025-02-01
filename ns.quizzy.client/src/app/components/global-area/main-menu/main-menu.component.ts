@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AccountService } from '../../../services/backend/account.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { IMenuItemInfo } from './menu-item-info';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
@@ -11,6 +12,7 @@ import { IMenuItemInfo } from './menu-item-info';
 })
 export class MainMenuComponent implements OnInit {
   private readonly _accountService = inject(AccountService);
+  private readonly _router = inject(Router);
   private readonly _dialogRef = inject(MatDialogRef<MainMenuComponent>);
   menuItems: IMenuItemInfo[];
 
@@ -29,7 +31,10 @@ export class MainMenuComponent implements OnInit {
 
   logout() {
     this._accountService.logout().subscribe({
-      next: () => this._dialogRef.close()
+      next: () => {
+        this._dialogRef.close();
+        this._router.navigate(['/']);
+      }
     });
   }
 }

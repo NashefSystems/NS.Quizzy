@@ -33,5 +33,19 @@
             <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.DURATION_WITH_EXTRA' | translate"
                 [value]="exam.durationWithExtra | time : 'HH:mm'"></app-exam-info-value>
         </div>
+        <div *ngIf="exam.gradeIds && exam.gradeIds.length > 0">
+            <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.GRADES' | translate"
+                [value]="exam.gradeIds.length > 3 ? '' : getGrades(exam.gradeIds)"></app-exam-info-value>
+            <div *ngIf="exam.gradeIds.length > 3" class="primary bold grade-list">
+                {{getGrades(exam.gradeIds)}}
+            </div>
+        </div>
+        <div *ngIf="exam.classIds && exam.classIds.length > 0">
+            <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.CLASSES' | translate"
+                [value]="exam.classIds.length > 3 ? '' : getClasses(exam.classIds)"></app-exam-info-value>
+            <div *ngIf="exam.classIds.length > 3" class="primary bold class-list">
+                {{getClasses(exam.classIds)}}
+            </div>
+        </div>
     </mat-expansion-panel>
 </mat-accordion>
