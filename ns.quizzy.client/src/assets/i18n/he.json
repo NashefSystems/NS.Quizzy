@@ -124,6 +124,15 @@
         "CONFIRM": "אישור",
         "CANCEL": "ביטול"
     },
+    "DAYS": {
+        "SUNDAY": "ראשון",
+        "MONDAY": "שני",
+        "TUESDAY": "שלישי",
+        "WEDNESDAY": "רביעי",
+        "THURSDAY": "חמישי",
+        "FRIDAY": "שישי",
+        "SATURDAY": "שבת"
+    },
     "ADD": "הוסף",
     "UPDATE": "עדכן",
     "FILTER": "סינון",

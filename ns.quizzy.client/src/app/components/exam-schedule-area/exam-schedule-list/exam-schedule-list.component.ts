@@ -7,6 +7,7 @@ import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
 import { ISubjectDto } from '../../../models/backend/subject.dto';
 import { MatAccordion } from '@angular/material/expansion';
 import { AppTranslateService } from '../../../services/app-translate.service';
+import { DateTimeUtils } from '../../../utils/date-time.utils';
 
 @Component({
   selector: 'app-exam-schedule-list',
@@ -139,5 +140,20 @@ export class ExamScheduleListComponent {
     }
     var names = this.grades.filter(x => ids.includes(x.id)).map(x => x.name);
     return names.join(' | ');
+  }
+
+  getDay(isoDateTime: string) {
+    if (!isoDateTime) {
+      return '';
+    }
+
+    const date = new Date(isoDateTime);
+    if (isNaN(date.getTime())) {
+      return '';
+    }
+
+    // Get the day of the week (0 = Sunday, 6 = Saturday)
+    const days = ['DAYS.SUNDAY', 'DAYS.MONDAY', 'DAYS.TUESDAY', 'DAYS.WEDNESDAY', 'DAYS.THURSDAY', 'DAYS.FRIDAY', 'DAYS.SATURDAY'];
+    return days[date.getDay()];
   }
 }

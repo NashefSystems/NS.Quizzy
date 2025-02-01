@@ -19,7 +19,7 @@
                     {{examTypesDic[exam.examTypeId].name }}
                 </div>
                 <div class="exam-time">
-                    {{exam.startTime | date: 'dd/MM/yyyy HH:mm'}}
+                    {{exam.startTime | date: 'dd/MM/yyyy HH:mm'}} {{getDay(exam.startTime) | translate}}
                 </div>
             </mat-panel-title>
         </mat-expansion-panel-header>
