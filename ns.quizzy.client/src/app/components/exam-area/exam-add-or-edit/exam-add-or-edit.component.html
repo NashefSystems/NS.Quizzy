@@ -28,7 +28,7 @@
         <mat-label>{{ 'EXAM_AREA.QUESTIONNAIRE' | translate }}</mat-label>
         <mat-select formControlName="questionnaireId" (selectionChange)="onQuestionnaireIdChange()">
             <mat-option [dir]="'DIR' | translate" *ngFor="let item of questionnaires"
-                [value]="item.id">{{item.name}}</mat-option>
+                [value]="item.id"> {{item.code}} | {{item.name}}</mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('questionnaireId')?.invalid && form.get('questionnaireId')?.touched">
             <ng-container *ngIf="form.get('questionnaireId')?.errors?.['required']">
