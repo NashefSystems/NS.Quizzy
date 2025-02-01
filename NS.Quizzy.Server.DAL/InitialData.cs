@@ -31,6 +31,7 @@ namespace NS.Quizzy.Server.DAL
                 Password = "BTWhVV8jqmP95G0w",
                 FullName = "Saji Nashef",
                 Email = "saji.nashef@gmail.com",
+                TwoFactorSecretKey= "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX",
                 Role = DALEnums.Roles.Admin,
             };
 
