@@ -69,7 +69,7 @@ export class ExamScheduleHomeComponent {
   private setDefaultFilterData() {
     const now = new Date();
     const toDate = new Date(now);
-    toDate.setMonth(now.getMonth() + 3);
+    toDate.setFullYear(now.getFullYear() + 1);
 
     this.filterIsActive = false;
     this.filterData = {
