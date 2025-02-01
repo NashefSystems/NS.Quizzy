@@ -117,6 +117,8 @@ namespace NS.Quizzy.Server.DAL
                 base.Configure(entity);
                 entity.ToTable("Exams");
 
+                entity.Property(x => x.MoedId).IsRequired(true);
+
                 entity
                     .HasOne(c => c.Questionnaire)
                     .WithMany(c => c.Exams)

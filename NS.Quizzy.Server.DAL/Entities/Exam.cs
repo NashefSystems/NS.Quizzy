@@ -10,7 +10,7 @@ namespace NS.Quizzy.Server.DAL.Entities
     {
         public Guid QuestionnaireId { get; set; }
         public Guid ExamTypeId { get; set; }
-        public Guid? MoedId { get; set; }
+        public Guid MoedId { get; set; }
         public DateTimeOffset StartTime { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan DurationWithExtra { get; set; }

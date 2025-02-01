@@ -40,7 +40,7 @@ namespace NS.Quizzy.Server.BL.Services
             if (request.MoedIds?.Count > 0)
             {
                 query = query
-                    .Where(x => x.MoedId.HasValue && request.MoedIds.Contains(x.MoedId.Value));
+                    .Where(x => request.MoedIds.Contains(x.MoedId));
             }
 
             if (request.QuestionnaireIds?.Count > 0)
