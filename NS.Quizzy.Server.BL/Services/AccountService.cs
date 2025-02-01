@@ -109,7 +109,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             _httpContextAccessor.HttpContext?.Response.Cookies.Append(BLConsts.AUTH_TOKEN_KEY, token, new CookieOptions
             {
-                HttpOnly = true, // Prevents JavaScript access to the cookie
+                HttpOnly = false, // If HttpOnly is true, JavaScript access to the cookie is prevented.
                 Secure = true,   // Ensures the cookie is sent only over HTTPS
                 SameSite = SameSiteMode.Strict, // Prevents cross-site request forgery (CSRF)
                 Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes()) // Set expiration time

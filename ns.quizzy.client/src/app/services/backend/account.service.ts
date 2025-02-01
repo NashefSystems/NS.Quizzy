@@ -5,6 +5,7 @@ import { LoginRequest } from '../../models/backend/login.request';
 import { LoginResponse } from '../../models/backend/login.response';
 import { BehaviorSubject, finalize, from, of, tap } from 'rxjs';
 import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,9 @@ export class AccountService extends BaseService {
   private pendingRequest: Promise<UserDetailsDto | undefined> | null = null;
 
 
-  constructor() {
+  constructor(
+    private readonly cookieService: CookieService,
+  ) {
     super();
     this.getDetails().subscribe();
   }
@@ -38,7 +41,19 @@ export class AccountService extends BaseService {
       }));
   }
 
+  tokenIsExists() {
+    const res = this.cookieService.check('_qat');
+    console.log("tokenIsExists(3): ", res);
+    return res;
+  }
+
   getDetails() {
+
+    if (!this.tokenIsExists()) {
+      // If the token does not exist, return null immediately
+      return of();
+    }
+
     if (this.userSubject.value) {
       // If user details are already cached, return them immediately
       return of(this.userSubject.value);

@@ -25,7 +25,16 @@ export class TableComponent {
 
   ngOnChanges(): void {
     this.displayedColumns = this.columns.map(x => x.key);
-    this.dataSource.data = this.items;
+    const columnInfos: { [key: string]: TableColumnInfo } = Object.fromEntries(this.columns.filter(x => !!x.converter).map(x => [x.key, x]));
+    this.dataSource.data = this.items?.map(x => {
+      let res = { ...x };
+      Object.values(columnInfos).forEach(cInfo => {
+        if (cInfo.key in res && cInfo.converter) {
+          res[cInfo.key] = cInfo.converter(x); // Apply the converter
+        }
+      });
+      return res;
+    });
   }
 
   getColumnInfo(key: string) {

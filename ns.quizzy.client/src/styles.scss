@@ -107,3 +107,15 @@ mat-snack-bar-container.no-panel {
         direction: rtl;
     }
 }
+
+.isActiveFilter {
+    background-color: colors.$blue !important;
+
+    mat-icon {
+        color: colors.$primary-white;
+    }
+
+    .mdc-button__label {
+        color: colors.$primary-white;
+    }
+}

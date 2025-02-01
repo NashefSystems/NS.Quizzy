@@ -4,6 +4,7 @@ import { IGradeDto } from '../../../models/backend/grade.dto';
 import { IClassDto } from '../../../models/backend/class.dto';
 import { IQuestionnaireDto } from '../../../models/backend/questionnaire.dto';
 import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
+import { ISubjectDto } from '../../../models/backend/subject.dto';
 
 @Component({
   selector: 'app-exam-schedule-calendar',
@@ -18,4 +19,5 @@ export class ExamScheduleCalendarComponent {
   @Input() classes: IClassDto[] = [];
   @Input() questionnaires: IQuestionnaireDto[] = [];
   @Input() examTypes: IExamTypeDto[] = [];
+  @Input() subjects: ISubjectDto[] = [];
 }

@@ -11,9 +11,9 @@ import { QuestionnairesService } from '../../../services/backend/questionnaires.
 import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
 import { ExamTypesService } from '../../../services/backend/exam-types.service';
 import { forkJoin } from 'rxjs';
-import moment from 'moment';
 import { IExamPayloadDto } from '../../../models/backend/exam.dto';
 import { ExamsService } from '../../../services/backend/exams.service';
+import { DateTimeUtils } from '../../../utils/date-time.utils';
 
 @Component({
   selector: 'app-exam-add-or-edit',
@@ -59,23 +59,6 @@ export class ExamAddOrEditComponent implements OnInit {
     });
   }
 
-  getDateTimeAsIso(rawValue: string) {
-    console.log("getDateTimeAsIso", rawValue);
-    if (!rawValue) {
-      return '';
-    }
-    return moment(rawValue).format('YYYY-MM-DDTHH:mm:ss.SSSZ')
-  }
-
-
-  getDateTimeFromIso(rawValue: string) {
-    console.log("getDateTimeFromIso", rawValue);
-    if (!rawValue) {
-      return '';
-    }
-    return moment(rawValue).format('YYYY-MM-DDTHH:mm')
-  }
-
   loadDataFromId(id: string | null) {
     forkJoin([
       this._gradesService.get(),
@@ -94,7 +77,7 @@ export class ExamAddOrEditComponent implements OnInit {
             const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds } = data;
             const newValue = {
               ...this.form.value,
-              startTime: this.getDateTimeFromIso(startTime), questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds
+              startTime: DateTimeUtils.getDateTimeFromIso(startTime), questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds
             };
             this.form.setValue(newValue);
             this.setClassesFiltered();
@@ -143,7 +126,7 @@ export class ExamAddOrEditComponent implements OnInit {
     const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds } = this.form.value;
 
     const payload: IExamPayloadDto = {
-      startTime: this.getDateTimeAsIso(startTime),
+      startTime: DateTimeUtils.getDateTimeAsIso(startTime),
       questionnaireId: questionnaireId,
       examTypeId: examTypeId,
       duration: duration,

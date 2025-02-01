@@ -1,11 +1,12 @@
 <div class="table-container">
   <div class="table-toolbar full-width">
-    <button mat-raised-button color="primary" (click)="addNewItem()">{{'TABLE.ACTIONS.ADD' | translate}}</button>
+    <button mat-raised-button (click)="addNewItem()">{{'TABLE.ACTIONS.ADD' | translate}}</button>
+    <ng-content></ng-content>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{'TABLE.SEARCH'|translate}}</mat-label>
       <input matInput (input)="applyFilter($event)" [placeholder]="'TABLE.SEARCH_PLACEHOLDER' | translate" />
     </mat-form-field>
-  </div>
+  </div>  
   <div class="H200 center-text dark-400 empty-status" *ngIf="showEmptyStatus()"
     [innerHtml]="'TABLE.EMPTY_STATUS' | translate"></div>
   <table *ngIf="!showEmptyStatus()" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
@@ -15,12 +16,7 @@
         {{ getColumnInfo(column)?.title ?? ''| translate }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <ng-container *ngIf="getColumnInfo(column)?.converter">
-          {{ getColumnInfo(column)?.converter(element) }}
-        </ng-container>
-        <ng-container *ngIf="!getColumnInfo(column)?.converter">
-          {{ element[column] }}
-        </ng-container>
+        {{ element[column] }}
       </td>
     </ng-container>
 

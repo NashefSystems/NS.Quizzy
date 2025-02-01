@@ -1,13 +1,19 @@
-<button mat-stroked-button color="primary" (click)="onFilter()">
+<button mat-button [class.isActiveFilter]="filterIsActive" (click)="onFilter()">
     {{ 'FILTER' | translate }}
+    <mat-icon>filter_alt</mat-icon>
 </button>
-<mat-tab-group>
+
+<!-- <mat-tab-group>
     <mat-tab [label]="'EXAM_SCHEDULE_AREA.LIST' | translate">
         <app-exam-schedule-list [exams]="exams" [grades]="grades" [classes]="classes" [questionnaires]="questionnaires"
-            [examTypes]="examTypes"></app-exam-schedule-list>
+            [examTypes]="examTypes" [subjects]="subjects"></app-exam-schedule-list>
     </mat-tab>
     <mat-tab [label]="'EXAM_SCHEDULE_AREA.CALENDAR' | translate">
         <app-exam-schedule-calendar [exams]="exams" [grades]="grades" [classes]="classes" [questionnaires]="questionnaires"
-        [examTypes]="examTypes"></app-exam-schedule-calendar>
+        [examTypes]="examTypes" [subjects]="subjects"></app-exam-schedule-calendar>
     </mat-tab>
-</mat-tab-group>
+</mat-tab-group> -->
+
+<app-exam-schedule-list [exams]="exams" [grades]="grades" [classes]="classes" [questionnaires]="questionnaires"
+    [examTypes]="examTypes" [subjects]="subjects" [filterIsActive]="filterIsActive"
+    (onFilter)="onFilter()"></app-exam-schedule-list>

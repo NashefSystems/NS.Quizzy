@@ -8,13 +8,18 @@ import { IClassDto } from '../../../models/backend/class.dto';
 import { IGradeDto } from '../../../models/backend/grade.dto';
 import { IQuestionnaireDto } from '../../../models/backend/questionnaire.dto';
 import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
-import { IExamDto } from '../../../models/backend/exam.dto';
+import { IExamDto, IExamFilterRequest } from '../../../models/backend/exam.dto';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
-import { ExamScheduleFilterData, FilterResult } from '../exam-schedule-filter/exam-schedule-filter.data';
+import { DialogAction, DialogResult, ExamScheduleFilterData, FilterResult } from '../exam-schedule-filter/exam-schedule-filter.data';
 import { ExamScheduleFilterComponent } from '../exam-schedule-filter/exam-schedule-filter.component';
 import { DialogService } from '../../../services/dialog.service';
+import { SubjectsService } from '../../../services/backend/subjects.service';
+import { ISubjectDto } from '../../../models/backend/subject.dto';
+import { NotificationsService } from '../../../services/notifications.service';
+import { DateTimeUtils } from '../../../utils/date-time.utils';
+import { StorageService } from '../../../services/storage.service';
+import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
 
 @Component({
   selector: 'app-exam-schedule-home',
@@ -28,35 +33,54 @@ export class ExamScheduleHomeComponent {
   private readonly _classesService = inject(ClassesService);
   private readonly _questionnairesService = inject(QuestionnairesService);
   private readonly _examTypesService = inject(ExamTypesService);
+  private readonly _subjectsService = inject(SubjectsService);
   private readonly _examsService = inject(ExamsService);
-  private readonly _fb = inject(FormBuilder);
+  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _storageService = inject(StorageService);
 
   exams: IExamDto[] = [];
   grades: IGradeDto[] = [];
   classes: IClassDto[] = [];
   questionnaires: IQuestionnaireDto[] = [];
   examTypes: IExamTypeDto[] = [];
-  
-  filterData: FilterResult = {
-    fromDate: '',
-    toDate: '',
-    classIds: [],
-    examTypeIds: [],
-    gradeIds: [],
-    questionnaireIds: [],
-  };
-
-  form: FormGroup = this._fb.group({
-    fromTime: [''],
-    toTime: [''],
-    questionnaireIds: [''],
-    examTypeIds: [''],
-    classIds: [''],
-    gradeIds: ['']
-  });
+  subjects: ISubjectDto[] = [];
+  filterData: FilterResult;
+  filterIsActive: boolean = false;
 
   ngOnInit(): void {
+    this.setExamFilterData();
     this.loadData();
+  }
+
+  private setExamFilterData() {
+    const examFilterDataJson = this._storageService.getLocalStorage(LocalStorageKeys.examFilterData);
+
+    if (examFilterDataJson) {
+      console.log("load ExamFilterData from cache");
+      this.filterData = JSON.parse(examFilterDataJson);
+      this.filterIsActive = true;
+    }
+
+    if (!this.filterData) {
+      this.setDefaultFilterData();
+    }
+  }
+
+  private setDefaultFilterData() {
+    const now = new Date();
+    const toDate = new Date(now);
+    toDate.setMonth(now.getMonth() + 3);
+
+    this.filterIsActive = false;
+    this.filterData = {
+      fromDate: DateTimeUtils.getDateTimeFromIso(now.toISOString(), 'YYYY-MM-DD'),
+      toDate: DateTimeUtils.getDateTimeFromIso(toDate.toISOString(), 'YYYY-MM-DD'),
+      classIds: [],
+      examTypeIds: [],
+      gradeIds: [],
+      questionnaireIds: [],
+      subjectIds: [],
+    };
   }
 
   loadData() {
@@ -65,11 +89,14 @@ export class ExamScheduleHomeComponent {
       this._classesService.get(),
       this._questionnairesService.get(),
       this._examTypesService.get(),
-    ]).subscribe(([grades, classes, questionnaires, examTypes]) => {
+      this._subjectsService.get(),
+    ]).subscribe(([grades, classes, questionnaires, examTypes, subjects]) => {
       this.grades = grades;
       this.classes = classes;
       this.questionnaires = questionnaires;
       this.examTypes = examTypes;
+      this.subjects = subjects;
+      this.getExams();
     });
   }
 
@@ -79,6 +106,7 @@ export class ExamScheduleHomeComponent {
       examTypes: this.examTypes,
       grades: this.grades,
       questionnaires: this.questionnaires,
+      subjects: this.subjects,
       filterResult: this.filterData,
     }
     const dialogPayload: OpenDialogPayload = {
@@ -90,15 +118,48 @@ export class ExamScheduleHomeComponent {
       .openDialog(dialogPayload)
       .then((filterResult) => {
         if (filterResult) {
-          this.filterData = filterResult as FilterResult;
-          console.log("filterData: ", this.filterData);
-          this.refresh();
+          const dialogResult = filterResult as DialogResult;
+          switch (dialogResult.action) {
+            case DialogAction.CLOSE:
+              return;
+            case DialogAction.CLEAR:
+              this.setDefaultFilterData();
+              break;
+            case DialogAction.SUBMIT:
+              if (dialogResult.filterResult) {
+                this.filterData = dialogResult.filterResult;
+                this._storageService.setLocalStorage(LocalStorageKeys.examFilterData, JSON.stringify(this.filterData));
+                this.filterIsActive = true;
+              } else {
+                this.setDefaultFilterData();
+              }
+              break;
+          }
+          this.getExams();
         }
       });
   }
 
-  refresh() {
-
+  getExams() {
+    console.log("this.filterData: ", this.filterData);
+    const request: IExamFilterRequest = {
+      fromTime: DateTimeUtils.getDateTimeAsIso(this.filterData.fromDate),
+      toTime: DateTimeUtils.getDateTimeAsIso(this.filterData.toDate + "T23:59:59"),
+      classIds: this.filterData.classIds,
+      examTypeIds: this.filterData.examTypeIds,
+      gradeIds: this.filterData.gradeIds,
+      questionnaireIds: this.filterData.questionnaireIds,
+      subjectIds: this.filterData.subjectIds,
+    };
+    console.log("request: ", request);
+    this._examsService.filter(request).subscribe({
+      next: result => {
+        this.exams = result;
+      },
+      error: err => {
+        this._notificationsService.httpErrorHandler(err);
+      }
+    });
   }
 
 }

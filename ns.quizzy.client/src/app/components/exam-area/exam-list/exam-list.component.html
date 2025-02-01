@@ -1,4 +1,7 @@
 <div class="page-container">
-    <app-table [items]="items" [columns]="columns" (add)="onAdd()" (edit)="onEdit($event)"
-        (delete)="onDelete($event)"></app-table>
+    <app-table [items]="items" [columns]="columns" (add)="onAdd()" (edit)="onEdit($event)" (delete)="onDelete($event)">
+        <mat-checkbox [(ngModel)]="filterCompletedExams" (change)="loadData()">
+            {{'EXAM_AREA.FILTER_COMPLETED_EXAMS' | translate}}
+        </mat-checkbox>
+    </app-table>
 </div>

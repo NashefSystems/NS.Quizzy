@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.DTOs;
@@ -19,25 +20,46 @@ namespace NS.Quizzy.Server.BL.Services
             _mapper = mapper;
         }
 
-        public async Task<List<ExamDto>> FilterAsync(DateTimeOffset? dtFrom, DateTimeOffset? dtTo, List<Guid>? classIds, List<Guid>? subjectIds)
+        public async Task<List<ExamDto>> FilterAsync(ExamFilterRequest request)
         {
-            dtFrom ??= new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            dtTo ??= dtFrom.Value.AddMonths(3).AddMicroseconds(-1);
+            var query = _appDbContext.Exams
+                .Include(x => x.GradeExams)
+                .Include(x => x.ClassExams)
+                .Where(x =>
+                    x.IsDeleted == false &&
+                    x.StartTime >= request.FromTime &&
+                    x.StartTime <= request.ToTime
+                );
 
-            var query = _appDbContext.Exams.Where(x => x.IsDeleted == false && x.StartTime >= dtFrom.Value && x.StartTime <= dtTo.Value);
-
-            if (classIds?.Any() ?? false)
+            if (request.ExamTypeIds?.Count > 0)
             {
                 query = query
-                    .Include(x => x.ClassExams)
-                    .Where(x => x.ClassExams.Any(y => classIds.Contains(y.ClassId)));
+                    .Where(x => request.ExamTypeIds.Contains(x.ExamTypeId));
             }
 
-            if (subjectIds?.Any() ?? false)
+            if (request.QuestionnaireIds?.Count > 0)
+            {
+                query = query
+                    .Where(x => request.QuestionnaireIds.Contains(x.QuestionnaireId));
+            }
+
+            if (request.GradeIds?.Count > 0)
+            {
+                query = query
+                    .Where(x => x.GradeExams.Any(y => request.GradeIds.Contains(y.GradeId)));
+            }
+
+            if (request.ClassIds?.Count > 0)
+            {
+                query = query
+                    .Where(x => x.ClassExams.Any(y => request.ClassIds.Contains(y.ClassId)));
+            }
+
+            if (request.SubjectIds?.Count > 0)
             {
                 query = query
                     .Include(x => x.Questionnaire)
-                    .Where(x => subjectIds.Contains(x.Questionnaire.SubjectId));
+                    .Where(x => request.SubjectIds.Contains(x.Questionnaire.SubjectId));
             }
 
             var data = await query.OrderBy(x => x.StartTime).ToListAsync();
@@ -46,7 +68,20 @@ namespace NS.Quizzy.Server.BL.Services
 
         public async Task<List<ExamDto>> GetAllAsync()
         {
-            return await FilterAsync(null, null, null, null);
+            return await GetAllAsync(false);
+        }
+
+        public async Task<List<ExamDto>> GetAllAsync(bool filterCompletedExams)
+        {
+            var query = _appDbContext.Exams.Where(x => x.IsDeleted == false);
+            if (filterCompletedExams)
+            {
+                query = query.Where(x => x.StartTime >= DateTimeOffset.Now);
+            }
+            var items = await query.OrderBy(x => x.StartTime)
+              .ThenBy(x => x.QuestionnaireId)
+              .ToListAsync();
+            return _mapper.Map<List<ExamDto>>(items);
         }
 
         public async Task<ExamDto?> GetAsync(Guid id)

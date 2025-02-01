@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ExamScheduleFilterData, FilterResult } from './exam-schedule-filter.data';
+import { DialogAction, DialogResult, ExamScheduleFilterData, FilterResult } from './exam-schedule-filter.data';
 
 @Component({
   selector: 'app-exam-schedule-filter',
@@ -21,18 +21,33 @@ export class ExamScheduleFilterComponent {
     questionnaireIds: [this.data.filterResult.questionnaireIds],
     examTypeIds: [this.data.filterResult.examTypeIds],
     classIds: [this.data.filterResult.classIds],
-    gradeIds: [this.data.filterResult.gradeIds]
+    gradeIds: [this.data.filterResult.gradeIds],
+    subjectIds: [this.data.filterResult.subjectIds],
   });
 
   onClose() {
-    this.dialogRef.close(null);
+    const dialogResult: DialogResult = {
+      action: DialogAction.CLOSE
+    };
+    this.dialogRef.close(dialogResult);
   }
 
   onSubmit() {
-    const { fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds } = this.form.value;
+    const { fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds, subjectIds } = this.form.value;
     const filterResult: FilterResult = {
-      fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds
+      fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds, subjectIds
     };
-    this.dialogRef.close(filterResult);
+    const dialogResult: DialogResult = {
+      action: DialogAction.SUBMIT,
+      filterResult: filterResult
+    };
+    this.dialogRef.close(dialogResult);
+  }
+
+  onClear() {
+    const dialogResult: DialogResult = {
+      action: DialogAction.CLEAR
+    };
+    this.dialogRef.close(dialogResult);
   }
 }

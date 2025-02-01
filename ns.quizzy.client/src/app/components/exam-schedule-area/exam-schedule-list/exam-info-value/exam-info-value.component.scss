@@ -1,0 +1,16 @@
+@use '../../../../../assets/styles/colors.scss' as colors;
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+
+    .name {
+        color: colors.$primary-dark;
+    }
+
+    .value {
+        color: colors.$primary;
+        font-weight: bold;
+    }
+}

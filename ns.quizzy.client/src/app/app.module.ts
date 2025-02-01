@@ -16,11 +16,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
   MatDialogModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatCardModule,
   MatExpansionModule, MatProgressBarModule, MatSidenavModule, MatMenuModule, MatSnackBarModule,
-  MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule
+  MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule, MatTooltipModule
 ];
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -62,6 +63,8 @@ import { ExamScheduleHomeComponent } from './components/exam-schedule-area/exam-
 import { ExamScheduleCalendarComponent } from './components/exam-schedule-area/exam-schedule-calendar/exam-schedule-calendar.component';
 import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/exam-add-or-edit.component';
 import { ExamScheduleFilterComponent } from './components/exam-schedule-area/exam-schedule-filter/exam-schedule-filter.component';
+import { ExamInfoValueComponent } from './components/exam-schedule-area/exam-schedule-list/exam-info-value/exam-info-value.component';
+import { TimePipe } from './pipes/time.pipe';
 
 
 // Factory function for HttpLoader
@@ -74,6 +77,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     RootComponent,
     HeaderComponent,
     PrettyJsonPipe,
+    TimePipe,
     LoginComponent,
     LogoutComponent,
     MainMenuComponent,
@@ -99,6 +103,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ExamScheduleCalendarComponent,
     ExamAddOrEditComponent,
     ExamScheduleFilterComponent,
+    ExamInfoValueComponent,
   ],
   imports: [
     BrowserModule,

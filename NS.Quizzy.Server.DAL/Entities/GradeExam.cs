@@ -8,10 +8,10 @@ namespace NS.Quizzy.Server.DAL.Entities
 {
     public class GradeExam : BaseEntity
     {
-        public Guid GradeId { get; set; }
-        public virtual Grade Grade { get; set; }
-
         public Guid ExamId { get; set; }
         public virtual Exam Exam { get; set; }
+
+        public Guid GradeId { get; set; }
+        public virtual Grade Grade { get; set; }
     }
 }

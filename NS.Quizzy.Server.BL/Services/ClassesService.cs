@@ -4,22 +4,32 @@ using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.Models.DTOs;
+using NS.Shared.CacheProvider.Interfaces;
 
 namespace NS.Quizzy.Server.BL.Services
 {
     internal class ClassesService : IClassesService
     {
+        const string CACHE_KEY = "Quizzy:Classes";
+        private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
 
-        public ClassesService(AppDbContext appDbContext, IMapper mapper)
+        public ClassesService(AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper)
         {
             _appDbContext = appDbContext;
+            _cacheProvider = cacheProvider;
             _mapper = mapper;
         }
 
         public async Task<List<ClassDto>> GetAllAsync()
         {
+            var cacheValue = await _cacheProvider.GetAsync<List<ClassDto>>(CACHE_KEY);
+            if (cacheValue != null)
+            {
+                return cacheValue;
+            }
+
             var grades = await _appDbContext.Grades
                 .AsNoTracking()
                 .Where(x => x.IsDeleted == false)
@@ -31,7 +41,7 @@ namespace NS.Quizzy.Server.BL.Services
                 .OrderBy(x => x.Code)
                 .ToListAsync();
 
-            return items
+            var res = items
                 .Select(x => new ClassDto()
                 {
                     Code = x.Code,
@@ -42,9 +52,11 @@ namespace NS.Quizzy.Server.BL.Services
                 })
                 .OrderBy(x => x.FullCode)
                 .ToList();
+            await _cacheProvider.SetOrUpdateAsync(CACHE_KEY, res);
+            return res;
         }
 
-        private uint GetFullCode(Dictionary<Guid, uint> gradeCodes, Guid gradeId, uint classCode)
+        private static uint GetFullCode(Dictionary<Guid, uint> gradeCodes, Guid gradeId, uint classCode)
         {
             var res = classCode;
             if (gradeCodes.TryGetValue(gradeId, out uint value))
@@ -104,6 +116,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             await _appDbContext.Classes.AddAsync(item);
             await _appDbContext.SaveChangesAsync();
+            await _cacheProvider.DeleteAsync(CACHE_KEY);
 
             return new ClassDto()
             {
@@ -142,6 +155,7 @@ namespace NS.Quizzy.Server.BL.Services
             item.GradeId = model.GradeId;
             item.Code = model.Code;
             await _appDbContext.SaveChangesAsync();
+            await _cacheProvider.DeleteAsync(CACHE_KEY);
 
             return new ClassDto()
             {
@@ -163,6 +177,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             item.IsDeleted = true;
             await _appDbContext.SaveChangesAsync();
+            await _cacheProvider.DeleteAsync(CACHE_KEY);
             return true;
         }
     }

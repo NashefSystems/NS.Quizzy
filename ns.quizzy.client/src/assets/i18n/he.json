@@ -104,7 +104,8 @@
         "DURATION": "משך הבחינה",
         "DURATION_WITH_EXTRA": "משך הבחינה עם תוספת זמן",
         "GRADES": "שכבות",
-        "CLASSES": "כיתות"
+        "CLASSES": "כיתות",
+        "FILTER_COMPLETED_EXAMS": "סינון בחינות שהושלמו"
     },
     "EXAM_SCHEDULE_AREA": {
         "FROM_DATE": "מתאריך",
@@ -113,6 +114,7 @@
         "QUESTIONNAIRES": "שאלונים",
         "GRADES": "שכבות",
         "CLASSES": "כיתות",
+        "SUBJECTS": "נושאים",
         "LIST": "רשימה",
         "CALENDAR": "לוח שנה"
     },
@@ -125,6 +127,10 @@
     "ADD": "הוסף",
     "UPDATE": "עדכן",
     "FILTER": "סינון",
+    "CLEAR": "נקה",
+    "EXPAND_ALL": "הרחב הכל",
+    "COLLAPSE_ALL": "כווץ הכל",
+    "PRINT": "הדפס",
     "ITEM_ADDED_SUCCESSFULLY": "פריט נוסף בהצלחה",
     "ITEM_UPDATED_SUCCESSFULLY": "פריט עודכן בהצלחה",
     "Subject already exists": "הנושא כבר קיים",

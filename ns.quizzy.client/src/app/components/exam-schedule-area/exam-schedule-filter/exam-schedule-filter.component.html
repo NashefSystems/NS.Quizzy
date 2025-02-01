@@ -1,84 +1,105 @@
 <div class="wrapper">
-    <div>
+    <div class="header">
         <button mat-icon-button (click)="onClose()">
             <mat-icon>close</mat-icon>
         </button>
     </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'EXAM_SCHEDULE_AREA.FROM_DATE' | translate }}</mat-label>
-            <input matInput formControlName="fromDate" autocomplete="off" type="date" />
-            <mat-error *ngIf="form.get('fromDate')?.invalid && form.get('fromDate')?.touched">
-                <ng-container *ngIf="form.get('fromDate')?.errors?.['required']">
-                    {{ 'ERRORS.FIELD_REQUIRED' | translate }}
-                </ng-container>
-            </mat-error>
-        </mat-form-field>
+    <div class="content">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="date-range">
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ 'EXAM_SCHEDULE_AREA.FROM_DATE' | translate }}</mat-label>
+                    <input matInput formControlName="fromDate" autocomplete="off" type="date" />
+                    <mat-error *ngIf="form.get('fromDate')?.invalid && form.get('fromDate')?.touched">
+                        <ng-container *ngIf="form.get('fromDate')?.errors?.['required']">
+                            {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                        </ng-container>
+                    </mat-error>
+                </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'EXAM_SCHEDULE_AREA.TO_DATE' | translate }}</mat-label>
-            <input matInput formControlName="toDate" autocomplete="off" type="date" />
-            <mat-error *ngIf="form.get('toDate')?.invalid && form.get('toDate')?.touched">
-                <ng-container *ngIf="form.get('toDate')?.errors?.['required']">
-                    {{ 'ERRORS.FIELD_REQUIRED' | translate }}
-                </ng-container>
-            </mat-error>
-        </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ 'EXAM_SCHEDULE_AREA.TO_DATE' | translate }}</mat-label>
+                    <input matInput formControlName="toDate" autocomplete="off" type="date" />
+                    <mat-error *ngIf="form.get('toDate')?.invalid && form.get('toDate')?.touched">
+                        <ng-container *ngIf="form.get('toDate')?.errors?.['required']">
+                            {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                        </ng-container>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'EXAM_SCHEDULE_AREA.EXAM_TYPES' | translate }}</mat-label>
+                <mat-select formControlName="examTypeIds" multiple>
+                    <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.examTypes"
+                        [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('examTypeIds')?.invalid && form.get('examTypeIds')?.touched">
+                    <ng-container *ngIf="form.get('examTypeIds')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'EXAM_SCHEDULE_AREA.EXAM_TYPES' | translate }}</mat-label>
-            <mat-select formControlName="examTypeIds" multiple>
-                <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.examTypes"
-                    [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('examTypeIds')?.invalid && form.get('examTypeIds')?.touched">
-                <ng-container *ngIf="form.get('examTypeIds')?.errors?.['required']">
-                    {{ 'ERRORS.FIELD_REQUIRED' | translate }}
-                </ng-container>
-            </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'EXAM_SCHEDULE_AREA.QUESTIONNAIRES' | translate }}</mat-label>
+                <mat-select formControlName="questionnaireIds" multiple>
+                    <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.questionnaires"
+                        [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('questionnaireIds')?.invalid && form.get('questionnaireIds')?.touched">
+                    <ng-container *ngIf="form.get('questionnaireIds')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'EXAM_SCHEDULE_AREA.QUESTIONNAIRES' | translate }}</mat-label>
-            <mat-select formControlName="questionnaireIds" multiple>
-                <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.questionnaires"
-                    [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('questionnaireIds')?.invalid && form.get('questionnaireIds')?.touched">
-                <ng-container *ngIf="form.get('questionnaireIds')?.errors?.['required']">
-                    {{ 'ERRORS.FIELD_REQUIRED' | translate }}
-                </ng-container>
-            </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'EXAM_SCHEDULE_AREA.SUBJECTS' | translate }}</mat-label>
+                <mat-select formControlName="subjectIds" multiple>
+                    <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.subjects"
+                        [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('subjectIds')?.invalid && form.get('subjectIds')?.touched">
+                    <ng-container *ngIf="form.get('subjectIds')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'EXAM_SCHEDULE_AREA.GRADES' | translate }}</mat-label>
-            <mat-select formControlName="gradeIds" multiple>
-                <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.grades"
-                    [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('gradeIds')?.invalid && form.get('gradeIds')?.touched">
-                <ng-container *ngIf="form.get('gradeIds')?.errors?.['required']">
-                    {{ 'ERRORS.FIELD_REQUIRED' | translate }}
-                </ng-container>
-            </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'EXAM_SCHEDULE_AREA.GRADES' | translate }}</mat-label>
+                <mat-select formControlName="gradeIds" multiple>
+                    <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.grades"
+                        [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('gradeIds')?.invalid && form.get('gradeIds')?.touched">
+                    <ng-container *ngIf="form.get('gradeIds')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'EXAM_SCHEDULE_AREA.CLASSES' | translate }}</mat-label>
-            <mat-select formControlName="classIds" multiple>
-                <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.classes"
-                    [value]="item.id">{{item.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('classIds')?.invalid && form.get('classIds')?.touched">
-                <ng-container *ngIf="form.get('classIds')?.errors?.['required']">
-                    {{ 'ERRORS.FIELD_REQUIRED' | translate }}
-                </ng-container>
-            </mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'EXAM_SCHEDULE_AREA.CLASSES' | translate }}</mat-label>
+                <mat-select formControlName="classIds" multiple>
+                    <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.classes"
+                        [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('classIds')?.invalid && form.get('classIds')?.touched">
+                    <ng-container *ngIf="form.get('classIds')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
 
-        <button mat-stroked-button color="primary" class="full-width" [disabled]="form.invalid" cdkFocusInitial>
-            {{ 'FILTER' | translate }}
-        </button>
-    </form>
+            <div class="action-buttons">
+                <button mat-stroked-button [disabled]="form.invalid" cdkFocusInitial>
+                    {{ 'FILTER' | translate }}
+                </button>
+                <button mat-button type="button" (click)="onClear()">
+                    {{ 'CLEAR' | translate }}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

@@ -12,6 +12,7 @@ import { IQuestionnaireDto } from '../../../models/backend/questionnaire.dto';
 import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
 import { forkJoin } from 'rxjs';
 import moment from 'moment';
+import { TimePipe } from '../../../pipes/time.pipe';
 
 @Component({
   selector: 'app-exam-list',
@@ -25,7 +26,9 @@ export class ExamListComponent implements OnInit {
   private readonly _questionnairesService = inject(QuestionnairesService);
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
+  private readonly _timePipe = inject(TimePipe);
 
+  filterCompletedExams = true;
   questionnaires: IQuestionnaireDto[];
   examTypes: IExamTypeDto[];
   items: IExamDto[];
@@ -57,14 +60,9 @@ export class ExamListComponent implements OnInit {
     {
       key: 'duration',
       title: 'EXAM_AREA.DURATION',
-      converter: (item: IExamDto) => `${this.getTimeFormat(item.duration)} (${this.getTimeFormat(item.durationWithExtra)})`
+      converter: (item: IExamDto) => `${this._timePipe.transform(item.duration)} (${this._timePipe.transform(item.durationWithExtra)})`
     },
   ];
-
-  getTimeFormat(value: string) {
-    const [h, m, s] = value.split(':');
-    return `${h}:${m}`;
-  }
 
   ngOnInit(): void {
     this.loadData();
@@ -78,7 +76,7 @@ export class ExamListComponent implements OnInit {
       this.questionnaires = questionnaires;
       this.examTypes = examTypes;
 
-      this._examsService.get().subscribe({
+      this._examsService.get(this.filterCompletedExams).subscribe({
         next: (responseBody) => this.items = responseBody
       });
     });

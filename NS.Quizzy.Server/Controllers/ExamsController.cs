@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Quizzy.Server.Models.Models;
 using NS.Shared.Logging.Attributes;
@@ -23,13 +24,21 @@ namespace NS.Quizzy.Server.Controllers
             _service = service;
         }
 
-
         [HttpGet]
         [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<ExamDto>))]
-        public async Task<ActionResult<List<ExamDto>>> GetAllAsync([FromQuery(Name = "from")] DateTimeOffset? dtFrom, [FromQuery(Name = "to")] DateTimeOffset? dtTo, [FromQuery(Name = "classes")] List<Guid>? classIds, [FromQuery(Name = "subjects")] List<Guid>? subjectIds)
+        public async Task<ActionResult<List<ExamDto>>> GetAllAsync([FromQuery] bool filterCompletedExams)
         {
-            var res = await _service.FilterAsync(dtFrom, dtTo, classIds, subjectIds);
+            var res = await _service.GetAllAsync(filterCompletedExams);
+            return Ok(res);
+        }
+
+        [HttpPost("Filter")]
+        [AllowAnonymous]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<ExamDto>))]
+        public async Task<ActionResult<List<ExamDto>>> FilterAsync([FromBody] ExamFilterRequest request)
+        {
+            var res = await _service.FilterAsync(request);
             return Ok(res);
         }
 

@@ -1,0 +1,31 @@
+@use '../../../../assets/styles/colors.scss' as colors;
+
+mat-panel-title {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .exam-info {
+        font-weight: bold;
+        color: colors.$primary-dark;
+    }
+
+    .exam-time {
+        color: colors.$dark-400;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.5rem;
+}
+
+.exam-info-container {
+    border-top: 1px dotted colors.$dark-400;
+    padding-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}

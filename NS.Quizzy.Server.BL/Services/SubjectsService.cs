@@ -4,28 +4,40 @@ using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.Models.DTOs;
+using NS.Shared.CacheProvider.Interfaces;
 
 namespace NS.Quizzy.Server.BL.Services
 {
     internal class SubjectsService : ISubjectsService
     {
+        const string CACHE_KEY = "Quizzy:Subjects";
+        private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
 
-        public SubjectsService(AppDbContext appDbContext, IMapper mapper)
+        public SubjectsService(AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper)
         {
             _appDbContext = appDbContext;
+            _cacheProvider = cacheProvider;
             _mapper = mapper;
         }
 
         public async Task<List<SubjectDto>> GetAllAsync()
         {
+            var cacheValue = await _cacheProvider.GetAsync<List<SubjectDto>>(CACHE_KEY);
+            if (cacheValue != null)
+            {
+                return cacheValue;
+            }
+
             var items = await _appDbContext.Subjects
                 .Where(x => x.IsDeleted == false)
                 .OrderBy(x => x.ItemOrder)
                 .ThenBy(x => x.Name)
                 .ToListAsync();
-            return _mapper.Map<List<SubjectDto>>(items);
+            var res = _mapper.Map<List<SubjectDto>>(items);
+            await _cacheProvider.SetOrUpdateAsync(CACHE_KEY, res);
+            return res;
         }
 
         public async Task<SubjectDto?> GetAsync(Guid id)
@@ -54,6 +66,7 @@ namespace NS.Quizzy.Server.BL.Services
             };
             await _appDbContext.Subjects.AddAsync(item);
             await _appDbContext.SaveChangesAsync();
+            await _cacheProvider.DeleteAsync(CACHE_KEY);
 
             return _mapper.Map<SubjectDto>(item);
         }
@@ -74,6 +87,7 @@ namespace NS.Quizzy.Server.BL.Services
             item.Name = model.Name;
             item.ItemOrder = model.ItemOrder;
             await _appDbContext.SaveChangesAsync();
+            await _cacheProvider.DeleteAsync(CACHE_KEY);
 
             return _mapper.Map<SubjectDto>(item);
         }
@@ -88,6 +102,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             item.IsDeleted = true;
             await _appDbContext.SaveChangesAsync();
+            await _cacheProvider.DeleteAsync(CACHE_KEY);
             return true;
         }
     }

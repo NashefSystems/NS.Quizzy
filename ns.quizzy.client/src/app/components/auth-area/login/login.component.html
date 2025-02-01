@@ -38,7 +38,7 @@
 
                 <mat-checkbox formControlName="rememberMe">{{ 'LOGIN.REMEMBER_ME' | translate }}</mat-checkbox>
 
-                <button mat-stroked-button color="primary" class="full-width login-btn" [disabled]="loginForm.invalid"
+                <button mat-stroked-button class="full-width login-btn" [disabled]="loginForm.invalid"
                     cdkFocusInitial>{{
                     'LOGIN.LOGIN_BUTTON' | translate }}</button>
             </form>
@@ -74,7 +74,7 @@
                     </mat-error>
                 </mat-form-field>
 
-                <button mat-stroked-button color="primary" class="full-width login-btn"
+                <button mat-stroked-button class="full-width login-btn"
                     [disabled]="twoFactorForm.invalid" cdkFocusInitial>
                     {{ 'LOGIN.LOGIN_BUTTON' | translate }}
                 </button>

@@ -100,7 +100,8 @@
         "DURATION": "Exam duration",
         "DURATION_WITH_EXTRA": "Exam duration with extra time",
         "GRADES": "Grades",
-        "CLASSES": "Classes"
+        "CLASSES": "Classes",
+        "FILTER_COMPLETED_EXAMS": "Filter completed exams"
     },
     "EXAM_SCHEDULE_AREA": {
         "FROM_DATE": "From date",
@@ -109,6 +110,7 @@
         "QUESTIONNAIRES": "Questionnaires",
         "GRADES": "Grades",
         "CLASSES": "Classes",
+        "SUBJECTS": "Subjects",
         "LIST": "List",
         "CALENDAR": "Calendar"
     },
@@ -121,6 +123,10 @@
     "ADD": "Add",
     "UPDATE": "Update",
     "FILTER": "Filter",
+    "CLEAR": "Clear",
+    "EXPAND_ALL": "Expand All",
+    "COLLAPSE_ALL": "Collapse All",
+    "PRINT": "Print",
     "ITEM_ADDED_SUCCESSFULLY": "Item added successfully",
     "ITEM_UPDATED_SUCCESSFULLY": "Item updated successfully"
 }

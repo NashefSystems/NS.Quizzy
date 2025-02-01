@@ -1,1 +1,37 @@
-<p>exam-schedule-list works!</p>
+<div class="action-buttons">
+    <button mat-stroked-button (click)="accordion().openAll()">
+        {{ 'EXPAND_ALL' | translate }}
+    </button>
+    <button mat-stroked-button (click)="accordion().closeAll()">
+        {{ 'COLLAPSE_ALL' | translate }}
+    </button>
+    <button mat-stroked-button (click)="onPrint()">
+        {{ 'PRINT' | translate }}
+    </button>
+</div>
+<mat-accordion multi id="exam-list">
+    <mat-expansion-panel *ngFor="let exam of exams" expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <div class="exam-info">
+                    ({{questionnairesDic[exam.questionnaireId].code}})
+                    {{questionnairesDic[exam.questionnaireId].name}} |
+                    {{examTypesDic[exam.examTypeId].name }}
+                </div>
+                <div class="exam-time">
+                    {{exam.startTime | date: 'dd/MM/yyyy HH:mm'}}
+                </div>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="exam-info-container">
+            <app-exam-info-value [icon]="'category'" [name]="'SUBJECT_AREA.NAME' | translate"
+                [value]="subjectsDic[questionnairesDic[exam.questionnaireId].subjectId].name"></app-exam-info-value>
+
+            <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.DURATION' | translate"
+                [value]="exam.duration | time : 'HH:mm'"></app-exam-info-value>
+
+            <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.DURATION_WITH_EXTRA' | translate"
+                [value]="exam.durationWithExtra | time : 'HH:mm'"></app-exam-info-value>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>
