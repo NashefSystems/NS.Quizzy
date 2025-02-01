@@ -27,7 +27,7 @@ const matModules = [
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -65,6 +65,7 @@ import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/
 import { ExamScheduleFilterComponent } from './components/exam-schedule-area/exam-schedule-filter/exam-schedule-filter.component';
 import { ExamInfoValueComponent } from './components/exam-schedule-area/exam-schedule-list/exam-info-value/exam-info-value.component';
 import { TimePipe } from './pipes/time.pipe';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 
 // Factory function for HttpLoader
@@ -123,7 +124,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     QRCodeComponent,
   ],
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([LoadingInterceptor])),
     provideAnimationsAsync(),
   ],
   bootstrap: [

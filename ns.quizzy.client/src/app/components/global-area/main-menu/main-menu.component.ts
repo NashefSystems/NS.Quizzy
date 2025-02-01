@@ -24,7 +24,7 @@ export class MainMenuComponent implements OnInit {
       { text: 'MAIN_MENU.ITEMS.EXAM_TYPE_LIST', icon: 'format_size', routerLink: 'exam-types' },
       { text: 'MAIN_MENU.ITEMS.SUBJECT_LIST', icon: 'category', routerLink: 'subjects' },
     ]
-    this.menuItems.push({ text: 'Developer', icon: 'code_blocks', routerLink: 'developer' });
+    // this.menuItems.push({ text: 'Developer', icon: 'code_blocks', routerLink: 'developer' });
   }
 
   logout() {

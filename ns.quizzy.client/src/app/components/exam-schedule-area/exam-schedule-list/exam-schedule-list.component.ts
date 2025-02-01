@@ -42,14 +42,6 @@ export class ExamScheduleListComponent {
     this.examTypesDic = Object.fromEntries(this.examTypes.map(x => [x.id, x]));
     this.subjectsDic = Object.fromEntries(this.subjects.map(x => [x.id, x]));
 
-    console.log("ngOnChangesValues: ", {
-      gradesDic: this.gradesDic,
-      classesDic: this.classesDic,
-      questionnairesDic: this.questionnairesDic,
-      examTypesDic: this.examTypesDic,
-      subjectsDic: this.subjectsDic
-    });
-
     setTimeout(() => {
       this.isLoading = true;
     }, 100);

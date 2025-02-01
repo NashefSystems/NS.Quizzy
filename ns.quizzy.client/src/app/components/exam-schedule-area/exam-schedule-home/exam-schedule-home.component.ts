@@ -141,7 +141,6 @@ export class ExamScheduleHomeComponent {
   }
 
   getExams() {
-    console.log("this.filterData: ", this.filterData);
     const request: IExamFilterRequest = {
       fromTime: DateTimeUtils.getDateTimeAsIso(this.filterData.fromDate),
       toTime: DateTimeUtils.getDateTimeAsIso(this.filterData.toDate + "T23:59:59"),
@@ -151,7 +150,6 @@ export class ExamScheduleHomeComponent {
       questionnaireIds: this.filterData.questionnaireIds,
       subjectIds: this.filterData.subjectIds,
     };
-    console.log("request: ", request);
     this._examsService.filter(request).subscribe({
       next: result => {
         this.exams = result;
@@ -161,5 +159,4 @@ export class ExamScheduleHomeComponent {
       }
     });
   }
-
 }
