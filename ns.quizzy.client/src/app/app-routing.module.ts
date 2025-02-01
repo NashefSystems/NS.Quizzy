@@ -15,6 +15,8 @@ import { GradeAddOrEditComponent } from './components/grade-area/grade-add-or-ed
 import { QuestionnaireAddOrEditComponent } from './components/questionnaire-area/questionnaire-add-or-edit/questionnaire-add-or-edit.component';
 import { ExamScheduleHomeComponent } from './components/exam-schedule-area/exam-schedule-home/exam-schedule-home.component';
 import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/exam-add-or-edit.component';
+import { MoedListComponent } from './components/moed-area/moed-list/moed-list.component';
+import { MoedAddOrEditComponent } from './components/moed-area/moed-add-or-edit/moed-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -176,6 +178,38 @@ const routes: Routes = [
         component: ExamTypeAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.EXAM_TYPE_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/exam-types',
+      }
+    ]
+  },
+  {
+    path: 'moeds',
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: MoedListComponent,
+        data: {
+          page_title: "PAGE_TITLES.MOED_LIST"
+        }
+      }, {
+        path: 'new',
+        component: MoedAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.MOED_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: MoedAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.MOED_EDIT"
         }
       },
       {

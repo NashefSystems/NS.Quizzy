@@ -27,6 +27,7 @@
                     </mat-error>
                 </mat-form-field>
             </div>
+            
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'EXAM_SCHEDULE_AREA.EXAM_TYPES' | translate }}</mat-label>
                 <mat-select formControlName="examTypeIds" multiple>
@@ -35,6 +36,19 @@
                 </mat-select>
                 <mat-error *ngIf="form.get('examTypeIds')?.invalid && form.get('examTypeIds')?.touched">
                     <ng-container *ngIf="form.get('examTypeIds')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'EXAM_SCHEDULE_AREA.MOEDS' | translate }}</mat-label>
+                <mat-select formControlName="moedIds" multiple>
+                    <mat-option [dir]="'DIR' | translate" *ngFor="let item of data.moeds"
+                        [value]="item.id">{{item.name}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('moedIds')?.invalid && form.get('moedIds')?.touched">
+                    <ng-container *ngIf="form.get('moedIds')?.errors?.['required']">
                         {{ 'ERRORS.FIELD_REQUIRED' | translate }}
                     </ng-container>
                 </mat-error>

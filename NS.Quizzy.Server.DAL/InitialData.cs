@@ -31,7 +31,7 @@ namespace NS.Quizzy.Server.DAL
                 Password = "BTWhVV8jqmP95G0w",
                 FullName = "Saji Nashef",
                 Email = "saji.nashef@gmail.com",
-                TwoFactorSecretKey= "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX",
+                TwoFactorSecretKey = "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX",
                 Role = DALEnums.Roles.Admin,
             };
 
@@ -63,6 +63,32 @@ namespace NS.Quizzy.Server.DAL
                 for (var i = 0; i < examTypeDic.Count; i++)
                 {
                     var kvp = examTypeDic.ElementAt(i);
+                    res.Add(new()
+                    {
+                        Id = Guid.Parse(kvp.Key),
+                        Name = kvp.Value,
+                        ItemOrder = i + 1,
+                    });
+                }
+                return res;
+            }
+        }
+
+        internal static class MoedEntityData
+        {
+            internal static List<Moed> GetData()
+            {
+                var moedDic = new Dictionary<string, string>()
+                {
+                    { "72CDE11D-B3F6-47F2-9909-51BCD30FF086", "חורף" },
+                    { "1E33F673-6773-4DB1-B6CF-909586A6544B", "אביב" },
+                    { "159BB5E6-9460-4E43-BA3C-B5967CF99F4E", "קיץ" },
+                    { "1C3A5BE0-9727-4A9D-B525-1461F33DED8F", "קיץ מועד ב'" },
+                };
+                var res = new List<Moed>();
+                for (var i = 0; i < moedDic.Count; i++)
+                {
+                    var kvp = moedDic.ElementAt(i);
                     res.Add(new()
                     {
                         Id = Guid.Parse(kvp.Key),

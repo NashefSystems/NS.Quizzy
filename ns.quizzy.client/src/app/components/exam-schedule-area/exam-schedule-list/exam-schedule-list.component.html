@@ -16,7 +16,7 @@
                 <div class="exam-info">
                     ({{questionnairesDic[exam.questionnaireId].code}})
                     {{questionnairesDic[exam.questionnaireId].name}} |
-                    {{examTypesDic[exam.examTypeId].name }}
+                    {{examTypesDic[exam.examTypeId].name }} - {{moedsDic[exam.moedId].name }}
                 </div>
                 <div class="exam-time">
                     {{exam.startTime | date: 'dd/MM/yyyy HH:mm'}} {{getDay(exam.startTime) | translate}}

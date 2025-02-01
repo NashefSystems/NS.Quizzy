@@ -37,6 +37,12 @@ namespace NS.Quizzy.Server.BL.Services
                     .Where(x => request.ExamTypeIds.Contains(x.ExamTypeId));
             }
 
+            if (request.MoedIds?.Count > 0)
+            {
+                query = query
+                    .Where(x => x.MoedId.HasValue && request.MoedIds.Contains(x.MoedId.Value));
+            }
+
             if (request.QuestionnaireIds?.Count > 0)
             {
                 query = query
@@ -118,6 +124,7 @@ namespace NS.Quizzy.Server.BL.Services
                 Duration = model.Duration,
                 DurationWithExtra = model.DurationWithExtra,
                 ExamTypeId = model.ExamTypeId,
+                MoedId = model.MoedId,
                 QuestionnaireId = model.QuestionnaireId,
                 StartTime = model.StartTime,
             };
@@ -162,6 +169,7 @@ namespace NS.Quizzy.Server.BL.Services
             item.Duration = model.Duration;
             item.DurationWithExtra = model.DurationWithExtra;
             item.ExamTypeId = model.ExamTypeId;
+            item.MoedId = model.MoedId;
             item.QuestionnaireId = model.QuestionnaireId;
             item.StartTime = model.StartTime;
             await _appDbContext.SaveChangesAsync();
@@ -224,6 +232,12 @@ namespace NS.Quizzy.Server.BL.Services
             if (!examTypeIsExists)
             {
                 throw new BadRequestException("Exam type ID not found");
+            }
+
+            var moedIsExists = await _appDbContext.Moeds.AnyAsync(x => x.IsDeleted == false && x.Id == model.MoedId);
+            if (!moedIsExists)
+            {
+                throw new BadRequestException("Moed ID not found");
             }
 
             var questionnaireIsExists = await _appDbContext.Questionnaires.AnyAsync(x => x.IsDeleted == false && x.Id == model.QuestionnaireId);

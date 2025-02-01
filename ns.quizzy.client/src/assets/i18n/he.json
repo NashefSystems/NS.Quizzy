@@ -24,6 +24,9 @@
         "EXAM_TYPE_LIST": "סוגי מבחנים",
         "EXAM_TYPE_ADD": "הוספת סוג בחינה",
         "EXAM_TYPE_EDIT": "עריכת סוג בחינה",
+        "MOED_LIST": "מועדים",
+        "MOED_ADD": "הוספת מועד",
+        "MOED_EDIT": "עריכת מועד",
         "SUBJECT_LIST": "נושאים",
         "SUBJECT_ADD": "הוספת נושא",
         "SUBJECT_EDIT": "עריכת נושא"
@@ -58,6 +61,7 @@
             "CLASS_LIST": "כיתות",
             "EXAM_LIST": "מבחנים",
             "EXAM_TYPE_LIST": "סוגי מבחנים",
+            "MOED_LIST": "מועדים",
             "QUESTIONNAIRE_LIST": "שאלונים",
             "SUBJECT_LIST": "נושאים"
         }
@@ -80,6 +84,10 @@
         "NAME": "סוג בחינה",
         "ITEM_ORDER": "סדר הופעה"
     },
+    "MOED_AREA": {
+        "NAME": "מועד",
+        "ITEM_ORDER": "סדר הופעה"
+    },
     "GRADE_AREA": {
         "NAME": "שם",
         "CODE": "קוד שכבה"
@@ -100,6 +108,7 @@
     "EXAM_AREA": {
         "START_TIME": "זמן הבחינה",
         "EXAM_TYPE": "סוג בחינה",
+        "MOED": "מועד",
         "QUESTIONNAIRE": "שאלון",
         "DURATION": "משך הבחינה",
         "DURATION_WITH_EXTRA": "משך הבחינה עם תוספת זמן",
@@ -111,6 +120,7 @@
         "FROM_DATE": "מתאריך",
         "TO_DATE": "עד תאריך",
         "EXAM_TYPES": "סוגי מבחן",
+        "MOEDS": "מועדים",
         "QUESTIONNAIRES": "שאלונים",
         "GRADES": "שכבות",
         "CLASSES": "כיתות",

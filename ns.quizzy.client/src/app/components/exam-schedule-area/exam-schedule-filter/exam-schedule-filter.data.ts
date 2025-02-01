@@ -1,6 +1,7 @@
 import { IClassDto } from "../../../models/backend/class.dto";
 import { IExamTypeDto } from "../../../models/backend/exam-type.dto";
 import { IGradeDto } from "../../../models/backend/grade.dto";
+import { IMoedDto } from "../../../models/backend/moed.dto";
 import { IQuestionnaireDto } from "../../../models/backend/questionnaire.dto";
 import { ISubjectDto } from "../../../models/backend/subject.dto";
 
@@ -9,6 +10,7 @@ export interface ExamScheduleFilterData {
     classes: IClassDto[];
     questionnaires: IQuestionnaireDto[];
     examTypes: IExamTypeDto[];
+    moeds: IMoedDto[];
     subjects: ISubjectDto[];
     filterResult: FilterResult;
 }
@@ -18,6 +20,7 @@ export interface FilterResult {
     toDate: string;
     questionnaireIds: string[];
     examTypeIds: string[];
+    moedIds: string[];
     classIds: string[];
     gradeIds: string[];
     subjectIds: string[];

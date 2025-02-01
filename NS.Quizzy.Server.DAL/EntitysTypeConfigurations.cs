@@ -22,6 +22,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new GradeEntityConfiguration());
             modelBuilder.ApplyConfiguration(new GradeExamEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ExamTypeEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new MoedEntityConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionnaireEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new AppSettingEntityConfiguration());
@@ -120,6 +121,16 @@ namespace NS.Quizzy.Server.DAL
                     .HasOne(c => c.Questionnaire)
                     .WithMany(c => c.Exams)
                     .HasForeignKey(c => c.QuestionnaireId);
+
+                entity
+                  .HasOne(c => c.ExamType)
+                  .WithMany(c => c.Exams)
+                  .HasForeignKey(c => c.ExamTypeId);
+
+                entity
+                  .HasOne(c => c.Moed)
+                  .WithMany(c => c.Exams)
+                  .HasForeignKey(c => c.MoedId);
             }
         }
 
@@ -200,6 +211,19 @@ namespace NS.Quizzy.Server.DAL
                 entity.Property(p => p.Name).IsRequired(true);
 
                 entity.HasData(InitialData.ExamTypeEntityData.GetData());
+            }
+        }
+
+        internal class MoedEntityConfiguration : BaseEntityTypeConfiguration<Moed>
+        {
+            public override void Configure(EntityTypeBuilder<Moed> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Moeds");
+                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.Property(p => p.Name).IsRequired(true);
+
+                entity.HasData(InitialData.MoedEntityData.GetData());
             }
         }
 

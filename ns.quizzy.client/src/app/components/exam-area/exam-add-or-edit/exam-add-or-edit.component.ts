@@ -14,6 +14,8 @@ import { forkJoin } from 'rxjs';
 import { IExamPayloadDto } from '../../../models/backend/exam.dto';
 import { ExamsService } from '../../../services/backend/exams.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
+import { MoedsService } from '../../../services/backend/moeds.service';
+import { IMoedDto } from '../../../models/backend/moed.dto';
 
 @Component({
   selector: 'app-exam-add-or-edit',
@@ -29,6 +31,7 @@ export class ExamAddOrEditComponent implements OnInit {
   private readonly _classesService = inject(ClassesService);
   private readonly _questionnairesService = inject(QuestionnairesService);
   private readonly _examTypesService = inject(ExamTypesService);
+  private readonly _moedsService = inject(MoedsService);
   private readonly _examsService = inject(ExamsService);
 
   private readonly _notificationsService = inject(NotificationsService);
@@ -41,11 +44,13 @@ export class ExamAddOrEditComponent implements OnInit {
   grades: IGradeDto[] = [];
   questionnaires: IQuestionnaireDto[] = [];
   examTypes: IExamTypeDto[] = [];
+  moeds: IMoedDto[] = [];
 
   form: FormGroup = this._fb.group({
     startTime: ['', [Validators.required]],
     questionnaireId: ['', [Validators.required]],
     examTypeId: ['', [Validators.required]],
+    moedId: ['', [Validators.required]],
     duration: ['', [Validators.required]],
     durationWithExtra: ['', [Validators.required]],
     classIds: [''],
@@ -65,19 +70,21 @@ export class ExamAddOrEditComponent implements OnInit {
       this._classesService.get(),
       this._questionnairesService.get(),
       this._examTypesService.get(),
-    ]).subscribe(([grades, classes, questionnaires, examTypes]) => {
+      this._moedsService.get(),
+    ]).subscribe(([grades, classes, questionnaires, examTypes, moeds]) => {
       this.grades = grades;
       this.classes = this.classesFiltered = classes;
       this.questionnaires = questionnaires;
       this.examTypes = examTypes;
+      this.moeds = moeds;
 
       if (id) {
         this._examsService.getById(id).subscribe({
           next: data => {
-            const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds } = data;
+            const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = data;
             const newValue = {
               ...this.form.value,
-              startTime: DateTimeUtils.getDateTimeFromIso(startTime), questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds
+              startTime: DateTimeUtils.getDateTimeFromIso(startTime), questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId
             };
             this.form.setValue(newValue);
             this.setClassesFiltered();
@@ -123,12 +130,13 @@ export class ExamAddOrEditComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds } = this.form.value;
+    const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = this.form.value;
 
     const payload: IExamPayloadDto = {
       startTime: DateTimeUtils.getDateTimeAsIso(startTime),
       questionnaireId: questionnaireId,
       examTypeId: examTypeId,
+      moedId: moedId,
       duration: duration,
       durationWithExtra: durationWithExtra,
       gradeIds: gradeIds,

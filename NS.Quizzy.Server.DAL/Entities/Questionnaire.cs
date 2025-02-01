@@ -11,6 +11,5 @@
 
         public virtual Subject Subject { get; set; }
         public virtual IList<Exam> Exams { get; set; }
-
     }
 }

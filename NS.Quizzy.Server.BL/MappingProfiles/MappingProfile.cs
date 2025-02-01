@@ -16,6 +16,7 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
                 .ForMember(dst => dst.GradeIds, opt => opt.MapFrom(src => src.GradeExams.Where(x => x.IsDeleted == false).Select(x => x.GradeId).ToList()))
                 .ForMember(dst => dst.ClassIds, opt => opt.MapFrom(src => src.ClassExams.Where(x => x.IsDeleted == false).Select(x => x.ClassId).ToList()));
             CreateMap<ExamType, ExamTypeDto>();
+            CreateMap<Moed, MoedDto>();
             CreateMap<Grade, GradeDto>();
             CreateMap<GradeExam, GradeExamDto>();
             CreateMap<Questionnaire, QuestionnaireDto>();

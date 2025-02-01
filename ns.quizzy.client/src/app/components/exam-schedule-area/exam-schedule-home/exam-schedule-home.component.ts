@@ -20,6 +20,8 @@ import { NotificationsService } from '../../../services/notifications.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
 import { StorageService } from '../../../services/storage.service';
 import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
+import { IMoedDto } from '../../../models/backend/moed.dto';
+import { MoedsService } from '../../../services/backend/moeds.service';
 
 @Component({
   selector: 'app-exam-schedule-home',
@@ -33,6 +35,7 @@ export class ExamScheduleHomeComponent {
   private readonly _classesService = inject(ClassesService);
   private readonly _questionnairesService = inject(QuestionnairesService);
   private readonly _examTypesService = inject(ExamTypesService);
+  private readonly _moedsService = inject(MoedsService);
   private readonly _subjectsService = inject(SubjectsService);
   private readonly _examsService = inject(ExamsService);
   private readonly _notificationsService = inject(NotificationsService);
@@ -43,6 +46,7 @@ export class ExamScheduleHomeComponent {
   classes: IClassDto[] = [];
   questionnaires: IQuestionnaireDto[] = [];
   examTypes: IExamTypeDto[] = [];
+  moeds: IMoedDto[] = [];
   subjects: ISubjectDto[] = [];
   filterData: FilterResult;
   filterIsActive: boolean = false;
@@ -77,6 +81,7 @@ export class ExamScheduleHomeComponent {
       toDate: DateTimeUtils.getDateTimeFromIso(toDate.toISOString(), 'YYYY-MM-DD'),
       classIds: [],
       examTypeIds: [],
+      moedIds: [],
       gradeIds: [],
       questionnaireIds: [],
       subjectIds: [],
@@ -89,12 +94,14 @@ export class ExamScheduleHomeComponent {
       this._classesService.get(),
       this._questionnairesService.get(),
       this._examTypesService.get(),
+      this._moedsService.get(),
       this._subjectsService.get(),
-    ]).subscribe(([grades, classes, questionnaires, examTypes, subjects]) => {
+    ]).subscribe(([grades, classes, questionnaires, examTypes, moeds, subjects]) => {
       this.grades = grades;
       this.classes = classes;
       this.questionnaires = questionnaires;
       this.examTypes = examTypes;
+      this.moeds = moeds;
       this.subjects = subjects;
       this.getExams();
     });
@@ -104,6 +111,7 @@ export class ExamScheduleHomeComponent {
     const dialogData: ExamScheduleFilterData = {
       classes: this.classes,
       examTypes: this.examTypes,
+      moeds: this.moeds,
       grades: this.grades,
       questionnaires: this.questionnaires,
       subjects: this.subjects,
@@ -148,6 +156,7 @@ export class ExamScheduleHomeComponent {
       toTime: DateTimeUtils.getDateTimeAsIso(this.filterData.toDate + "T23:59:59"),
       classIds: this.filterData.classIds,
       examTypeIds: this.filterData.examTypeIds,
+      moedIds: this.filterData.moedIds,
       gradeIds: this.filterData.gradeIds,
       questionnaireIds: this.filterData.questionnaireIds,
       subjectIds: this.filterData.subjectIds,

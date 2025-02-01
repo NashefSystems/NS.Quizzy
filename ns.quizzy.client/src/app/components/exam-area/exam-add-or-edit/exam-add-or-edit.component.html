@@ -25,6 +25,19 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'EXAM_AREA.MOED' | translate }}</mat-label>
+        <mat-select formControlName="moedId">
+            <mat-option [dir]="'DIR' | translate" *ngFor="let item of moeds"
+                [value]="item.id">{{item.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('moedId')?.invalid && form.get('moedId')?.touched">
+            <ng-container *ngIf="form.get('moedId')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'EXAM_AREA.QUESTIONNAIRE' | translate }}</mat-label>
         <mat-select formControlName="questionnaireId" (selectionChange)="onQuestionnaireIdChange()">
             <mat-option [dir]="'DIR' | translate" *ngFor="let item of questionnaires"

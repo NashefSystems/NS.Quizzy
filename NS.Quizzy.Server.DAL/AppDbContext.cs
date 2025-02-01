@@ -10,6 +10,7 @@ namespace NS.Quizzy.Server.DAL
         public DbSet<User> Users { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<ExamType> ExamTypes { get; set; }
+        public DbSet<Moed> Moeds { get; set; }
         public DbSet<Questionnaire> Questionnaires { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Grade> Grades { get; set; }

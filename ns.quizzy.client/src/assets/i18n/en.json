@@ -20,6 +20,9 @@
         "EXAM_TYPE_LIST": "Exam types",
         "EXAM_TYPE_ADD": "Adding an exam type",
         "EXAM_TYPE_EDIT": "Editing an exam type",
+        "MOED_LIST": "Moeds",
+        "MOED_ADD": "Adding a moed",
+        "MOED_EDIT": "Editing a moed",
         "SUBJECT_LIST": "Subjects",
         "SUBJECT_ADD": "Adding a subject",
         "SUBJECT_EDIT": "Editing a subject"
@@ -54,6 +57,7 @@
             "CLASS_LIST": "Classes",
             "EXAM_LIST": "Exams",
             "EXAM_TYPE_LIST": "Exam types",
+            "MOED_LIST": "Moeds",
             "QUESTIONNAIRE_LIST": "Questionnaires",
             "SUBJECT_LIST": "Subjects"
         }
@@ -76,6 +80,10 @@
         "NAME": "Exam type",
         "ITEM_ORDER": "Item order"
     },
+    "MOED_AREA": {
+        "NAME": "Moed",
+        "ITEM_ORDER": "Item order"
+    },
     "GRADE_AREA": {
         "NAME": "Name",
         "CODE": "Grade code"
@@ -96,6 +104,7 @@
     "EXAM_AREA": {
         "START_TIME": "Exam time",
         "EXAM_TYPE": "Exam Type",
+        "MOED": "Moed",
         "QUESTIONNAIRE": "Questionnaire",
         "DURATION": "Exam duration",
         "DURATION_WITH_EXTRA": "Exam duration with extra time",
@@ -107,6 +116,7 @@
         "FROM_DATE": "From date",
         "TO_DATE": "To date",
         "EXAM_TYPES": "Exam types",
+        "MOEDS": "Moeds",
         "QUESTIONNAIRES": "Questionnaires",
         "GRADES": "Grades",
         "CLASSES": "Classes",

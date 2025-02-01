@@ -7,7 +7,7 @@ import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
 import { ISubjectDto } from '../../../models/backend/subject.dto';
 import { MatAccordion } from '@angular/material/expansion';
 import { AppTranslateService } from '../../../services/app-translate.service';
-import { DateTimeUtils } from '../../../utils/date-time.utils';
+import { IMoedDto } from '../../../models/backend/moed.dto';
 
 @Component({
   selector: 'app-exam-schedule-list',
@@ -22,6 +22,7 @@ export class ExamScheduleListComponent {
   @Input() classes: IClassDto[] = [];
   @Input() questionnaires: IQuestionnaireDto[] = [];
   @Input() examTypes: IExamTypeDto[] = [];
+  @Input() moeds: IMoedDto[] = [];
   @Input() subjects: ISubjectDto[] = [];
   @Input() filterIsActive: boolean;
   @Input() onFilter = new EventEmitter<void>();
@@ -30,6 +31,7 @@ export class ExamScheduleListComponent {
   classesDic: { [key: string]: IClassDto } = {};
   questionnairesDic: { [key: string]: IQuestionnaireDto } = {};
   examTypesDic: { [key: string]: IExamTypeDto } = {};
+  moedsDic: { [key: string]: IMoedDto } = {};
   subjectsDic: { [key: string]: ISubjectDto } = {};
   accordion = viewChild.required(MatAccordion);
 
@@ -41,17 +43,12 @@ export class ExamScheduleListComponent {
     this.classesDic = Object.fromEntries(this.classes.map(x => [x.id, x]));
     this.questionnairesDic = Object.fromEntries(this.questionnaires.map(x => [x.id, x]));
     this.examTypesDic = Object.fromEntries(this.examTypes.map(x => [x.id, x]));
+    this.moedsDic = Object.fromEntries(this.moeds.map(x => [x.id, x]));
     this.subjectsDic = Object.fromEntries(this.subjects.map(x => [x.id, x]));
 
     setTimeout(() => {
       this.isLoading = true;
     }, 100);
-  }
-
-  getDescription(exam: IExamDto) {
-    const questionnaire = this.questionnaires.find(x => x.id === exam.questionnaireId);
-    const examType = this.examTypes.find(x => x.id === exam.examTypeId);
-    return `(${questionnaire?.code}) ${questionnaire?.name} - ${examType?.name}`;
   }
 
   onPrint() {

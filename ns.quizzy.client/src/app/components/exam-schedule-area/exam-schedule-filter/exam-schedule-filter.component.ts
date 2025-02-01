@@ -20,6 +20,7 @@ export class ExamScheduleFilterComponent {
     toDate: [this.data.filterResult.toDate],
     questionnaireIds: [this.data.filterResult.questionnaireIds],
     examTypeIds: [this.data.filterResult.examTypeIds],
+    moedIds: [this.data.filterResult.moedIds],
     classIds: [this.data.filterResult.classIds],
     gradeIds: [this.data.filterResult.gradeIds],
     subjectIds: [this.data.filterResult.subjectIds],
@@ -33,9 +34,9 @@ export class ExamScheduleFilterComponent {
   }
 
   onSubmit() {
-    const { fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds, subjectIds } = this.form.value;
+    const { fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds, subjectIds, moedIds } = this.form.value;
     const filterResult: FilterResult = {
-      fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds, subjectIds
+      fromDate, toDate, questionnaireIds, examTypeIds, classIds, gradeIds, subjectIds, moedIds
     };
     const dialogResult: DialogResult = {
       action: DialogAction.SUBMIT,

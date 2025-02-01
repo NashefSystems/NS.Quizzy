@@ -103,6 +103,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<IClassesService, ClassesService>();
             services.AddScoped<IExamsService, ExamsService>();
             services.AddScoped<IExamTypesService, ExamTypesService>();
+            services.AddScoped<IMoedsService, MoedsService>();
             services.AddScoped<IQuestionnairesService, QuestionnairesService>();
             services.AddScoped<ISubjectsService, SubjectsService>();
             services.AddScoped<IAccountService, AccountService>();

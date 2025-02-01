@@ -4,6 +4,7 @@ export interface IExamPayloadDto {
     startTime: string;
     questionnaireId: string;
     examTypeId: string;
+    moedId: string;
     duration: string;
     durationWithExtra: string;
     gradeIds?: string[];
@@ -16,6 +17,7 @@ export interface IExamFilterRequest {
     fromTime: string;
     toTime: string;
     examTypeIds?: string[];
+    moedIds?: string[];
     questionnaireIds?: string[];
     gradeIds?: string[];
     classIds?: string[];

@@ -65,6 +65,8 @@ import { ExamScheduleFilterComponent } from './components/exam-schedule-area/exa
 import { ExamInfoValueComponent } from './components/exam-schedule-area/exam-schedule-list/exam-info-value/exam-info-value.component';
 import { TimePipe } from './pipes/time.pipe';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { MoedListComponent } from './components/moed-area/moed-list/moed-list.component';
+import { MoedAddOrEditComponent } from './components/moed-area/moed-add-or-edit/moed-add-or-edit.component';
 
 
 // Factory function for HttpLoader
@@ -85,12 +87,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     TestComponent,
     ExamListComponent,
     ExamTypeListComponent,
+    MoedListComponent,
     SubjectListComponent,
     TableComponent,
     SubjectAddOrEditComponent,
     ConfirmDialogComponent,
     BackButtonComponent,
     ExamTypeAddOrEditComponent,
+    MoedAddOrEditComponent,
     ClassListComponent,
     ClassAddOrEditComponent,
     GradeListComponent,
