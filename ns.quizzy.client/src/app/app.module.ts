@@ -126,6 +126,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     provideHttpClient(withInterceptors([LoadingInterceptor])),
     provideAnimationsAsync(),
+    TimePipe
   ],
   bootstrap: [
     RootComponent

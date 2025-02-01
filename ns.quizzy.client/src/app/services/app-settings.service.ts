@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +13,6 @@ export class AppSettingsService {
   private loadingStatusSubject = new BehaviorSubject<boolean>(false);
   public readonly onLoadingStatusChange = this.loadingStatusSubject.asObservable();
 
-  constructor(
-    private readonly storageService: StorageService,
-  ) { }
-
   setLargeScreen(value: boolean) {
     this.isLargeScreenSubject.next(value);
   }
@@ -27,6 +22,8 @@ export class AppSettingsService {
   }
 
   setLoadingStatus(value: boolean) {
-    this.loadingStatusSubject.next(value);
+    setTimeout(() => {
+      this.loadingStatusSubject.next(value);
+    }, 100);
   }
 }
