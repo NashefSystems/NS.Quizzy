@@ -21,7 +21,7 @@ export class GradeAddOrEditComponent implements OnInit {
 
   form: FormGroup = this._fb.group({
     name: ['', [Validators.required]],
-    code: ['', [Validators.required, Validators.min(1)]],
+    code: ['', [Validators.required, Validators.min(0)]],
   });
 
   ngOnInit(): void {

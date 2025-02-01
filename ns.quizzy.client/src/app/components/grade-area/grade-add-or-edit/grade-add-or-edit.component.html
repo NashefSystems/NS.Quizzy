@@ -13,7 +13,7 @@
 
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'GRADE_AREA.CODE' | translate }}</mat-label>
-        <input matInput formControlName="code" autocomplete="off" type="number" min="1" />
+        <input matInput formControlName="code" autocomplete="off" type="number" min="0" />
         <mat-error *ngIf="form.get('code')?.invalid && form.get('code')?.touched">
             <ng-container *ngIf="form.get('code')?.errors?.['required']">
                 {{ 'ERRORS.FIELD_REQUIRED' | translate }}
