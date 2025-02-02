@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { AppSettingsService } from '../../../services/app-settings.service';
 import { AppTranslateService } from '../../../services/app-translate.service';
+import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +12,11 @@ import { AppTranslateService } from '../../../services/app-translate.service';
 export class RootComponent implements AfterViewInit, OnInit {
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _appTranslateService = inject(AppTranslateService);
+  private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
+  
   isReady = false;
   isLoading = false;
+  appVersion: string = "";
   appContainerClasses = {
     "app-container": true,
     "large-screen": false
@@ -20,6 +24,8 @@ export class RootComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     document.documentElement.style.setProperty("--app-max-width", this._appSettingsService.appMaxWidth + "px");
+
+    this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion })
 
     this._appSettingsService.onLoadingStatusChange.subscribe({
       next: (loadingStatus) => {

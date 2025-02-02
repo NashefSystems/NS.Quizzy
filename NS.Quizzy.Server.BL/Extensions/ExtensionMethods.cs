@@ -109,7 +109,6 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAppSettingsService, AppSettingsService>();
             services.AddScoped<IOTPService, OTPService>();
-            services.AddScoped<ITestService, TestService>();
 
             return services;
         }
