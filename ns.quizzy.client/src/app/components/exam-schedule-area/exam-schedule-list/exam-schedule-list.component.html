@@ -13,13 +13,14 @@
     <mat-expansion-panel *ngFor="let exam of exams" expanded="true">
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <div class="exam-info">
+                <div class="exam-info-questionnaire">
                     ({{questionnairesDic[exam.questionnaireId].code}})
-                    {{questionnairesDic[exam.questionnaireId].name}} |
-                    {{examTypesDic[exam.examTypeId].name }} - {{moedsDic[exam.moedId].name }}
+                    {{questionnairesDic[exam.questionnaireId].name}}
                 </div>
-                <div class="exam-time">
+                <div class="exam-description">
                     {{exam.startTime | date: 'dd/MM/yyyy HH:mm'}} {{getDay(exam.startTime) | translate}}
+                    |
+                    {{examTypesDic[exam.examTypeId].name }} - {{moedsDic[exam.moedId].name }}
                 </div>
             </mat-panel-title>
         </mat-expansion-panel-header>

@@ -9,7 +9,7 @@
   </div>  
   <div class="H200 center-text dark-400 empty-status" *ngIf="showEmptyStatus()"
     [innerHtml]="'TABLE.EMPTY_STATUS' | translate"></div>
-  <table *ngIf="!showEmptyStatus()" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+  <table *ngIf="!showEmptyStatus()" mat-table [dataSource]="dataSource" matSort class="table-data">
     <!-- Define other columns -->
     <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>

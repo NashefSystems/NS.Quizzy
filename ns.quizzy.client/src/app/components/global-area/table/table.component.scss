@@ -1,6 +1,10 @@
 @use '../../../../assets/styles/colors.scss' as colors;
 
 .table-container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; // Ensures no overflow
 
   .table-toolbar {
     display: flex;
@@ -14,13 +18,27 @@
     margin-top: 1.5rem;
   }
 
-  table {
+  .table-data {
     width: 100%;
+    max-width: 100%;
+    table-layout: fixed; //Ensures columns fit within the width 
+    overflow: hidden;
     border: 1px solid colors.$dark-400;
-    overflow: auto;
+
+    .mat-mdc-cell {
+      letter-spacing: normal;
+    }
+
+    .mdc-data-table__cell {
+      overflow: unset;
+    }
   }
 
   .mat-column-actions {
     padding: 0;
+    width: 48px; // Adjust based on the icon size
+    min-width: 48px;
+    max-width: 48px;
+    text-align: center;
   }
 }

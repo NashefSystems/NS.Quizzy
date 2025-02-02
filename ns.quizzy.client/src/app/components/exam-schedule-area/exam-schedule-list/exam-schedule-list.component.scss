@@ -4,13 +4,14 @@ mat-panel-title {
     flex-direction: column;
     align-items: flex-start;
 
-    .exam-info {
+    .exam-info-questionnaire {
         font-weight: bold;
         color: colors.$primary-dark;
     }
 
-    .exam-time {
+    .exam-description {
         color: colors.$dark-400;
+        font-size: 0.9rem;
     }
 }
 
@@ -29,7 +30,8 @@ mat-panel-title {
     flex-direction: column;
     gap: 0.5rem;
 }
+
 .grade-list,
-.class-list{
+.class-list {
     margin: 0 1.5rem;
 }

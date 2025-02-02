@@ -44,7 +44,7 @@ export class ExamListComponent implements OnInit {
     {
       key: 'startTime',
       title: 'EXAM_AREA.START_TIME',
-      converter: (item: IExamDto) => moment(item.startTime).format('DD/MM/YYYY HH:mm')
+      converter: (item: IExamDto) => moment(item.startTime).format('DD/MM/YY HH:mm')
     },
     {
       key: 'questionnaireId',
@@ -58,7 +58,7 @@ export class ExamListComponent implements OnInit {
         if (!subject) {
           return `(${questionnaire.code}) ${questionnaire.name}`;
         }
-        return `(${questionnaire.code}) ${questionnaire.name} [${subject.name}]`;
+        return `(${questionnaire.code}) ${questionnaire.name} (${subject.name})`;
       }
     },
     {
@@ -70,7 +70,7 @@ export class ExamListComponent implements OnInit {
         if (!moed) {
           return examType?.name;
         }
-        return `${examType?.name} - ${moed.name}`;
+        return `${examType?.name} (${moed.name})`;
       }
     },
     {
