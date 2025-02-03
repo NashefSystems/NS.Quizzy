@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, viewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, viewChild } from '@angular/core';
 import { IExamDto } from '../../../models/backend/exam.dto';
 import { IGradeDto } from '../../../models/backend/grade.dto';
 import { IClassDto } from '../../../models/backend/class.dto';
@@ -8,6 +8,7 @@ import { ISubjectDto } from '../../../models/backend/subject.dto';
 import { MatAccordion } from '@angular/material/expansion';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { IMoedDto } from '../../../models/backend/moed.dto';
+import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 
 @Component({
   selector: 'app-exam-schedule-list',
@@ -15,8 +16,10 @@ import { IMoedDto } from '../../../models/backend/moed.dto';
   templateUrl: './exam-schedule-list.component.html',
   styleUrl: './exam-schedule-list.component.scss'
 })
-export class ExamScheduleListComponent {
-  isLoading: boolean = false;
+export class ExamScheduleListComponent implements OnInit {
+  isLoading: boolean = true;
+  appVersion: string = "";
+
   @Input() exams: IExamDto[] = [];
   @Input() grades: IGradeDto[] = [];
   @Input() classes: IClassDto[] = [];
@@ -36,9 +39,14 @@ export class ExamScheduleListComponent {
   accordion = viewChild.required(MatAccordion);
 
   private readonly _appTranslateService = inject(AppTranslateService);
+  private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
+
+  ngOnInit(): void {
+    this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion })
+  }
 
   ngOnChanges(): void {
-    this.isLoading = false;
+    this.isLoading = true;
     this.gradesDic = Object.fromEntries(this.grades.map(x => [x.id, x]));
     this.classesDic = Object.fromEntries(this.classes.map(x => [x.id, x]));
     this.questionnairesDic = Object.fromEntries(this.questionnaires.map(x => [x.id, x]));
@@ -47,7 +55,7 @@ export class ExamScheduleListComponent {
     this.subjectsDic = Object.fromEntries(this.subjects.map(x => [x.id, x]));
 
     setTimeout(() => {
-      this.isLoading = true;
+      this.isLoading = false;
     }, 100);
   }
 
@@ -75,18 +83,25 @@ export class ExamScheduleListComponent {
       }
     }
 
-    // Open new print window
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      console.error('Failed to open print window');
-      return;
-    }
-
     const dir = this._appTranslateService.translate("DIR");
     const title = this._appTranslateService.translate("PAGE_TITLES.EXAM_SCHEDULE");
 
-    printWindow.document.open(); // Ensure the document is writable
-    printWindow.document.write(`
+    // Create an iframe for printing
+    const printFrame = document.createElement('iframe');
+    printFrame.style.position = 'absolute';
+    printFrame.style.width = '0px';
+    printFrame.style.height = '0px';
+    printFrame.style.border = 'none';
+    document.body.appendChild(printFrame);
+
+    const printDoc = printFrame.contentWindow?.document;
+    if (!printDoc) {
+      console.error('Failed to create print document');
+      return;
+    }
+
+    printDoc.open();
+    printDoc.write(`
       <html>
         <head>
           <title>${title}</title>
@@ -100,23 +115,33 @@ export class ExamScheduleListComponent {
               margin-bottom: 16px;
               text-align: center;
             }
+            .app-info {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: center;
+                color: gray;
+                direction: ltr;
+            }
           </style>
         </head>
         <body dir="${dir}">
-          <h1 class="page-title">${title}</h1>  
+          <h1 class="page-title">${title}</h1>            
           ${printContent}
+          <div class="app-info">
+              <small>Quizzy App (V${this.appVersion})</small>
+          </div>
         </body>
       </html>
     `);
-    printWindow.document.close(); // Close document to trigger rendering
+    printDoc.close();
 
-    // Wait for the window to load before printing
-    printWindow.onload = () => {
-      setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-      }, 100);
-    };
+    printFrame.contentWindow?.focus();
+    printFrame.contentWindow?.print();
+
+    // Remove the iframe after printing (wait a bit to ensure printing starts)
+    setTimeout(() => {
+      document.body.removeChild(printFrame);
+    }, 500);
   }
 
   onFilterClick() {

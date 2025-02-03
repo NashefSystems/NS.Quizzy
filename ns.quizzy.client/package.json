@@ -33,6 +33,7 @@
     "moment-timezone": "^0.5.47",
     "ngx-cookie-service": "^19.1.0",
     "ngx-json-viewer": "^3.2.1",
+    "ngx-skeleton-loader": "^10.0.0",
     "run-script-os": "*",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
