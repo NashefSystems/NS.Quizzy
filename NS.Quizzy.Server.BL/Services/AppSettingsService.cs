@@ -29,16 +29,20 @@ namespace NS.Quizzy.Server.BL.Services
         {
             var items = await _dbContext.AppSettings.Where(x => x.Target == target || x.Target == AppSettingTargets.All).ToListAsync();
             var res = items.ToDictionary(k => k.Key, v => v.GetValueByType(_logger));
-            
+
             #region Set app version
-            var appVersion = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString();
-            if (res.ContainsKey(APP_VERSION_KEY))
+            var appVersion = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version;
+            if (appVersion != null)
             {
-                res[APP_VERSION_KEY] = appVersion;
-            }
-            else
-            {
-                res.Add(APP_VERSION_KEY, appVersion);
+                var appVersionStr = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
+                if (res.ContainsKey(APP_VERSION_KEY))
+                {
+                    res[APP_VERSION_KEY] = appVersionStr;
+                }
+                else
+                {
+                    res.Add(APP_VERSION_KEY, appVersionStr);
+                }
             }
             #endregion
 
