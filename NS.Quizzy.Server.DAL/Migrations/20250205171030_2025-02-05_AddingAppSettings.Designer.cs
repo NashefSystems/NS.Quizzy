@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NS.Quizzy.Server.DAL;
 
@@ -11,9 +12,11 @@ using NS.Quizzy.Server.DAL;
 namespace NS.Quizzy.Server.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250205171030_2025-02-05_AddingAppSettings")]
+    partial class _20250205_AddingAppSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +116,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             Key = "CacheLoginsTTLMin",
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Target = "Server",
-                            Value = "20160",
+                            Value = "10080",
                             ValueType = "Integer"
                         },
                         new
@@ -125,19 +128,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             Key = "ServerInfoTTLMin",
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Target = "Server",
-                            Value = "20160",
-                            ValueType = "Integer"
-                        },
-                        new
-                        {
-                            Id = new Guid("c34bf183-1ff4-4b96-8524-076243aad56b"),
-                            CreatedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            IsDeleted = false,
-                            IsSecured = false,
-                            Key = "CacheOTPTTLMin",
-                            ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Target = "Server",
-                            Value = "60",
+                            Value = "10080",
                             ValueType = "Integer"
                         });
                 });

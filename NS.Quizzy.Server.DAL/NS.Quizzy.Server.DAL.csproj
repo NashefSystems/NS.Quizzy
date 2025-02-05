@@ -25,4 +25,8 @@
 		<PackageReference Include="QRCoder" Version="1.6.0" />
 		<PackageReference Include="NS.Shared.Logging" Version="1.0.19" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\NS.Quizzy.Server.Common\NS.Quizzy.Server.Common.csproj" />
+	</ItemGroup>
 </Project>

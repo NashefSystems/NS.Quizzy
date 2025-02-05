@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
+using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
+using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.Models;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
+using static NS.Quizzy.Server.Common.Enums;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -18,8 +22,10 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOTPService _otpService;
         private readonly INSCacheProvider _cacheProvider;
+        private readonly TimeSpan _cacheOTPTTL;
+        private readonly TimeSpan _cacheLoginsTTL;
 
-        public AccountService(INSLogger logger, AppDbContext appDbContext, JwtHelper jwtHelper, IHttpContextAccessor httpContextAccessor, IOTPService otpService, INSCacheProvider cacheProvider)
+        public AccountService(INSLogger logger, AppDbContext appDbContext, JwtHelper jwtHelper, IHttpContextAccessor httpContextAccessor, IOTPService otpService, INSCacheProvider cacheProvider, IConfiguration configuration)
         {
             _logger = logger;
             _appDbContext = appDbContext;
@@ -27,6 +33,16 @@ namespace NS.Quizzy.Server.BL.Services
             _httpContextAccessor = httpContextAccessor;
             _otpService = otpService;
             _cacheProvider = cacheProvider;
+            {
+                var cacheKey = AppSettingKeys.CacheOTPTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 60;
+                _cacheOTPTTL = TimeSpan.FromMinutes(valueInMin);
+            }
+            {
+                var cacheKey = AppSettingKeys.CacheLoginsTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 20160;
+                _cacheLoginsTTL = TimeSpan.FromMinutes(valueInMin);
+            }
         }
 
         public async Task<LoginResponse?> LoginAsync(LoginRequest loginRequest)
@@ -62,7 +78,7 @@ namespace NS.Quizzy.Server.BL.Services
                 UserId = user.Id,
                 TwoFactorSecretKey = res.TwoFactorSecretKey,
             };
-            await _cacheProvider.SetOrUpdateAsync(GetTwoFactorCacheKey(res.ContextId), cacheInfo, TimeSpan.FromHours(1));
+            await _cacheProvider.SetOrUpdateAsync(GetTwoFactorCacheKey(res.ContextId), cacheInfo, _cacheOTPTTL);
 
             return res;
         }
@@ -116,6 +132,7 @@ namespace NS.Quizzy.Server.BL.Services
             });
 
             _logger.Info($"VerifyOTP userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");
+            await AddLoginCacheAsync(user, tokenId, token);
             return new UserDetailsDto()
             {
                 Id = user.Id,
@@ -124,6 +141,20 @@ namespace NS.Quizzy.Server.BL.Services
                 TokenId = tokenId,
                 Token = token,
             };
+        }
+
+        private async Task AddLoginCacheAsync(User? user, Guid tokenId, string token)
+        {
+            var cacheData = new
+            {
+                user?.Id,
+                user?.Email,
+                user?.FullName,
+                tokenId,
+                token
+            };
+            var cacheKey = $"Logins:{user?.Email}:{DateTime.Now:yyyy-MM-dd_HH-mm-ss}_{_logger.GetContextId()}";
+            await _cacheProvider.SetOrUpdateAsync(cacheKey, cacheData, _cacheLoginsTTL);
         }
 
         public async Task<UserDetailsDto> GetDetailsAsync()

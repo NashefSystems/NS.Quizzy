@@ -7,13 +7,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using NS.Quizzy.Server.BL.AppConfiguration;
+using NS.Quizzy.Server.BL.HostedServices;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.MappingProfiles;
 using NS.Quizzy.Server.BL.Services;
+using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
 using NS.Security;
 using NS.Shared.CacheProvider.Extensions;
+using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.Logging.Configs;
 using NS.Shared.Logging.Extensions;
@@ -23,12 +27,13 @@ namespace NS.Quizzy.Server.BL.Extensions
 {
     public static class ExtensionMethods
     {
-        public static IServiceCollection AddQuizzyBLServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddQuizzyBLServices(this IServiceCollection services, IConfigurationBuilder configuration)
         {
             ArgumentNullException.ThrowIfNull(services);
+            IConfiguration conf = (IConfiguration)configuration;
 
             #region NSLogger
-            var loggerConfig = configuration.GetSection("NSLoggerConfig").Get<NSLoggerConfig>();
+            var loggerConfig = conf.GetSection("NSLoggerConfig").Get<NSLoggerConfig>();
             if (loggerConfig != null)
             {
                 loggerConfig.GetUserId = (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -37,11 +42,23 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddNSLogger(loggerConfig);
             #endregion
 
-            var appName = configuration.GetValue<string>("AppName");
-            var environment = configuration.GetValue<string>("Environment");
+            services.AddQuizzyDALServices();
+
+            var appName = conf.GetValue<string>("AppName");
+            var environment = conf.GetValue<string>("Environment");
             var cachePrefix = $"{appName}:{environment}";
             services.AddNSCacheProvider(cachePrefix);
-            services.AddQuizzyDALServices();
+
+            #region DbConfiguration
+            // Get DbContext instance
+            using var scope = services.BuildServiceProvider().CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
+
+            // Add DB Configuration Source
+            configuration.Add(new DbConfigurationSource(dbContext, cacheProvider));
+            #endregion
+
             services.AddMappingProfiles();
 
             services.AddHttpContextAccessor();
@@ -109,6 +126,8 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IAppSettingsService, AppSettingsService>();
             services.AddScoped<IOTPService, OTPService>();
+
+            services.AddHostedService<AppLifetimeInfoHostedService>();
 
             return services;
         }

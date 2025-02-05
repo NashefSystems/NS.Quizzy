@@ -69,7 +69,6 @@ namespace NS.Quizzy.Server
                     }
                 });
             });
-
             builder.Services.AddQuizzyBLServices(builder.Configuration);
 
             var app = builder.Build();

@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using Elasticsearch.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
+using static NS.Quizzy.Server.Common.Enums;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -16,12 +19,18 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
+        private readonly TimeSpan _cacheDataTTL;
 
-        public QuestionnairesService(AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper)
+        public QuestionnairesService(AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper, IConfiguration configuration)
         {
             _appDbContext = appDbContext;
             _cacheProvider = cacheProvider;
             _mapper = mapper;
+            {
+                var cacheKey = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 60;
+                _cacheDataTTL = TimeSpan.FromMinutes(valueInMin);
+            }
         }
 
         public async Task<List<QuestionnaireDto>> GetAllAsync()
@@ -37,7 +46,7 @@ namespace NS.Quizzy.Server.BL.Services
                 .OrderBy(x => x.Code)
                 .ToListAsync();
             var res = _mapper.Map<List<QuestionnaireDto>>(items);
-            await _cacheProvider.SetOrUpdateAsync(CACHE_KEY, res);
+            await _cacheProvider.SetOrUpdateAsync(CACHE_KEY, res, _cacheDataTTL);
             return res;
         }
 

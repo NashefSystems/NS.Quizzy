@@ -1,4 +1,6 @@
-﻿using NS.Quizzy.Server.DAL.Entities;
+﻿using NS.Quizzy.Server.Common.Extensions;
+using NS.Quizzy.Server.DAL.Entities;
+using static NS.Quizzy.Server.Common.Enums;
 
 namespace NS.Quizzy.Server.DAL
 {
@@ -378,10 +380,50 @@ namespace NS.Quizzy.Server.DAL
                     new()
                     {
                         Id = Guid.Parse("795B0B48-4238-4D27-BE60-3DD2CB66E424"),
-                        Key = "SavePasswordOnRememberMe",
+                        Key = AppSettingKeys.SavePasswordOnRememberMe.GetDBStringValue(),
                         Target = DALEnums.AppSettingTargets.Client,
                         ValueType = DALEnums.AppSettingValueTypes.Boolean,
                         Value = "true",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("4D9C6810-644D-4AC4-B00F-245AA2B69086"),
+                        Key =  AppSettingKeys.CacheDataTTLMin.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.Integer,
+                        Value = "300", // 5 Hours
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("586641C6-6289-4DCF-BC0B-0F5513CBD911"),
+                        Key =  AppSettingKeys.CacheLoginsTTLMin.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.Integer,
+                        Value = "20160", // 2 Week
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("4AAA77C9-37E3-417D-8549-0C541869CA6C"),
+                        Key =  AppSettingKeys.ServerInfoTTLMin.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.Integer,
+                        Value = "20160", // 2 Week
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("C34BF183-1FF4-4B96-8524-076243AAD56B"),
+                        Key =  AppSettingKeys.CacheOTPTTLMin.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.Integer,
+                        Value = "60", // 1 Hour
                         IsSecured = false,
                         IsDeleted = false,
                     }
