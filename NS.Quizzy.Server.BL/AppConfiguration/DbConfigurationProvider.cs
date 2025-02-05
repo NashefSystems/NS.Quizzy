@@ -32,7 +32,7 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
             var cacheKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
             var serverInfoTTLMin = settings.TryGetValue(cacheKey, out var ttlMinStr) && double.TryParse(ttlMinStr, out double ttlMin) ?
             ttlMin : 10080; //1 Week
-            _cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:LastLoadAppSettingsTime", DateTime.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
+            _cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:LastLoadAppSettingsTime", DateTimeOffset.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
         }
 
         private void Reload()

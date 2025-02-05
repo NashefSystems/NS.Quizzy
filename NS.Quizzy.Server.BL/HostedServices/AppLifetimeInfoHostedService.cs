@@ -31,7 +31,7 @@ namespace NS.Quizzy.Server.BL.HostedServices
 
             var cacheKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
             var serverInfoTTLMin = double.TryParse(config.GetValue<string>(cacheKey), out double ttlMin) ? ttlMin : 10080; //1 Week
-            await cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:StartTime", DateTime.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
+            await cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:StartTime", DateTimeOffset.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
@@ -42,7 +42,7 @@ namespace NS.Quizzy.Server.BL.HostedServices
 
             var cacheKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
             var serverInfoTTLMin = double.TryParse(config.GetValue<string>(cacheKey), out double ttlMin) ? ttlMin : 10080; //1 Week
-            await cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:StopTime", DateTime.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
+            await cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:StopTime", DateTimeOffset.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
         }
     }
 }
