@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using NS.Quizzy.Server.BL.Extensions;
@@ -31,8 +32,14 @@ namespace NS.Quizzy.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "NS.Quizzy API",
+                    Version = "V" + AppUtils.GetAppVersionAsString(),
+                });
                 c.EnableAnnotations();
                 c.UseInlineDefinitionsForEnums();
+
 
                 var docXmlPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory)
                      .Where(x => x.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase) && Path.GetFileName(x).StartsWith("ns.", StringComparison.CurrentCultureIgnoreCase))
