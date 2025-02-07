@@ -12,18 +12,16 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
 {
     internal class DbConfigurationSource : IConfigurationSource
     {
-        private readonly AppDbContext _dbContext;
-        private readonly INSCacheProvider _cacheProvider;
+        private readonly IServiceProvider _rootServiceProvider;
 
-        public DbConfigurationSource(AppDbContext dbContext, INSCacheProvider cacheProvider)
+        public DbConfigurationSource(IServiceProvider rootServiceProvider)
         {
-            _dbContext = dbContext;
-            _cacheProvider = cacheProvider;
+            _rootServiceProvider = rootServiceProvider;
         }
 
         public IConfigurationProvider Build(IConfigurationBuilder builder)
         {
-            return new DbConfigurationProvider(_dbContext, _cacheProvider);
+            return new DbConfigurationProvider(_rootServiceProvider);
         }
     }
 }

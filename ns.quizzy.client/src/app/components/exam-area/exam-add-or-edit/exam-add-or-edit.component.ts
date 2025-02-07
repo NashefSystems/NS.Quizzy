@@ -41,7 +41,11 @@ export class ExamAddOrEditComponent implements OnInit {
 
   classes: IClassDto[] = [];
   classesFiltered: IClassDto[] = [];
+  improvementClasses: { [key: string]: boolean } = {};
+
   grades: IGradeDto[] = [];
+  improvementGrades: { [key: string]: boolean } = {};
+
   questionnaires: IQuestionnaireDto[] = [];
   examTypes: IExamTypeDto[] = [];
   moeds: IMoedDto[] = [];
@@ -73,7 +77,9 @@ export class ExamAddOrEditComponent implements OnInit {
       this._moedsService.get(),
     ]).subscribe(([grades, classes, questionnaires, examTypes, moeds]) => {
       this.grades = grades;
+      this.improvementGrades = Object.fromEntries(this.grades.map(x => [x.id, false]));
       this.classes = this.classesFiltered = classes;
+      this.improvementClasses = Object.fromEntries(this.classes.map(x => [x.id, false]));
       this.questionnaires = questionnaires;
       this.examTypes = examTypes;
       this.moeds = moeds;
@@ -81,11 +87,15 @@ export class ExamAddOrEditComponent implements OnInit {
       if (id) {
         this._examsService.getById(id).subscribe({
           next: data => {
-            const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = data;
+            const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, moedId } = data;
+            const classIds = [...data.classIds || [], ...data.improvementClassIds || []];
+            const gradeIds = [...data.gradeIds || [], ...data.improvementGradeIds || []];
             const newValue = {
               ...this.form.value,
               startTime: DateTimeUtils.getDateTimeFromIso(startTime), questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId
             };
+            data.improvementGradeIds?.forEach(x => this.improvementGrades[x] = true);
+            data.improvementClassIds?.forEach(x => this.improvementClasses[x] = true);
             this.form.setValue(newValue);
             this.setClassesFiltered();
           }
@@ -113,6 +123,33 @@ export class ExamAddOrEditComponent implements OnInit {
     this.setClassesFiltered();
   }
 
+  isSelectedGrade(id: string) {
+    const { gradeIds } = this.form.value;
+    return gradeIds?.includes(id) ?? false;
+  }
+
+  getSelectedGradeNames() {
+    const { gradeIds } = this.form.value;
+    return this.grades
+      .filter(g => gradeIds.includes(g.id))
+      .map(g => g.name)
+      .join(', ');
+  }
+
+  isSelectedClass(id: string) {
+    const { classIds } = this.form.value;
+    return classIds?.includes(id) ?? false;
+  }
+
+  getSelectedClassNames() {
+    const { classIds } = this.form.value;
+    return this.classes
+      .filter(g => classIds.includes(g.id))
+      .map(g => g.name)
+      .join(', ');
+  }
+
+
   onQuestionnaireIdChange() {
     const questionnaire = this.questionnaires.find(x => x.id === this.form?.value?.questionnaireId);
     if (!questionnaire) {
@@ -132,6 +169,9 @@ export class ExamAddOrEditComponent implements OnInit {
     }
     const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = this.form.value;
 
+    const selectedGradeIds = gradeIds as string[];
+    const selectedClassIds = classIds as string[];
+
     const payload: IExamPayloadDto = {
       startTime: DateTimeUtils.getDateTimeAsIso(startTime),
       questionnaireId: questionnaireId,
@@ -139,8 +179,10 @@ export class ExamAddOrEditComponent implements OnInit {
       moedId: moedId,
       duration: duration,
       durationWithExtra: durationWithExtra,
-      gradeIds: gradeIds,
-      classIds: classIds,
+      gradeIds: selectedGradeIds.filter(x => !this.improvementGrades[x]),
+      improvementGradeIds: selectedGradeIds.filter(x => this.improvementGrades[x]),
+      classIds: selectedClassIds.filter(x => !this.improvementClasses[x]),
+      improvementClassIds: selectedClassIds.filter(x => this.improvementClasses[x]),
     };
 
     if (this.id) {

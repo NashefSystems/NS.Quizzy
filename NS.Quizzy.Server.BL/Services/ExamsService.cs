@@ -6,6 +6,7 @@ using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.DTOs;
+using System.Linq;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -92,30 +93,23 @@ namespace NS.Quizzy.Server.BL.Services
 
         public async Task<ExamDto?> GetAsync(Guid id)
         {
-            var item = await _appDbContext.Exams.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            var item = await _appDbContext.Exams
+                .Include(x => x.ClassExams)
+                .Include(x => x.GradeExams)
+                .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
             if (item == null)
             {
                 return null;
             }
-            var res = _mapper.Map<ExamDto>(item);
-
-            res.ClassIds = await _appDbContext.ClassExams
-                .Where(x => x.IsDeleted == false && x.ExamId == item.Id)
-                .Select(x => x.ClassId)
-                .ToListAsync();
-
-            res.GradeIds = await _appDbContext.GradeExams
-             .Where(x => x.IsDeleted == false && x.ExamId == item.Id)
-             .Select(x => x.GradeId)
-             .ToListAsync();
-
-            return res;
+            return _mapper.Map<ExamDto>(item);
         }
 
         public async Task<ExamDto> InsertAsync(ExamPayloadDto model)
         {
             model.ClassIds ??= [];
+            model.ImprovementClassIds ??= [];
             model.GradeIds ??= [];
+            model.ImprovementGradeIds ??= [];
 
             await ValidationMethod(model);
 
@@ -136,6 +130,16 @@ namespace NS.Quizzy.Server.BL.Services
                 {
                     ClassId = classId,
                     ExamId = exam.Id,
+                    IsImprovement = false,
+                });
+            }
+            foreach (var classId in model.ImprovementClassIds)
+            {
+                await _appDbContext.ClassExams.AddAsync(new()
+                {
+                    ClassId = classId,
+                    ExamId = exam.Id,
+                    IsImprovement = true,
                 });
             }
             foreach (var gradeId in model.GradeIds)
@@ -144,12 +148,24 @@ namespace NS.Quizzy.Server.BL.Services
                 {
                     GradeId = gradeId,
                     ExamId = exam.Id,
+                    IsImprovement = false,
+                });
+            }
+            foreach (var gradeId in model.ImprovementGradeIds)
+            {
+                await _appDbContext.GradeExams.AddAsync(new()
+                {
+                    GradeId = gradeId,
+                    ExamId = exam.Id,
+                    IsImprovement = true,
                 });
             }
             await _appDbContext.SaveChangesAsync();
             var res = _mapper.Map<ExamDto>(exam);
             res.ClassIds = model.ClassIds;
+            res.ImprovementClassIds = model.ImprovementClassIds;
             res.GradeIds = model.GradeIds;
+            res.ImprovementGradeIds = model.ImprovementGradeIds;
             return res;
         }
 
@@ -162,7 +178,9 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             model.ClassIds ??= [];
+            model.ImprovementClassIds ??= [];
             model.GradeIds ??= [];
+            model.ImprovementGradeIds ??= [];
 
             await ValidationMethod(model);
 
@@ -178,13 +196,22 @@ namespace NS.Quizzy.Server.BL.Services
                 var dbClassExams = await _appDbContext.ClassExams.Where(x => x.IsDeleted == false && x.ExamId == item.Id).ToListAsync();
                 var dbClassIds = dbClassExams.Select(x => x.ClassId).ToList();
 
-                var dbClassIdsToDelete = dbClassIds.Where(x => !model.ClassIds.Contains(x)).ToList();
+                var dbClassIdsToDelete = dbClassIds.Where(x => !model.ClassIds.Contains(x) && !model.ImprovementClassIds.Contains(x)).ToList();
                 if (dbClassIdsToDelete.Count > 0)
                 {
                     var itemsToRemove = dbClassExams.Where(x => dbClassIdsToDelete.Contains(x.ClassId)).ToList();
-                    //_appDbContext.ClassExams.RemoveRange(itemsToRemove);
                     itemsToRemove.ForEach(x => x.IsDeleted = true);
                 }
+
+                dbClassExams
+                    .Where(x => model.ClassIds.Contains(x.Id))
+                    .ToList()
+                    .ForEach(x => x.IsImprovement = false);
+
+                dbClassExams
+                    .Where(x => model.ImprovementClassIds.Contains(x.Id))
+                    .ToList()
+                    .ForEach(x => x.IsImprovement = true);
 
                 var classIdsToAdd = model.ClassIds.Where(x => !dbClassIds.Contains(x)).ToList();
                 foreach (var classId in classIdsToAdd)
@@ -193,6 +220,18 @@ namespace NS.Quizzy.Server.BL.Services
                     {
                         ClassId = classId,
                         ExamId = item.Id,
+                        IsImprovement = false,
+                    });
+                }
+
+                classIdsToAdd = model.ImprovementClassIds.Where(x => !dbClassIds.Contains(x)).ToList();
+                foreach (var classId in classIdsToAdd)
+                {
+                    await _appDbContext.ClassExams.AddAsync(new()
+                    {
+                        ClassId = classId,
+                        ExamId = item.Id,
+                        IsImprovement = true,
                     });
                 }
             }
@@ -201,12 +240,22 @@ namespace NS.Quizzy.Server.BL.Services
                 var dbGradeExams = await _appDbContext.GradeExams.Where(x => x.IsDeleted == false && x.ExamId == item.Id).ToListAsync();
                 var dbGradeIds = dbGradeExams.Select(x => x.GradeId).ToList();
 
-                var dbGradeIdsToDelete = dbGradeIds.Where(x => !model.GradeIds.Contains(x)).ToList();
+                var dbGradeIdsToDelete = dbGradeIds.Where(x => !model.GradeIds.Contains(x) && !model.ImprovementGradeIds.Contains(x)).ToList();
                 if (dbGradeIdsToDelete.Count > 0)
                 {
                     var itemsToRemove = dbGradeExams.Where(x => dbGradeIdsToDelete.Contains(x.GradeId)).ToList();
-                    _appDbContext.GradeExams.RemoveRange(itemsToRemove);
+                    itemsToRemove.ForEach(x => x.IsDeleted = true);
                 }
+
+                dbGradeExams
+                    .Where(x => model.GradeIds.Contains(x.Id))
+                    .ToList()
+                    .ForEach(x => x.IsImprovement = false);
+
+                dbGradeExams
+                    .Where(x => model.ImprovementGradeIds.Contains(x.Id))
+                    .ToList()
+                    .ForEach(x => x.IsImprovement = true);
 
                 var gradeIdsToAdd = model.GradeIds.Where(x => !dbGradeIds.Contains(x)).ToList();
                 foreach (var gradeId in gradeIdsToAdd)
@@ -215,6 +264,18 @@ namespace NS.Quizzy.Server.BL.Services
                     {
                         GradeId = gradeId,
                         ExamId = item.Id,
+                        IsImprovement = false,
+                    });
+                }
+
+                gradeIdsToAdd = model.ImprovementGradeIds.Where(x => !dbGradeIds.Contains(x)).ToList();
+                foreach (var gradeId in gradeIdsToAdd)
+                {
+                    await _appDbContext.GradeExams.AddAsync(new()
+                    {
+                        GradeId = gradeId,
+                        ExamId = item.Id,
+                        IsImprovement = true,
                     });
                 }
             }
@@ -222,12 +283,19 @@ namespace NS.Quizzy.Server.BL.Services
             await _appDbContext.SaveChangesAsync();
             var res = _mapper.Map<ExamDto>(item);
             res.ClassIds = model.ClassIds;
+            res.ImprovementClassIds = model.ImprovementClassIds;
             res.GradeIds = model.GradeIds;
+            res.ImprovementGradeIds = model.ImprovementGradeIds;
             return res;
         }
 
         private async Task ValidationMethod(ExamPayloadDto model)
         {
+            model.ClassIds ??= [];
+            model.ImprovementClassIds ??= [];
+            model.GradeIds ??= [];
+            model.ImprovementGradeIds ??= [];
+
             var examTypeIsExists = await _appDbContext.ExamTypes.AnyAsync(x => x.IsDeleted == false && x.Id == model.ExamTypeId);
             if (!examTypeIsExists)
             {
@@ -247,14 +315,14 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             var dbClassIds = await _appDbContext.Classes.Where(x => x.IsDeleted == false).Select(x => x.Id).ToListAsync();
-            var invalidClassIds = model.ClassIds.Where(x => !dbClassIds.Contains(x)).ToList();
+            var invalidClassIds = model.ClassIds.Union(model.ImprovementClassIds).Where(x => !dbClassIds.Contains(x)).ToList();
             if (invalidClassIds.Count != 0)
             {
                 throw new BadRequestException($"Invalid class ID's [{string.Join(", ", invalidClassIds)}]");
             }
 
             var dbGradeIds = await _appDbContext.Grades.Where(x => x.IsDeleted == false).Select(x => x.Id).ToListAsync();
-            var invalidGradeIds = model.GradeIds.Where(x => !dbGradeIds.Contains(x)).ToList();
+            var invalidGradeIds = model.GradeIds.Union(model.ImprovementGradeIds).Where(x => !dbGradeIds.Contains(x)).ToList();
             if (invalidGradeIds.Count != 0)
             {
                 throw new BadRequestException($"Invalid grade ID's [{string.Join(", ", invalidGradeIds)}]");

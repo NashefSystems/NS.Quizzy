@@ -8,13 +8,29 @@
     max-width: 100%;
     width: 100%;
 
-    .name {
-        color: colors.$primary-dark;
+    .icon {
+        width: 1.5rem;
+        max-width: 1.5rem;
     }
 
-    .value {
-        color: colors.$primary;
-        font-weight: bold;
-        text-wrap-mode: wrap;
+    >div {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        width: 100%;
+        flex-wrap: wrap;
+
+        .name {
+            color: colors.$primary-dark;
+        }
+
+        .value {
+            color: colors.$primary;
+            font-weight: bold;
+            text-wrap-mode: wrap;
+        }
     }
+
+
 }

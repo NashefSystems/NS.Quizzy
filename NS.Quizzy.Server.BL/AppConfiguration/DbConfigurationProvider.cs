@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
 using NS.Shared.CacheProvider.Interfaces;
@@ -8,15 +9,13 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
 {
     internal class DbConfigurationProvider : ConfigurationProvider, IDisposable
     {
-        private readonly AppDbContext _dbContext;
-        private readonly INSCacheProvider _cacheProvider;
+        private readonly IServiceProvider _rootServiceProvider;
         private readonly Timer _reloadTimer;
         private readonly TimeSpan _reloadInterval = TimeSpan.FromMinutes(10);
 
-        public DbConfigurationProvider(AppDbContext dbContext, INSCacheProvider cacheProvider)
+        public DbConfigurationProvider(IServiceProvider rootServiceProvider)
         {
-            _cacheProvider = cacheProvider;
-            _dbContext = dbContext;
+            _rootServiceProvider = rootServiceProvider;
             Load();  // Initial Load
 
             _reloadTimer = new Timer(_ => Reload(), null, _reloadInterval, _reloadInterval);
@@ -24,7 +23,11 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
 
         public override void Load()
         {
-            var settings = _dbContext.AppSettings
+            using var scope = _rootServiceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
+
+            var settings = dbContext.AppSettings
                 .Where(x => x.IsDeleted == false && x.Target != DALEnums.AppSettingTargets.Client)
                 .ToDictionary(k => k.Key, v => v.Value);
             Data = settings;
@@ -32,7 +35,7 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
             var cacheKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
             var serverInfoTTLMin = settings.TryGetValue(cacheKey, out var ttlMinStr) && double.TryParse(ttlMinStr, out double ttlMin) ?
             ttlMin : 10080; //1 Week
-            _cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:LastLoadAppSettingsTime", DateTimeOffset.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
+            cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:LastLoadAppSettingsTime", DateTimeOffset.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
         }
 
         private void Reload()

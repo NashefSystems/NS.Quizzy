@@ -13,5 +13,7 @@ namespace NS.Quizzy.Server.DAL.Entities
 
         public Guid GradeId { get; set; }
         public virtual Grade Grade { get; set; }
+
+        public bool IsImprovement { get; set; }
     }
 }

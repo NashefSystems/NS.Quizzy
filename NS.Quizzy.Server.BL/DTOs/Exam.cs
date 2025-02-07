@@ -11,7 +11,9 @@ namespace NS.Quizzy.Server.Models.DTOs
         public TimeSpan Duration { get; set; }
         public TimeSpan DurationWithExtra { get; set; }
         public List<Guid>? GradeIds { get; set; }
+        public List<Guid>? ImprovementGradeIds { get; set; }
         public List<Guid>? ClassIds { get; set; }
+        public List<Guid>? ImprovementClassIds { get; set; }
     }
 
     public class ExamDto : ExamPayloadDto, IBaseEntityDto

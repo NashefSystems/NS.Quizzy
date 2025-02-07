@@ -50,13 +50,10 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddNSCacheProvider(cachePrefix);
 
             #region DbConfiguration
-            // Get DbContext instance
-            using var scope = services.BuildServiceProvider().CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
+            services.AddSingleton<IConfigurationSource, DbConfigurationSource>();
 
             // Add DB Configuration Source
-            configuration.Add(new DbConfigurationSource(dbContext, cacheProvider));
+            configuration.Add(new DbConfigurationSource(services.BuildServiceProvider()));
             #endregion
 
             services.AddMappingProfiles();

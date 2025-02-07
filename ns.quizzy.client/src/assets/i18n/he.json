@@ -103,7 +103,7 @@
         "NAME": "שם",
         "SUBJECT_ID": "נושא",
         "DURATION": "משך הבחינה",
-        "DURATION_WITH_EXTRA": "משך הבחינה עם תוספת זמן"
+        "DURATION_WITH_EXTRA": "משך הבחינה כולל תוספת זמן"
     },
     "EXAM_AREA": {
         "START_TIME": "זמן הבחינה",
@@ -111,10 +111,13 @@
         "MOED": "מועד",
         "QUESTIONNAIRE": "שאלון",
         "DURATION": "משך הבחינה",
-        "DURATION_WITH_EXTRA": "משך הבחינה עם תוספת זמן",
+        "DURATION_WITH_EXTRA": "משך הבחינה כולל תוספת זמן",
         "GRADES": "שכבות",
+        "GRADES_GRADE_IMPROVEMENT": "שכבות (שיפור ציון)",
         "CLASSES": "כיתות",
-        "FILTER_COMPLETED_EXAMS": "סינון בחינות שהושלמו"
+        "CLASSES_GRADE_IMPROVEMENT": "כיתות (שיפור ציון)",
+        "FILTER_COMPLETED_EXAMS": "סינון בחינות שהושלמו",
+        "GRADE_IMPROVEMENT": "שיפור ציון"
     },
     "EXAM_SCHEDULE_AREA": {
         "FROM_DATE": "מתאריך",

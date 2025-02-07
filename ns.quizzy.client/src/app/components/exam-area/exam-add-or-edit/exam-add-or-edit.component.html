@@ -40,8 +40,8 @@
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'EXAM_AREA.QUESTIONNAIRE' | translate }}</mat-label>
         <mat-select formControlName="questionnaireId" (selectionChange)="onQuestionnaireIdChange()">
-            <mat-option [dir]="'DIR' | translate" *ngFor="let item of questionnaires"
-                [value]="item.id"> {{item.code}} | {{item.name}}</mat-option>
+            <mat-option [dir]="'DIR' | translate" *ngFor="let item of questionnaires" [value]="item.id"> {{item.code}} |
+                {{item.name}}</mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('questionnaireId')?.invalid && form.get('questionnaireId')?.touched">
             <ng-container *ngIf="form.get('questionnaireId')?.errors?.['required']">
@@ -73,8 +73,21 @@
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'EXAM_AREA.GRADES' | translate }}</mat-label>
         <mat-select formControlName="gradeIds" multiple (selectionChange)="onGradeIdsChange()">
-            <mat-option [dir]="'DIR' | translate" *ngFor="let item of grades"
-                [value]="item.id">{{item.name}}</mat-option>
+            <mat-select-trigger>
+                {{ getSelectedGradeNames() }}
+            </mat-select-trigger>
+
+            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of grades"
+                [value]="item.id">
+                <div class="opt-item">
+                    <label>{{item.name}}</label>
+                    <mat-checkbox [dir]="'DIR' | translate" [disabled]="!isSelectedGrade(item.id)"
+                        [(ngModel)]="improvementGrades[item.id]" [ngModelOptions]="{standalone: true}"
+                        (click)="$event.stopPropagation()">
+                        {{'EXAM_AREA.GRADE_IMPROVEMENT' | translate}}
+                    </mat-checkbox>
+                </div>
+            </mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('gradeIds')?.invalid && form.get('gradeIds')?.touched">
             <ng-container *ngIf="form.get('gradeIds')?.errors?.['required']">
@@ -86,8 +99,21 @@
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'EXAM_AREA.CLASSES' | translate }}</mat-label>
         <mat-select formControlName="classIds" multiple>
-            <mat-option [dir]="'DIR' | translate" *ngFor="let item of classesFiltered"
-                [value]="item.id">{{item.name}}</mat-option>
+            <mat-select-trigger>
+                {{ getSelectedClassNames() }}
+            </mat-select-trigger>
+
+            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of classesFiltered"
+                [value]="item.id">
+                <div class="opt-item">
+                    <label>{{item.name}}</label>
+                    <mat-checkbox [dir]="'DIR' | translate" [disabled]="!isSelectedClass(item.id)"
+                        [(ngModel)]="improvementClasses[item.id]" [ngModelOptions]="{standalone: true}"
+                        (click)="$event.stopPropagation()">
+                        {{'EXAM_AREA.GRADE_IMPROVEMENT' | translate}}
+                    </mat-checkbox>
+                </div>
+            </mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('classIds')?.invalid && form.get('classIds')?.touched">
             <ng-container *ngIf="form.get('classIds')?.errors?.['required']">

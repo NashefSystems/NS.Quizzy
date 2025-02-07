@@ -109,8 +109,11 @@
         "DURATION": "Exam duration",
         "DURATION_WITH_EXTRA": "Exam duration with extra time",
         "GRADES": "Grades",
+        "GRADES_GRADE_IMPROVEMENT":"Grades (Grade improvement)",
         "CLASSES": "Classes",
-        "FILTER_COMPLETED_EXAMS": "Filter completed exams"
+        "CLASSES_GRADE_IMPROVEMENT": "Classes (Grade improvement)",
+        "FILTER_COMPLETED_EXAMS": "Filter completed exams",
+        "GRADE_IMPROVEMENT": "Grade improvement"
     },
     "EXAM_SCHEDULE_AREA": {
         "FROM_DATE": "From date",

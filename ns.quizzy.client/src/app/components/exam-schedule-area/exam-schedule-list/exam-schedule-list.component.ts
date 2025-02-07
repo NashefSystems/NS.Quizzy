@@ -18,6 +18,7 @@ import { ClientAppSettingsService } from '../../../services/backend/client-app-s
 })
 export class ExamScheduleListComponent implements OnInit {
   isLoading: boolean = true;
+  iconColor: string = '#0053E7';
   appVersion: string = "";
 
   @Input() exams: IExamDto[] = [];
@@ -47,6 +48,7 @@ export class ExamScheduleListComponent implements OnInit {
 
   ngOnChanges(): void {
     this.isLoading = true;
+
     this.gradesDic = Object.fromEntries(this.grades.map(x => [x.id, x]));
     this.classesDic = Object.fromEntries(this.classes.map(x => [x.id, x]));
     this.questionnairesDic = Object.fromEntries(this.questionnaires.map(x => [x.id, x]));

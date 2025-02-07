@@ -13,8 +13,10 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
             CreateMap<Class, ClassDto>();
             CreateMap<ClassExam, ClassExamDto>();
             CreateMap<Exam, ExamDto>()
-                .ForMember(dst => dst.GradeIds, opt => opt.MapFrom(src => src.GradeExams.Where(x => x.IsDeleted == false).Select(x => x.GradeId).ToList()))
-                .ForMember(dst => dst.ClassIds, opt => opt.MapFrom(src => src.ClassExams.Where(x => x.IsDeleted == false).Select(x => x.ClassId).ToList()));
+                .ForMember(dst => dst.GradeIds, opt => opt.MapFrom(src => src.GradeExams.Where(x => x.IsDeleted == false && x.IsImprovement == false).Select(x => x.GradeId).ToList()))
+                .ForMember(dst => dst.ImprovementGradeIds, opt => opt.MapFrom(src => src.GradeExams.Where(x => x.IsDeleted == false && x.IsImprovement == true).Select(x => x.GradeId).ToList()))
+                .ForMember(dst => dst.ClassIds, opt => opt.MapFrom(src => src.ClassExams.Where(x => x.IsDeleted == false && x.IsImprovement == false).Select(x => x.ClassId).ToList()))
+                .ForMember(dst => dst.ImprovementClassIds, opt => opt.MapFrom(src => src.ClassExams.Where(x => x.IsDeleted == false && x.IsImprovement == true).Select(x => x.ClassId).ToList()));
             CreateMap<ExamType, ExamTypeDto>();
             CreateMap<Moed, MoedDto>();
             CreateMap<Grade, GradeDto>();

@@ -139,3 +139,10 @@ mat-snack-bar-container.no-panel {
         background-position: -200% 0;
     }
 }
+
+
+mat-option.full-width-option {
+    span {
+        width: 100%;
+    }
+}

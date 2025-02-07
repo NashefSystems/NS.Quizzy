@@ -9,7 +9,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 #### ➕ To add a new migration:
 ```bash
-dotnet ef migrations add "2025-02-05_AddingAppSettings" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
+dotnet ef migrations add "Initialization DataBase" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
 #### ❌ To remove last migrations:

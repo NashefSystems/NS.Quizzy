@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { UserDetailsDto } from '../../models/backend/user-details.dto';
 import { LoginRequest } from '../../models/backend/login.request';

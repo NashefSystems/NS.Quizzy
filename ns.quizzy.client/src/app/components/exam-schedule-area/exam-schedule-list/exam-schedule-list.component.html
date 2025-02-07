@@ -33,22 +33,23 @@
                 <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.DURATION' | translate"
                     [value]="exam.duration | time : 'HH:mm'"></app-exam-info-value>
 
-                <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.DURATION_WITH_EXTRA' | translate"
+                <app-exam-info-value [icon]="'schedule'" [iconColor]="iconColor"
+                    [name]="'EXAM_AREA.DURATION_WITH_EXTRA' | translate"
                     [value]="exam.durationWithExtra | time : 'HH:mm'"></app-exam-info-value>
-            </div>
-            <div *ngIf="exam.gradeIds && exam.gradeIds.length > 0">
-                <app-exam-info-value [icon]="'groups'" [name]="'EXAM_AREA.GRADES' | translate"
-                    [value]="exam.gradeIds.length > 3 ? '' : getGrades(exam.gradeIds)"></app-exam-info-value>
-                <div *ngIf="exam.gradeIds.length > 3" class="primary bold grade-list">
-                    {{getGrades(exam.gradeIds)}}
-                </div>
-            </div>
-            <div *ngIf="exam.classIds && exam.classIds.length > 0">
-                <app-exam-info-value [icon]="'school'" [name]="'EXAM_AREA.CLASSES' | translate"
-                    [value]="exam.classIds.length > 3 ? '' : getClasses(exam.classIds)"></app-exam-info-value>
-                <div *ngIf="exam.classIds.length > 3" class="primary bold class-list">
-                    {{getClasses(exam.classIds)}}
-                </div>
+
+                <app-exam-info-value *ngIf="exam.gradeIds && exam.gradeIds.length > 0" [icon]="'groups'"
+                    [name]="'EXAM_AREA.GRADES' | translate" [value]="getGrades(exam.gradeIds)"></app-exam-info-value>
+
+                <app-exam-info-value *ngIf="exam.improvementGradeIds && exam.improvementGradeIds.length > 0"
+                    [icon]="'groups'" [iconColor]="iconColor" [name]="'EXAM_AREA.GRADES_GRADE_IMPROVEMENT' | translate"
+                    [value]="getGrades(exam.improvementGradeIds)"></app-exam-info-value>
+
+                <app-exam-info-value *ngIf="exam.classIds && exam.classIds.length > 0" [icon]="'school'"
+                    [name]="'EXAM_AREA.CLASSES' | translate" [value]="getClasses(exam.classIds)"></app-exam-info-value>
+
+                <app-exam-info-value *ngIf="exam.improvementClassIds && exam.improvementClassIds.length > 0"
+                    [icon]="'school'" [iconColor]="iconColor" [name]="'EXAM_AREA.CLASSES_GRADE_IMPROVEMENT' | translate"
+                    [value]="getClasses(exam.improvementClassIds)"></app-exam-info-value>
             </div>
         </mat-expansion-panel>
     </mat-accordion>

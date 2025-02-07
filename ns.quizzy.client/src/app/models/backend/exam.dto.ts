@@ -8,7 +8,9 @@ export interface IExamPayloadDto {
     duration: string;
     durationWithExtra: string;
     gradeIds?: string[];
+    improvementGradeIds?: string[];
     classIds?: string[];
+    improvementClassIds?: string[];
 }
 
 export interface IExamDto extends IExamPayloadDto, IBaseEntityDto { }

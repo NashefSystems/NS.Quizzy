@@ -8,6 +8,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './exam-info-value.component.scss'
 })
 export class ExamInfoValueComponent {
+  @Input() iconColor: string;
   @Input() icon: string;
   @Input() name: string;
   @Input() value: string | null | undefined | number;

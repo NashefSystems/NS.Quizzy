@@ -12,6 +12,8 @@ namespace NS.Quizzy.Server.DAL.Entities
         public virtual Exam Exam { get; set; }
 
         public Guid ClassId { get; set; }
-        public virtual Class Class { get; set; }      
+        public virtual Class Class { get; set; }
+
+        public bool IsImprovement { get; set; }
     }
 }
