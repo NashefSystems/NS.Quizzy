@@ -13,10 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NS.Quizzy.Server.DAL", "NS.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{4D5FCF87-B81A-42F4-97B1-1DD23EB56742}"
 	ProjectSection(SolutionItems) = preProject
+		NS.Quizzy.Server\Dockerfile = NS.Quizzy.Server\Dockerfile
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NS.Quizzy.Server.Common", "NS.Quizzy.Server.Common\NS.Quizzy.Server.Common.csproj", "{081EAF04-61FD-4E2D-9B4C-08DB1523EFA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NS.Quizzy.Server.Common", "NS.Quizzy.Server.Common\NS.Quizzy.Server.Common.csproj", "{081EAF04-61FD-4E2D-9B4C-08DB1523EFA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

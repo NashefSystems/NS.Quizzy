@@ -27,6 +27,7 @@ COPY ["NS.Quizzy.Server/NS.Quizzy.Server.csproj", "NS.Quizzy.Server/"]
 COPY ["ns.quizzy.client/ns.quizzy.client.esproj", "ns.quizzy.client/"]
 COPY ["NS.Quizzy.Server.BL/NS.Quizzy.Server.BL.csproj", "NS.Quizzy.Server.BL/"]
 COPY ["NS.Quizzy.Server.DAL/NS.Quizzy.Server.DAL.csproj", "NS.Quizzy.Server.DAL/"]
+COPY ["NS.Quizzy.Server.Common/NS.Quizzy.Server.Common.csproj", "NS.Quizzy.Server.Common/"]
 COPY ["nuget.config", "nuget.config"]
 ENV ASPNETCORE_ENVIRONMENT=$ENV
 RUN dotnet restore "./NS.Quizzy.Server/NS.Quizzy.Server.csproj"
