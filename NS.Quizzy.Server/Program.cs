@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using NS.Quizzy.Server.BL.Extensions;
+using NS.Quizzy.Server.BL.Utils;
 using NS.Shared.Logging.Extensions;
 
 namespace NS.Quizzy.Server
 {
     public class Program
     {
+        private static readonly string? appVersion = AppUtils.GetAppVersionAsString();
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +33,11 @@ namespace NS.Quizzy.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
+                c.SwaggerDoc(appVersion, new OpenApiInfo()
+                {
+                    Title = "Quizzy App",
+                    Version = appVersion,
+                });
                 c.EnableAnnotations();
                 c.UseInlineDefinitionsForEnums();
 
@@ -82,7 +90,11 @@ namespace NS.Quizzy.Server
             //}
 
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/{appVersion}/swagger.json", $"Quizzy App {appVersion}");
+                c.RoutePrefix = "swagger";
+            });
 
             app.UseHttpsRedirection();
 

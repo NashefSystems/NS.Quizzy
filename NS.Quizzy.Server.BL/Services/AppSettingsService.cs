@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.BL.Utils;
 using NS.Quizzy.Server.DAL;
 using NS.Shared.Logging;
 using static NS.Quizzy.Server.DAL.DALEnums;
@@ -31,17 +32,16 @@ namespace NS.Quizzy.Server.BL.Services
             var res = items.ToDictionary(k => k.Key, v => v.GetValueByType(_logger));
 
             #region Set app version
-            var appVersion = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version;
-            if (appVersion != null)
+            var appVersion = AppUtils.GetAppVersionAsString();
+            if (!string.IsNullOrWhiteSpace(appVersion))
             {
-                var appVersionStr = $"{appVersion.Major}.{appVersion.Minor}.{appVersion.Build}";
                 if (res.ContainsKey(APP_VERSION_KEY))
                 {
-                    res[APP_VERSION_KEY] = appVersionStr;
+                    res[APP_VERSION_KEY] = appVersion;
                 }
                 else
                 {
-                    res.Add(APP_VERSION_KEY, appVersionStr);
+                    res.Add(APP_VERSION_KEY, appVersion);
                 }
             }
             #endregion
