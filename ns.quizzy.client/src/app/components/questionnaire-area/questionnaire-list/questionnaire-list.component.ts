@@ -66,7 +66,12 @@ export class QuestionnaireListComponent implements OnInit {
     this._router.navigate([`/questionnaires/edit/${item?.id}`]);
   };
 
-  onDelete(item: IQuestionnaireDto) {
+  onDelete(selected: IQuestionnaireDto) {
+    const item = this.items.find(x => x.id == selected.id);
+    if (!item) {
+      return;
+    }
+
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,

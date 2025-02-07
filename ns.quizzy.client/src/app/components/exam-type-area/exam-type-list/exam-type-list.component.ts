@@ -48,7 +48,12 @@ export class ExamTypeListComponent implements OnInit {
     this._router.navigate([`/exam-types/edit/${item?.id}`]);
   };
 
-  onDelete(item: IExamTypeDto) {
+  onDelete(selected: IExamTypeDto) {
+    const item = this.items.find(x => x.id == selected.id);
+    if (!item) {
+      return;
+    }
+
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,

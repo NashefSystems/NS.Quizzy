@@ -49,7 +49,12 @@ export class GradeListComponent implements OnInit {
     this._router.navigate([`/grades/edit/${item?.id}`]);
   };
 
-  onDelete(item: IGradeDto) {
+  onDelete(selected: IGradeDto) {
+    const item = this.items.find(x => x.id == selected.id);
+    if (!item) {
+      return;
+    }
+
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,

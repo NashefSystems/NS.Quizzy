@@ -110,7 +110,12 @@ export class ExamListComponent implements OnInit {
     this._router.navigate([`/exams/edit/${item?.id}`]);
   };
 
-  onDelete(item: IExamDto) {
+  onDelete(selected: IExamDto) {
+    const item = this.items.find(x => x.id == selected.id);
+    if (!item) {
+      return;
+    }
+
     const questionnaire = this.questionnaires?.find(x => x.id === item.questionnaireId);
     const examType = this.examTypes?.find(x => x.id === item.examTypeId);
     const startTime = moment(item.startTime).format('DD/MM/YYYY HH:mm');

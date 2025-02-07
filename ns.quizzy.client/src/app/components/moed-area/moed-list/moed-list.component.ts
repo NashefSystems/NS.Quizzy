@@ -48,7 +48,12 @@ export class MoedListComponent implements OnInit {
     this._router.navigate([`/moeds/edit/${item?.id}`]);
   };
 
-  onDelete(item: IMoedDto) {
+  onDelete(selected: IMoedDto) {
+    const item = this.items.find(x => x.id == selected.id);
+    if (!item) {
+      return;
+    }
+
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,

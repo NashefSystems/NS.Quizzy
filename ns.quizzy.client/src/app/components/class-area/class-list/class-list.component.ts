@@ -65,7 +65,12 @@ export class ClassListComponent implements OnInit {
     this._router.navigate([`/classes/edit/${item?.id}`]);
   };
 
-  onDelete(item: IClassDto) {
+  onDelete(selected: IClassDto) {
+    const item = this.items.find(x => x.id == selected.id);
+    if (!item) {
+      return;
+    }
+
     const dialogPayload: OpenDialogPayload = {
       component: ConfirmDialogComponent,
       isFullDialog: false,
