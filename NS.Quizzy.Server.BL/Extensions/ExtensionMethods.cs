@@ -12,12 +12,10 @@ using NS.Quizzy.Server.BL.HostedServices;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.MappingProfiles;
 using NS.Quizzy.Server.BL.Services;
-using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
 using NS.Security;
 using NS.Shared.CacheProvider.Extensions;
-using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.Logging.Configs;
 using NS.Shared.Logging.Extensions;
@@ -133,23 +131,14 @@ namespace NS.Quizzy.Server.BL.Extensions
         {
             var forwardOptions = new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                ForwardedHeaders = ForwardedHeaders.All
             };
             forwardOptions.KnownNetworks.Clear(); // Allows any network to be a known source
             forwardOptions.KnownProxies.Clear();  // Allows any proxy to be a known proxy
-
             app.UseForwardedHeaders(forwardOptions);
 
             app.UseAuthentication();
-            //app.UseAuthorization();
-
-            app.Use(async (context, next) =>
-            {
-                var realIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-                var remoteIp = context.Connection.RemoteIpAddress?.ToString();
-                Console.WriteLine($"Real IP: {realIp}, Remote IP: {remoteIp}");
-                await next();
-            });
+            app.UseAuthorization();
 
             return app;
         }

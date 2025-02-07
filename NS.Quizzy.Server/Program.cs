@@ -94,15 +94,11 @@ namespace NS.Quizzy.Server
             app.UseHttpsRedirection();
 
             app.UseQuizzyBL();
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.MapControllers();
             app.MapDefaultControllerRoute();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.All
-            });
-
+           
             #region RequestResponseLoggingMiddleware
             // Must call Middleware after calling `app.UseRouting()` or `app.MapControllers()`
             app.UseRequestResponseLoggingMiddleware((logBag, apiCallInfoData) =>
