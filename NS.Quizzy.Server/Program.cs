@@ -1,6 +1,5 @@
 
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using NS.Quizzy.Server.BL.Extensions;
