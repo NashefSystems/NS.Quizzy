@@ -35,7 +35,7 @@ namespace NS.Quizzy.Server
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "NS.Quizzy API",
-                    Version = "V" + AppUtils.GetAppVersionAsString(),
+                    Version = AppUtils.GetAppVersionAsString(),
                 });
                 c.EnableAnnotations();
                 c.UseInlineDefinitionsForEnums();
