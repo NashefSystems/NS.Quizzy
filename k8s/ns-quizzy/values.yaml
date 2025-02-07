@@ -43,12 +43,13 @@ service:
 ingress:
   enabled: true
   className: "nginx"
-  annotations: {
-    nginx.org/proxy-read-timeout: '300',
+  annotations: 
+    nginx.org/proxy-read-timeout: '300'
     nginx.org/proxy-send-timeout: '300'
-  }
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    nginx.ingress.kubernetes.io/proxy-add-original-uri-header: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/enable-real-ip: "true"
   hosts:
     - host: quizzy.examproduction.com
       paths:
