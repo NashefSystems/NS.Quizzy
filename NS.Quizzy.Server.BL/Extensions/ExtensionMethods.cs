@@ -131,12 +131,25 @@ namespace NS.Quizzy.Server.BL.Extensions
 
         public static IApplicationBuilder UseQuizzyBL(this IApplicationBuilder app)
         {
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            var forwardOptions = new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.All
-            });
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            };
+            forwardOptions.KnownNetworks.Clear(); // Allows any network to be a known source
+            forwardOptions.KnownProxies.Clear();  // Allows any proxy to be a known proxy
+
+            app.UseForwardedHeaders(forwardOptions);
+
             app.UseAuthentication();
             //app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                var realIp = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                var remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                Console.WriteLine($"Real IP: {realIp}, Remote IP: {remoteIp}");
+                await next();
+            });
 
             return app;
         }
