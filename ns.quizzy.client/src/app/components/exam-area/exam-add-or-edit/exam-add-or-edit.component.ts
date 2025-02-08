@@ -168,9 +168,9 @@ export class ExamAddOrEditComponent implements OnInit {
       return;
     }
     const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = this.form.value;
-debugger;
-    const selectedGradeIds = gradeIds as string[];
-    const selectedClassIds = classIds as string[];
+
+    const selectedGradeIds = (gradeIds as string[]) || [];
+    const selectedClassIds = (classIds as string[]) || [];
 
     const payload: IExamPayloadDto = {
       startTime: DateTimeUtils.getDateTimeAsIso(startTime),
