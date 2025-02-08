@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NS.Shared.EFDBAudit.Extentions;
+using NS.Shared.Logging.Extensions;
+using System.Security.Claims;
 
 namespace NS.Quizzy.Server.DAL.Extensions
 {
@@ -17,10 +19,12 @@ namespace NS.Quizzy.Server.DAL.Extensions
                     Console.WriteLine($"ConnectionString: '{connectionString}'");
                     options.UseSqlServer(connectionString);
                 },
-                ServiceLifetime.Scoped
+                ServiceLifetime.Scoped,
+                getChangeBy: (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value,
+                getContextId: (httpContext) => httpContext?.GetContextId()
             );
             return services;
-        }
+        }            
 
         public static T? ToEnumValue<T>(this string? dbValue)
         {
