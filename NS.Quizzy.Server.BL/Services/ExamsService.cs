@@ -204,12 +204,12 @@ namespace NS.Quizzy.Server.BL.Services
                 }
 
                 dbClassExams
-                    .Where(x => model.ClassIds.Contains(x.Id))
+                    .Where(x => model.ClassIds.Contains(x.ClassId))
                     .ToList()
                     .ForEach(x => x.IsImprovement = false);
 
                 dbClassExams
-                    .Where(x => model.ImprovementClassIds.Contains(x.Id))
+                    .Where(x => model.ImprovementClassIds.Contains(x.ClassId))
                     .ToList()
                     .ForEach(x => x.IsImprovement = true);
 
@@ -248,12 +248,12 @@ namespace NS.Quizzy.Server.BL.Services
                 }
 
                 dbGradeExams
-                    .Where(x => model.GradeIds.Contains(x.Id))
+                    .Where(x => model.GradeIds.Contains(x.GradeId))
                     .ToList()
                     .ForEach(x => x.IsImprovement = false);
 
                 dbGradeExams
-                    .Where(x => model.ImprovementGradeIds.Contains(x.Id))
+                    .Where(x => model.ImprovementGradeIds.Contains(x.GradeId))
                     .ToList()
                     .ForEach(x => x.IsImprovement = true);
 

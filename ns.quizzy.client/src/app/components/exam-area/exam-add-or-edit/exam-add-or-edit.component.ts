@@ -168,7 +168,7 @@ export class ExamAddOrEditComponent implements OnInit {
       return;
     }
     const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = this.form.value;
-
+debugger;
     const selectedGradeIds = gradeIds as string[];
     const selectedClassIds = classIds as string[];
 
@@ -179,10 +179,10 @@ export class ExamAddOrEditComponent implements OnInit {
       moedId: moedId,
       duration: duration,
       durationWithExtra: durationWithExtra,
-      gradeIds: selectedGradeIds.filter(x => !this.improvementGrades[x]),
-      improvementGradeIds: selectedGradeIds.filter(x => this.improvementGrades[x]),
-      classIds: selectedClassIds.filter(x => !this.improvementClasses[x]),
-      improvementClassIds: selectedClassIds.filter(x => this.improvementClasses[x]),
+      gradeIds: selectedGradeIds?.filter(x => !this.improvementGrades[x]),
+      improvementGradeIds: selectedGradeIds?.filter(x => this.improvementGrades[x]),
+      classIds: selectedClassIds?.filter(x => !this.improvementClasses[x]),
+      improvementClassIds: selectedClassIds?.filter(x => this.improvementClasses[x]),
     };
 
     if (this.id) {
