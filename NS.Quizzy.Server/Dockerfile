@@ -10,6 +10,7 @@ WORKDIR /app
 EXPOSE 8080
 
 
+
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS with-node
 RUN apt-get update
