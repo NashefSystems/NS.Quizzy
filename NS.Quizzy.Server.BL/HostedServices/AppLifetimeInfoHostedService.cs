@@ -3,13 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Shared.CacheProvider.Interfaces;
-using NS.Shared.Logging;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static NS.Quizzy.Server.Common.Enums;
 
 namespace NS.Quizzy.Server.BL.HostedServices
@@ -29,8 +22,8 @@ namespace NS.Quizzy.Server.BL.HostedServices
             var cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
             var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-            var cacheKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
-            var serverInfoTTLMin = double.TryParse(config.GetValue<string>(cacheKey), out double ttlMin) ? ttlMin : 10080; //1 Week
+            var configKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
+            var serverInfoTTLMin = double.TryParse(config.GetValue<string>(configKey), out double ttlMin) ? ttlMin : 20160; //2 Week
             await cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:StartTime", DateTimeOffset.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
         }
 
@@ -40,8 +33,8 @@ namespace NS.Quizzy.Server.BL.HostedServices
             var cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
             var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-            var cacheKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
-            var serverInfoTTLMin = double.TryParse(config.GetValue<string>(cacheKey), out double ttlMin) ? ttlMin : 10080; //1 Week
+            var configKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
+            var serverInfoTTLMin = double.TryParse(config.GetValue<string>(configKey), out double ttlMin) ? ttlMin : 20160; //2 Week
             await cacheProvider.SetOrUpdateAsync($"ServerInfo:{Environment.MachineName}:StopTime", DateTimeOffset.Now, TimeSpan.FromMinutes(serverInfoTTLMin));
         }
     }

@@ -28,10 +28,10 @@ namespace NS.Quizzy.Server.BL.Extensions
         public static IServiceCollection AddQuizzyBLServices(this IServiceCollection services, IConfigurationBuilder configuration)
         {
             ArgumentNullException.ThrowIfNull(services);
-            IConfiguration conf = (IConfiguration)configuration;
+            IConfiguration config = (IConfiguration)configuration;
 
             #region NSLogger
-            var loggerConfig = conf.GetSection("NSLoggerConfig").Get<NSLoggerConfig>();
+            var loggerConfig = config.GetSection("NSLoggerConfig").Get<NSLoggerConfig>();
             if (loggerConfig != null)
             {
                 loggerConfig.GetUserId = (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -42,8 +42,8 @@ namespace NS.Quizzy.Server.BL.Extensions
 
             services.AddQuizzyDALServices();
 
-            var appName = conf.GetValue<string>("AppName");
-            var environment = conf.GetValue<string>("Environment");
+            var appName = config.GetValue<string>("AppName");
+            var environment = config.GetValue<string>("Environment");
             var cachePrefix = $"{appName}:{environment}";
             services.AddNSCacheProvider(cachePrefix);
 

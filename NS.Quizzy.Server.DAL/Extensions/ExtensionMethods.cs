@@ -16,7 +16,7 @@ namespace NS.Quizzy.Server.DAL.Extensions
                 {
                     var configuration = provider.GetRequiredService<IConfiguration>();
                     var connectionString = configuration.GetConnectionString("QuizzyDB");
-                    Console.WriteLine($"ConnectionString: '{connectionString}'");
+                    //Console.WriteLine($"ConnectionString: '{connectionString}'");
                     options.UseSqlServer(connectionString);
                 },
                 ServiceLifetime.Scoped,
