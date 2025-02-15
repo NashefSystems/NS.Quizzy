@@ -1,15 +1,29 @@
 <app-skeleton-loader *ngIf="isLoading" [count]="5"></app-skeleton-loader>
 <div class="wrapper" *ngIf="!isLoading">
     <div class="action-buttons">
-        <button mat-stroked-button (click)="accordion().openAll()">
-            {{ 'EXPAND_ALL' | translate }}
+        <div>
+            <button mat-stroked-button (click)="accordion().openAll()">
+                <mat-icon>keyboard_arrow_up</mat-icon>
+                <span>{{ 'EXPAND_ALL' | translate }}</span>
+            </button>
+            <button mat-stroked-button (click)="accordion().closeAll()">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+                <span>{{ 'COLLAPSE_ALL' | translate }}</span>
+            </button>
+        </div>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
         </button>
-        <button mat-stroked-button (click)="accordion().closeAll()">
-            {{ 'COLLAPSE_ALL' | translate }}
-        </button>
-        <button mat-stroked-button (click)="onPrint()">
-            {{ 'PRINT' | translate }}
-        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onPrint()">
+                <mat-icon>print</mat-icon>
+                <span>{{ 'PRINT' | translate }}</span>
+            </button>
+            <button mat-menu-item (click)="onExport()">
+                <mat-icon>download</mat-icon>
+                <span>{{ 'EXPORT' | translate }}</span>
+            </button>
+        </mat-menu>
     </div>
     <mat-accordion multi id="exam-list">
         <mat-expansion-panel *ngFor="let exam of exams" expanded="true">

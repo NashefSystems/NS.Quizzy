@@ -17,10 +17,18 @@ mat-panel-title {
 
 .action-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin: 0.5rem;
+
+    >div {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+    }
 }
 
 .exam-info-container {

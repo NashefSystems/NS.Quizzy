@@ -9,6 +9,8 @@ import { MatAccordion } from '@angular/material/expansion';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { IMoedDto } from '../../../models/backend/moed.dto';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
+import { ExportDataItem, ExportService } from './export.service';
+import { DateTimeUtils } from '../../../utils/date-time.utils';
 
 @Component({
   selector: 'app-exam-schedule-list',
@@ -41,6 +43,7 @@ export class ExamScheduleListComponent implements OnInit {
 
   private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
+  ExportService: any;
 
   ngOnInit(): void {
     this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion })
@@ -179,5 +182,34 @@ export class ExamScheduleListComponent implements OnInit {
     // Get the day of the week (0 = Sunday, 6 = Saturday)
     const days = ['DAYS.SUNDAY', 'DAYS.MONDAY', 'DAYS.TUESDAY', 'DAYS.WEDNESDAY', 'DAYS.THURSDAY', 'DAYS.FRIDAY', 'DAYS.SATURDAY'];
     return days[date.getDay()];
+  }
+
+  onExport() {
+    const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+
+    const sheetData: ExportDataItem[] = this.exams.map(x => {
+      const examDate = new Date(x.startTime);
+      const questionnaire = this.questionnairesDic[x.questionnaireId];
+      return {
+        examDay: days[examDate.getDay()],
+        startTime: DateTimeUtils.getDateTimeFromIso(x.startTime, 'DD/MM/yyyy HH:mm'),
+        subject: (questionnaire?.subjectId) ? this.subjectsDic[questionnaire?.subjectId].name : '',
+        questionnaireName: questionnaire?.name,
+        questionnaireCode: questionnaire?.code,
+        examType: this.examTypesDic[x.examTypeId]?.name,
+        moed: this.moedsDic[x.moedId]?.name,
+        duration: x.duration,
+        durationWithExtra: x.durationWithExtra,
+        firstTime: [
+          ...(x.gradeIds?.map(x => this.gradesDic[x].name) || []),
+          ...(x.classIds?.map(x => this.classesDic[x].name) || [])
+        ],
+        improvement: [
+          ...(x.improvementGradeIds?.map(x => this.gradesDic[x].name) || []),
+          ...(x.improvementClassIds?.map(x => this.classesDic[x].name) || [])
+        ],
+      };
+    });
+    ExportService.exportToExcel(sheetData);
   }
 }
