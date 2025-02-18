@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AppSettingsService {
-  readonly appMaxWidth = 500; // in px  
+  readonly appMaxWidth = 400; // in px  
 
   private isLargeScreenSubject = new BehaviorSubject<boolean>(false);
   public readonly onLargeScreenChange = this.isLargeScreenSubject.asObservable();
