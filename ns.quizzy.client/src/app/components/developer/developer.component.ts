@@ -1,6 +1,7 @@
 import { Component, inject, NgZone, OnInit } from '@angular/core';
 import { NotificationsService } from '../../services/notifications.service';
 import { AppSettingsService } from '../../services/app-settings.service';
+import { MESSAGE_RESPONSE_EVENTS, MESSAGE_TYPES } from '../../enums/react-native.enum';
 
 @Component({
   selector: 'app-test',
@@ -28,7 +29,10 @@ export class DeveloperComponent implements OnInit {
     this._appSettingsService.setLoadingStatus(this.isLoading);
   }
 
-  reactNativeMessageKeys = ['test', 'console', 'checkBiometric', 'checkMainUser'];
+
+
+
+  reactNativeMessageKeys = [MESSAGE_TYPES.CONSOLE, MESSAGE_TYPES.CHECK_BIOMETRIC, MESSAGE_TYPES.STORE_DATA, MESSAGE_TYPES.READ_DATA];
   onReactNativeMessage(type: string) {
     const _window = (window as any);
     if (!_window.ReactNativeWebView) {
@@ -39,22 +43,27 @@ export class DeveloperComponent implements OnInit {
     let data: any = { type: type };
     let responseEvent: string = "";
     switch (type) {
-      case 'test': {
-        responseEvent = '';
-        break;
-      }
-      case 'console': {
+      case MESSAGE_TYPES.CONSOLE: {
         data.data = ["Is", "Console", "Test"]
         responseEvent = '';
         break;
       }
-      case 'checkBiometric': {
-        responseEvent = 'onCheckBiometricResponse';
+      case MESSAGE_TYPES.CHECK_BIOMETRIC: {
+        responseEvent = MESSAGE_RESPONSE_EVENTS.ON_CHECK_BIOMETRIC_RESPONSE;
         break;
       }
-      case 'checkMainUser': {
-        responseEvent = 'onCheckMainUserResponse';
-        data.uid = "uidvalue"
+      case MESSAGE_TYPES.STORE_DATA: {
+        responseEvent = '';
+        data.key = "testKey";
+        data.value = {
+          nashef: 1,
+          mahmoud: 2
+        };
+        break;
+      }
+      case MESSAGE_TYPES.READ_DATA: {
+        responseEvent = MESSAGE_RESPONSE_EVENTS.ON_READ_DATA_RESPONSE;
+        data.key = "testKey";
         break;
       }
       default: {
