@@ -3,6 +3,7 @@ import { AccountService } from '../../../services/backend/account.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { IMenuItemInfo } from './menu-item-info';
 import { Router } from '@angular/router';
+import { UserDetailsDto, UserRoles } from '../../../models/backend/user-details.dto';
 
 @Component({
   selector: 'app-main-menu',
@@ -17,6 +18,15 @@ export class MainMenuComponent implements OnInit {
   menuItems: IMenuItemInfo[];
 
   ngOnInit(): void {
+    this._accountService.userChange.subscribe(x => this.setMenuItems(x));
+  }
+
+  setMenuItems(userDetails: UserDetailsDto | null) {
+    if (!userDetails) {
+      this.menuItems = [];
+      return;
+    }
+
     this.menuItems = [
       { text: 'MAIN_MENU.ITEMS.EXAM_SCHEDULE', icon: 'calendar_month', routerLink: '' },
       { text: 'MAIN_MENU.ITEMS.EXAM_LIST', icon: 'rule', routerLink: 'exams' },
@@ -26,8 +36,11 @@ export class MainMenuComponent implements OnInit {
       { text: 'MAIN_MENU.ITEMS.EXAM_TYPE_LIST', icon: 'format_size', routerLink: 'exam-types' },
       { text: 'MAIN_MENU.ITEMS.SUBJECT_LIST', icon: 'category', routerLink: 'subjects' },
       { text: 'MAIN_MENU.ITEMS.MOED_LIST', icon: 'timeline', routerLink: 'moeds' },
-    ]
-    // this.menuItems.push({ text: 'Developer', icon: 'code_blocks', routerLink: 'developer' });
+    ];
+
+    if (userDetails.role === UserRoles.DEVELOPER) {
+      this.menuItems.push({ text: 'Developer', icon: 'code_blocks', routerLink: 'developer' });
+    }
   }
 
   logout() {

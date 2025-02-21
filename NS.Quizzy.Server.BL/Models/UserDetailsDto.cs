@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NS.Quizzy.Server.DAL;
 
 namespace NS.Quizzy.Server.Models.Models
 {
@@ -15,5 +16,7 @@ namespace NS.Quizzy.Server.Models.Models
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string Token { get; set; }
+
+        public DALEnums.Roles Role { get; set; }
     }
 }

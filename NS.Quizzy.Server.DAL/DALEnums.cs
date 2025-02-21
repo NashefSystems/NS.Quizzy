@@ -29,9 +29,10 @@ namespace NS.Quizzy.Server.DAL
         public enum Roles
         {
             Student,
+            Teacher,
             Admin,
             Developer,
-            SuperAdmin
+            SuperAdmin,
         }
     }
 }

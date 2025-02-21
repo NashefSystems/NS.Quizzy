@@ -140,6 +140,7 @@ namespace NS.Quizzy.Server.BL.Services
                 FullName = user.FullName,
                 TokenId = tokenId,
                 Token = token,
+                Role = user.Role,
             };
         }
 
@@ -150,6 +151,7 @@ namespace NS.Quizzy.Server.BL.Services
                 user?.Id,
                 user?.Email,
                 user?.FullName,
+                user?.Role,
                 tokenId,
                 token
             };
@@ -167,6 +169,7 @@ namespace NS.Quizzy.Server.BL.Services
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
+                Role = user.Role,
                 TokenId = tokenId
             };
         }

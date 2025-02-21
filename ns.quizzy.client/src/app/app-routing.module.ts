@@ -5,7 +5,7 @@ import { QuestionnaireListComponent } from './components/questionnaire-area/ques
 import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
 import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
 import { ClassListComponent } from './components/class-area/class-list/class-list.component';
-import { TestComponent } from './components/test/test.component';
+import { DeveloperComponent } from './components/developer/developer.component';
 import { adminUserGuard } from './guards/admin-user.guard';
 import { SubjectAddOrEditComponent } from './components/subject-area/subject-add-or-edit/subject-add-or-edit.component';
 import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-type-add-or-edit/exam-type-add-or-edit.component';
@@ -17,6 +17,7 @@ import { ExamScheduleHomeComponent } from './components/exam-schedule-area/exam-
 import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/exam-add-or-edit.component';
 import { MoedListComponent } from './components/moed-area/moed-list/moed-list.component';
 import { MoedAddOrEditComponent } from './components/moed-area/moed-add-or-edit/moed-add-or-edit.component';
+import { developerGuard } from './guards/developer.guard';
 
 const routes: Routes = [
   {
@@ -253,7 +254,8 @@ const routes: Routes = [
   },
   {
     path: 'developer',
-    component: TestComponent,
+    component: DeveloperComponent,
+    canActivate: [developerGuard],
     data: {
       page_title: "Developer"
     }

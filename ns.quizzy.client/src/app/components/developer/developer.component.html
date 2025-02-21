@@ -1,3 +1,8 @@
+<h3 class="center-text">React native message</h3>
+<ng-container *ngFor="let key of reactNativeMessageKeys">
+    <button mat-stroked-button (click)="onReactNativeMessage(key)">{{key}}</button>
+</ng-container>
+<hr>
 <h3 class="center-text">Loading test</h3>
 <button mat-stroked-button (click)="toggleLoadingMode()">Loader</button>
 <hr>
