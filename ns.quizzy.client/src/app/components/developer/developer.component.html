@@ -1,6 +1,6 @@
 <h3 class="center-text">React native message</h3>
-<ng-container *ngFor="let key of reactNativeMessageTypes.keys">
-    <button mat-stroked-button (click)="onReactNativeMessage(key)">{{key}}</button>
+<ng-container *ngFor="let item of reactNativeMessageTypes | keyvalue">
+    <button mat-stroked-button (click)="onReactNativeMessage(item.key)">{{item.key}}</button>
 </ng-container>
 <hr>
 <h3 class="center-text">Loading test</h3>

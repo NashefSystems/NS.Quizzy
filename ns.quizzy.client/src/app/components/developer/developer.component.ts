@@ -13,13 +13,13 @@ export class DeveloperComponent implements OnInit {
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _ngZone = inject(NgZone);
-  public readonly reactNativeMessageTypes: { [key: string]: string | null } = {};
+  public readonly reactNativeMessageTypes: { [key: string]: string  } = {};
 
   isLoading = false;
 
   constructor() {
-    this.reactNativeMessageTypes[MESSAGE_TYPES.CONSOLE] = null;
-    this.reactNativeMessageTypes[MESSAGE_TYPES.STORE_DATA] = null;
+    this.reactNativeMessageTypes[MESSAGE_TYPES.CONSOLE] = '';
+    this.reactNativeMessageTypes[MESSAGE_TYPES.STORE_DATA] = '';
     this.reactNativeMessageTypes[MESSAGE_TYPES.READ_DATA] = MESSAGE_RESPONSE_EVENTS.ON_READ_DATA_RESPONSE;
     this.reactNativeMessageTypes[MESSAGE_TYPES.CHECK_BIOMETRIC_AVAILABILITY] = MESSAGE_RESPONSE_EVENTS.ON_CHECK_BIOMETRIC_AVAILABILITY_RESPONSE;
     this.reactNativeMessageTypes[MESSAGE_TYPES.VERIFY_BIOMETRIC_SIGNATURE] = MESSAGE_RESPONSE_EVENTS.ON_VERIFY_BIOMETRIC_SIGNATURE_RESPONSE;
@@ -45,7 +45,7 @@ export class DeveloperComponent implements OnInit {
       return;
     }
 
-    let data: any = { type: type };
+    let data: any = { type: type };this.reactNativeMessageTypes
     const responseEvent: string | null = this.reactNativeMessageTypes[type];
     switch (type) {
       case MESSAGE_TYPES.CONSOLE: {
