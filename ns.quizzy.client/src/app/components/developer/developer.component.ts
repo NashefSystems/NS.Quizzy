@@ -13,12 +13,21 @@ export class DeveloperComponent implements OnInit {
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _ngZone = inject(NgZone);
+  public readonly reactNativeMessageTypes: { [key: string]: string | null } = {};
 
   isLoading = false;
 
+  constructor() {
+    this.reactNativeMessageTypes[MESSAGE_TYPES.CONSOLE] = null;
+    this.reactNativeMessageTypes[MESSAGE_TYPES.STORE_DATA] = null;
+    this.reactNativeMessageTypes[MESSAGE_TYPES.READ_DATA] = MESSAGE_RESPONSE_EVENTS.ON_READ_DATA_RESPONSE;
+    this.reactNativeMessageTypes[MESSAGE_TYPES.CHECK_BIOMETRIC_AVAILABILITY] = MESSAGE_RESPONSE_EVENTS.ON_CHECK_BIOMETRIC_AVAILABILITY_RESPONSE;
+    this.reactNativeMessageTypes[MESSAGE_TYPES.VERIFY_BIOMETRIC_SIGNATURE] = MESSAGE_RESPONSE_EVENTS.ON_VERIFY_BIOMETRIC_SIGNATURE_RESPONSE;
+  }
+
   ngOnInit(): void {
     this._appSettingsService.onLoadingStatusChange.subscribe({
-      next: (loadingStatus) => {
+      next: (loadingStatus: boolean) => {
         this.isLoading = loadingStatus;
       }
     });
@@ -29,10 +38,6 @@ export class DeveloperComponent implements OnInit {
     this._appSettingsService.setLoadingStatus(this.isLoading);
   }
 
-
-
-
-  reactNativeMessageKeys = [MESSAGE_TYPES.CONSOLE, MESSAGE_TYPES.CHECK_BIOMETRIC, MESSAGE_TYPES.STORE_DATA, MESSAGE_TYPES.READ_DATA];
   onReactNativeMessage(type: string) {
     const _window = (window as any);
     if (!_window.ReactNativeWebView) {
@@ -41,20 +46,14 @@ export class DeveloperComponent implements OnInit {
     }
 
     let data: any = { type: type };
-    let responseEvent: string = "";
+    const responseEvent: string | null = this.reactNativeMessageTypes[type];
     switch (type) {
       case MESSAGE_TYPES.CONSOLE: {
         data.data = ["Is", "Console", "Test"]
-        responseEvent = '';
-        break;
-      }
-      case MESSAGE_TYPES.CHECK_BIOMETRIC: {
-        responseEvent = MESSAGE_RESPONSE_EVENTS.ON_CHECK_BIOMETRIC_RESPONSE;
         break;
       }
       case MESSAGE_TYPES.STORE_DATA: {
-        responseEvent = '';
-        data.key = "testKey";
+        data.key = "testKey22";
         data.value = {
           nashef: 1,
           mahmoud: 2
@@ -62,8 +61,7 @@ export class DeveloperComponent implements OnInit {
         break;
       }
       case MESSAGE_TYPES.READ_DATA: {
-        responseEvent = MESSAGE_RESPONSE_EVENTS.ON_READ_DATA_RESPONSE;
-        data.key = "testKey";
+        data.key = "testKey22";
         break;
       }
       default: {
