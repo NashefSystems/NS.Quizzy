@@ -1,3 +1,4 @@
+<app-back-button [marginBottom]="'0rem'"></app-back-button>
 <div class="privacy-policy">
     <p class="updated-date">עודכן לאחרונה: <strong>{{ lastUpdated }}</strong></p>
 
@@ -21,7 +22,8 @@
         <li><strong>RECEIVE_BOOT_COMPLETED</strong> – להפעלת שירותים לאחר אתחול המכשיר.</li>
         <li><strong>POST_NOTIFICATIONS</strong> – לשליחת התראות למשתמש.</li>
         <li><strong>USE_BIOMETRIC / USE_FINGERPRINT</strong> – זיהוי ביומטרי לצורכי אבטחה.</li>
-        <li><strong>INTERNET / ACCESS_NETWORK_STATE / ACCESS_WIFI_STATE</strong> – לגישה לרשת עבור עדכונים ותקשורת עם
+        <li><strong>INTERNET / ACCESS_NETWORK_STATE / ACCESS_WIFI_STATE</strong> – לגישה לרשת עבור עדכונים ותקשורת
+            עם
             השרת.</li>
     </ul>
 
@@ -59,5 +61,5 @@
 
     <h2>7. צור קשר</h2>
     <p>לשאלות נוספות, ניתן ליצור קשר בדוא"ל:</p>
-    <p><strong><a [href]="'mailto:' + email">{{email}}</a></strong></p>
+    <p><strong><a mat-button [href]="'mailto:' + email">{{email}}</a></strong></p>
 </div>

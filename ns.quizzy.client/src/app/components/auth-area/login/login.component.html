@@ -74,11 +74,14 @@
                     </mat-error>
                 </mat-form-field>
 
-                <button mat-stroked-button class="full-width login-btn"
-                    [disabled]="twoFactorForm.invalid" cdkFocusInitial>
+                <button mat-stroked-button class="full-width login-btn" [disabled]="twoFactorForm.invalid"
+                    cdkFocusInitial>
                     {{ 'LOGIN.LOGIN_BUTTON' | translate }}
                 </button>
             </form>
         </ng-container>
+        <small>
+            <a mat-button (click)="onPrivacyPolicyClick()">{{'PAGE_TITLES.PRIVACY_POLICY' | translate}}</a>
+        </small>
     </div>
 </div>

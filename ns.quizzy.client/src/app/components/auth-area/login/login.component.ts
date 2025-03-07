@@ -10,6 +10,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { LoginSteps } from './login-steps.enum';
 import { LoginResponse } from '../../../models/backend/login.response';
 import { VerifyOTPRequest } from '../../../models/backend/verify-otp.request';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,8 @@ export class LoginComponent implements OnInit {
   private readonly _accountService = inject(AccountService);
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _dialogRef = inject(MatDialogRef<LoginComponent>);
+  private readonly _router = inject(Router);
+
   LoginSteps = LoginSteps;
   step = LoginSteps.UserNameAndPassword;
   loginResponse: LoginResponse | null = null;
@@ -119,7 +122,13 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
+  }
+
+  onPrivacyPolicyClick(){
+    this._router.navigate(['/privacy-policy']);
+    this._dialogRef.close();
   }
 }
