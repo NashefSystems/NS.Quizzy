@@ -25,7 +25,8 @@
         "MOED_EDIT": "Editing a moed",
         "SUBJECT_LIST": "Subjects",
         "SUBJECT_ADD": "Adding a subject",
-        "SUBJECT_EDIT": "Editing a subject"
+        "SUBJECT_EDIT": "Editing a subject",
+        "PRIVACY": "Privacy"
     },
     "LOGIN": {
         "TITLE": "Log in",

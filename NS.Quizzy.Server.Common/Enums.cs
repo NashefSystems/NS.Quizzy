@@ -20,6 +20,9 @@ namespace NS.Quizzy.Server.Common
 
             [DBStringValue(nameof(ServerInfoTTLMin))]
             ServerInfoTTLMin,
+
+            [DBStringValue(nameof(Email))]
+            Email,
         }
     }
 }

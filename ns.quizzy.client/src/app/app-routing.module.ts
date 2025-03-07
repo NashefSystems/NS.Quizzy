@@ -18,6 +18,7 @@ import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/
 import { MoedListComponent } from './components/moed-area/moed-list/moed-list.component';
 import { MoedAddOrEditComponent } from './components/moed-area/moed-add-or-edit/moed-add-or-edit.component';
 import { developerGuard } from './guards/developer.guard';
+import { PrivacyPolicyComponent } from './components/global-area/privacy-policy/privacy-policy.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,13 @@ const routes: Routes = [
     component: ExamScheduleHomeComponent,
     data: {
       page_title: "PAGE_TITLES.EXAM_SCHEDULE"
+    }
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacyPolicyComponent,
+    data: {
+      page_title: "PAGE_TITLES.PRIVACY"
     }
   },
   {

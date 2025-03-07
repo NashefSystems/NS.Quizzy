@@ -29,7 +29,8 @@
         "MOED_EDIT": "עריכת מועד",
         "SUBJECT_LIST": "נושאים",
         "SUBJECT_ADD": "הוספת נושא",
-        "SUBJECT_EDIT": "עריכת נושא"
+        "SUBJECT_EDIT": "עריכת נושא",
+        "PRIVACY": "מדיניות הפרטיות"
     },
     "LOGIN": {
         "TITLE": "התחברות",
