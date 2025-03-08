@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { AppSettingsService } from '../../../services/app-settings.service';
 import { AppTranslateService } from '../../../services/app-translate.service';
-import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
+import { AccountService } from '../../../services/backend/account.service';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +12,12 @@ import { ClientAppSettingsService } from '../../../services/backend/client-app-s
 export class RootComponent implements AfterViewInit, OnInit {
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _appTranslateService = inject(AppTranslateService);
-  private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
-  
+  private readonly _accountService = inject(AccountService);
+
+  userLoggedIn = false;
   isReady = false;
   isLoading = false;
-  appVersion: string = "";
+ 
   appContainerClasses = {
     "app-container": true,
     "large-screen": false
@@ -24,8 +25,7 @@ export class RootComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     document.documentElement.style.setProperty("--app-max-width", this._appSettingsService.appMaxWidth + "px");
-
-    this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion })
+    document.documentElement.style.setProperty("--app-max-height", "100vh");
 
     this._appSettingsService.onLoadingStatusChange.subscribe({
       next: (loadingStatus) => {
@@ -41,6 +41,8 @@ export class RootComponent implements AfterViewInit, OnInit {
       }
     });
 
+    this._accountService.userChange.subscribe(user => this.userLoggedIn = !!(user?.id));
+
     this.onResize();
   }
 
@@ -53,5 +55,6 @@ export class RootComponent implements AfterViewInit, OnInit {
     this._appSettingsService.setLargeScreen(isLargeScreen);
     this.appContainerClasses['large-screen'] = isLargeScreen;
     document.documentElement.style.setProperty("--is-large-screen", isLargeScreen ? 'true' : 'false');
+    document.documentElement.style.setProperty("--app-max-height", isLargeScreen ? "80vh" : "100vh");
   }
 }

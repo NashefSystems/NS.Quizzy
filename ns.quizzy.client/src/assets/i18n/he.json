@@ -4,8 +4,9 @@
         "FIELD_REQUIRED": "שדה חובה",
         "MIN": "הערך חייב להיות לפחות {{min}}",
         "MAX": "הערך חייב להיות לכל היותר {{max}}",
-        "MIN_LENGTH": "הטקסט שהוזן קצר מדי, יש להזין לפחות {requiredLength} תווים",
-        "MAX_LENGTH": "הטקסט שהוזן ארוך מדי, יש להזין עד {requiredLength} תווים בלבד"
+        "MIN_LENGTH": "הטקסט שהוזן קצר מדי, יש להזין לפחות {{requiredLength}} תווים",
+        "MAX_LENGTH": "הטקסט שהוזן ארוך מדי, יש להזין עד {{requiredLength}} תווים בלבד",
+        "FORBID": "אין לך מספיק הרשאות על מנת לגשת לעמוד זה"
     },
     "PAGE_TITLES": {
         "EXAM_SCHEDULE": "מערך בחינות",
@@ -38,10 +39,14 @@
         "PASSWORD": "סיסמה",
         "REMEMBER_ME": "זכור אותי",
         "LOGIN_BUTTON": "התחבר",
+        "ID_NUMBER": "תעודת זהות",
+        "LOGIN_WITH_EMAIL": "התחבר באמצעות דוא\"ל",
+        "LOGIN_WITH_ID_NUMBER": "התחבר באמצעות תעודת זהות",
         "EMAIL_REQUIRED": "נדרש להזין דואר אלקטרוני.",
         "EMAIL_INVALID": "אנא הזן כתובת דוא\"ל תקינה.",
         "PASSWORD_REQUIRED": "יש להזין סיסמה.",
         "INVALID_CREDENTIALS": "פרטי הזדהות שגויים",
+        "INVALID_ID_NUMBER": "מספר תעודת זהות אינו מורשה",
         "LOGIN_SUCCESSFULLY": "ברוך שובך, {{fullName}}!",
         "TWO_FACTOR": {
             "TITLE": "אימות דו-שלבי",
@@ -159,5 +164,12 @@
     "ITEM_UPDATED_SUCCESSFULLY": "פריט עודכן בהצלחה",
     "Subject already exists": "הנושא כבר קיים",
     "Exam type already exists": "סוג הבחינה כבר קיים",
-    "Class already exists": "כיתה כבר קיימת"
+    "Class already exists": "כיתה כבר קיימת",
+    "USER_ROLES": {
+        "STUDENT": "תלמיד",
+        "TEACHER": "מורה",
+        "ADMIN": "אחראי",
+        "DEVELOPER": "מפתח",
+        "SUPERADMIN": "מנהל מערכת"
+    }
 }

@@ -37,7 +37,7 @@ export class NotificationsService {
             this.error(this._appTranslateService.translate(msg));
             return;
         }
-        console.log(err);
+        console.error(err);
         this.fatal('UNEXPECTED_ERROR', { message: this._appTranslateService.translate(msg) });
     }
 

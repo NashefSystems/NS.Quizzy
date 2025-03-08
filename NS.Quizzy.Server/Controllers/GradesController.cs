@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NS.Quizzy.Server.BL.Attributes;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Quizzy.Server.Models.Models;
@@ -11,6 +12,7 @@ namespace NS.Quizzy.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
     [LoggingAPICallInfo]
     public class GradesController : ControllerBase
@@ -22,7 +24,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<GradeDto>))]
         public async Task<ActionResult<List<GradeDto>>> GetAllAsync()
         {
@@ -31,7 +32,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(GradeDto))]
         public async Task<ActionResult<GradeDto>> GetAsync(Guid id)
         {
@@ -44,7 +44,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
         [SwaggerResponse(StatusCodes.Status201Created, null, typeof(GradeDto))]
         public async Task<ActionResult<GradeDto>> InsertAsync([FromBody] GradePayloadDto payload)
@@ -60,7 +60,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(GradeDto))]
         public async Task<ActionResult<GradeDto>> UpdateAsync(Guid id, [FromBody] GradePayloadDto payload)
@@ -74,7 +74,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
         [SwaggerResponse(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<GradeDto>> DeleteAsync(Guid id)

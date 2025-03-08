@@ -22,7 +22,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(Dictionary<string, object?>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Dictionary<string, object?>>> GetAsync()
         {

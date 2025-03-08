@@ -19,21 +19,27 @@ import { MoedListComponent } from './components/moed-area/moed-list/moed-list.co
 import { MoedAddOrEditComponent } from './components/moed-area/moed-add-or-edit/moed-add-or-edit.component';
 import { developerGuard } from './guards/developer.guard';
 import { PrivacyPolicyComponent } from './components/global-area/privacy-policy/privacy-policy.component';
+import { LoginComponent } from './components/auth-area/login/login.component';
+import { anonymousUserGuard } from './guards/anonymous-user.guard';
+import { authenticatedUserGuard } from './guards/authenticated-user.guard';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: ExamScheduleHomeComponent,
-    data: {
-      page_title: "PAGE_TITLES.EXAM_SCHEDULE"
-    }
+    redirectTo: '/login',
+  },
+  {
+    path: 'login',
+    canActivate: [anonymousUserGuard],
+    component: LoginComponent,
   },
   {
     path: 'privacy-policy',
     component: PrivacyPolicyComponent,
     data: {
-      page_title: "PAGE_TITLES.PRIVACY_POLICY"
+      page_title: "PAGE_TITLES.PRIVACY_POLICY",
+      header_is_hide: true
     }
   },
   {
@@ -269,9 +275,17 @@ const routes: Routes = [
     }
   },
   {
+    path: 'exam-schedule',
+    canActivate: [authenticatedUserGuard],
+    component: ExamScheduleHomeComponent,
+    data: {
+      page_title: "PAGE_TITLES.EXAM_SCHEDULE"
+    }
+  },
+  {
     path: '**',
     pathMatch: 'full',
-    redirectTo: '/',
+    redirectTo: '/exam-schedule',
   }
 ];
 

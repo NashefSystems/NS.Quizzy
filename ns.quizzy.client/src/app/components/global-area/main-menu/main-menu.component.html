@@ -9,11 +9,16 @@
             <mat-icon>close</mat-icon>
         </button>
     </header>
+    <div class="dark-400 app-version">
+        V{{appVersion}}
+    </div>
     <img src="assets/images/logo.png">
     <!-- <app-language-selector></app-language-selector> -->
+    <app-user-details></app-user-details>
 
     <div class="button-grid">
-        <button mat-button *ngFor="let item of menuItems" class="button-item" mat-dialog-close [routerLink]="item.routerLink">
+        <button mat-button *ngFor="let item of menuItems" class="button-item" mat-dialog-close
+            [routerLink]="item.routerLink">
             <div class="button-content">
                 <mat-icon class="icon">{{item.icon}}</mat-icon>
                 <span>{{item.text | translate}}</span>

@@ -18,5 +18,6 @@ namespace NS.Quizzy.Server.Models.Models
         public string Token { get; set; }
 
         public DALEnums.Roles Role { get; set; }
+        public Guid? ClassId { get; set; }
     }
 }

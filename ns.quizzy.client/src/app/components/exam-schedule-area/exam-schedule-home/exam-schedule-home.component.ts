@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { afterNextRender, Component, inject } from '@angular/core';
 import { GradesService } from '../../../services/backend/grades.service';
 import { ClassesService } from '../../../services/backend/classes.service';
 import { QuestionnairesService } from '../../../services/backend/questionnaires.service';
@@ -22,6 +22,7 @@ import { StorageService } from '../../../services/storage.service';
 import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
 import { IMoedDto } from '../../../models/backend/moed.dto';
 import { MoedsService } from '../../../services/backend/moeds.service';
+import { AccountService } from '../../../services/backend/account.service';
 
 @Component({
   selector: 'app-exam-schedule-home',
@@ -30,6 +31,7 @@ import { MoedsService } from '../../../services/backend/moeds.service';
   styleUrl: './exam-schedule-home.component.scss'
 })
 export class ExamScheduleHomeComponent {
+  private readonly _accountService = inject(AccountService);
   private readonly _dialogService = inject(DialogService);
   private readonly _gradesService = inject(GradesService);
   private readonly _classesService = inject(ClassesService);
@@ -50,17 +52,22 @@ export class ExamScheduleHomeComponent {
   subjects: ISubjectDto[] = [];
   filterData: FilterResult;
   filterIsActive: boolean = false;
+  classId: string | null = null;
 
   ngOnInit(): void {
-    this.setExamFilterData();
-    this.loadData();
+    this._accountService.getDetails().subscribe({
+      next: (data) => {
+        this.classId = data?.classId ?? null;
+        this.setExamFilterData();
+        this.loadData();
+      }
+    });
   }
 
   private setExamFilterData() {
     const examFilterDataJson = this._storageService.getLocalStorage(LocalStorageKeys.examFilterData);
 
     if (examFilterDataJson) {
-      console.log("load ExamFilterData from cache");
       this.filterData = JSON.parse(examFilterDataJson);
       this.filterIsActive = true;
     }
@@ -86,6 +93,10 @@ export class ExamScheduleHomeComponent {
       questionnaireIds: [],
       subjectIds: [],
     };
+    
+    if (this.classId) {
+      this.filterData.classIds.push(this.classId);
+    }
   }
 
   loadData() {

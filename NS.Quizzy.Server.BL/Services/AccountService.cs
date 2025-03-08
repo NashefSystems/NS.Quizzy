@@ -83,6 +83,45 @@ namespace NS.Quizzy.Server.BL.Services
             return res;
         }
 
+        public async Task<UserDetailsDto> LoginWithIdNumberAsync(LoginWithIdNumberRequest loginRequest)
+        {
+            var email = $"{loginRequest?.IdNumber}@Quizzy.ExamProduction.com".ToUpper();
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(x =>
+               x.IsDeleted == false &&
+               (x.Role == DALEnums.Roles.Student || x.Role == DALEnums.Roles.Teacher) &&
+               x.Email.ToUpper() == email
+           );
+
+            if (user == null)
+            {
+                _logger.Error($"LoginWithIdNumber | Login error", new { loginRequest });
+                return null;
+            }
+
+            var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role);
+
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append(BLConsts.AUTH_TOKEN_KEY, token, new CookieOptions
+            {
+                HttpOnly = false, // If HttpOnly is true, JavaScript access to the cookie is prevented.
+                Secure = true,   // Ensures the cookie is sent only over HTTPS
+                SameSite = SameSiteMode.Strict, // Prevents cross-site request forgery (CSRF)
+                Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes()) // Set expiration time
+            });
+
+            _logger.Info($"LoginWithIdNumber | userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");
+            await AddLoginCacheAsync(user, tokenId, token);
+            return new UserDetailsDto()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FullName = user.FullName,
+                TokenId = tokenId,
+                Token = token,
+                Role = user.Role,
+                ClassId = user.ClassId,
+            };
+        }
+
         private static string GetTwoFactorCacheKey(string requestId)
         {
             return $"TwoFactor:{requestId}";
@@ -121,7 +160,7 @@ namespace NS.Quizzy.Server.BL.Services
             }
             await _cacheProvider.DeleteAsync(twoFactorCacheKey);
 
-            var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName);
+            var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role);
 
             _httpContextAccessor.HttpContext?.Response.Cookies.Append(BLConsts.AUTH_TOKEN_KEY, token, new CookieOptions
             {
@@ -141,6 +180,7 @@ namespace NS.Quizzy.Server.BL.Services
                 TokenId = tokenId,
                 Token = token,
                 Role = user.Role,
+                ClassId = user.ClassId,
             };
         }
 
@@ -170,7 +210,8 @@ namespace NS.Quizzy.Server.BL.Services
                 Email = user.Email,
                 FullName = user.FullName,
                 Role = user.Role,
-                TokenId = tokenId
+                TokenId = tokenId,
+                ClassId = user.ClassId,
             };
         }
 

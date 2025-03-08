@@ -1,7 +1,12 @@
 {
     "DIR": "ltr",
     "ERRORS": {
-        "FIELD_REQUIRED": "Field is required"
+        "FIELD_REQUIRED": "This field is required",
+        "MIN": "The value must be at least {{min}}",
+        "MAX": "The value must be at most {{max}}",
+        "MIN_LENGTH": "The entered text is too short. You must enter at least {requiredLength} characters",
+        "MAX_LENGTH": "The entered text is too long. You may enter up to {requiredLength} characters only",
+        "FORBID": "You do not have sufficient permissions to access this page"
     },
     "PAGE_TITLES": {
         "EXAM_SCHEDULE": "Exam schedule",

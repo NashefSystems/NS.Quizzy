@@ -1,4 +1,4 @@
-import {  Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { UserDetailsDto } from '../../models/backend/user-details.dto';
 import { LoginRequest } from '../../models/backend/login.request';
@@ -6,6 +6,7 @@ import { LoginResponse } from '../../models/backend/login.response';
 import { BehaviorSubject, finalize, from, of, tap } from 'rxjs';
 import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
 import { CookieService } from 'ngx-cookie-service';
+import { LoginWithIdNumberRequest } from '../../models/backend/login-with-id-number.request';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,15 @@ export class AccountService extends BaseService {
     return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
   }
 
+  loginWithIdNumber(request: LoginWithIdNumberRequest) {
+    this.userSubject.next(null)
+    return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/LoginWithIdNumber`, request)
+      .pipe(tap({
+        next: (data) => this.userSubject.next(data),
+        error: () => this.userSubject.next(null),
+      }));
+  }
+
   verifyOTP(request: VerifyOTPRequest) {
     return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/VerifyOTP`, request)
       .pipe(tap({
@@ -42,13 +52,10 @@ export class AccountService extends BaseService {
   }
 
   tokenIsExists() {
-    const res = this.cookieService.check('_qat');
-    console.log("tokenIsExists(3): ", res);
-    return res;
+    return this.cookieService.check('_qat');
   }
 
   getDetails() {
-
     if (!this.tokenIsExists()) {
       // If the token does not exist, return null immediately
       return of();

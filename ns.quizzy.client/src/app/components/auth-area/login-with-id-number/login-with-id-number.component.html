@@ -1,0 +1,26 @@
+<div class="login-with-id-number">
+    <label class="H200">{{ 'LOGIN.TITLE' | translate }}</label>
+    <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'LOGIN.ID_NUMBER' | translate }}</mat-label>
+            <input matInput formControlName="idNumber" type="tel" dir="ltr"
+                placeholder="{{ 'LOGIN.ID_NUMBER' | translate }}" />
+            <mat-error *ngIf="loginForm.get('idNumber')?.invalid && loginForm.get('idNumber')?.touched">
+                <ng-container *ngIf="loginForm.get('idNumber')?.errors?.['required']">
+                    {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                </ng-container>
+                <ng-container *ngIf="loginForm.get('idNumber')?.errors?.['minlength']">
+                    {{ 'ERRORS.MIN_LENGTH' | translate : loginForm.get('idNumber')?.errors?.['minlength'] }}
+                </ng-container>
+                <ng-container *ngIf="loginForm.get('idNumber')?.errors?.['maxlength']">
+                    {{ 'ERRORS.MAX_LENGTH' | translate : loginForm.get('idNumber')?.errors?.['maxlength'] }}
+                </ng-container>
+            </mat-error>
+        </mat-form-field>
+       
+        <mat-checkbox formControlName="rememberMe">{{ 'LOGIN.REMEMBER_ME' | translate }}</mat-checkbox>
+       
+       <button mat-stroked-button class="full-width login-btn" [disabled]="loginForm.invalid" cdkFocusInitial>{{
+            'LOGIN.LOGIN_BUTTON' | translate }}</button>
+    </form>
+</div>

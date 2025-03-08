@@ -11,4 +11,5 @@ export class UserDetailsDto {
     fullName: string;
     email: string;
     role: UserRoles;
+    classId!: string;
 }

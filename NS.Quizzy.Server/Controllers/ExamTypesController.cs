@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NS.Quizzy.Server.BL.Attributes;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Quizzy.Server.Models.Models;
@@ -24,7 +25,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<ExamTypeDto>))]
         public async Task<ActionResult<List<ExamTypeDto>>> GetAllAsync()
         {
@@ -33,7 +33,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(ExamTypeDto))]
         public async Task<ActionResult<ExamTypeDto>> GetAsync(Guid id)
         {
@@ -46,6 +45,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPost]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status201Created, null, typeof(ExamTypeDto))]
         public async Task<ActionResult<ExamTypeDto>> InsertAsync([FromBody] ExamTypePayloadDto payload)
         {
@@ -60,6 +60,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(ExamTypeDto))]
         public async Task<ActionResult<ExamTypeDto>> UpdateAsync(Guid id, [FromBody] ExamTypePayloadDto payload)
         {
@@ -72,6 +73,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<ExamTypeDto>> DeleteAsync(Guid id)
         {

@@ -2,46 +2,33 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    $maxHeight: calc(var(--app-dialog-max-height) - 2.1rem);
-    height: $maxHeight;
-    max-height: $maxHeight;
-    justify-content: flex-start;
     overflow-y: hidden;
 
-
-    header {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-    }
-
-
     .page-body {
-        height: 100%;
+        margin-top: 1.5rem;
         display: flex;
         gap: 1rem;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
         overflow-y: auto;
+        padding: 1rem 0;
 
         .logo {
             max-width: 50%;
             margin-bottom: 2rem;
         }
 
-        .qr-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        app-login-with-id-number,
+        app-login-with-email {
+            width: 100%;
         }
 
-        form {
-            width: 80%;
 
-            .login-btn {
-                margin-top: 1rem;
-            }
+        .global-actions {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
         }
     }
 }

@@ -88,6 +88,12 @@ namespace NS.Quizzy.Server.DAL
                 entity.Property(e => e.TwoFactorSecretKey).HasMaxLength(50);
 
                 entity.Property(e => e.FullName).IsRequired(true);
+
+                entity
+                .HasOne(c => c.Class)
+                .WithMany(c => c.Users)
+                .HasForeignKey(c => c.ClassId);
+
                 entity.HasData(InitialData.UserEntityData.GetData());
             }
 

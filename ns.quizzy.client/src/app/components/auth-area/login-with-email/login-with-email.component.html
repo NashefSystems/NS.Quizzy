@@ -1,0 +1,73 @@
+<div class="login-with-email">
+    <ng-container *ngIf="step === LoginSteps.UserNameAndPassword">
+        <label class="H200">{{ 'LOGIN.TITLE' | translate }}</label>
+        <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'LOGIN.EMAIL' | translate }}</mat-label>
+                <input matInput formControlName="email" type="email" dir="ltr"
+                    placeholder="{{ 'LOGIN.EMAIL' | translate }}" />
+                <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                    <ng-container *ngIf="loginForm.get('email')?.errors?.['required']">
+                        {{ 'LOGIN.EMAIL_REQUIRED' | translate }}
+                    </ng-container>
+                    <ng-container *ngIf="loginForm.get('email')?.errors?.['email']">
+                        {{ 'LOGIN.EMAIL_INVALID' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'LOGIN.PASSWORD' | translate }}</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                    placeholder="{{ 'LOGIN.PASSWORD' | translate }}" />
+                <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+                    <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                    {{ 'LOGIN.PASSWORD_REQUIRED' | translate }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-checkbox formControlName="rememberMe">{{ 'LOGIN.REMEMBER_ME' | translate }}</mat-checkbox>
+
+            <button mat-stroked-button class="full-width login-btn" [disabled]="loginForm.invalid" cdkFocusInitial>{{
+                'LOGIN.LOGIN_BUTTON' | translate }}</button>
+        </form>
+    </ng-container>
+    
+    <ng-container *ngIf="step === LoginSteps.OTP">
+        <label class="H200">{{ 'LOGIN.TWO_FACTOR.TITLE' | translate }}</label>
+        <ng-container *ngIf="loginResponse?.twoFactorUrl">
+            <label class="L200 full-width">{{ 'LOGIN.TWO_FACTOR.SETUP.LINE_1' | translate }}</label>
+            <label class="L200 full-width">{{ 'LOGIN.TWO_FACTOR.SETUP.LINE_2' | translate }}</label>
+            <div class="qr-container">
+                <qrcode [qrdata]="loginResponse?.twoFactorUrl || ''" [width]="150"></qrcode>
+                <label class="L200 full-width dark-400" *ngIf="loginResponse?.twoFactorSecretKey">
+                    {{ loginResponse?.twoFactorSecretKey}}
+                </label>
+            </div>
+            <label class="L200 full-width" *ngIf="loginResponse?.twoFactorUrl">
+                {{ 'LOGIN.TWO_FACTOR.SETUP.LINE_3' | translate }}
+            </label>
+        </ng-container>
+
+        <form [formGroup]="twoFactorForm" (ngSubmit)="onVerifyOTP()">
+            <label class="L200 full-width" *ngIf="!loginResponse?.twoFactorUrl">
+                {{ 'LOGIN.TWO_FACTOR.TOKEN_TITLE' | translate }}
+            </label>
+            <mat-form-field appearance="outline" class="full-width">
+                <input matInput formControlName="token" dir="ltr" autocomplete="off" autocapitalize="off"
+                    name="twofactor_token" inputmode="numeric" />
+                <mat-error *ngIf="twoFactorForm.get('token')?.invalid && twoFactorForm.get('token')?.touched">
+                    <ng-container *ngIf="twoFactorForm.get('token')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
+
+            <button mat-stroked-button class="full-width login-btn" [disabled]="twoFactorForm.invalid" cdkFocusInitial>
+                {{ 'LOGIN.LOGIN_BUTTON' | translate }}
+            </button>
+        </form>
+    </ng-container>
+</div>

@@ -8,5 +8,6 @@
 
         public virtual Grade Grade { get; set; }
         public virtual IList<ClassExam> ClassExams { get; set; }
+        public virtual IList<User> Users { get; set; }
     }
 }

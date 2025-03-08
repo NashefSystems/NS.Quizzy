@@ -29,7 +29,7 @@ namespace NS.Quizzy.Server.BL.Services
             _expiresInMinutes = jwtSection.GetValue<double>("ExpiresInMinutes");
         }
 
-        public (Guid tokenId, string token) GenerateToken(Guid userId, string email, string fullName)
+        public (Guid tokenId, string token) GenerateToken(Guid userId, string email, string fullName, DAL.DALEnums.Roles role)
         {
             var expires = DateTime.Now.AddMinutes(_expiresInMinutes);
             var tokenId = Guid.NewGuid();
@@ -41,7 +41,7 @@ namespace NS.Quizzy.Server.BL.Services
                 new Claim(ClaimTypes.Name, fullName),
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.Sid, tokenIdStr),
-                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.Role, role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, tokenIdStr)
             };
 

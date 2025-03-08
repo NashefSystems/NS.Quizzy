@@ -69,6 +69,9 @@ import { MoedListComponent } from './components/moed-area/moed-list/moed-list.co
 import { MoedAddOrEditComponent } from './components/moed-area/moed-add-or-edit/moed-add-or-edit.component';
 import { SkeletonLoaderComponent } from './components/global-area/skeleton-loader/skeleton-loader.component';
 import { PrivacyPolicyComponent } from './components/global-area/privacy-policy/privacy-policy.component';
+import { LoginWithIdNumberComponent } from './components/auth-area/login-with-id-number/login-with-id-number.component';
+import { LoginWithEmailComponent } from './components/auth-area/login-with-email/login-with-email.component';
+import { UserDetailsComponent } from './components/auth-area/user-details/user-details.component';
 
 
 // Factory function for HttpLoader
@@ -110,6 +113,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ExamScheduleFilterComponent,
     ExamInfoValueComponent,
     PrivacyPolicyComponent,
+    LoginWithIdNumberComponent,
+    LoginWithEmailComponent,
+    UserDetailsComponent,
   ],
   imports: [
     BrowserModule,

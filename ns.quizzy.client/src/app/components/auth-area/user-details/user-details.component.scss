@@ -1,0 +1,17 @@
+.user-details-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .full-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    .role {
+        padding: 0 1rem;
+        border: 1px solid gray;
+        border-radius: 1rem;
+        font-weight: bold;
+    }
+}

@@ -2,20 +2,31 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AccountService } from '../services/backend/account.service';
 import { firstValueFrom } from 'rxjs';
+import { UserRoles } from '../models/backend/user-details.dto';
+import { NotificationsService } from '../services/notifications.service';
 
 export const adminUserGuard: CanActivateFn = async (route, state) => {
   const accountService = inject(AccountService);
   const router = inject(Router);
+  const notificationsService = inject(NotificationsService);
+
+  let isAuthenticated = false;
   let res = false;
   try {
     const userDetailsDto = await firstValueFrom(accountService.getDetails());
-    res = !!(userDetailsDto?.id);
+    isAuthenticated = !!(userDetailsDto?.id);
+    const allowRoles = [UserRoles.ADMIN, UserRoles.DEVELOPER, UserRoles.SUPERADMIN];
+    res = !!(userDetailsDto?.id) && allowRoles.includes(userDetailsDto.role);
   } catch (error) {
     console.error('adminUserGuard error:', error);
   }
 
+  if (!isAuthenticated) {
+    router.navigate(['/exam-schedule'])
+  }
+
   if (!res) {
-    router.navigate(['/'])
+    notificationsService.error("ERRORS.FORBID");
   }
 
   return res;

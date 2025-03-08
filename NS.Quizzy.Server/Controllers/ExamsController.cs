@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NS.Quizzy.Server.BL.Attributes;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Models.DTOs;
@@ -25,7 +26,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<ExamDto>))]
         public async Task<ActionResult<List<ExamDto>>> GetAllAsync([FromQuery] bool filterCompletedExams)
         {
@@ -34,7 +34,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPost("Filter")]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<ExamDto>))]
         public async Task<ActionResult<List<ExamDto>>> FilterAsync([FromBody] ExamFilterRequest request)
         {
@@ -43,7 +42,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(ExamDto))]
         public async Task<ActionResult<ExamDto>> GetAsync(Guid id)
         {
@@ -56,6 +54,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPost]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status201Created, null, typeof(ExamDto))]
         public async Task<ActionResult<ExamDto>> InsertAsync([FromBody] ExamPayloadDto payload)
         {
@@ -70,6 +69,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(ExamDto))]
         public async Task<ActionResult<ExamDto>> UpdateAsync(Guid id, [FromBody] ExamPayloadDto payload)
         {
@@ -82,6 +82,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<ExamDto>> DeleteAsync(Guid id)
         {
