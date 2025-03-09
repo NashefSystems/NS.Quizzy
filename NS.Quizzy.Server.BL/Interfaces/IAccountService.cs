@@ -7,8 +7,9 @@ namespace NS.Quizzy.Server.BL.Interfaces
     {
         Task<UserDetailsDto> GetDetailsAsync();
         Task<LoginResponse?> LoginAsync(LoginRequest loginRequest);
+        Task<UserDetailsDto> LoginWithIdNumberAsync(LoginWithIdNumberRequest loginRequest);
         Task<UserDetailsDto?> VerifyOTP(VerifyOTPRequest request);
         Task LogoutAsync();
-        Task<UserDetailsDto> LoginWithIdNumberAsync(LoginWithIdNumberRequest loginRequest);
+        string GetEmailForIdNumber(string IdNumber);
     }
 }

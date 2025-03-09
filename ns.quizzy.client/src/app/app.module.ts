@@ -72,6 +72,8 @@ import { PrivacyPolicyComponent } from './components/global-area/privacy-policy/
 import { LoginWithIdNumberComponent } from './components/auth-area/login-with-id-number/login-with-id-number.component';
 import { LoginWithEmailComponent } from './components/auth-area/login-with-email/login-with-email.component';
 import { UserDetailsComponent } from './components/auth-area/user-details/user-details.component';
+import { UserListComponent } from './components/user-area/user-list/user-list.component';
+import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/user-add-or-edit.component';
 
 
 // Factory function for HttpLoader
@@ -116,6 +118,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoginWithIdNumberComponent,
     LoginWithEmailComponent,
     UserDetailsComponent,
+    UserListComponent,
+    UserAddOrEditComponent,
   ],
   imports: [
     BrowserModule,

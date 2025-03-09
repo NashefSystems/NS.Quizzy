@@ -22,6 +22,8 @@ import { PrivacyPolicyComponent } from './components/global-area/privacy-policy/
 import { LoginComponent } from './components/auth-area/login/login.component';
 import { anonymousUserGuard } from './guards/anonymous-user.guard';
 import { authenticatedUserGuard } from './guards/authenticated-user.guard';
+import { UserListComponent } from './components/user-area/user-list/user-list.component';
+import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/user-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -103,6 +105,38 @@ const routes: Routes = [
         path: '**',
         pathMatch: 'full',
         redirectTo: '/grades',
+      }
+    ]
+  },
+  {
+    path: 'users',
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: UserListComponent,
+        data: {
+          page_title: "PAGE_TITLES.USER_LIST"
+        }
+      }, {
+        path: 'new',
+        component: UserAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.USER_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: UserAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.USER_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/users',
       }
     ]
   },

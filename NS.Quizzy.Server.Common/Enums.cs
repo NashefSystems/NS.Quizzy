@@ -23,6 +23,9 @@ namespace NS.Quizzy.Server.Common
 
             [DBStringValue(nameof(Email))]
             Email,
+
+            [DBStringValue(nameof(IdNumberEmailDomain))]
+            IdNumberEmailDomain,
         }
     }
 }

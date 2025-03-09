@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NS.Quizzy.Server.DAL;
 
@@ -11,9 +12,11 @@ using NS.Quizzy.Server.DAL;
 namespace NS.Quizzy.Server.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250308150214_Fix user role")]
+    partial class Fixuserrole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1296,7 +1299,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
-                    b.Property<int>("Role")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0)
@@ -1327,7 +1330,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             IsDeleted = true,
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Password = "yYZo4vAwJn7BtJ1x3MvbIHoQul3eoSduPbhS+pkZL/8=",
-                            Role = 4,
+                            RoleId = 4,
                             TwoFactorSecretKey = "97F1AFCD316343B4B2D492A10B036680"
                         },
                         new
@@ -1339,7 +1342,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             IsDeleted = false,
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Password = "j9Q7vYJckIupzSmvlKwiPg==",
-                            Role = 3,
+                            RoleId = 3,
                             TwoFactorSecretKey = "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO"
                         },
                         new
@@ -1351,7 +1354,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             IsDeleted = false,
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Password = "jXg9GRdykHODQX8Kzxs8kiiZ92sfPDa3kH+lHmwHq+Q=",
-                            Role = 2,
+                            RoleId = 2,
                             TwoFactorSecretKey = "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX"
                         });
                 });

@@ -6,10 +6,17 @@
       <mat-label>{{'TABLE.SEARCH'|translate}}</mat-label>
       <input matInput (input)="applyFilter($event)" [placeholder]="'TABLE.SEARCH_PLACEHOLDER' | translate" />
     </mat-form-field>
-  </div>  
-  <div class="H200 center-text dark-400 empty-status" *ngIf="showEmptyStatus()"
-    [innerHtml]="'TABLE.EMPTY_STATUS' | translate"></div>
-  <table *ngIf="!showEmptyStatus()" mat-table [dataSource]="dataSource" matSort class="table-data">
+  </div>
+
+  @switch (getDataStatus()){
+  @case (DataStatus.Loading) {
+  <app-skeleton-loader *ngIf="items === null || items === undefined"></app-skeleton-loader>
+  }
+  @case (DataStatus.Empty) {
+  <div class="H200 center-text dark-400 empty-status" [innerHtml]="'TABLE.EMPTY_STATUS' | translate"></div>
+  }
+  @case (DataStatus.List) {
+  <table mat-table [dataSource]="dataSource" matSort class="table-data">
     <!-- Define other columns -->
     <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -44,4 +51,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumnsWithActions"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumnsWithActions;"></tr>
   </table>
+  }
+  }
 </div>

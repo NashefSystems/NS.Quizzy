@@ -82,8 +82,7 @@ namespace NS.Quizzy.Server.DAL
                 entity
                    .Property(e => e.Role)
                    .IsRequired(true)
-                   .HasDefaultValue(Roles.Student)
-                   .HasConversion(v => v.ToStringValue(), dbv => dbv.ToEnumValue<Roles>());
+                   .HasDefaultValue(Roles.Student);
 
                 entity.Property(e => e.TwoFactorSecretKey).HasMaxLength(50);
 

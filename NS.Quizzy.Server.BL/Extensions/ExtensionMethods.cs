@@ -111,6 +111,7 @@ namespace NS.Quizzy.Server.BL.Extensions
                     };
                 });
 
+            services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IGradesService, GradesService>();
             services.AddScoped<IClassesService, ClassesService>();
             services.AddScoped<IExamsService, ExamsService>();
@@ -168,6 +169,19 @@ namespace NS.Quizzy.Server.BL.Extensions
             }
 
             return Guid.Parse(userIdStr);
+        }
+
+        internal static DAL.DALEnums.Roles? GetUserRole(this HttpContext? context)
+        {
+            // Retrieve the user ID from the claims
+            var stringValue = context?.User?.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (stringValue == null)
+            {
+                return null;
+            }
+
+            return Enum.Parse<DAL.DALEnums.Roles>(stringValue);
         }
 
         internal static Guid? GetTokenId(this HttpContext? context)

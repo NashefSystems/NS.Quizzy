@@ -19,6 +19,9 @@
         "CLASS_LIST": "כיתות",
         "CLASS_ADD": "הוספת כיתה",
         "CLASS_EDIT": "עריכת כיתה",
+        "USER_LIST": "משתמשים",
+        "USER_ADD": "הוספת משתמש",
+        "USER_EDIT": "עריכת משתמש",
         "QUESTIONNAIRE_LIST": "שאלונים",
         "QUESTIONNAIRE_ADD": "הוספת שאלון",
         "QUESTIONNAIRE_EDIT": "עריכת שאלון",
@@ -69,7 +72,8 @@
             "EXAM_TYPE_LIST": "סוגי מבחנים",
             "MOED_LIST": "מועדים",
             "QUESTIONNAIRE_LIST": "שאלונים",
-            "SUBJECT_LIST": "נושאים"
+            "SUBJECT_LIST": "נושאים",
+            "USER_LIST": "משתמשים"
         }
     },
     "TABLE": {
@@ -136,6 +140,13 @@
         "SUBJECTS": "נושאים",
         "LIST": "רשימה",
         "CALENDAR": "לוח שנה"
+    },
+    "USER_AREA": {
+        "EMAIL": "דואר אלקטרוני",
+        "ID_NUMBER": "תעודת זהות",
+        "FULL_NAME": "שם מלא",
+        "ROLE": "תפקיד",
+        "CLASS": "כיתה"
     },
     "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {

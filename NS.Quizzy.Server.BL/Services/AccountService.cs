@@ -24,6 +24,7 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly INSCacheProvider _cacheProvider;
         private readonly TimeSpan _cacheOTPTTL;
         private readonly TimeSpan _cacheLoginsTTL;
+        private readonly string _idNumberEmailDomain;
 
         public AccountService(INSLogger logger, AppDbContext appDbContext, JwtHelper jwtHelper, IHttpContextAccessor httpContextAccessor, IOTPService otpService, INSCacheProvider cacheProvider, IConfiguration configuration)
         {
@@ -42,6 +43,10 @@ namespace NS.Quizzy.Server.BL.Services
                 var cacheKey = AppSettingKeys.CacheLoginsTTLMin.GetDBStringValue();
                 var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 20160;
                 _cacheLoginsTTL = TimeSpan.FromMinutes(valueInMin);
+            }
+            {
+                var cacheKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
+                _idNumberEmailDomain = configuration.GetValue<string>(cacheKey);
             }
         }
 
@@ -83,14 +88,19 @@ namespace NS.Quizzy.Server.BL.Services
             return res;
         }
 
+        public string GetEmailForIdNumber(string IdNumber)
+        {
+            return $"{IdNumber}@{_idNumberEmailDomain}";
+        }
+
         public async Task<UserDetailsDto> LoginWithIdNumberAsync(LoginWithIdNumberRequest loginRequest)
         {
-            var email = $"{loginRequest?.IdNumber}@Quizzy.ExamProduction.com".ToUpper();
+            var email = GetEmailForIdNumber(loginRequest.IdNumber).ToUpper();
             var user = await _appDbContext.Users.FirstOrDefaultAsync(x =>
                x.IsDeleted == false &&
                (x.Role == DALEnums.Roles.Student || x.Role == DALEnums.Roles.Teacher) &&
                x.Email.ToUpper() == email
-           );
+            );
 
             if (user == null)
             {

@@ -2,6 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableColumnInfo } from './table-column-info';
 
+enum DataStatus {
+  Loading,
+  Empty,
+  List
+}
 @Component({
   selector: 'app-table',
   standalone: false,
@@ -9,8 +14,9 @@ import { TableColumnInfo } from './table-column-info';
   styleUrl: './table.component.scss'
 })
 export class TableComponent {
+  DataStatus = DataStatus;
   @Input() emptyStatusFeatureEnabled: boolean = true;
-  @Input() items: any[] = [];
+  @Input() items: any[] | null = null;
   @Input() columns: TableColumnInfo[] = [];
   @Output() add = new EventEmitter<void>();
   @Output() edit = new EventEmitter<any>();
@@ -34,7 +40,7 @@ export class TableComponent {
         }
       });
       return res;
-    });
+    }) ?? [];
   }
 
   getColumnInfo(key: string) {
@@ -58,12 +64,17 @@ export class TableComponent {
     this.dataSource.filter = filterValue;
   }
 
-  showEmptyStatus() {
-    if (!this.emptyStatusFeatureEnabled) {
-      return false;
+  getDataStatus(): DataStatus {
+    if (this.items === null || this.items === undefined) {
+      return DataStatus.Loading;
     }
+    
     const isEmptyStatus = this.dataSource.filteredData.length === 0;
-    return isEmptyStatus;
+    if (this.emptyStatusFeatureEnabled && isEmptyStatus) {
+      return DataStatus.Empty;
+    }
+
+    return DataStatus.List;
   }
 
   get displayedColumnsWithActions(): string[] {
