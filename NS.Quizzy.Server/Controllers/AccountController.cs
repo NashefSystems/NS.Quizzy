@@ -30,10 +30,7 @@ namespace NS.Quizzy.Server.Controllers
             var res = await _accountService.LoginAsync(loginRequest);
             if (res == null)
             {
-                return Unauthorized(new GlobalErrorResponse()
-                {
-                    Message = "Invalid credentials"
-                });
+                return Unauthorized();
             }
             return Ok(res);
         }
@@ -45,10 +42,7 @@ namespace NS.Quizzy.Server.Controllers
             var res = await _accountService.LoginWithIdNumberAsync(loginRequest);
             if (res == null)
             {
-                return Unauthorized(new GlobalErrorResponse()
-                {
-                    Message = "Invalid credentials"
-                });
+                return Unauthorized();
             }
             return Ok(res);
         }

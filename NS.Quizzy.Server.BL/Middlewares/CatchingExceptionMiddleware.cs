@@ -71,9 +71,10 @@ namespace NS.Quizzy.Server.BL.Middlewares
                 logger.Fatal($"CatchingException ({response.Message})", new { StatusCode = statusCode, ErrorMessage = response.Message }, exception);
             }
 
-            context.Response.StatusCode = statusCode;
+            context.Response.Clear();
             await context.Response.WriteAsJsonAsync(response);
             context.Response.Body.Position = 0;
+            context.Response.StatusCode = statusCode;
         }
     }
 }
