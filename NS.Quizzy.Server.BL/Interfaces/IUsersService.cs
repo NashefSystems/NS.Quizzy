@@ -4,5 +4,6 @@ namespace NS.Quizzy.Server.BL.Interfaces
 {
     public interface IUsersService : IBaseService<UserPayloadDto, UserDto>
     {
+        Task<byte[]> DownloadAsync();
     }
 }

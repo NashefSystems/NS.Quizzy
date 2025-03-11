@@ -8,6 +8,16 @@
         font-weight: bold;
     }
 
+    .class-info {
+        margin-top: 1rem;
+
+        span:nth-child(1),
+        span:nth-child(2) {
+            font-weight: bold;
+            color: gray;
+        }
+    }
+
     .role {
         padding: 0 1rem;
         border: 1px solid gray;

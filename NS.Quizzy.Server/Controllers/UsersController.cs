@@ -12,7 +12,7 @@ namespace NS.Quizzy.Server.Controllers
 {
     [ApiController]
     [Authorize]
-    [RoleRequirement(DAL.DALEnums.Roles.Admin)]
+    [RoleRequirement(DAL.DALEnums.Roles.Student)]
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
@@ -81,6 +81,14 @@ namespace NS.Quizzy.Server.Controllers
                 return NotFound("Item not found");
             }
             return NoContent();
+        }
+
+        [HttpGet("Download")]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(File))]
+        public async Task<ActionResult> DownloadAsync()
+        {
+            var bytes = await _service.DownloadAsync();
+            return File(bytes, "text/csv", $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} Quizzy users.csv");
         }
     }
 }

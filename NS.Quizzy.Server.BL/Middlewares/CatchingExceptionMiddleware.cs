@@ -54,7 +54,7 @@ namespace NS.Quizzy.Server.BL.Middlewares
             {
                 if (statusCode == StatusCodes.Status401Unauthorized)
                 {
-                    response.Message = "invalid credentials";
+                    response.Message = "Invalid credentials";
                 }
                 else
                 {

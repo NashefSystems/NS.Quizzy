@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NS.Quizzy.Server.BL.CustomExceptions;
-using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
+using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
+using System.Text;
 using static NS.Quizzy.Server.Common.Enums;
 using static NS.Quizzy.Server.DAL.DALEnums;
 
@@ -21,6 +21,7 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
         private readonly TimeSpan _cacheDataTTL;
+        private readonly string _idNumberEmailDomain;
         private readonly Roles[] _roles;
 
 
@@ -31,9 +32,13 @@ namespace NS.Quizzy.Server.BL.Services
             _mapper = mapper;
             _roles = [Roles.Teacher, Roles.Student];
             {
-                var cacheKey = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
-                var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 60;
+                var key = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(key), out double val) ? val : 60;
                 _cacheDataTTL = TimeSpan.FromMinutes(valueInMin);
+            }
+            {
+                var key = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
+                _idNumberEmailDomain = configuration.GetValue<string>(key) ?? "";
             }
         }
 
@@ -67,7 +72,7 @@ namespace NS.Quizzy.Server.BL.Services
 
         public async Task<UserDto> InsertAsync(UserPayloadDto model)
         {
-            if (_roles.Contains(model.Role))
+            if (!_roles.Contains(model.Role))
             {
                 throw new ForbiddenException("You do not have permission to insert this role");
             }
@@ -95,7 +100,7 @@ namespace NS.Quizzy.Server.BL.Services
 
         public async Task<UserDto?> UpdateAsync(Guid id, UserPayloadDto model)
         {
-            if (_roles.Contains(model.Role))
+            if (!_roles.Contains(model.Role))
             {
                 throw new ForbiddenException("You do not have permission to edit this role");
             }
@@ -123,6 +128,14 @@ namespace NS.Quizzy.Server.BL.Services
             return _mapper.Map<UserDto>(item);
         }
 
+        private static uint? GetFullCode(Class? c)
+        {
+            if (c == null || c.Grade == null)
+                return null;
+
+            return (c.Grade.Code * 100) + c.Code;
+        }
+
         public async Task<bool> DeleteAsync(Guid id)
         {
             var item = await _appDbContext.Users.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
@@ -131,7 +144,7 @@ namespace NS.Quizzy.Server.BL.Services
                 return false;
             }
 
-            if (_roles.Contains(item.Role))
+            if (!_roles.Contains(item.Role))
             {
                 throw new ForbiddenException("You do not have permission to delete this role");
             }
@@ -140,6 +153,32 @@ namespace NS.Quizzy.Server.BL.Services
             await _appDbContext.SaveChangesAsync();
             await _cacheProvider.DeleteAsync(CACHE_KEY);
             return true;
+        }
+
+        public async Task<byte[]> DownloadAsync()
+        {
+            var items = await _appDbContext.Users
+                .Where(x => x.IsDeleted == false && _roles.Contains(x.Role))
+                .Include(x => x.Class)
+                .ThenInclude(x => x.Grade)
+                .OrderBy(x => x.FullName)
+                .ToListAsync();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("תעודת זהות,שם מלא,תפקיד,כיתה");
+
+            foreach (var item in items)
+            {
+                var role = item.Role == Roles.Student ? "תלמיד" : "מורה";
+                var classCode = GetFullCode(item.Class);
+                var idNumber = item.Email.Replace($"@{_idNumberEmailDomain}", "");
+                sb.AppendLine($"\"{idNumber}\",\"{item.FullName}\",\"{role}\",{classCode}");
+            }
+
+            var csvContent = sb.ToString();
+            var utf8Bytes = Encoding.UTF8.GetBytes(csvContent);
+            var utf8WithBom = Encoding.UTF8.GetPreamble().Concat(utf8Bytes).ToArray();
+            return utf8WithBom;
         }
     }
 }

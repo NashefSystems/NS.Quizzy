@@ -1,1 +1,54 @@
-<p>user-add-or-edit works!</p>
+<app-back-button></app-back-button>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'USER_AREA.ID_NUMBER' | translate }}</mat-label>
+        <input matInput formControlName="idNumber" type="tel" inputmode="numeric" autocomplete="off" />
+        <mat-error *ngIf="form.get('idNumber')?.invalid && form.get('idNumber')?.touched">
+            <ng-container *ngIf="form.get('idNumber')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+            <ng-container *ngIf="form.get('idNumber')?.errors?.['minlength']">
+                {{ 'ERRORS.MIN_LENGTH' | translate : form.get('idNumber')?.errors?.['minlength'] }}
+            </ng-container>
+            <ng-container *ngIf="form.get('idNumber')?.errors?.['maxlength']">
+                {{ 'ERRORS.MAX_LENGTH' | translate : form.get('idNumber')?.errors?.['maxlength'] }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'USER_AREA.FULL_NAME' | translate }}</mat-label>
+        <input matInput formControlName="fullName" autocomplete="off" />
+        <mat-error *ngIf="form.get('fullName')?.invalid && form.get('fullName')?.touched">
+            <ng-container *ngIf="form.get('fullName')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'USER_AREA.ROLE' | translate }}</mat-label>
+        <mat-select formControlName="role" #userRole>
+            <mat-option [dir]="'DIR' | translate" [value]="'Student'">{{'USER_ROLES.STUDENT' | translate}}</mat-option>
+            <mat-option [dir]="'DIR' | translate" [value]="'Teacher'">{{'USER_ROLES.TEACHER' | translate}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('role')?.invalid && form.get('role')?.touched">
+            <ng-container *ngIf="form.get('role')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width" *ngIf="userRole.value === 'Student'">
+        <mat-label>{{ 'USER_AREA.CLASS' | translate }}</mat-label>
+        <mat-select formControlName="classId">
+            <mat-option [dir]="'DIR' | translate" *ngFor="let class of classes"
+                [value]="class.id">{{class.name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+        {{ (id ? 'UPDATE' : 'ADD') | translate }}
+    </button>
+</form>
