@@ -31,9 +31,9 @@ namespace NS.Quizzy.Server.BL.Services
             _expiresInMinutesForMobile = jwtSection.GetValue<double>("ExpiresInMinutesForMobile");
         }
 
-        public (Guid tokenId, string token) GenerateToken(Guid userId, string email, string fullName, DAL.DALEnums.Roles role)
+        public (Guid tokenId, string token) GenerateToken(Guid userId, string email, string fullName, DAL.DALEnums.Roles role, bool isMobile)
         {
-            var expires = DateTime.Now.AddMinutes(_expiresInMinutes);
+            var expires = DateTime.Now.AddMinutes(GetJwtExpiresInMinutes(isMobile));
             var tokenId = Guid.NewGuid();
             var tokenIdStr = tokenId.ToString();
             var claims = new[]

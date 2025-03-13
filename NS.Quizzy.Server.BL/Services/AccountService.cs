@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
@@ -109,20 +110,21 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
-            var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role);
-
             var httpContext = _httpContextAccessor.HttpContext;
             var loginHistoryItem = new LoginHistoryItem()
             {
-                Id = tokenId,
                 UserId = user.Id,
-                Token = token,
                 ClientIP = httpContext.GetClientIP(),
                 IsMobile = httpContext.IsMobile(),
                 Platform = httpContext.GetPlatform(),
                 UserAgent = httpContext.GetUserAgent(),
                 Country = httpContext.GetCountryInfo()?.Name
             };
+
+            var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role, loginHistoryItem.IsMobile);
+            loginHistoryItem.Id = tokenId;
+            loginHistoryItem.Token = token;
+
             await _appDbContext.LoginHistory.AddAsync(loginHistoryItem);
             await _appDbContext.SaveChangesAsync();
 
@@ -186,20 +188,21 @@ namespace NS.Quizzy.Server.BL.Services
             }
             await _cacheProvider.DeleteAsync(twoFactorCacheKey);
 
-            var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role);
-
             var httpContext = _httpContextAccessor.HttpContext;
             var loginHistoryItem = new LoginHistoryItem()
             {
-                Id = tokenId,
                 UserId = user.Id,
-                Token = token,
                 ClientIP = httpContext.GetClientIP(),
                 IsMobile = httpContext.IsMobile(),
                 Platform = httpContext.GetPlatform(),
                 UserAgent = httpContext.GetUserAgent(),
                 Country = httpContext.GetCountryInfo()?.Name
             };
+
+            var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role, loginHistoryItem.IsMobile);
+            loginHistoryItem.Id = tokenId;
+            loginHistoryItem.Token = token;
+
             await _appDbContext.LoginHistory.AddAsync(loginHistoryItem);
             await _appDbContext.SaveChangesAsync();
 
