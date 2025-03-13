@@ -1,5 +1,3 @@
-
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using NS.Quizzy.Server.BL.Extensions;
@@ -98,7 +96,7 @@ namespace NS.Quizzy.Server
 
             app.MapControllers();
             app.MapDefaultControllerRoute();
-           
+
             #region RequestResponseLoggingMiddleware
             // Must call Middleware after calling `app.UseRouting()` or `app.MapControllers()`
             app.UseRequestResponseLoggingMiddleware((logBag, apiCallInfoData) =>

@@ -21,7 +21,7 @@ namespace NS.Quizzy.Server.DAL
             internal static readonly User adminUser = new()
             {
                 Id = Guid.Parse("B900D543-90AB-4E7A-83BA-B961918DCC8C"),
-                Password = "30496^#3267%$",
+                Password = "304963267",
                 FullName = "Admin",
                 Email = "Nashef90@Gmail.com",
                 TwoFactorSecretKey = "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO",
@@ -30,7 +30,7 @@ namespace NS.Quizzy.Server.DAL
             internal static readonly User sajiUser = new()
             {
                 Id = Guid.Parse("2325B8AE-F12A-43D8-BE46-7041E57C9283"),
-                Password = "BTWhVV8jqmP95G0w",
+                Password = "4557969",
                 FullName = "Saji Nashef",
                 Email = "saji.nashef@gmail.com",
                 TwoFactorSecretKey = "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX",

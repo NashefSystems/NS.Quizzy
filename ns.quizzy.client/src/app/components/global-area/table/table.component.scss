@@ -6,6 +6,14 @@
   box-sizing: border-box;
   overflow: hidden; // Ensures no overflow
 
+  .header-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .table-toolbar {
     display: flex;
     flex-direction: column;

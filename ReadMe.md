@@ -9,7 +9,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 #### ➕ To add a new migration:
 ```bash
-dotnet ef migrations add "AddUserProperties" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
+dotnet ef migrations add "ChangeUserPassword" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
 #### ❌ To remove last migrations:

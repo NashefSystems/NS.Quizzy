@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { ConfirmDialogComponent } from '../../global-area/confirm-dialog/confirm-dialog.component';
@@ -25,6 +25,9 @@ export class UserListComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
   private readonly _appTranslateService = inject(AppTranslateService);
+
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  selectedFile: File | null = null;
 
   idNumberEmailDomain: string = '';
   classes: IClassDto[] = [];
@@ -102,4 +105,24 @@ export class UserListComponent implements OnInit {
         }
       });
   };
+
+  onExport() {
+    window.location.href = '/api/users/download';
+  }
+
+  onImport() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+    if (!selectedFile) {
+      return;
+    }
+    this._usersService.upload(selectedFile).subscribe({
+      next: (response) => {
+        console.log(response);
+      }
+    });
+  }
 }

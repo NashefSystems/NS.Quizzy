@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using System.Security.Claims;
 using static NS.Quizzy.Server.DAL.DALEnums;

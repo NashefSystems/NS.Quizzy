@@ -7,6 +7,7 @@ using NS.Quizzy.Server.Models.Models;
 using NS.Shared.Logging.Attributes;
 using NS.Shared.Logging.Extensions;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Text;
 
 namespace NS.Quizzy.Server.Controllers
 {
@@ -89,6 +90,15 @@ namespace NS.Quizzy.Server.Controllers
         {
             var bytes = await _service.DownloadAsync();
             return File(bytes, "text/csv", $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} Quizzy users.csv");
+        }
+
+        [HttpPost("Upload")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public async Task<IActionResult> UploadFileAsync([FromForm] IFormFile file)
+        {
+            await _service.UploadAsync(file);
+            return Ok();
+
         }
     }
 }

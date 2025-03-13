@@ -1,4 +1,18 @@
 <div class="page-container">
-    <app-table [items]="items" [columns]="columns" (add)="onAdd()" (edit)="onEdit($event)"
-        (delete)="onDelete($event)"></app-table>
+    <app-table [items]="items" [columns]="columns" (add)="onAdd()" (edit)="onEdit($event)" (delete)="onDelete($event)">
+        <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden />
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onExport()">
+                <mat-icon>download</mat-icon>
+                <span>{{ 'EXPORT' | translate }}</span>
+            </button>
+            <button mat-menu-item (click)="onImport()">
+                <mat-icon>upload</mat-icon>
+                <span>{{ 'IMPORT' | translate }}</span>
+            </button>
+        </mat-menu>
+    </app-table>
 </div>

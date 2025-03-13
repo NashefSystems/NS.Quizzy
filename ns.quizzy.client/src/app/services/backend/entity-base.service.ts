@@ -25,4 +25,10 @@ export abstract class EntityBaseService<PayloadDto, Dto> extends BaseService {
   delete(id: string) {
     return this.httpClient.delete(`${this.getBaseUrl()}/${id}`);
   }
+
+  upload(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.httpClient.post<any>(`${this.getBaseUrl()}/upload`, formData);
+  }
 }

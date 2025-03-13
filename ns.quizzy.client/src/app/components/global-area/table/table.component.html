@@ -1,7 +1,9 @@
 <div class="table-container">
   <div class="table-toolbar full-width">
-    <button mat-raised-button (click)="addNewItem()">{{'TABLE.ACTIONS.ADD' | translate}}</button>
-    <ng-content></ng-content>
+    <div class="header-buttons">
+      <button mat-raised-button (click)="addNewItem()">{{'TABLE.ACTIONS.ADD' | translate}}</button>
+      <ng-content></ng-content>
+    </div>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{'TABLE.SEARCH'|translate}}</mat-label>
       <input matInput (input)="applyFilter($event)" [placeholder]="'TABLE.SEARCH_PLACEHOLDER' | translate" />

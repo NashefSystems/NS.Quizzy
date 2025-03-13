@@ -32,14 +32,14 @@ export class UserDetailsComponent implements OnInit {
       case UserRoles.ADMIN:
         return 'darkgreen';
       case UserRoles.DEVELOPER:
-        return 'darkorange';
+        return 'darkmagenta';
       case UserRoles.SUPERADMIN:
         return 'darkred';
       case UserRoles.TEACHER:
         return 'darkblue';
       default:
       case UserRoles.STUDENT:
-        return 'gray';
+        return 'darkorange';
     }
   }
 

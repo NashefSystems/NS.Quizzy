@@ -1,13 +1,18 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
+using NS.Shared.Logging;
 using System.Text;
 using static NS.Quizzy.Server.Common.Enums;
 using static NS.Quizzy.Server.DAL.DALEnums;
@@ -23,10 +28,12 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly TimeSpan _cacheDataTTL;
         private readonly string _idNumberEmailDomain;
         private readonly Roles[] _roles;
+        private readonly INSLogger _logger;
 
 
-        public UsersService(AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper, IConfiguration configuration)
+        public UsersService(INSLogger logger, AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper, IConfiguration configuration)
         {
+            _logger = logger;
             _appDbContext = appDbContext;
             _cacheProvider = cacheProvider;
             _mapper = mapper;
@@ -179,6 +186,139 @@ namespace NS.Quizzy.Server.BL.Services
             var utf8Bytes = Encoding.UTF8.GetBytes(csvContent);
             var utf8WithBom = Encoding.UTF8.GetPreamble().Concat(utf8Bytes).ToArray();
             return utf8WithBom;
+        }
+
+        public async Task UploadAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new BadRequestException("No file uploaded");
+            }
+
+            var allowedExtensions = new[] { ".csv" };
+            var extension = Path.GetExtension(file.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(extension))
+            {
+                throw new BadRequestException("Invalid file type. Only CSV files are allowed.");
+            }
+
+            using var reader = new StreamReader(file.OpenReadStream(), Encoding.UTF8);
+
+            // Read entire content of the CSV file as a single string
+            string csvContent = await reader.ReadToEndAsync();
+
+            // Validate if the file is empty after reading
+            if (string.IsNullOrWhiteSpace(csvContent))
+            {
+                throw new BadRequestException("CSV file is empty.");
+            }
+
+            var (items, errors) = CsvFileExtractor(csvContent);
+            if (errors.Count != 0)
+            {
+                var errMsg = string.Join('\n', errors);
+                throw new BadRequestException(errMsg);
+            }
+
+            await _cacheProvider.SetOrUpdateAsync($"CsvFiles:{_logger.GetContextId()}", items);
+        }
+
+        private (List<CsvFileItem> items, List<string> errors) CsvFileExtractor(string csvContent)
+        {
+            using var logBag = _logger.CreateLogBag(nameof(CsvFileExtractor));
+            logBag.AddOrUpdateParameter("CsvContentLength", csvContent?.Length);
+            var items = new List<CsvFileItem>();
+            var errors = new List<string>();
+
+            var lines = csvContent
+                .Split(['\r', '\n'])
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToArray();
+
+            logBag.AddOrUpdateParameter("LinesLength", lines?.Length);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var csvItem = ToCsvFileItem(lines[i]);
+                List<string> lineErrors;
+                if (i == 0) // header row
+                {
+
+                    if (csvItem.IdNumber != "תעודת זהות" || csvItem.FullName != "שם מלא" || csvItem.Role != "תפקיד" || csvItem.Class != "כיתה")
+                    {
+                        lineErrors = [
+                            "Invalid header row"
+                        ];
+                    }
+                    continue;
+                }
+                else
+                {
+                    lineErrors = GetCsvFileItemErrors(csvItem);
+                }
+
+                if (lineErrors.Count > 0)
+                {
+                    errors.Add($"({i + 1}) {string.Join(", ", lineErrors)}");
+                }
+                else if (lineErrors.Count == 0 && i != 0)
+                {
+                    items.Add(csvItem);
+                }
+            }
+            logBag.AddOrUpdateParameter("ItemsLength", items.Count);
+            logBag.AddOrUpdateParameter("ErrorsLength", errors.Count);
+
+            if (errors.Count != 0)
+            {
+                logBag.LogLevel = NSLogLevel.Error;
+            }
+
+            return (items, errors);
+        }
+
+        private static CsvFileItem ToCsvFileItem(string line)
+        {
+            var res = new CsvFileItem();
+
+            //"תעודת זהות,שם מלא,תפקיד,כיתה"
+            var lineParts = line.Split(',', StringSplitOptions.TrimEntries);
+            if (lineParts.Length >= 4)
+            {
+                res.IdNumber = lineParts[0].Trim();
+                res.FullName = lineParts[1].Trim();
+                res.Role = lineParts[2].Trim();
+                res.Class = lineParts[3].Trim();
+            }
+
+            return res;
+        }
+
+        private static List<string> GetCsvFileItemErrors(CsvFileItem item)
+        {
+            var errors = new List<string>();
+            if (string.IsNullOrWhiteSpace(item.IdNumber))
+            {
+                errors.Add("Invalid ID number");
+            }
+
+            if (string.IsNullOrWhiteSpace(item.FullName))
+            {
+                errors.Add("Invalid full name");
+            }
+
+            if (item.Role != "תלמיד" && item.Role != "מורה")
+            {
+                errors.Add("Invalid role");
+            }
+
+            if (item.Role == "תלמיד" && !(int.TryParse(item.Class, out int classNo) && classNo >= 1001 && classNo <= 1411))
+            {
+                errors.Add("Invalid class number");
+            }
+
+            return errors;
         }
     }
 }
