@@ -10,6 +10,7 @@ using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.Models;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
+using NS.Shared.Logging.Extensions;
 using static NS.Quizzy.Server.Common.Enums;
 
 namespace NS.Quizzy.Server.BL.Services
@@ -110,12 +111,27 @@ namespace NS.Quizzy.Server.BL.Services
 
             var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role);
 
+            var httpContext = _httpContextAccessor.HttpContext;
+            var loginHistoryItem = new LoginHistoryItem()
+            {
+                Id = tokenId,
+                UserId = user.Id,
+                Token = token,
+                ClientIP = httpContext.GetClientIP(),
+                IsMobile = httpContext.IsMobile(),
+                Platform = httpContext.GetPlatform(),
+                UserAgent = httpContext.GetUserAgent(),
+                Country = httpContext.GetCountryInfo()?.Name
+            };
+            await _appDbContext.LoginHistory.AddAsync(loginHistoryItem);
+            await _appDbContext.SaveChangesAsync();
+
             _httpContextAccessor.HttpContext?.Response.Cookies.Append(BLConsts.AUTH_TOKEN_KEY, token, new CookieOptions
             {
                 HttpOnly = false, // If HttpOnly is true, JavaScript access to the cookie is prevented.
                 Secure = true,   // Ensures the cookie is sent only over HTTPS
                 SameSite = SameSiteMode.Strict, // Prevents cross-site request forgery (CSRF)
-                Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes()) // Set expiration time
+                Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes(loginHistoryItem.IsMobile)) // Set expiration time
             });
 
             _logger.Info($"LoginWithIdNumber | userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");
@@ -172,12 +188,27 @@ namespace NS.Quizzy.Server.BL.Services
 
             var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role);
 
+            var httpContext = _httpContextAccessor.HttpContext;
+            var loginHistoryItem = new LoginHistoryItem()
+            {
+                Id = tokenId,
+                UserId = user.Id,
+                Token = token,
+                ClientIP = httpContext.GetClientIP(),
+                IsMobile = httpContext.IsMobile(),
+                Platform = httpContext.GetPlatform(),
+                UserAgent = httpContext.GetUserAgent(),
+                Country = httpContext.GetCountryInfo()?.Name
+            };
+            await _appDbContext.LoginHistory.AddAsync(loginHistoryItem);
+            await _appDbContext.SaveChangesAsync();
+
             _httpContextAccessor.HttpContext?.Response.Cookies.Append(BLConsts.AUTH_TOKEN_KEY, token, new CookieOptions
             {
                 HttpOnly = false, // If HttpOnly is true, JavaScript access to the cookie is prevented.
                 Secure = true,   // Ensures the cookie is sent only over HTTPS
                 SameSite = SameSiteMode.Strict, // Prevents cross-site request forgery (CSRF)
-                Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes()) // Set expiration time
+                Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes(loginHistoryItem.IsMobile)) // Set expiration time
             });
 
             _logger.Info($"VerifyOTP userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");

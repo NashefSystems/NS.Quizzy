@@ -8,12 +8,6 @@
             <ng-container *ngIf="form.get('idNumber')?.errors?.['required']">
                 {{ 'ERRORS.FIELD_REQUIRED' | translate }}
             </ng-container>
-            <ng-container *ngIf="form.get('idNumber')?.errors?.['minlength']">
-                {{ 'ERRORS.MIN_LENGTH' | translate : form.get('idNumber')?.errors?.['minlength'] }}
-            </ng-container>
-            <ng-container *ngIf="form.get('idNumber')?.errors?.['maxlength']">
-                {{ 'ERRORS.MAX_LENGTH' | translate : form.get('idNumber')?.errors?.['maxlength'] }}
-            </ng-container>
         </mat-error>
     </mat-form-field>
 

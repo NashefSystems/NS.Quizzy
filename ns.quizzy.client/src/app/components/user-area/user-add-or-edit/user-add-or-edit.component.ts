@@ -30,7 +30,7 @@ export class UserAddOrEditComponent implements OnInit {
   id: string | null = null;
 
   form: FormGroup = this._fb.group({
-    idNumber: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    idNumber: ['', [Validators.required]],
     fullName: ['', [Validators.required]],
     role: ['', [Validators.required]],
     classId: ['']

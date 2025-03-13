@@ -15,5 +15,6 @@ namespace NS.Quizzy.Server.DAL.Entities
         public string? TwoFactorSecretKey { get; set; }
 
         public virtual Class? Class { get; set; }
+        public virtual IList<LoginHistoryItem> LoginHistory { get; set; }
     }
 }

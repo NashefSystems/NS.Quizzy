@@ -12,11 +12,12 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly string _issuer;
         private readonly string _audience;
         private readonly double _expiresInMinutes;
+        private readonly double _expiresInMinutesForMobile;
 
         internal byte[] GetJwtKey() => [.. _key];
         internal string GetJwtIssuer() => _issuer;
         internal string GetJwtAudience() => _audience;
-        internal double GetJwtExpiresInMinutes() => _expiresInMinutes;
+        internal double GetJwtExpiresInMinutes(bool isMobile) => isMobile ? _expiresInMinutesForMobile : _expiresInMinutes;
 
         public JwtHelper(IConfiguration configuration)
         {
@@ -27,6 +28,7 @@ namespace NS.Quizzy.Server.BL.Services
             _key = Encoding.UTF8.GetBytes(keyStr);
             _audience = jwtSection.GetValue<string>("Audience") ?? "";
             _expiresInMinutes = jwtSection.GetValue<double>("ExpiresInMinutes");
+            _expiresInMinutesForMobile = jwtSection.GetValue<double>("ExpiresInMinutesForMobile");
         }
 
         public (Guid tokenId, string token) GenerateToken(Guid userId, string email, string fullName, DAL.DALEnums.Roles role)

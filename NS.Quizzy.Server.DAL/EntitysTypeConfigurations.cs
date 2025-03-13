@@ -26,6 +26,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new QuestionnaireEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new AppSettingEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new LoginHistoryItemEntityConfiguration());
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -282,6 +283,22 @@ namespace NS.Quizzy.Server.DAL
                     .HasConversion(v => v.ToStringValue(), dbv => dbv.ToEnumValue<AppSettingTargets>());
 
                 entity.HasData(InitialData.AppSettingEntityData.GetData());
+            }
+        }
+
+        internal class LoginHistoryItemEntityConfiguration : BaseEntityTypeConfiguration<LoginHistoryItem>
+        {
+            public override void Configure(EntityTypeBuilder<LoginHistoryItem> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("LoginHistory");
+                entity.HasIndex(p => p.UserId).HasFilter("IsDeleted = '0'");
+
+                entity
+                  .HasOne(c => c.User)
+                  .WithMany(c => c.LoginHistory)
+                  .HasForeignKey(c => c.UserId);
+
             }
         }
     }

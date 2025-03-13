@@ -17,6 +17,7 @@ namespace NS.Quizzy.Server.DAL
         public DbSet<GradeExam> GradeExams { get; set; }
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassExam> ClassExams { get; set; }
+        public DbSet<LoginHistoryItem> LoginHistory { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
@@ -48,7 +49,10 @@ namespace NS.Quizzy.Server.DAL
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entity.Id = Guid.NewGuid();
+                        if (entity.Id == Guid.Empty)
+                        {
+                            entity.Id = Guid.NewGuid();
+                        }
                         entity.CreatedTime = startAction;
                         entity.ModifiedTime = startAction;
                         break;
