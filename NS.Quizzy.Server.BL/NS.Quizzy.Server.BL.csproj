@@ -10,7 +10,7 @@
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="NS.Security" Version="1.0.0" />
     <PackageReference Include="NS.Shared.CacheProvider" Version="1.0.13" />
-    <PackageReference Include="NS.Shared.QueueManager" Version="1.0.8" />
+    <PackageReference Include="NS.Shared.QueueManager" Version="1.0.9" />
     <PackageReference Include="Otp.NET" Version="1.4.0" />
     <PackageReference Include="QRCoder" Version="1.6.0" />
   </ItemGroup>

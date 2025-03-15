@@ -221,10 +221,11 @@ namespace NS.Quizzy.Server.BL.Services
                 throw new BadRequestException(errMsg);
             }
 
-            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage(
-                BLConsts.QUEUE_UPDATE_USERS,
-                JsonConvert.SerializeObject(items)
-            ));
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+            {
+                QueueName = BLConsts.QUEUE_UPDATE_USERS,
+                Payload = JsonConvert.SerializeObject(items)
+            });
         }
 
         private (List<CsvFileItem> items, List<string> errors) CsvFileValidatorAndExtractor(string csvContent)

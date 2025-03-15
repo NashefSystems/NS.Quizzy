@@ -108,14 +108,21 @@ export class UserListComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    const selectedFile = event.target.files[0];
-    if (!selectedFile) {
-      return;
-    }
-    this._usersService.upload(selectedFile).subscribe({
-      next: (response) => {
-        console.log(response);
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const selectedFile = input.files[0];
+
+      if (!selectedFile) {
+        return;
       }
-    });
+
+      this._usersService.upload(selectedFile).subscribe({
+        next: (response) => {
+          console.log(response);
+        }
+      });
+      
+      input.value = '';
+    }
   }
 }
