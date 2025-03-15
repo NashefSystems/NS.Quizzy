@@ -235,6 +235,7 @@ namespace NS.Quizzy.Server.BL.Services
                 user?.Id,
                 user?.Email,
                 user?.FullName,
+                user?.IdNumber,
                 user?.Role,
                 tokenId,
                 token
@@ -253,6 +254,7 @@ namespace NS.Quizzy.Server.BL.Services
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
+                IdNumber = user.IdNumber,
                 Role = user.Role,
                 TokenId = tokenId,
                 ClassId = user.ClassId,

@@ -10,6 +10,7 @@ namespace NS.Quizzy.Server.DAL.Entities
         [SensitiveData(SensitiveDataMode.Sha1)]
         public string Password { get; set; }
         public string FullName { get; set; }
+        public string? IdNumber { get; set; }
         public Guid? ClassId { get; set; }
         public Roles Role { get; set; }
         public string? TwoFactorSecretKey { get; set; }

@@ -7,5 +7,6 @@ namespace NS.Quizzy.Server.BL.Interfaces
     {
         Task<byte[]> DownloadAsync();
         Task UploadAsync(IFormFile file);
+        Task ClearCacheAsync();
     }
 }

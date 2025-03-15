@@ -79,6 +79,7 @@ export class UserAddOrEditComponent implements OnInit {
     const email = this.getEmailFromIdNumber(idNumber);
     const payload: IUserPayloadDto = {
       email: email,
+      idNumber: idNumber,
       fullName: fullName,
       role: role,
       classId: role === UserRoles.STUDENT ? classId : null,

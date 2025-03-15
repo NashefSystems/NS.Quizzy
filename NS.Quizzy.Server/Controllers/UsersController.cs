@@ -98,7 +98,6 @@ namespace NS.Quizzy.Server.Controllers
         {
             await _service.UploadAsync(file);
             return Ok();
-
         }
     }
 }

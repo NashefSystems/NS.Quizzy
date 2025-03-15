@@ -11,6 +11,7 @@ using NS.Quizzy.Server.BL.AppConfiguration;
 using NS.Quizzy.Server.BL.HostedServices;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.MappingProfiles;
+using NS.Quizzy.Server.BL.QueueSubscriptions;
 using NS.Quizzy.Server.BL.Services;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
@@ -19,7 +20,10 @@ using NS.Shared.CacheProvider.Extensions;
 using NS.Shared.Logging;
 using NS.Shared.Logging.Configs;
 using NS.Shared.Logging.Extensions;
+using NS.Shared.QueueManager.Extensions;
+using NS.Shared.QueueManager.Models;
 using System.Security.Claims;
+using static NS.Quizzy.Server.DAL.DALEnums;
 
 namespace NS.Quizzy.Server.BL.Extensions
 {
@@ -46,6 +50,14 @@ namespace NS.Quizzy.Server.BL.Extensions
             var environment = config.GetValue<string>("Environment");
             var cachePrefix = $"{appName}:{environment}";
             services.AddNSCacheProvider(cachePrefix);
+
+            var queueManagerConfig = config.GetSection("NSQueueManagerConfig").Get<NSQueueManagerConfig>();
+            services.AddNSQueueManager(queueManagerConfig);
+
+            services.AddNSQueueSubscription(setup =>
+            {
+                setup.AddSubscriptionClass<UpdateUsersQueueSubscription>();
+            });
 
             #region DbConfiguration
             services.AddSingleton<IConfigurationSource, DbConfigurationSource>();
@@ -279,6 +291,42 @@ namespace NS.Quizzy.Server.BL.Extensions
                 logger.Fatal($"AppSetting value parsing exception '{ex.Message}'", new { AppSettingItem = item }, ex);
                 throw new Exception($"AppSetting value parsing error '{ex.Message}'");
             }
+        }
+
+        internal static uint? GetFullCode(this Class? @class)
+        {
+            if (@class == null || @class.Grade == null)
+            {
+                return null;
+            }
+
+            return (@class.Grade.Code * 100) + @class.Code;
+        }
+
+        internal static Roles ToUserRole(this string role)
+        {
+            return (role ?? string.Empty) switch
+            {
+                "תלמיד" => Roles.Student,
+                "מורה" => Roles.Teacher,
+                "אחראי" => Roles.Admin,
+                "מפתח" => Roles.Developer,
+                "מנהל מערכת" => Roles.SuperAdmin,
+                _ => throw new Exception($"Unknown role '{role}'"),
+            };
+        }
+
+        internal static string ToHebrewRole(this Roles role)
+        {
+            return role switch
+            {
+                Roles.Student => "תלמיד",
+                Roles.Teacher => "מורה",
+                Roles.Admin => "אחראי",
+                Roles.Developer => "מפתח",
+                Roles.SuperAdmin => "מנהל מערכת",
+                _ => throw new Exception($"Unknown role '{role}'"),
+            };
         }
     }
 }

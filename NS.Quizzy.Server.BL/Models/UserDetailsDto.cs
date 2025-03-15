@@ -8,6 +8,7 @@ namespace NS.Quizzy.Server.Models.Models
         public Guid Id { get; set; }
 
         public string FullName { get; set; }
+        public string IdNumber { get; set; }
 
         public string Email { get; set; }
 

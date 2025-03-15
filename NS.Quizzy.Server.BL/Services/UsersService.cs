@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.CustomExceptions;
+using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Common.Extensions;
@@ -13,6 +13,7 @@ using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
+using NS.Shared.QueueManager.Interfaces;
 using System.Text;
 using static NS.Quizzy.Server.Common.Enums;
 using static NS.Quizzy.Server.DAL.DALEnums;
@@ -22,6 +23,7 @@ namespace NS.Quizzy.Server.BL.Services
     internal class UsersService : IUsersService
     {
         const string CACHE_KEY = "Users";
+        private readonly INSQueueService _queueService;
         private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
@@ -31,12 +33,13 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly INSLogger _logger;
 
 
-        public UsersService(INSLogger logger, AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper, IConfiguration configuration)
+        public UsersService(INSLogger logger, AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper, IConfiguration configuration, INSQueueService queueService)
         {
             _logger = logger;
             _appDbContext = appDbContext;
             _cacheProvider = cacheProvider;
             _mapper = mapper;
+            _queueService = queueService;
             _roles = [Roles.Teacher, Roles.Student];
             {
                 var key = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
@@ -47,6 +50,11 @@ namespace NS.Quizzy.Server.BL.Services
                 var key = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
                 _idNumberEmailDomain = configuration.GetValue<string>(key) ?? "";
             }
+        }
+
+        public async Task ClearCacheAsync()
+        {
+            await _cacheProvider.DeleteAsync(CACHE_KEY);
         }
 
         public async Task<List<UserDto>> GetAllAsync()
@@ -94,13 +102,14 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 Email = model.Email,
                 Password = model.Email.ToLower(),
+                IdNumber = model.IdNumber,
                 FullName = model.FullName,
                 ClassId = model.ClassId,
                 Role = model.Role,
             };
             await _appDbContext.Users.AddAsync(item);
             await _appDbContext.SaveChangesAsync();
-            await _cacheProvider.DeleteAsync(CACHE_KEY);
+            await ClearCacheAsync();
 
             return _mapper.Map<UserDto>(item);
         }
@@ -126,21 +135,14 @@ namespace NS.Quizzy.Server.BL.Services
             item.Email = model.Email;
             item.Password = model.Email.ToLower();
             item.FullName = model.FullName;
+            item.IdNumber = model.IdNumber;
             item.ClassId = model.ClassId;
             item.Role = model.Role;
 
             await _appDbContext.SaveChangesAsync();
-            await _cacheProvider.DeleteAsync(CACHE_KEY);
+            await ClearCacheAsync();
 
             return _mapper.Map<UserDto>(item);
-        }
-
-        private static uint? GetFullCode(Class? c)
-        {
-            if (c == null || c.Grade == null)
-                return null;
-
-            return (c.Grade.Code * 100) + c.Code;
         }
 
         public async Task<bool> DeleteAsync(Guid id)
@@ -158,7 +160,7 @@ namespace NS.Quizzy.Server.BL.Services
 
             item.IsDeleted = true;
             await _appDbContext.SaveChangesAsync();
-            await _cacheProvider.DeleteAsync(CACHE_KEY);
+            await ClearCacheAsync();
             return true;
         }
 
@@ -176,8 +178,8 @@ namespace NS.Quizzy.Server.BL.Services
 
             foreach (var item in items)
             {
-                var role = item.Role == Roles.Student ? "תלמיד" : "מורה";
-                var classCode = GetFullCode(item.Class);
+                var role = item.Role.ToHebrewRole();
+                var classCode = item.Class?.GetFullCode();
                 var idNumber = item.Email.Replace($"@{_idNumberEmailDomain}", "");
                 sb.AppendLine($"\"{idNumber}\",\"{item.FullName}\",\"{role}\",{classCode}");
             }
@@ -204,8 +206,6 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             using var reader = new StreamReader(file.OpenReadStream(), Encoding.UTF8);
-
-            // Read entire content of the CSV file as a single string
             string csvContent = await reader.ReadToEndAsync();
 
             // Validate if the file is empty after reading
@@ -214,19 +214,22 @@ namespace NS.Quizzy.Server.BL.Services
                 throw new BadRequestException("CSV file is empty.");
             }
 
-            var (items, errors) = CsvFileExtractor(csvContent);
+            var (items, errors) = CsvFileValidatorAndExtractor(csvContent);
             if (errors.Count != 0)
             {
                 var errMsg = string.Join('\n', errors);
                 throw new BadRequestException(errMsg);
             }
 
-            await _cacheProvider.SetOrUpdateAsync($"CsvFiles:{_logger.GetContextId()}", items);
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage(
+                BLConsts.QUEUE_UPDATE_USERS,
+                JsonConvert.SerializeObject(items)
+            ));
         }
 
-        private (List<CsvFileItem> items, List<string> errors) CsvFileExtractor(string csvContent)
+        private (List<CsvFileItem> items, List<string> errors) CsvFileValidatorAndExtractor(string csvContent)
         {
-            using var logBag = _logger.CreateLogBag(nameof(CsvFileExtractor));
+            using var logBag = _logger.CreateLogBag(nameof(CsvFileValidatorAndExtractor));
             logBag.AddOrUpdateParameter("CsvContentLength", csvContent?.Length);
             var items = new List<CsvFileItem>();
             var errors = new List<string>();

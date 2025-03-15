@@ -8,7 +8,6 @@ import { UsersService } from '../../../services/backend/users.service';
 import { IUserDto } from '../../../models/backend/user.dto';
 import { ClassesService } from '../../../services/backend/classes.service';
 import { IClassDto } from '../../../models/backend/class.dto';
-import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 import { AppTranslateService } from '../../../services/app-translate.service';
 
 @Component({
@@ -19,7 +18,6 @@ import { AppTranslateService } from '../../../services/app-translate.service';
   styleUrl: './user-list.component.scss'
 })
 export class UserListComponent implements OnInit {
-  private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
   private readonly _usersService = inject(UsersService);
   private readonly _classesService = inject(ClassesService);
   private readonly _router = inject(Router);
@@ -29,16 +27,12 @@ export class UserListComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
   selectedFile: File | null = null;
 
-  idNumberEmailDomain: string = '';
   classes: IClassDto[] = [];
   items: IUserDto[] | null = null;
   columns: TableColumnInfo[] = [
     {
-      key: 'email',
-      title: 'USER_AREA.ID_NUMBER',
-      converter: (item: IUserDto) => {
-        return item.email.replace(`@${this.idNumberEmailDomain}`, '');
-      }
+      key: 'idNumber',
+      title: 'USER_AREA.ID_NUMBER'
     }, {
       key: 'fullName',
       title: 'USER_AREA.FULL_NAME'
@@ -69,7 +63,6 @@ export class UserListComponent implements OnInit {
   }
 
   loadData() {
-    this._clientAppSettingsService.get().subscribe({ next: (data) => this.idNumberEmailDomain = data.IdNumberEmailDomain });
     this._classesService.get().subscribe({ next: (data) => this.classes = data });
     this._usersService.get().subscribe({ next: (data) => this.items = data });
   }
