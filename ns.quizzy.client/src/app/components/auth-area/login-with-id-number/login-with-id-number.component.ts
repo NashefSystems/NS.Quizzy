@@ -25,7 +25,7 @@ export class LoginWithIdNumberComponent implements OnInit {
   private readonly _storageService = inject(StorageService);
 
   loginForm: FormGroup = this._fb.group({
-    idNumber: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    idNumber: ['', [Validators.required]],
     rememberMe: [true],
   });
 
