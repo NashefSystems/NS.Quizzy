@@ -9,12 +9,18 @@
                 <ng-container *ngIf="loginForm.get('idNumber')?.errors?.['required']">
                     {{ 'ERRORS.FIELD_REQUIRED' | translate }}
                 </ng-container>
+                <ng-container *ngIf="loginForm.get('idNumber')?.errors?.['minlength']">
+                    {{ 'ERRORS.MIN_LENGTH' | translate : loginForm.get('idNumber')?.errors?.['minlength'] }}
+                </ng-container>
+                <ng-container *ngIf="loginForm.get('idNumber')?.errors?.['maxlength']">
+                    {{ 'ERRORS.MAX_LENGTH' | translate : loginForm.get('idNumber')?.errors?.['maxlength'] }}
+                </ng-container>
             </mat-error>
         </mat-form-field>
-
+       
         <mat-checkbox formControlName="rememberMe">{{ 'LOGIN.REMEMBER_ME' | translate }}</mat-checkbox>
-
-        <button mat-stroked-button class="full-width login-btn" [disabled]="loginForm.invalid" cdkFocusInitial>{{
+       
+       <button mat-stroked-button class="full-width login-btn" [disabled]="loginForm.invalid" cdkFocusInitial>{{
             'LOGIN.LOGIN_BUTTON' | translate }}</button>
     </form>
 </div>
