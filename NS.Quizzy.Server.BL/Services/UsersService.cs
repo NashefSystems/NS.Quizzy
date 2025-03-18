@@ -290,7 +290,7 @@ namespace NS.Quizzy.Server.BL.Services
             var lineParts = line.Split(',', StringSplitOptions.TrimEntries);
             if (lineParts.Length >= 4)
             {
-                res.IdNumber = lineParts[0].Trim();
+                res.IdNumber = lineParts[0].Trim().PadLeft(9, '0');
                 res.FullName = lineParts[1].Trim();
                 res.Role = lineParts[2].Trim();
                 res.Class = lineParts[3].Trim();
