@@ -62,6 +62,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 {
                     user = new User();
                     await dbContext.Users.AddAsync(user);
+                    userDic.Add(email.ToLower(), user);
                 }
 
                 user.Email = email;
