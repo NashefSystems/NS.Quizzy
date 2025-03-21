@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.Attributes;
 using NS.Quizzy.Server.BL.Interfaces;
+using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Models.DTOs;
 using NS.Quizzy.Server.Models.Models;
 using NS.Shared.Logging.Attributes;
 using NS.Shared.Logging.Extensions;
+using NS.Shared.QueueManager.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Text;
 
@@ -94,10 +96,17 @@ namespace NS.Quizzy.Server.Controllers
 
         [HttpPost("Upload")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public async Task<IActionResult> UploadFileAsync([FromForm] IFormFile file)
+        public async Task<ActionResult<UploadFileResponse>> UploadFileAsync([FromForm] IFormFile file)
         {
-            await _service.UploadAsync(file);
-            return Ok();
+            var res = await _service.UploadAsync(file);
+            return Ok(res);
+        }
+
+        [HttpGet("UploadFileStatus/{uploadMessageId}")]
+        public async Task<ActionResult<UploadFileStatusResponse>> UploadFileStatusAsync(Guid uploadMessageId)
+        {
+            var res = await _service.UploadFileStatusAsync(uploadMessageId);
+            return Ok(res);
         }
     }
 }

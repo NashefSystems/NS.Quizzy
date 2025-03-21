@@ -9,6 +9,7 @@ import { IUserDto } from '../../../models/backend/user.dto';
 import { ClassesService } from '../../../services/backend/classes.service';
 import { IClassDto } from '../../../models/backend/class.dto';
 import { AppTranslateService } from '../../../services/app-translate.service';
+import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'app-user-list',
@@ -23,10 +24,12 @@ export class UserListComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
   private readonly _appTranslateService = inject(AppTranslateService);
+  private readonly _notificationsService = inject(NotificationsService);
 
   @ViewChild('fileInput') fileInput!: ElementRef;
   selectedFile: File | null = null;
 
+  uploadFileProgressPercentage: number | null = null;
   classes: IClassDto[] = [];
   items: IUserDto[] | null = null;
   columns: TableColumnInfo[] = [
@@ -63,6 +66,7 @@ export class UserListComponent implements OnInit {
   }
 
   loadData() {
+    this.items = null;
     this._classesService.get().subscribe({ next: (data) => this.classes = data });
     this._usersService.get().subscribe({ next: (data) => this.items = data });
   }
@@ -107,6 +111,29 @@ export class UserListComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
+  checkUploadFileIsCompleted(messageId: string) {
+    setTimeout(() => {
+
+      this._usersService.uploadFileStatus(messageId).subscribe({
+        next: (response) => {
+          if (response.isCompleted) {
+            this.uploadFileProgressPercentage = null;
+            this.loadData();
+          } else {
+            this.uploadFileProgressPercentage = response?.progressPercentage ?? 0;
+            this.checkUploadFileIsCompleted(messageId);
+          }
+        },
+        error: (err) => {
+          console.log("checkUploadFileIsCompleted error: ", err);
+          this.uploadFileProgressPercentage = null;
+          this.loadData();
+        }
+      });
+
+    }, 100);
+  }
+
   onFileSelected(event: any) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -118,10 +145,15 @@ export class UserListComponent implements OnInit {
 
       this._usersService.upload(selectedFile).subscribe({
         next: (response) => {
-          console.log(response);
+          this._notificationsService.success('ITEM_UPDATED_SUCCESSFULLY');
+          this.items = null;
+          this.checkUploadFileIsCompleted(response.messageId);
+        },
+        error: err => {
+          this._notificationsService.httpErrorHandler(err);
         }
       });
-      
+
       input.value = '';
     }
   }

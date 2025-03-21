@@ -1,5 +1,17 @@
 <div class="page-container">
-    <app-table [items]="items" [columns]="columns" (add)="onAdd()" (edit)="onEdit($event)" (delete)="onDelete($event)">
+    <div class="upload-spinner-overlay" dir="ltr" *ngIf="uploadFileProgressPercentage != null">
+        <div class="upload-spinner-wrapper">
+            <mat-progress-spinner class="upload-spinner" [mode]="'determinate'" [value]="uploadFileProgressPercentage"
+                [diameter]="100" strokeWidth="6" color="primary">
+            </mat-progress-spinner>
+            <div class="upload-percentage-text dark-400">
+                {{ uploadFileProgressPercentage }}%
+            </div>
+        </div>
+    </div>
+
+    <app-table *ngIf="uploadFileProgressPercentage == null" [items]="items" [columns]="columns" (add)="onAdd()"
+        (edit)="onEdit($event)" (delete)="onDelete($event)">
         <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden />
         <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>

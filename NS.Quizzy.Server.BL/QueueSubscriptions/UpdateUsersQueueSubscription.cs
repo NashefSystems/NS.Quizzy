@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
@@ -20,10 +21,11 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
         public override int GetMaximumAttempts() => 2;
         public override string GetQueueName() => BLConsts.QUEUE_UPDATE_USERS;
 
-        public override async Task<QueueSubscriptionAcceptMethodResult> ProcessMessageAsync(NSQueueMessage message, INSLogBag logBag, IServiceScope scope, CancellationToken cancellationToken)
+        public override async Task<QueueSubscriptionAcceptMethodResult> ProcessMessageAsync(NSQueueMessage message, Func<double, Task> setMessageProgressPercentage, INSLogBag logBag, IServiceScope scope, CancellationToken cancellationToken)
         {
             var res = new QueueSubscriptionAcceptMethodResult();
             logBag.Trace("Starting ProcessMessageAsync");
+            await setMessageProgressPercentage(0);
             var items = JsonConvert.DeserializeObject<List<CsvFileItem>>(message.Payload);
             if (items == null || items.Count == 0)
             {
@@ -51,12 +53,14 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 item.IsDeleted = true;
             }
 
-            foreach (var item in items)
+            await setMessageProgressPercentage(0);
+            for (int i = 0; i < items.Count; i++)
             {
-                var email = $"{item.IdNumber}@{idNumberEmailDomain}";
-                var role = item.Role.ToUserRole();
-                //item.FullName;
-                classDic.TryGetValue(item.Class, out var classId);
+                await setMessageProgressPercentage(Math.Truncate(100.0 * i / items.Count));
+                var email = $"{items[i].IdNumber}@{idNumberEmailDomain}";
+                var role = items[i].Role.ToUserRole();
+
+                classDic.TryGetValue(items[i].Class, out var classId);
 
                 if (!userDic.TryGetValue(email.ToLower(), out var user))
                 {
@@ -67,15 +71,15 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
 
                 user.Email = email;
                 user.Password = email.ToLower();
-                user.IdNumber = item.IdNumber;
-                user.FullName = item.FullName;
+                user.IdNumber = items[i].IdNumber;
+                user.FullName = items[i].FullName;
                 user.Role = role;
                 user.ClassId = role == DALEnums.Roles.Teacher ? null : classId;
                 user.IsDeleted = false;
             }
-
             await dbContext.SaveChangesAsync();
             await usersService.ClearCacheAsync();
+            await setMessageProgressPercentage(100);
             return res.SetOk();
         }
     }

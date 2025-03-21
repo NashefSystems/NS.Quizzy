@@ -16,8 +16,11 @@ enum DataStatus {
 export class TableComponent {
   DataStatus = DataStatus;
   @Input() emptyStatusFeatureEnabled: boolean = true;
+  @Input() rowCountFeatureEnabled: boolean = true;
+
   @Input() items: any[] | null = null;
   @Input() columns: TableColumnInfo[] = [];
+
   @Output() add = new EventEmitter<void>();
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
@@ -68,7 +71,7 @@ export class TableComponent {
     if (this.items === null || this.items === undefined) {
       return DataStatus.Loading;
     }
-    
+
     const isEmptyStatus = this.dataSource.filteredData.length === 0;
     if (this.emptyStatusFeatureEnabled && isEmptyStatus) {
       return DataStatus.Empty;

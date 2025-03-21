@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -20,8 +21,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
   MatDialogModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatCardModule,
-  MatExpansionModule, MatProgressBarModule, MatSidenavModule, MatMenuModule, MatSnackBarModule,
-  MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule, MatTooltipModule
+  MatExpansionModule, MatProgressBarModule, MatProgressSpinner, MatSidenavModule, MatMenuModule,
+  MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule, MatTooltipModule
 ];
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';

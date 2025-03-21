@@ -14,6 +14,7 @@ using NS.Quizzy.Server.Models.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.QueueManager.Interfaces;
+using NS.Shared.QueueManager.Models;
 using System.Text;
 using static NS.Quizzy.Server.Common.Enums;
 using static NS.Quizzy.Server.DAL.DALEnums;
@@ -190,10 +191,13 @@ namespace NS.Quizzy.Server.BL.Services
             return utf8WithBom;
         }
 
-        public async Task UploadAsync(IFormFile file)
+        public async Task<UploadFileResponse> UploadAsync(IFormFile file)
         {
+            using var logBag = _logger.CreateLogBag(nameof(UploadAsync));
             if (file == null || file.Length == 0)
             {
+                logBag.Trace("No file uploaded");
+                logBag.LogLevel = NSLogLevel.Error;
                 throw new BadRequestException("No file uploaded");
             }
 
@@ -202,7 +206,9 @@ namespace NS.Quizzy.Server.BL.Services
 
             if (!allowedExtensions.Contains(extension))
             {
-                throw new BadRequestException("Invalid file type. Only CSV files are allowed.");
+                logBag.Trace("Invalid file type. Only CSV files are allowed");
+                logBag.LogLevel = NSLogLevel.Error;
+                throw new BadRequestException("Invalid file type. Only CSV files are allowed");
             }
 
             using var reader = new StreamReader(file.OpenReadStream(), Encoding.UTF8);
@@ -211,21 +217,48 @@ namespace NS.Quizzy.Server.BL.Services
             // Validate if the file is empty after reading
             if (string.IsNullOrWhiteSpace(csvContent))
             {
-                throw new BadRequestException("CSV file is empty.");
+                logBag.Trace("CSV file is empty");
+                logBag.LogLevel = NSLogLevel.Warn;
+                throw new BadRequestException("CSV file is empty");
             }
 
             var (items, errors) = CsvFileValidatorAndExtractor(csvContent);
             if (errors.Count != 0)
             {
                 var errMsg = string.Join('\n', errors);
+                logBag.Trace($"Error message:\n{errMsg}");
+                logBag.LogLevel = NSLogLevel.Error;
                 throw new BadRequestException(errMsg);
             }
 
-            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+            var publishMessageResult = await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
             {
                 QueueName = BLConsts.QUEUE_UPDATE_USERS,
                 Payload = JsonConvert.SerializeObject(items)
             });
+
+            logBag.AddOrUpdateParameter("PublishMessageResult", publishMessageResult);
+
+            if (!publishMessageResult.IsSuccessful)
+            {
+                throw new Exception($"Unable to push queue message: '{publishMessageResult.Error}'");
+            }
+
+            return new UploadFileResponse()
+            {
+                MessageId = publishMessageResult.MessageID
+            };
+        }
+
+        public async Task<UploadFileStatusResponse> UploadFileStatusAsync(Guid uploadMessageId)
+        {
+            var messageInfo = await _queueService.GetMessageStatusInfoAsync(uploadMessageId);
+
+            return new UploadFileStatusResponse()
+            {
+                IsCompleted = messageInfo.IsCompleted,
+                ProgressPercentage = messageInfo.ProgressPercentage
+            };
         }
 
         private (List<CsvFileItem> items, List<string> errors) CsvFileValidatorAndExtractor(string csvContent)
