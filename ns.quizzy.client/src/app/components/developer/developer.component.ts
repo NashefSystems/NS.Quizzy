@@ -13,7 +13,7 @@ export class DeveloperComponent implements OnInit {
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _ngZone = inject(NgZone);
-  public readonly reactNativeMessageTypes: { [key: string]: string  } = {};
+  public readonly reactNativeMessageTypes: { [key: string]: string } = {};
 
   isLoading = false;
 
@@ -23,6 +23,8 @@ export class DeveloperComponent implements OnInit {
     this.reactNativeMessageTypes[MESSAGE_TYPES.READ_DATA] = MESSAGE_RESPONSE_EVENTS.ON_READ_DATA_RESPONSE;
     this.reactNativeMessageTypes[MESSAGE_TYPES.CHECK_BIOMETRIC_AVAILABILITY] = MESSAGE_RESPONSE_EVENTS.ON_CHECK_BIOMETRIC_AVAILABILITY_RESPONSE;
     this.reactNativeMessageTypes[MESSAGE_TYPES.VERIFY_BIOMETRIC_SIGNATURE] = MESSAGE_RESPONSE_EVENTS.ON_VERIFY_BIOMETRIC_SIGNATURE_RESPONSE;
+    this.reactNativeMessageTypes[MESSAGE_TYPES.NOTIFICATION_TOKEN] = MESSAGE_RESPONSE_EVENTS.ON_NOTIFICATION_TOKEN_RESPONSE;
+    this.reactNativeMessageTypes[MESSAGE_TYPES.MOBILE_SERIAL_NUMBER] = MESSAGE_RESPONSE_EVENTS.ON_MOBILE_SERIAL_NUMBER_RESPONSE;
   }
 
   ngOnInit(): void {
@@ -45,7 +47,8 @@ export class DeveloperComponent implements OnInit {
       return;
     }
 
-    let data: any = { type: type };this.reactNativeMessageTypes
+    let data: any = { type: type };
+    this.reactNativeMessageTypes
     const responseEvent: string | null = this.reactNativeMessageTypes[type];
     switch (type) {
       case MESSAGE_TYPES.CONSOLE: {
