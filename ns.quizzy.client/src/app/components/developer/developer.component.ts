@@ -40,6 +40,10 @@ export class DeveloperComponent implements OnInit {
     this._appSettingsService.setLoadingStatus(this.isLoading);
   }
 
+  onAppMessage() {
+    window.postMessage({ action: 'customAction', data: 'Hello App 5' });
+  }
+
   onReactNativeMessage(type: string) {
     const _window = (window as any);
     if (!_window.ReactNativeWebView) {

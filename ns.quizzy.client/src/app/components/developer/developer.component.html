@@ -1,15 +1,22 @@
+<h3 class="center-text">App message</h3>
+<button mat-stroked-button (click)="onAppMessage()">Test</button>
+<hr>
+
 <h3 class="center-text">React native message</h3>
 <ng-container *ngFor="let item of reactNativeMessageTypes | keyvalue">
     <button mat-stroked-button (click)="onReactNativeMessage(item.key)">{{item.key}}</button>
 </ng-container>
 <hr>
+
 <h3 class="center-text">Loading test</h3>
 <button mat-stroked-button (click)="toggleLoadingMode()">Loader</button>
 <hr>
+
 <h3 class="center-text">Language test</h3>
 <!-- <app-language-selector></app-language-selector> -->
 <div class="center-text">{{'DIR' | translate}}</div>
 <hr>
+
 <h3 class="center-text">Notification test</h3>
 <button mat-stroked-button (click)="showNotify('info')">Info</button>
 <button mat-stroked-button (click)="showNotify('success')">Success</button>
