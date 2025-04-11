@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
@@ -131,7 +130,7 @@ namespace NS.Quizzy.Server.BL.Services
             _httpContextAccessor.HttpContext?.Response.Cookies.Append(BLConsts.AUTH_TOKEN_KEY, token, new CookieOptions
             {
                 HttpOnly = false, // If HttpOnly is true, JavaScript access to the cookie is prevented.
-                Secure = true,   // Ensures the cookie is sent only over HTTPS
+                Secure = false,   // Ensures the cookie is sent only over HTTPS
                 SameSite = SameSiteMode.Strict, // Prevents cross-site request forgery (CSRF)
                 Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes(loginHistoryItem.IsMobile)) // Set expiration time
             });
