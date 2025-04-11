@@ -61,7 +61,7 @@ export class AccountService extends BaseService {
       return of(null);
     }
 
-    if (this.userSubject.value) {
+    if (this.userSubject?.value) {
       // If user details are already cached, return them immediately
       return of(this.userSubject.value);
     }
