@@ -56,6 +56,7 @@ export class AccountService extends BaseService {
   }
 
   getDetails(): Observable<UserDetailsDto | null> {
+    debugger;
     if (!this.tokenIsExists()) {
       return of(null);
     }

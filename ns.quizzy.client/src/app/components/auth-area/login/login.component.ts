@@ -14,7 +14,7 @@ enum LoginMethod {
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   LoginMethod = LoginMethod;
   private readonly localStorageKey = LocalStorageKeys.loginMethod;
   private readonly _storageService = inject(StorageService);
@@ -23,10 +23,6 @@ export class LoginComponent implements OnInit {
 
   constructor() {
     this.loginMethod = this._storageService.getLocalStorage(this.localStorageKey, LoginMethod.ID);
-  }
-
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
   }
 
   onPrivacyPolicyClick() {
