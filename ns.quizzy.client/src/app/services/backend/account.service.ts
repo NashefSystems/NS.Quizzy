@@ -3,7 +3,7 @@ import { BaseService } from './base.service';
 import { UserDetailsDto } from '../../models/backend/user-details.dto';
 import { LoginRequest } from '../../models/backend/login.request';
 import { LoginResponse } from '../../models/backend/login.response';
-import { BehaviorSubject, finalize, from, map, Observable, of, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginWithIdNumberRequest } from '../../models/backend/login-with-id-number.request';
@@ -56,7 +56,6 @@ export class AccountService extends BaseService {
   }
 
   getDetails(): Observable<UserDetailsDto | null> {
-    debugger;
     if (!this.tokenIsExists()) {
       return of(null);
     }
