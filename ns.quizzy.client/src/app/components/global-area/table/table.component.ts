@@ -46,6 +46,13 @@ export class TableComponent {
     }) ?? [];
   }
 
+  getFilteredDataLength() {
+    if (this.dataSource && this.dataSource.filteredData) {
+      return this.dataSource.filteredData.length;
+    }
+    return 0;
+  }
+
   getColumnInfo(key: string) {
     return this.columns.find(x => x.key === key);
   }

@@ -3,7 +3,7 @@ import { BaseService } from './base.service';
 import { UserDetailsDto } from '../../models/backend/user-details.dto';
 import { LoginRequest } from '../../models/backend/login.request';
 import { LoginResponse } from '../../models/backend/login.response';
-import { BehaviorSubject, finalize, from, of, tap } from 'rxjs';
+import { BehaviorSubject, finalize, from, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { VerifyOTPRequest } from '../../models/backend/verify-otp.request';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginWithIdNumberRequest } from '../../models/backend/login-with-id-number.request';
@@ -15,14 +15,14 @@ export class AccountService extends BaseService {
   controllerName: string = 'Account';
   private userSubject = new BehaviorSubject<UserDetailsDto | null>(null);
   public userChange = this.userSubject.asObservable();
-  private pendingRequest: Promise<UserDetailsDto | undefined> | null = null;
+  private details$: Observable<UserDetailsDto | null> | null = null;
 
 
   constructor(
     private readonly cookieService: CookieService,
   ) {
     super();
-    this.getDetails().subscribe();
+    this.getDetails().subscribe({ next: (response: any) => { } });
   }
 
   getTest() {
@@ -55,38 +55,33 @@ export class AccountService extends BaseService {
     return this.cookieService.check('_qat');
   }
 
-  getDetails() {    
+  getDetails(): Observable<UserDetailsDto | null> {
     if (!this.tokenIsExists()) {
-      // If the token does not exist, return null immediately
       return of(null);
     }
 
-    if (this.userSubject?.value) {
-      // If user details are already cached, return them immediately
+    if (this.userSubject.value) {
       return of(this.userSubject.value);
     }
 
-    if (this.pendingRequest) {
-      // If there's an ongoing request, return the same promise as an Observable
-      return from(this.pendingRequest);
+    if (this.details$) {
+      return this.details$;
     }
-    // Create a new request and store it in `pendingRequest`
-    this.pendingRequest = this.httpClient.get<UserDetailsDto>(`${this.getBaseUrl()}/Details`).pipe(
+
+    this.details$ = this.httpClient.get<UserDetailsDto>(`${this.getBaseUrl()}/Details`).pipe(
       tap({
         next: (data) => this.userSubject.next(data),
         error: () => this.userSubject.next(null),
-      })
-    ).toPromise();
-
-    return from(this.pendingRequest).pipe(
-      finalize(() => {
-        // Reset the pending request once it's completed
-        this.pendingRequest = null;
-      })
+      }),
+      map(data => data ?? null), // normalize undefined to null
+      shareReplay(1) // ✅ cache the result
     );
+
+    return this.details$;
   }
 
   logout() {
+    this.details$ = null; // 🔄 reset cache
     return this.httpClient.delete(`${this.getBaseUrl()}/Logout`).pipe(tap({
       next: () => this.userSubject.next(null)
     }));

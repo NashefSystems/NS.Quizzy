@@ -18,8 +18,8 @@
   <div class="H200 center-text dark-400 empty-status" [innerHtml]="'TABLE.EMPTY_STATUS' | translate"></div>
   }
   @case (DataStatus.List) {
-  <div *ngIf="rowCountFeatureEnabled" class="row-count dark-400" 
-  translate [translateParams]="{value: dataSource?.filteredData?.length ?? 0}">
+  <div *ngIf="rowCountFeatureEnabled" class="row-count dark-400" translate
+    [translateParams]="{value: getFilteredDataLength()}">
     TABLE.ROW_COUNT
   </div>
   <table mat-table [dataSource]="dataSource" matSort class="table-data">
