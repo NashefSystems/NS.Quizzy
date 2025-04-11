@@ -55,10 +55,10 @@ export class AccountService extends BaseService {
     return this.cookieService.check('_qat');
   }
 
-  getDetails() {
+  getDetails() {    
     if (!this.tokenIsExists()) {
       // If the token does not exist, return null immediately
-      return of();
+      return of(null);
     }
 
     if (this.userSubject.value) {
