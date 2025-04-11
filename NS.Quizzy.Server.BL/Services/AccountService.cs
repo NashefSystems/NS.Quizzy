@@ -131,7 +131,7 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 HttpOnly = false, // If HttpOnly is true, JavaScript access to the cookie is prevented.
                 Secure = false,   // Ensures the cookie is sent only over HTTPS
-                SameSite = SameSiteMode.Strict, // Prevents cross-site request forgery (CSRF)
+                SameSite = SameSiteMode.None, // Prevents cross-site request forgery (CSRF)
                 Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes(loginHistoryItem.IsMobile)) // Set expiration time
             });
 
@@ -209,7 +209,7 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 HttpOnly = false, // If HttpOnly is true, JavaScript access to the cookie is prevented.
                 Secure = true,   // Ensures the cookie is sent only over HTTPS
-                SameSite = SameSiteMode.Strict, // Prevents cross-site request forgery (CSRF)
+                SameSite = SameSiteMode.None, // Prevents cross-site request forgery (CSRF)
                 Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes(loginHistoryItem.IsMobile)) // Set expiration time
             });
 
