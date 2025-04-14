@@ -1,4 +1,3 @@
-declare var IS_MOBILE_APP: boolean;
 import { Component, inject, OnInit } from '@angular/core';
 import { AccountService } from '../../../services/backend/account.service';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -21,7 +20,6 @@ export class MainMenuComponent implements OnInit {
   private readonly _dialogRef = inject(MatDialogRef<MainMenuComponent>);
   private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
 
-  isMobileApp: boolean = !!(IS_MOBILE_APP);
   menuItems: IMenuItemInfo[];
   appVersion: string = "";
 
