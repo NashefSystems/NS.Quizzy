@@ -446,6 +446,16 @@ namespace NS.Quizzy.Server.DAL
                         Value = "Quizzy.ExamProduction.com",
                         IsSecured = false,
                         IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("648308A0-690F-45E7-B4A8-C0F0680625AC"),
+                        Key =  AppSettingKeys.IgnoreOTPValidationUserIds.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.Json,
+                        Value = "[]",
+                        IsSecured = false,
+                        IsDeleted = false,
                     }
                 ];
             }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
@@ -26,6 +27,7 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly INSCacheProvider _cacheProvider;
         private readonly TimeSpan _cacheOTPTTL;
         private readonly TimeSpan _cacheLoginsTTL;
+        private readonly IConfiguration _configuration;
         private readonly string _idNumberEmailDomain;
 
         public AccountService(INSLogger logger, AppDbContext appDbContext, JwtHelper jwtHelper, IHttpContextAccessor httpContextAccessor, IOTPService otpService, INSCacheProvider cacheProvider, IConfiguration configuration)
@@ -36,6 +38,8 @@ namespace NS.Quizzy.Server.BL.Services
             _httpContextAccessor = httpContextAccessor;
             _otpService = otpService;
             _cacheProvider = cacheProvider;
+            _configuration = configuration;
+
             {
                 var cacheKey = AppSettingKeys.CacheOTPTTLMin.GetDBStringValue();
                 var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 60;
@@ -170,22 +174,29 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
-            var twoFactorSecretKey = user.TwoFactorSecretKey;
-            if (string.IsNullOrWhiteSpace(twoFactorSecretKey))
+            var cacheKey = AppSettingKeys.IgnoreOTPValidationUserIds.GetDBStringValue();
+            var ignoreOTPValidationUserIdsJson = _configuration.GetValue<string>(cacheKey) ?? "[]";
+            var ignoreOTPValidationUserIds = JsonConvert.DeserializeObject<List<Guid>>(ignoreOTPValidationUserIdsJson) ?? [];
+            if (!ignoreOTPValidationUserIds.Contains(user.Id))
             {
-                twoFactorSecretKey = cacheInfo.TwoFactorSecretKey;
+                var twoFactorSecretKey = user.TwoFactorSecretKey;
+                if (string.IsNullOrWhiteSpace(twoFactorSecretKey))
+                {
+                    twoFactorSecretKey = cacheInfo.TwoFactorSecretKey;
+                }
+
+                if (!_otpService.VerifyOTP(twoFactorSecretKey ?? "", request.Token))
+                {
+                    return null;
+                }
+
+                if (string.IsNullOrWhiteSpace(user.TwoFactorSecretKey) && !string.IsNullOrWhiteSpace(cacheInfo.TwoFactorSecretKey))
+                {
+                    user.TwoFactorSecretKey = cacheInfo.TwoFactorSecretKey;
+                    await _appDbContext.SaveChangesAsync();
+                }
             }
 
-            if (!_otpService.VerifyOTP(twoFactorSecretKey ?? "", request.Token))
-            {
-                return null;
-            }
-
-            if (string.IsNullOrWhiteSpace(user.TwoFactorSecretKey) && !string.IsNullOrWhiteSpace(cacheInfo.TwoFactorSecretKey))
-            {
-                user.TwoFactorSecretKey = cacheInfo.TwoFactorSecretKey;
-                await _appDbContext.SaveChangesAsync();
-            }
             await _cacheProvider.DeleteAsync(twoFactorCacheKey);
 
             var httpContext = _httpContextAccessor.HttpContext;

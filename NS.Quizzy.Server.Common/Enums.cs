@@ -26,6 +26,9 @@ namespace NS.Quizzy.Server.Common
 
             [DBStringValue(nameof(IdNumberEmailDomain))]
             IdNumberEmailDomain,
+
+            [DBStringValue(nameof(IgnoreOTPValidationUserIds))]
+            IgnoreOTPValidationUserIds,
         }
     }
 }

@@ -24,6 +24,7 @@ namespace NS.Quizzy.Server.DAL
             Char,
             String,
             Object,
+            Json,
         }
 
         public enum Roles
