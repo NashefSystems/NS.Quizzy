@@ -22,7 +22,7 @@ export class AccountService extends BaseService {
     private readonly cookieService: CookieService,
   ) {
     super();
-    this.getDetails().subscribe({ next: (response: any) => { } });
+    this.getDetails().subscribe();
   }
 
   getTest() {
