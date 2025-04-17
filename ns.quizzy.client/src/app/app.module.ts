@@ -42,7 +42,6 @@ import { LoginComponent } from './components/auth-area/login/login.component';
 import { MainMenuComponent } from './components/global-area/main-menu/main-menu.component';
 import { LanguageSelectorComponent } from './components/global-area/language-selector/language-selector.component';
 import { NotificationSnackBarComponent } from './components/global-area/notification-snack-bar/notification-snack-bar.component';
-import { DeveloperComponent } from './components/developer/developer.component';
 import { ExamListComponent } from './components/exam-area/exam-list/exam-list.component';
 import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
 import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
@@ -76,7 +75,6 @@ import { UserDetailsComponent } from './components/auth-area/user-details/user-d
 import { UserListComponent } from './components/user-area/user-list/user-list.component';
 import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/user-add-or-edit.component';
 
-
 // Factory function for HttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -92,7 +90,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MainMenuComponent,
     LanguageSelectorComponent,
     NotificationSnackBarComponent,
-    DeveloperComponent,
     ExamListComponent,
     ExamTypeListComponent,
     MoedListComponent,

@@ -1,13 +1,3 @@
-<h3 class="center-text">App message</h3>
-<button mat-stroked-button (click)="onAppMessage()">Test</button>
-<hr>
-
-<h3 class="center-text">React native message</h3>
-<ng-container *ngFor="let item of reactNativeMessageTypes | keyvalue">
-    <button mat-stroked-button (click)="onReactNativeMessage(item.key)">{{item.key}}</button>
-</ng-container>
-<hr>
-
 <h3 class="center-text">Loading test</h3>
 <button mat-stroked-button (click)="toggleLoadingMode()">Loader</button>
 <hr>
@@ -24,4 +14,7 @@
 <button mat-stroked-button (click)="showNotify('error')">Error</button>
 <button mat-stroked-button (click)="showNotify('fatal')">Fatal</button>
 <button mat-stroked-button (click)="showNotify('fatal')">Unexpected error</button>
+<hr>
+
+<button mat-stroked-button [routerLink]="'/developer/react-native-message-test'">React native message</button>
 <hr>

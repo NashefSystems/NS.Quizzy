@@ -5,7 +5,6 @@ import { QuestionnaireListComponent } from './components/questionnaire-area/ques
 import { ExamTypeListComponent } from './components/exam-type-area/exam-type-list/exam-type-list.component';
 import { SubjectListComponent } from './components/subject-area/subject-list/subject-list.component';
 import { ClassListComponent } from './components/class-area/class-list/class-list.component';
-import { DeveloperComponent } from './components/developer/developer.component';
 import { adminUserGuard } from './guards/admin-user.guard';
 import { SubjectAddOrEditComponent } from './components/subject-area/subject-add-or-edit/subject-add-or-edit.component';
 import { ExamTypeAddOrEditComponent } from './components/exam-type-area/exam-type-add-or-edit/exam-type-add-or-edit.component';
@@ -302,8 +301,7 @@ const routes: Routes = [
   },
   {
     path: 'developer',
-    component: DeveloperComponent,
-    canActivate: [developerGuard],
+    loadChildren: () => import('./components/developer/developer.module').then((m) => m.DeveloperModule),
     data: {
       page_title: "Developer"
     }

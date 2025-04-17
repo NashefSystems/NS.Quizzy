@@ -1,0 +1,15 @@
+<button class="back-button" mat-icon-button [routerLink]="'/developer'">
+    <mat-icon>arrow_forward</mat-icon>
+</button>
+
+<h3 class="center-text">React native message</h3>
+<div class="actions">
+    <ng-container *ngFor="let action of reactNativeActions">
+        <button mat-stroked-button (click)="onReactNativeMessage(action)">{{action}}</button>
+    </ng-container>
+</div>
+<hr>
+<div class="result">
+    <div>result source: {{resultSource}}</div>
+    <ngx-json-viewer *ngIf="result" [json]="result"></ngx-json-viewer>
+</div>
