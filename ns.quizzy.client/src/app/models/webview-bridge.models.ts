@@ -67,6 +67,7 @@ export interface IGetNotificationTokenResponse {
 export interface IGetMobileSerialNumberResponse {
     hasPermission: boolean,
     serialNumber: string | null,
+    uniqueId: string | null,
 }
 
 // GET_PLATFORM_INFO

@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { IResponseMessage, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
+import { Component, inject, OnInit } from '@angular/core';
+import { IReadDataPayload, IResponseMessage, IStoreDataPayload, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
 @Component({
@@ -8,8 +8,9 @@ import { WebviewBridgeService } from '../../../services/webview-bridge.service';
   templateUrl: './react-native-message-test.component.html',
   styleUrl: './react-native-message-test.component.scss'
 })
-export class ReactNativeMessageTestComponent {
+export class ReactNativeMessageTestComponent implements OnInit {
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
+  nativeAppIsAvailable = false;
   isLoading = false;
   result: any = null;
   resultSource: string = '';
@@ -24,10 +25,46 @@ export class ReactNativeMessageTestComponent {
     MESSAGE_ACTIONS.GET_PLATFORM_INFO,
   ];
 
+  ngOnInit(): void {
+    this.nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
+  }
+
   onReactNativeMessage(action: MESSAGE_ACTIONS) {
     this.result = null;
     this.resultSource = '';
     let requestPayload = null;
+
+    switch (action) {
+      case MESSAGE_ACTIONS.WRITE_TO_CONSOLE:
+        {
+          const payload: IWriteToConsolePayload = {
+            level: 'warn',
+            message: 'test warning message from website'
+          };
+          requestPayload = payload;
+          break;
+        }
+      case MESSAGE_ACTIONS.STORE_DATA:
+        {
+          const payload: IStoreDataPayload = {
+            key: 'website-data-key',
+            value: {
+              a: 10,
+              b: '15'
+            }
+          };
+          requestPayload = payload;
+          break;
+        }
+      case MESSAGE_ACTIONS.READ_DATA:
+        {
+          const payload: IReadDataPayload = {
+            key: 'website-data-key',
+          };
+          requestPayload = payload;
+          break;
+        }
+    }
 
     this._webviewBridgeService.sendMessageToNative(action, requestPayload)
       .then(x => {

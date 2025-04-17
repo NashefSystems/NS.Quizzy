@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IRequestMessage, IResponseMessage, MESSAGE_ACTIONS } from '../models/webview-bridge.models';
+import { IGetBiometricAvailabilityResponse, IGetMobileSerialNumberResponse, IGetNotificationTokenResponse, IGetPlatformInfoResponse, IReadDataPayload, IRequestMessage, IResponseMessage, IStoreDataPayload, IVerifyBiometricSignatureResponse, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../models/webview-bridge.models';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -7,54 +8,189 @@ import { IRequestMessage, IResponseMessage, MESSAGE_ACTIONS } from '../models/we
 export class WebviewBridgeService {
   private readonly EVENT_TYPE = 'message';
 
-  sendMessageToNative(action: MESSAGE_ACTIONS, payload: any): Promise<IResponseMessage> {
-    const requestMsg: IRequestMessage = {
-      requestId: crypto.randomUUID(),
-      action: action,
-      payload: payload
-    };
+  async writeToConsoleAsync(message: string, logLevel: 'log' | 'info' | 'warn' | 'error' = 'info') {
+    try {
+      const payload: IWriteToConsolePayload = {
+        level: logLevel,
+        message: message
+      };
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.WRITE_TO_CONSOLE, payload);
+      return res.isSuccess;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | writeToConsoleAsync exception:", err);
+      return false;
+    }
+  }
 
+  async storeDataAsync(key: string, value: any) {
+    try {
+      const payload: IStoreDataPayload = {
+        key: key,
+        value: value
+      };
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.STORE_DATA, payload);
+      return res.isSuccess;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | storeDataAsync exception:", err);
+      return false;
+    }
+  }
+
+  async readDataAsync(key: string) {
+    try {
+      const payload: IReadDataPayload = {
+        key: key,
+      };
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.READ_DATA, payload);
+      return res.data;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | readDataAsync exception:", err);
+      return null;
+    }
+  }
+
+  async getBiometricAvailabilityAsync() {
+    try {
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.GET_BIOMETRIC_AVAILABILITY);
+      const resData = res.data as IGetBiometricAvailabilityResponse;
+      return resData;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | getBiometricAvailabilityAsync exception:", err);
+      return null;
+    }
+  }
+
+  async verifyBiometricSignatureAsync() {
+    try {
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.VERIFY_BIOMETRIC_SIGNATURE);
+      const resData = res.data as IVerifyBiometricSignatureResponse;
+      return resData;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | verifyBiometricSignatureAsync exception:", err);
+      return null;
+    }
+  }
+
+  async getNotificationTokenAsync() {
+    try {
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.GET_NOTIFICATION_TOKEN);
+      const resData = res.data as IGetNotificationTokenResponse;
+      return resData;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | getNotificationTokenAsync exception:", err);
+      return null;
+    }
+  }
+
+  async getMobileSerialNumberAsync() {
+    try {
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.GET_MOBILE_SERIAL_NUMBER);
+      const resData = res.data as IGetMobileSerialNumberResponse;
+      return resData;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | getMobileSerialNumberAsync exception:", err);
+      return null;
+    }
+  }
+
+  async getPlatformInfoAsync() {
+    try {
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.GET_PLATFORM_INFO);
+      const resData = res.data as IGetPlatformInfoResponse;
+      return resData;
+    } catch (err: any) {
+      console.error("WebviewBridgeService | getPlatformInfoAsync exception:", err);
+      return null;
+    }
+  }
+
+  private getReactNativeWebView() {
+    const _window = (window as any);
+    return _window.ReactNativeWebView;
+  }
+
+  nativeAppIsAvailable() {
+    const reactNativeWebView = this.getReactNativeWebView();
+    return !!reactNativeWebView;
+  }
+
+  sendMessageToNative(action: MESSAGE_ACTIONS, payload: any = null): Promise<IResponseMessage> {
     return new Promise((resolve, reject) => {
-      const _window = (window as any);
-      if (!_window.ReactNativeWebView) {
-        const errorResponse: IResponseMessage = {
-          isException: false,
-          isSuccess: false,
-          action: requestMsg.action,
-          requestId: requestMsg.requestId,
-          data: null,
-          error: `window.ReactNativeWebView is null`
-        }
-        reject(errorResponse);
-      }
+      let rid = '';
+      try {
+        rid = uuidv4();
+        const requestMsg: IRequestMessage = {
+          requestId: rid,
+          action: action,
+          payload: payload
+        };
 
-      const listener = (event: MessageEvent) => {
-        try {
-          const responseMsg = JSON.parse(event.data) as IResponseMessage;
-          if (responseMsg?.requestId == requestMsg.requestId) {
-            window.removeEventListener(this.EVENT_TYPE, listener);
-            if (responseMsg.isSuccess) {
-              resolve(responseMsg);
-            } else {
-              reject(responseMsg);
-            }
-          }
-        } catch (err: any) {
-          const exceptionResponse: IResponseMessage = {
-            isException: true,
+        const _reactNativeWebView = this.getReactNativeWebView();
+        if (!_reactNativeWebView) {
+          const errorResponse: IResponseMessage = {
+            isException: false,
             isSuccess: false,
             action: requestMsg.action,
             requestId: requestMsg.requestId,
             data: null,
-            error: err
+            error: `window.ReactNativeWebView is null`
           }
-          reject(exceptionResponse);
+          reject(errorResponse);
         }
-      };
 
-      window.addEventListener(this.EVENT_TYPE, listener);
-      const eventRNWebView = JSON.stringify(requestMsg);
-      _window.ReactNativeWebView.postMessage(eventRNWebView);
+        const listener = (event: MessageEvent) => {
+          try {
+            const eData = event.data;
+            const responseMsg = eData as IResponseMessage;
+            if (!responseMsg) {
+              const errorResponse: IResponseMessage = {
+                isException: false,
+                isSuccess: false,
+                action: requestMsg.action,
+                requestId: requestMsg.requestId,
+                data: null,
+                error: `Response message is null`
+              }
+              reject(errorResponse);
+            }
+            if (responseMsg?.requestId === rid) {
+              window.removeEventListener(this.EVENT_TYPE, listener);
+              if (responseMsg.isSuccess) {
+                resolve(responseMsg);
+              } else {
+                reject(responseMsg);
+              }
+            }
+          } catch (err: any) {
+            console.error("sendMessageToNative | Listener exception: ", err);
+            const exceptionResponse: IResponseMessage = {
+              isException: true,
+              isSuccess: false,
+              action: requestMsg.action,
+              requestId: requestMsg.requestId,
+              data: null,
+              error: err
+            }
+            reject(exceptionResponse);
+          }
+        };
+
+        window.addEventListener(this.EVENT_TYPE, listener);
+        const eventRNWebView = JSON.stringify(requestMsg);
+        _reactNativeWebView.postMessage(eventRNWebView);
+
+      } catch (err: any) {
+        console.error("sendMessageToNative | Global exception: ", err);
+        const exceptionResponse: IResponseMessage = {
+          isException: true,
+          isSuccess: false,
+          action: action,
+          requestId: rid,
+          data: null,
+          error: err
+        }
+        reject(exceptionResponse);
+      }
     });
   }
 }
