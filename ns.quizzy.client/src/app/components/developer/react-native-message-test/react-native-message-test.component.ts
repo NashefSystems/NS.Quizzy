@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IResponseMessage, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
-import { sendMessageToNative } from '../../../utils/webview-bridge.utils';
+import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
 @Component({
   selector: 'app-react-native-message-test',
@@ -9,6 +9,7 @@ import { sendMessageToNative } from '../../../utils/webview-bridge.utils';
   styleUrl: './react-native-message-test.component.scss'
 })
 export class ReactNativeMessageTestComponent {
+  private readonly _webviewBridgeService = inject(WebviewBridgeService);
   isLoading = false;
   result: any = null;
   resultSource: string = '';
@@ -28,8 +29,7 @@ export class ReactNativeMessageTestComponent {
     this.resultSource = '';
     let requestPayload = null;
 
-
-    sendMessageToNative(action, requestPayload)
+    this._webviewBridgeService.sendMessageToNative(action, requestPayload)
       .then(x => {
         const response = x as IResponseMessage;
         this.resultSource = `then | response is null: ${!response}`;
