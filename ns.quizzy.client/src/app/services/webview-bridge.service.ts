@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IGetBiometricAvailabilityResponse, IGetMobileSerialNumberResponse, IGetNotificationTokenResponse, IGetPlatformInfoResponse, IReadDataPayload, IRequestMessage, IResponseMessage, IStoreDataPayload, IVerifyBiometricSignatureResponse, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../models/webview-bridge.models';
+import { IGetBiometricAvailabilityResponse, IGetMobileSerialNumberResponse, IGetNotificationTokenResponse, IGetPlatformInfoResponse, IReadDataPayload, IRequestMessage, IResponseMessage, IStoreDataPayload, IVerifyBiometricSignaturePayload, IVerifyBiometricSignatureResponse, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../models/webview-bridge.models';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -60,9 +60,12 @@ export class WebviewBridgeService {
     }
   }
 
-  async verifyBiometricSignatureAsync() {
+  async verifyBiometricSignatureAsync(promptMessage: string | null = null) {
     try {
-      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.VERIFY_BIOMETRIC_SIGNATURE);
+      const payload: IVerifyBiometricSignaturePayload = {
+        promptMessage: promptMessage
+      };
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.VERIFY_BIOMETRIC_SIGNATURE, payload);
       const resData = res.data as IVerifyBiometricSignatureResponse;
       return resData;
     } catch (err: any) {

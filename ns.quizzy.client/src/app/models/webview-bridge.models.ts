@@ -53,6 +53,10 @@ export interface IGetBiometricAvailabilityResponse {
 }
 
 // VERIFY_BIOMETRIC_SIGNATURE
+export interface IVerifyBiometricSignaturePayload {
+    promptMessage: string | null;
+}
+
 export interface IVerifyBiometricSignatureResponse {
     isVerify: boolean;
     token?: string;

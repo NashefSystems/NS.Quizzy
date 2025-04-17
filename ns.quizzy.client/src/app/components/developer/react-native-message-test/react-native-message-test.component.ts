@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { IReadDataPayload, IResponseMessage, IStoreDataPayload, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
+import { IReadDataPayload, IResponseMessage, IStoreDataPayload, IVerifyBiometricSignaturePayload, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
 @Component({
@@ -60,6 +60,14 @@ export class ReactNativeMessageTestComponent implements OnInit {
         {
           const payload: IReadDataPayload = {
             key: 'website-data-key',
+          };
+          requestPayload = payload;
+          break;
+        }
+      case MESSAGE_ACTIONS.VERIFY_BIOMETRIC_SIGNATURE:
+        {
+          const payload: IVerifyBiometricSignaturePayload = {
+            promptMessage: 'בדיקה'
           };
           requestPayload = payload;
           break;
