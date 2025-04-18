@@ -1,10 +1,5 @@
 ﻿using NS.Shared.Logging.Attributes;
 using NS.Shared.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static NS.Quizzy.Server.DAL.DALEnums;
 
 namespace NS.Quizzy.Server.DAL.Entities

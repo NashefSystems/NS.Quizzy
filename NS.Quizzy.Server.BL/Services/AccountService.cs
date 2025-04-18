@@ -87,6 +87,8 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 UserId = user.Id,
                 TwoFactorSecretKey = res.TwoFactorSecretKey,
+                DeviceId = loginRequest.DeviceId,
+                NotificationToken = loginRequest.NotificationToken,
             };
             await _cacheProvider.SetOrUpdateAsync(GetTwoFactorCacheKey(res.ContextId), cacheInfo, _cacheOTPTTL);
 
@@ -113,10 +115,17 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
+            if (!string.IsNullOrWhiteSpace(loginRequest.NotificationToken))
+            {
+                user.NotificationToken = loginRequest.NotificationToken;
+            }
+
             var httpContext = _httpContextAccessor.HttpContext;
             var loginHistoryItem = new LoginHistoryItem()
             {
                 UserId = user.Id,
+                NotificationToken = loginRequest.NotificationToken,
+                DeviceId = loginRequest.DeviceId,
                 ClientIP = httpContext.GetClientIP(),
                 IsMobile = httpContext.IsMobile(),
                 Platform = httpContext.GetPlatform(),
@@ -198,10 +207,17 @@ namespace NS.Quizzy.Server.BL.Services
 
             await _cacheProvider.DeleteAsync(twoFactorCacheKey);
 
+            if (!string.IsNullOrWhiteSpace(cacheInfo.NotificationToken))
+            {
+                user.NotificationToken = cacheInfo.NotificationToken;
+            }
+
             var httpContext = _httpContextAccessor.HttpContext;
             var loginHistoryItem = new LoginHistoryItem()
             {
                 UserId = user.Id,
+                NotificationToken = cacheInfo.NotificationToken,
+                DeviceId = cacheInfo.DeviceId,
                 ClientIP = httpContext.GetClientIP(),
                 IsMobile = httpContext.IsMobile(),
                 Platform = httpContext.GetPlatform(),

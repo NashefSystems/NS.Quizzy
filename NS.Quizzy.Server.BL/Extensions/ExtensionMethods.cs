@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.AppConfiguration;
+using NS.Quizzy.Server.BL.CustomizationsForSwagger;
 using NS.Quizzy.Server.BL.HostedServices;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.MappingProfiles;
@@ -22,6 +23,7 @@ using NS.Shared.Logging.Configs;
 using NS.Shared.Logging.Extensions;
 using NS.Shared.QueueManager.Extensions;
 using NS.Shared.QueueManager.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Security.Claims;
 using static NS.Quizzy.Server.DAL.DALEnums;
 
@@ -38,8 +40,8 @@ namespace NS.Quizzy.Server.BL.Extensions
             var loggerConfig = config.GetSection("NSLoggerConfig").Get<NSLoggerConfig>();
             if (loggerConfig != null)
             {
-                loggerConfig.GetUserId = (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-                loggerConfig.GetTokenId = (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Sid)?.Value;
+                loggerConfig.GetUserId = (httpContext) => httpContext?.GetUserId()?.ToString();
+                loggerConfig.GetTokenId = (httpContext) => httpContext?.GetTokenId()?.ToString();
             }
             services.AddNSLogger(loggerConfig);
             #endregion
@@ -57,6 +59,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddNSQueueSubscription(setup =>
             {
                 setup.AddSubscriptionClass<UpdateUsersQueueSubscription>();
+                setup.AddSubscriptionClass<PushNotificationsQueueSubscription>();
             });
 
             #region DbConfiguration
@@ -135,6 +138,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<IAppSettingsService, AppSettingsService>();
             services.AddScoped<IOTPService, OTPService>();
             services.AddScoped<IFcmService, FcmService>();
+            services.AddScoped<INotificationsService, NotificationsService>();
 
             services.AddHostedService<AppLifetimeInfoHostedService>();
 
@@ -170,6 +174,12 @@ namespace NS.Quizzy.Server.BL.Extensions
             return services;
         }
 
+        public static SwaggerGenOptions AddCustomOperationFilters(this SwaggerGenOptions c)
+        {
+            c.OperationFilter<RoleRequirementOperationFilter>();
+            c.OperationFilter<AllowAnonymousOperationFilter>();
+            return c;
+        }
 
         internal static Guid? GetUserId(this HttpContext? context)
         {

@@ -7,7 +7,7 @@ using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
-using NS.Quizzy.Server.Models.DTOs;
+using NS.Quizzy.Server.BL.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
 using static NS.Quizzy.Server.Common.Enums;
 

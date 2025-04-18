@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NS.Quizzy.Server.BL.Models;
-using NS.Quizzy.Server.Models.DTOs;
+using NS.Quizzy.Server.BL.DTOs;
 using NS.Shared.QueueManager.Models;
 
 namespace NS.Quizzy.Server.BL.Interfaces

@@ -1,4 +1,4 @@
-﻿using NS.Quizzy.Server.Models.DTOs;
+﻿using NS.Quizzy.Server.BL.DTOs;
 
 namespace NS.Quizzy.Server.BL.Interfaces
 {

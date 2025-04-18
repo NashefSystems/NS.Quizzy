@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace NS.Quizzy.Server.Models.DTOs
+namespace NS.Quizzy.Server.BL.DTOs
 {
     public class SubjectPayloadDto
     {

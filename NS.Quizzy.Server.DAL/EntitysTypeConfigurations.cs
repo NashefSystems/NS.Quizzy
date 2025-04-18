@@ -6,6 +6,8 @@ using NS.Security;
 using System.Reflection;
 using static NS.Quizzy.Server.DAL.DALEnums;
 using NS.Quizzy.Server.DAL.Extensions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NS.Quizzy.Server.DAL
 {
@@ -27,6 +29,8 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new AppSettingEntityConfiguration());
             modelBuilder.ApplyConfiguration(new LoginHistoryItemEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserNotificationEntityConfiguration());
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -299,6 +303,59 @@ namespace NS.Quizzy.Server.DAL
                   .WithMany(c => c.LoginHistory)
                   .HasForeignKey(c => c.UserId);
 
+            }
+        }
+
+        internal class NotificationEntityConfiguration : BaseEntityTypeConfiguration<Notification>
+        {
+            public override void Configure(EntityTypeBuilder<Notification> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("Notifications");
+
+                entity
+                    .Property(e => e.Data)
+                    .HasColumnName("DataJson")
+                    .HasConversion(v => NotificationDataToDBValue(v), dbv => NotificationDataFromDBValue(dbv));
+            }
+
+            private static Dictionary<string, string> NotificationDataFromDBValue(string dbValue)
+            {
+                Dictionary<string, string>? res = null;
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(dbValue))
+                    {
+                        res = JsonConvert.DeserializeObject<Dictionary<string, string>>(dbValue) ?? [];
+                    }
+                }
+                catch (Exception) { }
+                return res ?? [];
+            }
+
+            private static string NotificationDataToDBValue(Dictionary<string, string> value)
+            {
+                value ??= [];
+                return JsonConvert.SerializeObject(value);
+            }
+        }
+
+        internal class UserNotificationEntityConfiguration : BaseEntityTypeConfiguration<UserNotification>
+        {
+            public override void Configure(EntityTypeBuilder<UserNotification> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("UserNotifications");
+
+                entity
+                    .HasOne(c => c.Notification)
+                    .WithMany(c => c.UserNotifications)
+                    .HasForeignKey(c => c.NotificationId);
+
+                entity
+                    .HasOne(c => c.User)
+                    .WithMany(c => c.UserNotifications)
+                    .HasForeignKey(c => c.UserId);
             }
         }
     }

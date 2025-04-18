@@ -14,8 +14,10 @@ namespace NS.Quizzy.Server.DAL.Entities
         public Guid? ClassId { get; set; }
         public Roles Role { get; set; }
         public string? TwoFactorSecretKey { get; set; }
+        public string? NotificationToken { get; set; }
 
         public virtual Class? Class { get; set; }
         public virtual IList<LoginHistoryItem> LoginHistory { get; set; }
+        public virtual IList<UserNotification> UserNotifications { get; set; }
     }
 }

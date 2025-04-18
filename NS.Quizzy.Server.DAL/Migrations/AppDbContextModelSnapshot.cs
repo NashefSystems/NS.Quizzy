@@ -928,6 +928,10 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         .HasColumnOrder(2147483645)
                         .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(3);
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -936,7 +940,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<bool>("IsMobile")
                         .HasColumnType("bit")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(4);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
@@ -944,22 +948,26 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         .HasColumnOrder(2147483646)
                         .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
+                    b.Property<string>("NotificationToken")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(5);
+
                     b.Property<string>("Platform")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(6);
 
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(7);
 
                     b.Property<string>("UserAgent")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(8);
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(7);
+                        .HasColumnOrder(9);
 
                     b.HasKey("Id");
 
@@ -1049,6 +1057,73 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Name = "קיץ מועד ב'"
                         });
+                });
+
+            modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(-2147483648)
+                        .HasDefaultValueSql("(NewId())");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(1);
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(2147483645)
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DataJson")
+                        .HasColumnOrder(3);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnOrder(2147483647);
+
+                    b.Property<DateTimeOffset>("ModifiedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(2147483646)
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+
+                    b.Property<string>("P1")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(4);
+
+                    b.Property<string>("P2")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(5);
+
+                    b.Property<string>("P3")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(6);
+
+                    b.Property<int>("Target")
+                        .HasColumnType("int")
+                        .HasColumnOrder(7);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(8);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.Questionnaire", b =>
@@ -1370,21 +1445,25 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         .HasColumnOrder(2147483646)
                         .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
+                    b.Property<string>("NotificationToken")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(5);
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(6);
 
                     b.Property<int>("Role")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0)
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(7);
 
                     b.Property<string>("TwoFactorSecretKey")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasColumnOrder(7);
+                        .HasColumnOrder(8);
 
                     b.HasKey("Id");
 
@@ -1433,6 +1512,53 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             Role = 2,
                             TwoFactorSecretKey = "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX"
                         });
+                });
+
+            modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.UserNotification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(-2147483648)
+                        .HasDefaultValueSql("(NewId())");
+
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(2147483645)
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnOrder(2147483647);
+
+                    b.Property<DateTimeOffset>("ModifiedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(2147483646)
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+
+                    b.Property<Guid>("NotificationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<DateTimeOffset?>("SeenAt")
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(2);
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(3);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserNotifications", (string)null);
                 });
 
             modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.Class", b =>
@@ -1542,6 +1668,25 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     b.Navigation("Class");
                 });
 
+            modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.UserNotification", b =>
+                {
+                    b.HasOne("NS.Quizzy.Server.DAL.Entities.Notification", "Notification")
+                        .WithMany("UserNotifications")
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NS.Quizzy.Server.DAL.Entities.User", "User")
+                        .WithMany("UserNotifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.Class", b =>
                 {
                     b.Navigation("ClassExams");
@@ -1573,6 +1718,11 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     b.Navigation("Exams");
                 });
 
+            modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.Notification", b =>
+                {
+                    b.Navigation("UserNotifications");
+                });
+
             modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.Questionnaire", b =>
                 {
                     b.Navigation("Exams");
@@ -1586,6 +1736,8 @@ namespace NS.Quizzy.Server.DAL.Migrations
             modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.User", b =>
                 {
                     b.Navigation("LoginHistory");
+
+                    b.Navigation("UserNotifications");
                 });
 #pragma warning restore 612, 618
         }

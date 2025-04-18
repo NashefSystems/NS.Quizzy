@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using NS.Quizzy.Server.DAL;
 
-namespace NS.Quizzy.Server.Models.DTOs
+namespace NS.Quizzy.Server.BL.DTOs
 {
     public class UserPayloadDto
     {

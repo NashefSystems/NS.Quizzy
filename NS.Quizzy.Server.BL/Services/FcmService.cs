@@ -1,5 +1,6 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
+using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Shared.Logging;
@@ -19,7 +20,7 @@ namespace NS.Quizzy.Server.BL.Services
             _logger = logger;
         }
 
-        public async Task SendPushNotificationAsync(PushNotificationRequest request)
+        public async Task<bool> SendPushNotificationAsync(PushNotificationRequest request)
         {
             using var logBag = _logger.CreateLogBag(nameof(SendPushNotificationAsync));
             try
@@ -55,11 +56,13 @@ namespace NS.Quizzy.Server.BL.Services
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 logBag.Trace($"Response: {response.StatusCode} | Body: {responseContent}");
+                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
                 logBag.Exception = ex;
             }
+            return false;
         }
     }
 }

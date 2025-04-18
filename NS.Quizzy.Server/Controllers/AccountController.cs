@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NS.Quizzy.Server.BL.Attributes;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Models.Models;
@@ -23,6 +22,7 @@ namespace NS.Quizzy.Server.Controllers
             _accountService = accountService;
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(LoginResponse))]
         public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest loginRequest)
@@ -35,6 +35,7 @@ namespace NS.Quizzy.Server.Controllers
             return Ok(res);
         }
 
+        [AllowAnonymous]
         [HttpPost("LoginWithIdNumber")]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserDetailsDto))]
         public async Task<ActionResult<UserDetailsDto>> LoginWithIdNumberAsync([FromBody] LoginWithIdNumberRequest loginRequest)
@@ -47,6 +48,7 @@ namespace NS.Quizzy.Server.Controllers
             return Ok(res);
         }
 
+        [AllowAnonymous]
         [HttpPost("VerifyOTP")]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserDetailsDto))]
         public async Task<ActionResult<UserDetailsDto>> LoginAsync([FromBody] VerifyOTPRequest request)
@@ -62,8 +64,8 @@ namespace NS.Quizzy.Server.Controllers
             return Ok(res);
         }
 
-        [HttpGet("Details")]
         [Authorize]
+        [HttpGet("Details")]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(UserDetailsDto))]
         public async Task<ActionResult<UserDetailsDto>> GetDetailsAsync()
         {
@@ -71,8 +73,8 @@ namespace NS.Quizzy.Server.Controllers
             return Ok(res);
         }
 
-        [HttpDelete("Logout")]
         [Authorize]
+        [HttpDelete("Logout")]
         [SwaggerResponse(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Logout()
         {

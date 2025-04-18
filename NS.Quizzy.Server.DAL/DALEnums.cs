@@ -35,5 +35,14 @@ namespace NS.Quizzy.Server.DAL
             Developer,
             SuperAdmin,
         }
+
+        public enum NotificationTarget
+        {
+            User,
+            Class,
+            Grade,
+            Role,
+            All,
+        }
     }
 }

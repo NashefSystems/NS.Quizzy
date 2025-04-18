@@ -9,6 +9,8 @@
         public string? Platform { get; set; }
         public bool IsMobile { get; set; }
         public string? Country { get; set; }
+        public string? DeviceId { get; set; }
+        public string? NotificationToken { get; set; }
 
         public virtual User User { get; set; }
     }

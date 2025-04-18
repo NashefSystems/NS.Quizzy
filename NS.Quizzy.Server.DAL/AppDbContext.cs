@@ -18,6 +18,8 @@ namespace NS.Quizzy.Server.DAL
         public DbSet<Class> Classes { get; set; }
         public DbSet<ClassExam> ClassExams { get; set; }
         public DbSet<LoginHistoryItem> LoginHistory { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }

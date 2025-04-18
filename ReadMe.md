@@ -9,7 +9,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 #### ➕ To add a new migration:
 ```bash
-dotnet ef migrations add "Add IdNumber column to Users table" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
+dotnet ef migrations add "Remove IsSeen property" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
 #### ❌ To remove last migrations:

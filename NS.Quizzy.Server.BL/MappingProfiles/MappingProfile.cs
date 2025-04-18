@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using NS.Quizzy.Server.DAL.Entities;
-using NS.Quizzy.Server.Models.DTOs;
+using NS.Quizzy.Server.BL.DTOs;
 
 namespace NS.Quizzy.Server.BL.MappingProfiles
 {
@@ -24,6 +24,9 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
             CreateMap<Questionnaire, QuestionnaireDto>();
             CreateMap<Subject, SubjectDto>();
             CreateMap<User, UserDto>();
+            CreateMap<Notification, NotificationDto>()
+                .ForMember(dst => dst.TotalUsers, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Count()))
+                .ForMember(dst => dst.TotalSeen, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Where(x => x.SeenAt.HasValue).Count()));
         }
     }
 }

@@ -1,8 +1,10 @@
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
+using NS.Quizzy.Server.BL.CustomizationsForSwagger;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Utils;
 using NS.Shared.Logging.Extensions;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace NS.Quizzy.Server
 {
@@ -36,8 +38,8 @@ namespace NS.Quizzy.Server
                 });
                 c.EnableAnnotations();
                 c.UseInlineDefinitionsForEnums();
-
-
+                c.AddCustomOperationFilters();
+                
                 var docXmlPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory)
                      .Where(x => x.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase) && Path.GetFileName(x).StartsWith("ns.", StringComparison.CurrentCultureIgnoreCase))
                      .ToList();

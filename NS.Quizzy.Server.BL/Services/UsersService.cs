@@ -10,7 +10,7 @@ using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
-using NS.Quizzy.Server.Models.DTOs;
+using NS.Quizzy.Server.BL.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.QueueManager.Interfaces;

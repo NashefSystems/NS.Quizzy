@@ -2,8 +2,8 @@
 
 namespace NS.Quizzy.Server.BL.Interfaces
 {
-    public interface IFcmService
+    internal interface IFcmService
     {
-        Task SendPushNotificationAsync(PushNotificationRequest request);
+        Task<bool> SendPushNotificationAsync(PushNotificationRequest request);
     }
 }

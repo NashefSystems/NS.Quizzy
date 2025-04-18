@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Models.Models;
 using NS.Shared.Logging.Attributes;
@@ -20,6 +21,7 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(Dictionary<string, object?>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Dictionary<string, object?>>> GetAsync()
         {
