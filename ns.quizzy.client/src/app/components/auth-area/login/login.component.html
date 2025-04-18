@@ -5,7 +5,11 @@
         <app-login-with-email *ngIf="loginMethod === LoginMethod.EMAIL"></app-login-with-email>
         <div class="global-actions">
             <button mat-button class="full-width login-method-btn" (click)="loginMethodToggle()">
-                {{(loginMethod === LoginMethod.ID ? 'LOGIN.LOGIN_WITH_EMAIL' : 'LOGIN.LOGIN_WITH_ID_NUMBER') | translate }}
+                {{
+                (loginMethod === LoginMethod.ID ?
+                'LOGIN.LOGIN_WITH_EMAIL' :
+                'LOGIN.LOGIN_WITH_ID_NUMBER')
+                | translate}}
             </button>
             <button mat-button class="full-width login-method-btn" (click)="onPrivacyPolicyClick()">
                 {{'PAGE_TITLES.PRIVACY_POLICY' | translate }}
