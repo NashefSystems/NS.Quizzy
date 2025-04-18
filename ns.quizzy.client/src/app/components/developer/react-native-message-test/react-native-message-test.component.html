@@ -2,8 +2,8 @@
     <mat-icon>arrow_forward</mat-icon>
 </button>
 
-<h3 class="center-text">React native message</h3>
-<h5>Native application is available: {{nativeAppIsAvailable}}</h5>
+<div class="title-lbl center-text">React native message</div>
+<small class="native-app-lbl">Native application is available: {{nativeAppIsAvailable}}</small>
 <div class="actions">
     <ng-container *ngFor="let action of reactNativeActions">
         <button mat-stroked-button (click)="onReactNativeMessage(action)">{{action}}</button>

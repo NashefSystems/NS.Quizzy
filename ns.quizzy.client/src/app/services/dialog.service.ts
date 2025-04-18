@@ -11,13 +11,8 @@ export class DialogService {
   private readonly appSettingsService = inject(AppSettingsService);
 
   openDialog(payload: OpenDialogPayload) {
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-
-    if (width > this.appSettingsService.appMaxWidth) {
-      width = this.appSettingsService.appMaxWidth;
-      height *= 0.8;
-    }
+    let width = this.appSettingsService.getAppMaxWidth();
+    let height = this.appSettingsService.getAppMaxHeight();
 
     //#region set default values
     if (payload.disableClose === undefined) payload.disableClose = true;
@@ -38,7 +33,7 @@ export class DialogService {
         dialogConfig.minWidth = dialogConfig.maxWidth = width;
         dialogConfig.minHeight = dialogConfig.maxHeight = height;
         dialogConfig.panelClass.push('full-dialog');
-        dialogConfig.panelClass.push(this.appSettingsService.isLargeScreen() ?
+        dialogConfig.panelClass.push(this.appSettingsService.isLargeScreenMode() ?
           'full-dialog-large-screen' : 'mat-dialog-border-without-radius');
       } else {
         dialogConfig.maxWidth = width * maxWidthRation;

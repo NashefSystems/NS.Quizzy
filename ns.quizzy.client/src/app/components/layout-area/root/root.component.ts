@@ -2,6 +2,7 @@ import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { AppSettingsService } from '../../../services/app-settings.service';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { AccountService } from '../../../services/backend/account.service';
+import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
 @Component({
   selector: 'app-root',
@@ -11,21 +12,21 @@ import { AccountService } from '../../../services/backend/account.service';
 })
 export class RootComponent implements AfterViewInit, OnInit {
   private readonly _appSettingsService = inject(AppSettingsService);
+  private readonly _webviewBridgeService = inject(WebviewBridgeService);
   private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _accountService = inject(AccountService);
 
   userLoggedIn = false;
   isReady = false;
   isLoading = false;
- 
+
   appContainerClasses = {
     "app-container": true,
     "large-screen": false
   };
 
   ngOnInit(): void {
-    document.documentElement.style.setProperty("--app-max-width", this._appSettingsService.appMaxWidth + "px");
-    document.documentElement.style.setProperty("--app-max-height", "100vh");
+    this.onResize();
 
     this._appSettingsService.onLoadingStatusChange.subscribe({
       next: (loadingStatus) => {
@@ -42,8 +43,6 @@ export class RootComponent implements AfterViewInit, OnInit {
     });
 
     this._accountService.userChange.subscribe(user => this.userLoggedIn = !!(user?.id));
-
-    this.onResize();
   }
 
   ngAfterViewInit(): void {
@@ -51,10 +50,18 @@ export class RootComponent implements AfterViewInit, OnInit {
   }
 
   onResize() {
-    const isLargeScreen = window.innerWidth > this._appSettingsService.appMaxWidth;
-    this._appSettingsService.setLargeScreen(isLargeScreen);
-    this.appContainerClasses['large-screen'] = isLargeScreen;
-    document.documentElement.style.setProperty("--is-large-screen", isLargeScreen ? 'true' : 'false');
-    document.documentElement.style.setProperty("--app-max-height", isLargeScreen ? "80vh" : "100vh");
+    const isMobileApp = this._webviewBridgeService.nativeAppIsAvailable();
+    const isLargeScreenMode = (window.innerWidth > this._appSettingsService.appMaxWidth) && !isMobileApp;
+    this._appSettingsService.setLargeScreenMode(isLargeScreenMode);
+    document.documentElement.style.setProperty("--is-large-screen", isLargeScreenMode ? 'true' : 'false');
+    this.appContainerClasses['large-screen'] = isLargeScreenMode;
+
+    const maxHeight = window.innerHeight * (isLargeScreenMode ? 0.8 : 1);
+    this._appSettingsService.setAppMaxHeight(maxHeight);
+    document.documentElement.style.setProperty("--app-max-height", maxHeight + "px");
+
+    const maxWidth = isLargeScreenMode ? this._appSettingsService.appMaxWidth : window.innerWidth;
+    this._appSettingsService.setAppMaxWidth(maxWidth);
+    document.documentElement.style.setProperty("--app-max-width", maxWidth + "px");
   }
 }
