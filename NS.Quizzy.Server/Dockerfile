@@ -48,6 +48,7 @@ RUN dotnet publish "./NS.Quizzy.Server.csproj" -c $BUILD_CONFIGURATION -p:Versio
 FROM base AS final
 ARG ENV
 ENV ASPNETCORE_ENVIRONMENT=$ENV
+ENV TZ=Asia/Jerusalem
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "NS.Quizzy.Server.dll"]
