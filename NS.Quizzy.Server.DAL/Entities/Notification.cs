@@ -9,9 +9,9 @@ namespace NS.Quizzy.Server.DAL.Entities
         public NotificationTarget Target { get; set; }
         public List<Guid>? TargetIds { get; set; }
         public Dictionary<string, string>? Data { get; set; }
-        public Guid? CreatedById { get; set; }
+        public Guid CreatedById { get; set; }
 
-        public virtual User? CreatedBy { get; set; }
+        public virtual User CreatedBy { get; set; }
         public virtual IList<UserNotification> UserNotifications { get; set; }
     }
 }
