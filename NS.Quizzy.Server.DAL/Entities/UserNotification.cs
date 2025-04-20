@@ -9,5 +9,6 @@
         public virtual User User { get; set; }
 
         public DateTimeOffset? SeenAt { get; set; }
+        public DateTimeOffset? PushNotificationsSendingTime { get; set; }
     }
 }

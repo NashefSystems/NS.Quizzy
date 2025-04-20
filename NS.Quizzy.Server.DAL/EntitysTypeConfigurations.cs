@@ -316,26 +316,35 @@ namespace NS.Quizzy.Server.DAL
                 entity
                     .Property(e => e.Data)
                     .HasColumnName("DataJson")
-                    .HasConversion(v => NotificationDataToDBValue(v), dbv => NotificationDataFromDBValue(dbv));
+                    .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<Dictionary<string, string>>(dbv));
+
+                entity
+                    .Property(e => e.TargetIds)
+                    .HasColumnName("TargetIdsJson")
+                    .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<List<Guid>>(dbv));
+
+                entity
+                  .HasOne(c => c.CreatedBy)
+                  .WithMany(c => c.NotificationsICreated)
+                  .HasForeignKey(c => c.CreatedById)
+                  .OnDelete(DeleteBehavior.Restrict);
             }
 
-            private static Dictionary<string, string> NotificationDataFromDBValue(string dbValue)
+            private static T? JsonToObject<T>(string dbValue)
             {
-                Dictionary<string, string>? res = null;
                 try
                 {
                     if (!string.IsNullOrWhiteSpace(dbValue))
                     {
-                        res = JsonConvert.DeserializeObject<Dictionary<string, string>>(dbValue) ?? [];
+                        return JsonConvert.DeserializeObject<T>(dbValue);
                     }
                 }
                 catch (Exception) { }
-                return res ?? [];
+                return default;
             }
 
-            private static string NotificationDataToDBValue(Dictionary<string, string> value)
+            private static string ObjectToJson<T>(T value)
             {
-                value ??= [];
                 return JsonConvert.SerializeObject(value);
             }
         }

@@ -38,11 +38,13 @@ namespace NS.Quizzy.Server.DAL
 
         public enum NotificationTarget
         {
-            User,
-            Class,
-            Grade,
-            Role,
-            All,
+            SpecificUsers,
+            Classes,
+            Grades,
+            Students,
+            Teachers,
+            TeachersAndStudents,
+            AllUsers
         }
     }
 }

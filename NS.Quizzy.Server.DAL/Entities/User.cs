@@ -19,5 +19,7 @@ namespace NS.Quizzy.Server.DAL.Entities
         public virtual Class? Class { get; set; }
         public virtual IList<LoginHistoryItem> LoginHistory { get; set; }
         public virtual IList<UserNotification> UserNotifications { get; set; }
+        public virtual IList<Notification> NotificationsICreated { get; set; }
+
     }
 }

@@ -7,11 +7,9 @@ namespace NS.Quizzy.Server.BL.DTOs
     {
         public string Title { get; set; }
         public string Body { get; set; }
-        public Dictionary<string, string> Data { get; set; }
         public NotificationTarget Target { get; set; }
-        public string? P1 { get; set; }
-        public string? P2 { get; set; }
-        public string? P3 { get; set; }
+        public List<Guid>? TargetIds { get; set; }
+        public Dictionary<string, string>? Data { get; set; }
     }
 
     public class NotificationDto : NotificationPayloadDto, IBaseEntityDto

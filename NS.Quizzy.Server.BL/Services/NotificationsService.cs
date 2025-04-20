@@ -9,6 +9,11 @@ using static NS.Quizzy.Server.DAL.DALEnums;
 using Newtonsoft.Json;
 using NS.Shared.QueueManager.Interfaces;
 using NS.Shared.Logging;
+using NS.Quizzy.Server.BL.Models;
+using NS.Quizzy.Server.DAL.Entities;
+using NS.Shared.QueueManager.Models;
+using Azure.Core;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -82,15 +87,13 @@ namespace NS.Quizzy.Server.BL.Services
                 Body = model.Body,
                 Data = model.Data,
                 Target = model.Target,
-                P1 = model.P1,
-                P2 = model.P2,
-                P3 = model.P3,
-                CreatedBy = myUserId.Value,
+                TargetIds = model.TargetIds,
+                CreatedById = myUserId.Value,
                 UserNotifications = [],
             };
             await _appDbContext.Notifications.AddAsync(item);
 
-            List<Guid> userIds = await GetTargetUserIds(item.Target, item.P1);
+            List<Guid> userIds = await GetTargetUserIds(item.Target, item.TargetIds);
             logBag.AddOrUpdateParameter("TargetUserIds", userIds);
             if (userIds.Count != 0)
             {
@@ -110,90 +113,118 @@ namespace NS.Quizzy.Server.BL.Services
             await _appDbContext.SaveChangesAsync();
             logBag.AddOrUpdateParameter("NotificationId", item.Id);
 
-
-            var publishMessageResult = await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+            #region AddItemsToQueue
+            List<PublishMessageResponse> taskResults = [];
+            var batchSize = 15;
+            var skip = 0;
+            var tasks = item.UserNotifications.Skip(skip).Take(batchSize)
+                .Select(x => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+                {
+                    QueueName = BLConsts.QUEUE_PUSH_NOTIFICATIONS,
+                    Payload = JsonConvert.SerializeObject(x.Id)
+                }))
+                .ToList();
+            while (tasks.Count > 0)
             {
-                QueueName = BLConsts.QUEUE_PUSH_NOTIFICATIONS,
-                Payload = JsonConvert.SerializeObject(item.Id)
+                await Task.WhenAll(tasks);
+                taskResults.AddRange(tasks.Select(x => x.Result));
+
+                skip += batchSize;
+                tasks = item.UserNotifications.Skip(skip).Take(batchSize)
+                    .Select(x => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+                    {
+                        QueueName = BLConsts.QUEUE_PUSH_NOTIFICATIONS,
+                        Payload = JsonConvert.SerializeObject(x.Id)
+                    }))
+                    .ToList();
+            }
+            var total = taskResults.Count();
+            var numberOfFailedRequests = taskResults.Where(x => !x.IsSuccessful).Count();
+            logBag.AddOrUpdateParameter("PublishQueueMessageResult", new
+            {
+                Total = total,
+                NumberOfSuccessfulRequests = total - numberOfFailedRequests,
+                NumberOfFailedRequests = numberOfFailedRequests,
             });
+            logBag.AddOrUpdateParameter("PublishQueueMessageErrorResults", taskResults.Where(x => !x.IsSuccessful).ToList());
 
-            logBag.AddOrUpdateParameter("PublishQueueMessageResult", publishMessageResult);
-
-            if (!publishMessageResult.IsSuccessful)
+            if (numberOfFailedRequests > 0)
             {
                 logBag.LogLevel = NSLogLevel.Warn;
-                logBag.Trace($"Unable to push queue message: '{publishMessageResult.Error}'");
             }
+            #endregion
 
             return _mapper.Map<NotificationDto>(item);
         }
 
-        private async Task<List<Guid>> GetTargetUserIds(NotificationTarget target, string? p1)
+        private async Task<List<Guid>> GetTargetUserIds(NotificationTarget target, List<Guid>? tIds)
         {
+            List<Guid> targetIds = tIds ?? [];
             var userIds = new List<Guid>();
+            targetIds ??= [];
             switch (target)
             {
-                case NotificationTarget.User:
+                case NotificationTarget.SpecificUsers:
                     {
-                        if (Guid.TryParse(p1, out var userId))
+                        userIds.AddRange(targetIds);
+                        break;
+                    }
+                case NotificationTarget.Classes:
+                    {
+                        var ids = await _appDbContext.Users
+                            .Where(x => x.IsDeleted == false && x.ClassId.HasValue && targetIds.Contains(x.ClassId.Value))
+                            .Select(x => x.Id)
+                            .ToListAsync();
+                        if (ids.Count > 0)
                         {
-                            userIds.Add(userId);
+                            userIds.AddRange(ids);
                         }
                         break;
                     }
-                case NotificationTarget.Class:
+                case NotificationTarget.Grades:
                     {
-                        if (Guid.TryParse(p1, out var classId))
-                        {
-                            var ids = await _appDbContext.Users
-                                .Where(x => x.IsDeleted == false && x.ClassId == classId)
-                                .Select(x => x.Id)
-                                .ToListAsync();
-                            if (ids.Count > 0)
-                            {
-                                userIds.AddRange(ids);
-                            }
-                        }
-                        break;
-                    }
-                case NotificationTarget.Grade:
-                    {
-                        if (Guid.TryParse(p1, out var gradeId))
-                        {
-                            var classIds = await _appDbContext.Classes
-                                .Where(x => x.IsDeleted == false && x.GradeId == gradeId)
-                                .Select(x => x.Id)
-                                .ToListAsync();
+                        var classIds = await _appDbContext.Classes
+                            .Where(x => x.IsDeleted == false && targetIds.Contains(x.GradeId))
+                            .Select(x => x.Id)
+                            .ToListAsync();
 
-                            var ids = await _appDbContext.Users
-                                .Where(x => x.IsDeleted == false && x.ClassId.HasValue && classIds.Contains(x.ClassId.Value))
-                                .Select(x => x.Id)
-                                .ToListAsync();
+                        var ids = await _appDbContext.Users
+                            .Where(x => x.IsDeleted == false && x.ClassId.HasValue && classIds.Contains(x.ClassId.Value))
+                            .Select(x => x.Id)
+                            .ToListAsync();
 
-                            if (ids.Count > 0)
-                            {
-                                userIds.AddRange(ids);
-                            }
-                        }
-                        break;
-                    }
-                case NotificationTarget.Role:
-                    {
-                        if (!Enum.TryParse(p1, out Roles userRole))
+                        if (ids.Count > 0)
                         {
-                            var ids = await _appDbContext.Users
-                                .Where(x => x.IsDeleted == false && x.Role == userRole)
-                                .Select(x => x.Id)
-                                .ToListAsync();
-
-                            if (ids.Count > 0)
-                            {
-                                userIds.AddRange(ids);
-                            }
+                            userIds.AddRange(ids);
                         }
                         break;
                     }
-                case NotificationTarget.All:
+                case NotificationTarget.Students:
+                case NotificationTarget.Teachers:
+                case NotificationTarget.TeachersAndStudents:
+                    {
+                        List<Roles> roles = [];
+                        if (target == NotificationTarget.Students || target == NotificationTarget.TeachersAndStudents)
+                        {
+                            roles.Add(Roles.Student);
+                        }
+                        if (target == NotificationTarget.Teachers || target == NotificationTarget.TeachersAndStudents)
+                        {
+                            roles.Add(Roles.Teacher);
+                        }
+
+                        var ids = await _appDbContext.Users
+                            .Where(x => x.IsDeleted == false && roles.Contains(x.Role))
+                            .Select(x => x.Id)
+                            .ToListAsync();
+
+                        if (ids.Count > 0)
+                        {
+                            userIds.AddRange(ids);
+                        }
+                        break;
+                    }
+                case NotificationTarget.AllUsers:
                     {
                         var ids = await _appDbContext.Users
                                 .Where(x => x.IsDeleted == false)

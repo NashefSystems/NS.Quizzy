@@ -20,76 +20,67 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             var res = new QueueSubscriptionAcceptMethodResult();
             logBag.Trace("Starting ProcessMessageAsync");
             await setMessageProgressPercentage(0);
-            var notificationId = JsonConvert.DeserializeObject<Guid?>(message.Payload);
-            if (notificationId == null || notificationId == Guid.Empty)
+            var userNotificationId = JsonConvert.DeserializeObject<Guid?>(message.Payload);
+            if (userNotificationId == null || userNotificationId == Guid.Empty)
             {
                 logBag.LogLevel = NSLogLevel.Warn;
-                return res.SetOk("Notification id is null or empty");
+                return res.SetOk("User notification id is null or empty");
             }
 
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var fcmService = scope.ServiceProvider.GetRequiredService<IFcmService>();
+            await setMessageProgressPercentage(30);
+            var userNotification = await dbContext.UserNotifications
+                .Include(x => x.User)
+                .Include(x => x.Notification)
+                .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == userNotificationId.Value);
 
-            var notification = await dbContext.Notifications
-                .Include(x => x.UserNotifications)
-                .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id == notificationId.Value && x.IsDeleted == false);
-
-            if (notification == null)
+            if (userNotification == null)
             {
                 logBag.LogLevel = NSLogLevel.Warn;
-                return res.SetOk("Notification is null");
+                return res.SetOk("User notification is null");
             }
 
-            var successPn = new List<Guid>();
-            var errorPn = new List<Guid>();
-            var users = notification.UserNotifications
-                .Where(x => x.User.IsDeleted == false && !string.IsNullOrWhiteSpace(x.User.NotificationToken))
-                .Select(x => x.User)
-                .ToList();
-
-            logBag.Trace($"Found {users.Count} users with notification token");
-            for (int i = 0; i < users.Count; i++)
+            if (userNotification.Notification.IsDeleted)
             {
-                await setMessageProgressPercentage(Math.Truncate(100.0 * i / users.Count));
-                var request = new PushNotificationRequest()
-                {
-                    DeviceToken = users[i].NotificationToken,
-                    Title = notification.Title,
-                    Body = notification.Body,
-                    Data = notification.Data
-                };
-                var isSuccess = await fcmService.SendPushNotificationAsync(request);
-                if (isSuccess)
-                {
-                    successPn.Add(users[i].Id);
-                }
-                else
-                {
-                    errorPn.Add(users[i].Id);
-                }
+                logBag.LogLevel = NSLogLevel.Warn;
+                return res.SetOk("Notification is deleted");
             }
+
+            if (userNotification.User.IsDeleted)
+            {
+                logBag.LogLevel = NSLogLevel.Warn;
+                return res.SetOk("User is deleted");
+            }
+
+            if (string.IsNullOrWhiteSpace(userNotification.User.NotificationToken))
+            {
+                return res.SetOk("User notification token is null or empty");
+            }
+
+            await setMessageProgressPercentage(60);
+            var request = new PushNotificationRequest()
+            {
+                DeviceToken = userNotification.User.NotificationToken,
+                Title = userNotification.Notification.Title,
+                Body = userNotification.Notification.Body,
+                Data = userNotification.Notification.Data ?? []
+            };
+            request.Data["userNotificationId"] = userNotification.Id.ToString();
+            request.Data["notificationId"] = userNotification.Notification.Id.ToString();
+            var isSuccess = await fcmService.SendPushNotificationAsync(request);
             await setMessageProgressPercentage(100);
-            logBag.AddOrUpdateParameter("SuccessPushNotifications", successPn);
-            logBag.AddOrUpdateParameter("ErrorPushNotifications", errorPn);
-            if (errorPn.Count > 0)
+            if (isSuccess)
             {
-                logBag.LogLevel = NSLogLevel.Warn;
-                logBag.Trace($"Error sending push notifications to users: {string.Join(", ", errorPn)}");
+                userNotification.PushNotificationsSendingTime = DateTimeOffset.Now;
+                await dbContext.SaveChangesAsync(cancellationToken);
+                return res.SetOk("Push notification sent successfully");
             }
-
-            if (errorPn.Count == 0)
-            {
-                return res.SetOk("Push notifications sent successfully");
-            }
-            else if (successPn.Count == 0)
+            else
             {
                 logBag.LogLevel = NSLogLevel.Error;
                 return res.SetError("Failed to send push notifications to all users");
             }
-
-            logBag.LogLevel = NSLogLevel.Warn;
-            return res.SetOk("Push notifications sent partially");
         }
     }
 }
