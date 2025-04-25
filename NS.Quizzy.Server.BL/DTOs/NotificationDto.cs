@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NS.Quizzy.Server.DAL.Entities;
 using static NS.Quizzy.Server.DAL.DALEnums;
 
 namespace NS.Quizzy.Server.BL.DTOs
@@ -19,5 +20,8 @@ namespace NS.Quizzy.Server.BL.DTOs
 
         public int? TotalUsers { get; set; }
         public int? TotalSeen { get; set; }
+        public double? SeeingPercentage { get; set; }
+        public int? NumberOfPushNotificationsReceived { get; set; }
+        public double? PushNotificationReceivedPercentage { get; set; }
     }
 }

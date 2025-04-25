@@ -9,7 +9,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 #### ➕ To add a new migration:
 ```bash
-dotnet ef migrations add "change the CreatedById as mandatory in Notifications table" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
+dotnet ef migrations add "Add Notification tokens for init users" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
 #### ❌ To remove last migrations:

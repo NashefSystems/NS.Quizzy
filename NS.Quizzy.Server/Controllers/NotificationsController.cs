@@ -24,7 +24,7 @@ namespace NS.Quizzy.Server.Controllers
             _service = service;
         }
 
-        [HttpGet("MyNotifications")]        
+        [HttpGet("MyNotifications")]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<NotificationDto>))]
         public async Task<ActionResult<List<NotificationDto>>> GetMyNotificationsAsync([FromQuery] bool isArchive = false)
         {
@@ -67,6 +67,20 @@ namespace NS.Quizzy.Server.Controllers
 
             var getUri = $"{Request.GetFullURL()}/{res.Id}";
             return Created(getUri, res);
+        }
+
+
+        [HttpDelete("{id}")]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
+        [SwaggerResponse(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<NotificationDto>> DeleteAsync(Guid id)
+        {
+            var res = await _service.DeleteAsync(id);
+            if (!res)
+            {
+                return NotFound("Item not found");
+            }
+            return NoContent();
         }
     }
 }

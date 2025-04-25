@@ -26,7 +26,25 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
             CreateMap<User, UserDto>();
             CreateMap<Notification, NotificationDto>()
                 .ForMember(dst => dst.TotalUsers, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Count()))
-                .ForMember(dst => dst.TotalSeen, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Where(x => x.SeenAt.HasValue).Count()));
+                .ForMember(dst => dst.TotalSeen, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Where(x => x.SeenAt.HasValue).Count()))
+                .ForMember(dst => dst.SeeingPercentage, opt => opt.MapFrom(src => src.UserNotifications == null ? default : GetPercentage(src.UserNotifications.Where(x => x.SeenAt.HasValue).Count(), src.UserNotifications.Count())))
+                .ForMember(dst => dst.NumberOfPushNotificationsReceived, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Where(x => x.PushNotificationsSendingTime.HasValue).Count()))
+                .ForMember(dst => dst.PushNotificationReceivedPercentage, opt => opt.MapFrom(src => src.UserNotifications == null ? default : GetPercentage(src.UserNotifications.Where(x => x.PushNotificationsSendingTime.HasValue).Count(), src.UserNotifications.Count())));
+        }
+
+        private static double? GetPercentage(int? value, int? total)
+        {
+            if (value == null || total == null)
+            {
+                return null;
+            }
+
+            if (value == 0 || total == 0)
+            {
+                return 0;
+            }
+
+            return ((double)value) * 100.0 / (double)total;
         }
     }
 }

@@ -25,6 +25,7 @@ namespace NS.Quizzy.Server.DAL
                 FullName = "Admin",
                 Email = "Nashef90@Gmail.com",
                 TwoFactorSecretKey = "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO",
+                NotificationToken = "dxkmG0jIQyWsrrnlihsPzp:APA91bEZptXfWbtClGiGQsnoJyFlgZOvb8ezRkv0aBeUNMJv-OxAKNofrXSh3CNAV2Ix4qB5c_11LmcnFSgqH4dzZo5f-zQSIVfF3j1jvmqQfG-uRHcJ4Oc",
                 Role = DALEnums.Roles.Developer,
             };
             internal static readonly User sajiUser = new()
@@ -34,6 +35,7 @@ namespace NS.Quizzy.Server.DAL
                 FullName = "Saji Nashef",
                 Email = "saji.nashef@gmail.com",
                 TwoFactorSecretKey = "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX",
+                NotificationToken = "eeCTLExNRcGRRTmz1yXhue:APA91bHtF4PgtFbLsqAJHDw8-koBVRjZBCy6A_15OI_NfavWtvQwtytXsGQDoVa9Y_w__nap_jgQkOoA_YYAVM6UyKpeONooPgfCd4y5CItcIfUOizkmvHU",
                 Role = DALEnums.Roles.Admin,
             };
 

@@ -9,11 +9,7 @@ using static NS.Quizzy.Server.DAL.DALEnums;
 using Newtonsoft.Json;
 using NS.Shared.QueueManager.Interfaces;
 using NS.Shared.Logging;
-using NS.Quizzy.Server.BL.Models;
-using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.QueueManager.Models;
-using Azure.Core;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -37,14 +33,16 @@ namespace NS.Quizzy.Server.BL.Services
         public async Task<List<NotificationDto>> GetMyNotificationsAsync(bool isArchive)
         {
             var userId = _httpContextAccessor.HttpContext.GetUserId();
-            var notificationIds = await _appDbContext.UserNotifications
-                .Where(x => x.UserId == userId && x.SeenAt.HasValue == isArchive)
-                .Select(x => x.NotificationId)
-                .ToListAsync();
-
-            var items = await _appDbContext.Notifications
-                .Where(x => x.IsDeleted == false && notificationIds.Contains(x.Id))
-                .OrderByDescending(x => x.CreatedTime)
+            var items = await _appDbContext.UserNotifications
+                .Include(x => x.Notification)
+                .Where(x =>
+                    x.IsDeleted == false &&
+                    x.Notification.IsDeleted == false &&
+                    x.UserId == userId &&
+                    x.SeenAt.HasValue == isArchive
+                )
+                .OrderBy(x => x.Notification.CreatedTime)
+                .Select(x => x.Notification)
                 .ToListAsync();
 
             var res = _mapper.Map<List<NotificationDto>>(items);
@@ -58,6 +56,7 @@ namespace NS.Quizzy.Server.BL.Services
                 .Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.CreatedTime)
                 .ToListAsync();
+            items.ForEach(x => x.UserNotifications = x.UserNotifications.Where(x => x.IsDeleted == false).ToList());
             var res = _mapper.Map<List<NotificationDto>>(items);
             return res;
         }
@@ -67,6 +66,10 @@ namespace NS.Quizzy.Server.BL.Services
             var item = await _appDbContext.Notifications
                  .Include(x => x.UserNotifications)
                  .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            if (item != null)
+            {
+                item.UserNotifications = item.UserNotifications.Where(x => x.IsDeleted == false).ToList();
+            }
             return _mapper.Map<NotificationDto>(item);
         }
 
@@ -249,7 +252,15 @@ namespace NS.Quizzy.Server.BL.Services
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            throw new NotSupportedException();
+            var item = await _appDbContext.Notifications.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            if (item == null)
+            {
+                return false;
+            }
+
+            item.IsDeleted = true;
+            await _appDbContext.SaveChangesAsync();
+            return true;
         }
     }
 }
