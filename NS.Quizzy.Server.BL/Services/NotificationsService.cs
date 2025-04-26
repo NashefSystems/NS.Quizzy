@@ -153,22 +153,14 @@ namespace NS.Quizzy.Server.BL.Services
                 int? totalUsers = totalUsersDic.ContainsKey(x.Id) ? totalUsersDic[x.Id] : null;
                 int? totalRead = totalReadDic.ContainsKey(x.Id) ? totalReadDic[x.Id] : null;
                 int? numberOfPushNotificationsReceived = numberOfPushNotificationsReceivedDic.ContainsKey(x.Id) ? numberOfPushNotificationsReceivedDic[x.Id] : null;
+                var res = _mapper.Map<NotificationDto>(x);
 
-                return new NotificationDto()
-                {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Body = x.Body,
-                    CreatedTime = x.CreatedTime,
-                    Data = x.Data,
-                    Target = x.Target,
-                    TargetIds = x.TargetIds,
-                    TotalUsers = totalUsers,
-                    TotalRead = totalRead,
-                    ReadPercentage = NumberUtils.GetPercentage(totalRead, totalUsers),
-                    NumberOfPushNotificationsReceived = numberOfPushNotificationsReceived,
-                    PushNotificationReceivedPercentage = NumberUtils.GetPercentage(numberOfPushNotificationsReceived, totalUsers)
-                };
+                res.TotalUsers = totalUsers;
+                res.TotalRead = totalRead;
+                res.ReadPercentage = NumberUtils.GetPercentage(totalRead, totalUsers);
+                res.NumberOfPushNotificationsReceived = numberOfPushNotificationsReceived;
+                res.PushNotificationReceivedPercentage = NumberUtils.GetPercentage(numberOfPushNotificationsReceived, totalUsers);
+                return res;
             }).ToList();
 
             return res;
