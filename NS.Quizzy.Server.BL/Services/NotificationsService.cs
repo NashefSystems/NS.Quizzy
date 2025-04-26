@@ -15,6 +15,8 @@ using static NS.Quizzy.Server.Common.Enums;
 using NS.Quizzy.Server.Common.Extensions;
 using System.Collections.Generic;
 using NS.Quizzy.Server.BL.CustomExceptions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using NS.Quizzy.Server.BL.Utils;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -121,12 +123,54 @@ namespace NS.Quizzy.Server.BL.Services
         public async Task<List<NotificationDto>> GetAllAsync()
         {
             var items = await _appDbContext.Notifications
-                .Include(x => x.UserNotifications)
                 .Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.CreatedTime)
                 .Take(_notificationsGetLimitValue)
                 .ToListAsync();
-            var res = _mapper.Map<List<NotificationDto>>(items);
+
+            var notificationIds = items.Select(x => x.Id).ToList();
+
+            var totalUsersDic = await _appDbContext.UserNotifications
+                .AsNoTracking()
+                .Where(x => x.IsDeleted == false)
+                .GroupBy(g => g.NotificationId)
+                .ToDictionaryAsync(k => k.Key, v => v.Count());
+
+            var totalReadDic = await _appDbContext.UserNotifications
+                .AsNoTracking()
+                .Where(x => x.IsDeleted == false && x.SeenAt.HasValue)
+                .GroupBy(g => g.NotificationId)
+                .ToDictionaryAsync(k => k.Key, v => v.Count());
+
+            var numberOfPushNotificationsReceivedDic = await _appDbContext.UserNotifications
+                .AsNoTracking()
+                .Where(x => x.IsDeleted == false && x.PushNotificationsSendingTime.HasValue)
+                .GroupBy(g => g.NotificationId)
+                .ToDictionaryAsync(k => k.Key, v => v.Count());
+
+            var res = items.Select(x =>
+            {
+                int? totalUsers = totalUsersDic.ContainsKey(x.Id) ? totalUsersDic[x.Id] : null;
+                int? totalRead = totalReadDic.ContainsKey(x.Id) ? totalReadDic[x.Id] : null;
+                int? numberOfPushNotificationsReceived = numberOfPushNotificationsReceivedDic.ContainsKey(x.Id) ? numberOfPushNotificationsReceivedDic[x.Id] : null;
+
+                return new NotificationDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Body = x.Body,
+                    CreatedTime = x.CreatedTime,
+                    Data = x.Data,
+                    Target = x.Target,
+                    TargetIds = x.TargetIds,
+                    TotalUsers = totalUsers,
+                    TotalRead = totalRead,
+                    ReadPercentage = NumberUtils.GetPercentage(totalRead, totalUsers),
+                    NumberOfPushNotificationsReceived = numberOfPushNotificationsReceived,
+                    PushNotificationReceivedPercentage = NumberUtils.GetPercentage(numberOfPushNotificationsReceived, totalUsers)
+                };
+            }).ToList();
+
             return res;
         }
 

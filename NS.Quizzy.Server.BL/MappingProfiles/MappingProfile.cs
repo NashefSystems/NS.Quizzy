@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.BL.DTOs;
+using NS.Quizzy.Server.BL.Utils;
 
 namespace NS.Quizzy.Server.BL.MappingProfiles
 {
@@ -27,25 +28,9 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
             CreateMap<Notification, NotificationDto>()
                 .ForMember(dst => dst.TotalUsers, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Count()))
                 .ForMember(dst => dst.TotalRead, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Where(x => x.SeenAt.HasValue).Count()))
-                .ForMember(dst => dst.ReadPercentage, opt => opt.MapFrom(src => src.UserNotifications == null ? default : GetPercentage(src.UserNotifications.Where(x => x.SeenAt.HasValue).Count(), src.UserNotifications.Count())))
+                .ForMember(dst => dst.ReadPercentage, opt => opt.MapFrom(src => src.UserNotifications == null ? default : NumberUtils.GetPercentage(src.UserNotifications.Where(x => x.SeenAt.HasValue).Count(), src.UserNotifications.Count())))
                 .ForMember(dst => dst.NumberOfPushNotificationsReceived, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Where(x => x.PushNotificationsSendingTime.HasValue).Count()))
-                .ForMember(dst => dst.PushNotificationReceivedPercentage, opt => opt.MapFrom(src => src.UserNotifications == null ? default : GetPercentage(src.UserNotifications.Where(x => x.PushNotificationsSendingTime.HasValue).Count(), src.UserNotifications.Count())));
-        }
-
-        private static double? GetPercentage(int? value, int? total)
-        {
-            if (value == null || total == null)
-            {
-                return null;
-            }
-
-            if (value == 0 || total == 0)
-            {
-                return 0;
-            }
-
-            var val = ((double)value) * 100.0 / (double)total;
-            return Math.Round(val);
+                .ForMember(dst => dst.PushNotificationReceivedPercentage, opt => opt.MapFrom(src => src.UserNotifications == null ? default : NumberUtils.GetPercentage(src.UserNotifications.Where(x => x.PushNotificationsSendingTime.HasValue).Count(), src.UserNotifications.Count())));
         }
     }
 }
