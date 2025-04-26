@@ -1,0 +1,24 @@
+<app-back-button></app-back-button>
+<div class="notifications-container">
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let notification of notifications" [expanded]="false"
+            (opened)="markAsRead(notification)" [class.unread]="!notification.read">
+            <mat-expansion-panel-header>
+                <div class="notification-header">
+                    <div class="icon">
+                        <mat-icon>notifications</mat-icon>
+                    </div>
+                    <div class="info">
+                        <div class="title">{{ notification.title }}</div>
+                        <div class="details">
+                            <span>{{ notification.createdTime | date:'yyyy/MM/dd HH:mm' }}</span>
+                            <span>|</span>
+                            <span>{{ notification.author }}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel-header>
+            <div class="body">{{ notification.body }}</div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

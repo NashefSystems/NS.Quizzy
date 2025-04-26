@@ -9,7 +9,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools
 
 #### ➕ To add a new migration:
 ```bash
-dotnet ef migrations add "Add Notification tokens for init users" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
+dotnet ef migrations add "2025-04-26 db changes" -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
 #### ❌ To remove last migrations:

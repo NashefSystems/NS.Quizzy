@@ -4,6 +4,8 @@ namespace NS.Quizzy.Server.BL.Interfaces
 {
     public interface INotificationsService : IBaseService<NotificationPayloadDto, NotificationDto>
     {
-        Task<List<NotificationDto>> GetMyNotificationsAsync(bool isArchive);
+        Task<int> GetNumberOfMyNewNotificationsAsync();
+        Task<List<MyNotificationItem>> GetMyNotificationsAsync(int? limit);
+        Task<MyNotificationItem> MarkAsReadAsync(Guid notificationId);
     }
 }

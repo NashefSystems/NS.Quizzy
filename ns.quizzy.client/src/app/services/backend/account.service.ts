@@ -49,7 +49,6 @@ export class AccountService extends BaseService {
             if (tokenRes?.token) {
               request.notificationToken = tokenRes.token;
             }
-            debugger;
             return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
           })
         );

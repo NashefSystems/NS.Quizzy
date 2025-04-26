@@ -24,11 +24,28 @@ namespace NS.Quizzy.Server.Controllers
             _service = service;
         }
 
-        [HttpGet("MyNotifications")]
-        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<NotificationDto>))]
-        public async Task<ActionResult<List<NotificationDto>>> GetMyNotificationsAsync([FromQuery] bool isArchive = false)
+        [HttpGet("NumberOfMyNewNotifications")]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(int))]
+        public async Task<ActionResult<int>> GetNumberOfMyNewNotificationsAsync()
         {
-            var res = await _service.GetMyNotificationsAsync(isArchive);
+            var res = await _service.GetNumberOfMyNewNotificationsAsync();
+            res = 50;
+            return Ok(res);
+        }
+
+        [HttpGet("MyNotifications")]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<MyNotificationItem>))]
+        public async Task<ActionResult<List<MyNotificationItem>>> GetMyNotificationsAsync([FromQuery] int? limit = null)
+        {
+            var res = await _service.GetMyNotificationsAsync(limit);
+            return Ok(res);
+        }
+
+        [HttpPut("{notificationId}/read")]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<MyNotificationItem>))]
+        public async Task<ActionResult<MyNotificationItem>> MarkAsReadAsync(Guid notificationId)
+        {
+            var res = await _service.MarkAsReadAsync(notificationId);
             return Ok(res);
         }
 

@@ -4,8 +4,10 @@ import { AccountService } from '../services/backend/account.service';
 import { firstValueFrom } from 'rxjs';
 import { UserRoles } from '../models/backend/user-details.dto';
 import { NotificationsService } from '../services/notifications.service';
+import { AppSettingsService } from '../services/app-settings.service';
 
 export const developerGuard: CanActivateFn = async (route, state) => {
+  const appSettingsService = inject(AppSettingsService);
   const accountService = inject(AccountService);
   const router = inject(Router);
   const notificationsService = inject(NotificationsService);
@@ -22,11 +24,12 @@ export const developerGuard: CanActivateFn = async (route, state) => {
   }
 
   if (!isAuthenticated) {
-    router.navigate(['/exam-schedule'])
+    router.navigate([appSettingsService.loginUrl])
   }
 
   if (!res) {
     notificationsService.error("ERRORS.FORBID");
+    router.navigate([appSettingsService.homeUrl]);
   }
 
   return res;

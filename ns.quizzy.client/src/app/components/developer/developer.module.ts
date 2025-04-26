@@ -34,7 +34,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     DeveloperComponent,
-    ReactNativeMessageTestComponent
+    ReactNativeMessageTestComponent,
   ],
   imports: [
     CommonModule,

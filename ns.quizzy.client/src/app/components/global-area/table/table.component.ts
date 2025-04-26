@@ -21,6 +21,7 @@ export class TableComponent {
   @Input() items: any[] | null = null;
   @Input() columns: TableColumnInfo[] = [];
 
+  @Input() withoutEditOption = false;
   @Output() add = new EventEmitter<void>();
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();

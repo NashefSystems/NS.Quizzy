@@ -18,11 +18,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
   MatDialogModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatCardModule,
   MatExpansionModule, MatProgressBarModule, MatProgressSpinner, MatSidenavModule, MatMenuModule,
-  MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule, MatTooltipModule
+  MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule, MatTooltipModule,
+  MatBadgeModule
 ];
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -74,6 +76,9 @@ import { LoginWithEmailComponent } from './components/auth-area/login-with-email
 import { UserDetailsComponent } from './components/auth-area/user-details/user-details.component';
 import { UserListComponent } from './components/user-area/user-list/user-list.component';
 import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/user-add-or-edit.component';
+import { MyNotificationsComponent } from './components/notification-area/my-notifications/my-notifications.component';
+import { NotificationListComponent } from './components/notification-area/notification-list/notification-list.component';
+import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
 
 // Factory function for HttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -118,6 +123,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserDetailsComponent,
     UserListComponent,
     UserAddOrEditComponent,
+    MyNotificationsComponent,
+    NotificationListComponent,
+    NotificationAddComponent,
   ],
   imports: [
     BrowserModule,

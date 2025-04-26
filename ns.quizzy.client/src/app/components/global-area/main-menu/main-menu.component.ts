@@ -47,6 +47,7 @@ export class MainMenuComponent implements OnInit {
       this.menuItems.push({ text: 'MAIN_MENU.ITEMS.SUBJECT_LIST', icon: 'category', routerLink: 'subjects' });
       this.menuItems.push({ text: 'MAIN_MENU.ITEMS.MOED_LIST', icon: 'timeline', routerLink: 'moeds' });
       this.menuItems.push({ text: 'MAIN_MENU.ITEMS.USER_LIST', icon: 'supervisor_account', routerLink: 'users' });
+      this.menuItems.push({ text: 'MAIN_MENU.ITEMS.NOTIFICATION_LIST', icon: 'notifications', routerLink: 'notifications' });
     }
 
     if (this._userRolesService.checkRoleRequirement(userDetails, UserRoles.DEVELOPER)) {

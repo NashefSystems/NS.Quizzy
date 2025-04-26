@@ -1,0 +1,4 @@
+<div class="page-container">
+    <app-table [items]="items" [columns]="columns" (add)="onAdd()" (delete)="onDelete($event)"
+        [withoutEditOption]="true"></app-table>
+</div>

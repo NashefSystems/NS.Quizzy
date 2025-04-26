@@ -41,7 +41,7 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu" [class]="'DIR' | translate">
-          <button mat-menu-item (click)="editItem(element)">
+          <button mat-menu-item (click)="editItem(element)" *ngIf="!withoutEditOption">
             <mat-icon>edit</mat-icon>
             {{'TABLE.ACTIONS.EDIT' | translate}}
           </button>

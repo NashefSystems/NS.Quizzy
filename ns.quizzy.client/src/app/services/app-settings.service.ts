@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AppSettingsService {
   readonly homeUrl = '/exam-schedule';
+  readonly loginUrl = '/login';
   readonly appMaxWidth = 450; // in px  
 
   private isLargeScreenModeSubject = new BehaviorSubject<boolean>(false);

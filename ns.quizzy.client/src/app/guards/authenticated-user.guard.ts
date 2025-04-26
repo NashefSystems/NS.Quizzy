@@ -2,8 +2,10 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AccountService } from '../services/backend/account.service';
 import { firstValueFrom } from 'rxjs';
+import { AppSettingsService } from '../services/app-settings.service';
 
 export const authenticatedUserGuard: CanActivateFn = async (route, state) => {
+  const appSettingsService = inject(AppSettingsService);
   const accountService = inject(AccountService);
   const router = inject(Router);
   let res = false;
@@ -15,7 +17,7 @@ export const authenticatedUserGuard: CanActivateFn = async (route, state) => {
   }
 
   if (!res) {
-    router.navigate(['/login']);
+    router.navigate([appSettingsService.loginUrl]);
   }
 
   return res;

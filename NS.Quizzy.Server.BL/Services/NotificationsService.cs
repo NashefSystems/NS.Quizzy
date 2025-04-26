@@ -10,6 +10,11 @@ using Newtonsoft.Json;
 using NS.Shared.QueueManager.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.QueueManager.Models;
+using Microsoft.Extensions.Configuration;
+using static NS.Quizzy.Server.Common.Enums;
+using NS.Quizzy.Server.Common.Extensions;
+using System.Collections.Generic;
+using NS.Quizzy.Server.BL.CustomExceptions;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -20,33 +25,97 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
         private readonly INSLogger _logger;
+        private readonly int _notificationsGetLimitValue;
 
-        public NotificationsService(IHttpContextAccessor httpContextAccessor, AppDbContext appDbContext, IMapper mapper, INSQueueService queueService, INSLogger logger/*, IConfiguration configuration*/)
+        public NotificationsService(IHttpContextAccessor httpContextAccessor, AppDbContext appDbContext, IMapper mapper, INSQueueService queueService, INSLogger logger, IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
             _appDbContext = appDbContext;
             _mapper = mapper;
             _queueService = queueService;
             _logger = logger;
+
+            {
+                int value = 50; // default
+                var cacheKey = AppSettingKeys.NotificationsGetLimitValue.GetDBStringValue();
+                if (int.TryParse(configuration.GetValue<string>(cacheKey), out int val) && val > 0)
+                {
+                    value = val;
+                }
+                _notificationsGetLimitValue = value;
+            }
         }
 
-        public async Task<List<NotificationDto>> GetMyNotificationsAsync(bool isArchive)
+        public async Task<int> GetNumberOfMyNewNotificationsAsync()
         {
             var userId = _httpContextAccessor.HttpContext.GetUserId();
-            var items = await _appDbContext.UserNotifications
+            var count = await _appDbContext.UserNotifications
                 .Include(x => x.Notification)
                 .Where(x =>
                     x.IsDeleted == false &&
                     x.Notification.IsDeleted == false &&
                     x.UserId == userId &&
-                    x.SeenAt.HasValue == isArchive
+                    x.SeenAt.HasValue == false
                 )
-                .OrderBy(x => x.Notification.CreatedTime)
                 .Select(x => x.Notification)
-                .ToListAsync();
+                .CountAsync();
 
-            var res = _mapper.Map<List<NotificationDto>>(items);
+            return count;
+        }
+
+        public async Task<List<MyNotificationItem>> GetMyNotificationsAsync(int? limit)
+        {
+            var userId = _httpContextAccessor.HttpContext.GetUserId();
+            var res = await _appDbContext.UserNotifications
+                .Include(x => x.Notification)
+                .ThenInclude(x => x.CreatedBy)
+                .Where(x =>
+                    x.IsDeleted == false &&
+                    x.Notification.IsDeleted == false &&
+                    x.UserId == userId
+                )
+                .OrderByDescending(x => x.Notification.CreatedTime)
+                .Select(x => new MyNotificationItem()
+                {
+                    Id = x.Notification.Id,
+                    Title = x.Notification.Title,
+                    Body = x.Notification.Body,
+                    CreatedTime = x.Notification.CreatedTime,
+                    Data = x.Notification.Data,
+                    Read = x.SeenAt.HasValue,
+                    Author = x.Notification.CreatedBy.FullName,
+                })
+                .Take(limit ?? int.MaxValue)
+                .ToListAsync();
             return res;
+        }
+
+        public async Task<MyNotificationItem> MarkAsReadAsync(Guid notificationId)
+        {
+            var userId = _httpContextAccessor.HttpContext.GetUserId();
+            var item = await _appDbContext.UserNotifications
+                .Include(x => x.Notification)
+                .ThenInclude(x => x.CreatedBy)
+                .FirstOrDefaultAsync(x =>
+                    x.IsDeleted == false &&
+                    x.Notification.IsDeleted == false &&
+                    x.Notification.Id == notificationId &&
+                    x.UserId == userId
+                ) ?? throw new BadRequestException("Notification not found");
+
+            item.SeenAt = DateTimeOffset.Now;
+            await _appDbContext.SaveChangesAsync();
+
+            return new MyNotificationItem()
+            {
+                Id = item.Notification.Id,
+                Title = item.Notification.Title,
+                Body = item.Notification.Body,
+                CreatedTime = item.Notification.CreatedTime,
+                Data = item.Notification.Data,
+                Read = item.SeenAt.HasValue,
+                Author = item.Notification.CreatedBy.FullName,
+            };
         }
 
         public async Task<List<NotificationDto>> GetAllAsync()
@@ -55,6 +124,7 @@ namespace NS.Quizzy.Server.BL.Services
                 .Include(x => x.UserNotifications)
                 .Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.CreatedTime)
+                .Take(_notificationsGetLimitValue)
                 .ToListAsync();
             items.ForEach(x => x.UserNotifications = x.UserNotifications.Where(x => x.IsDeleted == false).ToList());
             var res = _mapper.Map<List<NotificationDto>>(items);

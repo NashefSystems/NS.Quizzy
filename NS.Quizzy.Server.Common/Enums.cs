@@ -29,6 +29,9 @@ namespace NS.Quizzy.Server.Common
 
             [DBStringValue(nameof(IgnoreOTPValidationUserIds))]
             IgnoreOTPValidationUserIds,
+
+            [DBStringValue(nameof(NotificationsGetLimitValue))]
+            NotificationsGetLimitValue,
         }
     }
 }

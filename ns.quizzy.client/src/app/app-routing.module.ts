@@ -23,6 +23,9 @@ import { anonymousUserGuard } from './guards/anonymous-user.guard';
 import { authenticatedUserGuard } from './guards/authenticated-user.guard';
 import { UserListComponent } from './components/user-area/user-list/user-list.component';
 import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/user-add-or-edit.component';
+import { NotificationListComponent } from './components/notification-area/notification-list/notification-list.component';
+import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
+import { MyNotificationsComponent } from './components/notification-area/my-notifications/my-notifications.component';
 
 const routes: Routes = [
   {
@@ -66,6 +69,39 @@ const routes: Routes = [
         component: ExamAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.EXAM_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/exams',
+      }
+    ]
+  },
+  {
+    path: 'my-notifications',
+    canActivate: [authenticatedUserGuard],
+    component: MyNotificationsComponent,
+    data: {
+      page_title: "PAGE_TITLES.MY_NOTIFICATIONS"
+    }
+  },
+  {
+    path: 'notifications',
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: NotificationListComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_LIST"
+        }
+      }, {
+        path: 'new',
+        component: NotificationAddComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_ADD"
         }
       },
       {
@@ -301,6 +337,7 @@ const routes: Routes = [
   },
   {
     path: 'developer',
+    canActivate: [developerGuard],
     loadChildren: () => import('./components/developer/developer.module').then((m) => m.DeveloperModule),
     data: {
       page_title: "Developer"

@@ -34,7 +34,10 @@
         "SUBJECT_LIST": "נושאים",
         "SUBJECT_ADD": "הוספת נושא",
         "SUBJECT_EDIT": "עריכת נושא",
-        "PRIVACY_POLICY": "מדיניות הפרטיות"
+        "PRIVACY_POLICY": "מדיניות הפרטיות",
+        "MY_NOTIFICATIONS": "ההתראות שלי",
+        "NOTIFICATION_LIST": "התראות",
+        "NOTIFICATION_ADD": "הוספת התראה"
     },
     "LOGIN": {
         "TITLE": "התחברות",
@@ -76,7 +79,8 @@
             "MOED_LIST": "מועדים",
             "QUESTIONNAIRE_LIST": "שאלונים",
             "SUBJECT_LIST": "נושאים",
-            "USER_LIST": "משתמשים"
+            "USER_LIST": "משתמשים",
+            "NOTIFICATION_LIST": "התראות"
         }
     },
     "TABLE": {
@@ -101,6 +105,11 @@
     "MOED_AREA": {
         "NAME": "מועד",
         "ITEM_ORDER": "סדר הופעה"
+    },
+    "NOTIFICATION_AREA": {
+        "CREATED_TIME": "זמן התראה",
+        "TITLE": "כותרת",
+        "TARGET": "יעד"
     },
     "GRADE_AREA": {
         "NAME": "שם",
@@ -187,5 +196,14 @@
         "ADMIN": "אחראי",
         "DEVELOPER": "מפתח",
         "SUPERADMIN": "מנהל מערכת"
+    },
+    "NOTIFICATION_TARGETS": {
+        "SPECIFICUSERS": "משתמשים ספציפיים",
+        "CLASSES": "כיתות",
+        "GRADES": "שכבות",
+        "STUDENTS": "תלמידים",
+        "TEACHERS": "מורים",
+        "TEACHERSANDSTUDENTS": "מורים ותלמידים",
+        "ALLUSERS": "כל המשתמשים"
     }
 }

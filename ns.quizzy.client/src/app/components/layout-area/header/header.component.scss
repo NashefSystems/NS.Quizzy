@@ -13,6 +13,10 @@
         align-items: center;
         justify-content: space-between;
 
+        >div {
+            flex: 1;
+        }
+
         .page-title {
             text-align: center;
             width: 100%;
