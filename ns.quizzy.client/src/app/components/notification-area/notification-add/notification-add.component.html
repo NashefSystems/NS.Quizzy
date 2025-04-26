@@ -1,1 +1,84 @@
-<p>notification-add works!</p>
+<app-back-button></app-back-button>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_AREA.TITLE' | translate }}</mat-label>
+        <input matInput formControlName="title" />
+        <mat-error *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+            <ng-container *ngIf="form.get('title')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_AREA.BODY' | translate }}</mat-label>
+        <textarea matInput formControlName="body"></textarea>
+        <mat-error *ngIf="form.get('body')?.invalid && form.get('body')?.touched">
+            <ng-container *ngIf="form.get('body')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_AREA.TARGET' | translate }}</mat-label>
+        <mat-select formControlName="target" (valueChange)="onTargetChange()">
+            <mat-option [dir]="'DIR' | translate" [value]="'SpecificUsers'">{{'NOTIFICATION_TARGETS.SPECIFICUSERS' |
+                translate}}</mat-option>
+            <mat-option [dir]="'DIR' | translate" [value]="'Classes'">{{'NOTIFICATION_TARGETS.CLASSES' |
+                translate}}</mat-option>
+            <mat-option [dir]="'DIR' | translate" [value]="'Grades'">{{'NOTIFICATION_TARGETS.GRADES' |
+                translate}}</mat-option>
+            <mat-option [dir]="'DIR' | translate" [value]="'Students'">{{'NOTIFICATION_TARGETS.STUDENTS' |
+                translate}}</mat-option>
+            <mat-option [dir]="'DIR' | translate" [value]="'Teachers'">{{'NOTIFICATION_TARGETS.TEACHERS' |
+                translate}}</mat-option>
+            <mat-option [dir]="'DIR' | translate"
+                [value]="'TeachersAndStudents'">{{'NOTIFICATION_TARGETS.TEACHERSANDSTUDENTS' |
+                translate}}</mat-option>
+            <mat-option [dir]="'DIR' | translate" [value]="'AllUsers'">{{'NOTIFICATION_TARGETS.ALLUSERS' |
+                translate}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('target')?.invalid && form.get('target')?.touched">
+            <ng-container *ngIf="form.get('target')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isSpecificUsers()" appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
+        <mat-select formControlName="targetIds" multiple>
+            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of users"
+                [value]="item.id">
+                {{item.fullName}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isClasses()" appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
+        <mat-select formControlName="targetIds" multiple>
+            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of classes"
+                [value]="item.id">
+                {{item.fullCode}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="isGrades()" appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
+        <mat-select formControlName="targetIds" multiple>
+            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of grades"
+                [value]="item.id">
+                {{item.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div dir="ltr">{{form.value|json}}</div>
+    <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+        {{ (id ? 'UPDATE' : 'ADD') | translate }}
+    </button>
+</form>

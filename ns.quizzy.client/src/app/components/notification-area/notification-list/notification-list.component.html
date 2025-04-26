@@ -1,4 +1,44 @@
-<div class="page-container">
-    <app-table [items]="items" [columns]="columns" (add)="onAdd()" (delete)="onDelete($event)"
-        [withoutEditOption]="true"></app-table>
+<div class="header-actions">
+    <app-back-button></app-back-button>
+    <button mat-raised-button (click)="onAdd()">{{'TABLE.ACTIONS.ADD' | translate}}</button>
+</div>
+<div class="notifications-container">
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let notification of items" [expanded]="false">
+            <mat-expansion-panel-header>
+                <div class="notification-header">
+                    <div class="icon">
+                        <mat-icon>notifications</mat-icon>
+                    </div>
+                    <div class="info">
+                        <div class="title">{{ notification.title }}</div>
+                        <div class="details">
+                            <span>{{ notification.createdTime | date:'yyyy/MM/dd HH:mm' }}</span>
+                            <span>|</span>
+                            <span [translate]="'NOTIFICATION_TARGETS.'+notification.target.toUpperCase() "></span>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel-header>
+            <div class="body" [innerHTML]="notification.body?.replaceAll('\n','<br>')"></div>
+            <hr>
+            <div class="delivery-info"
+                [innerHTML]="'NOTIFICATION_AREA.DELIVERY_INFO.TARGET_USER_QUANTITY' | translate:{value:notification.totalUsers}">
+            </div>
+            <div class="delivery-info"
+                [innerHTML]="'NOTIFICATION_AREA.DELIVERY_INFO.READ_QUANTITY' | translate:{value:notification.totalRead}">
+            </div>
+            <div class="delivery-info"
+                [innerHTML]="'NOTIFICATION_AREA.DELIVERY_INFO.PUSH_NOTIFICATION_TEXT' | translate:{value:notification.numberOfPushNotificationsReceived}">
+            </div>
+            <div class="delivery-info"
+                [innerHTML]="'NOTIFICATION_AREA.DELIVERY_INFO.READ_PERCENTAGE' | translate:{value:notification.readPercentage}">
+            </div>
+            <div class="item-actions">
+                <button class="delete-item" mat-button (click)="onDelete(notification)">
+                    <mat-icon>delete</mat-icon>
+                    {{'TABLE.ACTIONS.DELETE' | translate}}</button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
 </div>

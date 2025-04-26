@@ -109,7 +109,14 @@
     "NOTIFICATION_AREA": {
         "CREATED_TIME": "זמן התראה",
         "TITLE": "כותרת",
-        "TARGET": "יעד"
+        "TARGET": "יעד",
+        "TARGET_IDS": "מזהה יעדים",
+        "DELIVERY_INFO": {
+            "TARGET_USER_QUANTITY": "ההתראה שוייכה ל <b>{{value}}</b> משתמשים",
+            "READ_QUANTITY": "ההתראה נקראה ע\"י <b>{{value}}</b> משתמשים",
+            "READ_PERCENTAGE": "אחוז הקריאה <b>{{value}}</b>%",
+            "PUSH_NOTIFICATION_TEXT": "ההתראה נשלחה ל <b>{{value}}</b> משתמשים"
+        }
     },
     "GRADE_AREA": {
         "NAME": "שם",

@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NotificationsService } from '../../../services/backend/notifications.service';
 import { IMyNotificationItem } from '../../../models/backend/notification.dto';
+import { AppSettingsService } from '../../../services/app-settings.service';
 
 @Component({
   selector: 'app-my-notifications',
@@ -10,6 +11,7 @@ import { IMyNotificationItem } from '../../../models/backend/notification.dto';
 })
 export class MyNotificationsComponent {
   private readonly _notificationsService = inject(NotificationsService);
+  private readonly _appSettingsService = inject(AppSettingsService);
   notifications: IMyNotificationItem[] = [];
 
   ngOnInit() {
@@ -27,6 +29,7 @@ export class MyNotificationsComponent {
     if (!notification.read) {
       this._notificationsService.markAsRead(notification.id).subscribe(() => {
         notification.read = true;
+        this._appSettingsService.reCalculateUnReadNotifications("MyNotificationsComponent");
       });
     }
   }

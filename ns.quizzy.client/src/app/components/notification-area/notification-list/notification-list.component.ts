@@ -22,27 +22,6 @@ export class NotificationListComponent implements OnInit {
   private readonly _dialogService = inject(DialogService);
 
   items: INotificationDto[];
-  columns: TableColumnInfo[] = [
-    {
-      key: 'createdTime',
-      title: 'NOTIFICATION_AREA.CREATED_TIME',
-      converter: (item: INotificationDto) => moment(item.createdTime).format('DD/MM/YY HH:mm')
-    },
-    {
-      key: 'title',
-      title: 'NOTIFICATION_AREA.TITLE'
-    }, {
-      key: 'target',
-      title: 'NOTIFICATION_AREA.TARGET',
-      converter: (item: INotificationDto) => {
-        const target = item?.target;
-        if (!target) {
-          return '';
-        }
-        return this._appTranslateService.translate(`NOTIFICATION_TARGETS.${target.toUpperCase()}`);
-      }
-    }
-  ];
 
   ngOnInit(): void {
     this.loadData();

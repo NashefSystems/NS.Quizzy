@@ -24,8 +24,8 @@ export interface INotificationPayloadDto extends INotificationBasePayloadDto {
 export interface INotificationDto extends INotificationPayloadDto, IBaseEntityDto {
     createdTime: Date;
     totalUsers?: number;
-    totalSeen?: number;
-    seeingPercentage?: number;
+    totalRead?: number;
+    readPercentage?: number;
     numberOfPushNotificationsReceived?: number;
     pushNotificationReceivedPercentage?: number;
     read: boolean;

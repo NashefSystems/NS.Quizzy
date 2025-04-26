@@ -24,8 +24,8 @@ namespace NS.Quizzy.Server.BL.DTOs
 
         public DateTimeOffset CreatedTime { get; set; }
         public int? TotalUsers { get; set; }
-        public int? TotalSeen { get; set; }
-        public double? SeeingPercentage { get; set; }
+        public int? TotalRead { get; set; }
+        public double? ReadPercentage { get; set; }
         public int? NumberOfPushNotificationsReceived { get; set; }
         public double? PushNotificationReceivedPercentage { get; set; }
     }

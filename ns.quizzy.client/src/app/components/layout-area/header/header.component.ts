@@ -6,6 +6,7 @@ import { AccountService } from '../../../services/backend/account.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, Observable } from 'rxjs';
 import { NotificationsService } from '../../../services/backend/notifications.service';
+import { AppSettingsService } from '../../../services/app-settings.service';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
   private readonly _dialogService = inject(DialogService);
   private readonly _accountService = inject(AccountService);
   private readonly _notificationsService = inject(NotificationsService);
+  private readonly _appSettingsService = inject(AppSettingsService);
 
   private readonly _router = inject(Router);
   private readonly _activatedRoute = inject(ActivatedRoute);
@@ -44,6 +46,15 @@ export class HeaderComponent implements OnInit {
     });
 
     this._accountService.userChange.subscribe(user => this.userLoggedIn = !!(user?.id));
+
+    this.fetchNumberOfMyNewNotifications();
+    this._appSettingsService.reCalculateUnReadNotifications$.subscribe(source => {
+      console.log(`[${source}] Get unread notification quantity`);
+      this.fetchNumberOfMyNewNotifications();
+    });
+  }
+
+  fetchNumberOfMyNewNotifications() {
     this._notificationsService.getNumberOfMyNewNotifications().subscribe(value => this.notificationsBadge = (value && value > 0) ? value.toString() : "");
   }
 

@@ -21,6 +21,9 @@ export class AppSettingsService {
   private appMaxHeightSubject = new BehaviorSubject<number>(window.innerHeight);
   public readonly onAppMaxHeightChange = this.appMaxHeightSubject.asObservable();
 
+  private reCalculateUnReadNotificationsSubject = new BehaviorSubject<string>("");
+  public readonly reCalculateUnReadNotifications$ = this.reCalculateUnReadNotificationsSubject.asObservable();
+
   setLargeScreenMode(value: boolean) {
     this.isLargeScreenModeSubject.next(value);
   }
@@ -49,5 +52,9 @@ export class AppSettingsService {
     setTimeout(() => {
       this.loadingStatusSubject.next(value);
     }, 100);
+  }
+
+  reCalculateUnReadNotifications(source: string) {
+    this.reCalculateUnReadNotificationsSubject.next(source);
   }
 }

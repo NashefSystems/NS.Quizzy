@@ -29,7 +29,6 @@ namespace NS.Quizzy.Server.Controllers
         public async Task<ActionResult<int>> GetNumberOfMyNewNotificationsAsync()
         {
             var res = await _service.GetNumberOfMyNewNotificationsAsync();
-            res = 50;
             return Ok(res);
         }
 

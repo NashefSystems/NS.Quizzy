@@ -1,0 +1,70 @@
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+mat-expansion-panel {
+    margin-bottom: 0.5rem;
+    transition: background-color 0.3s ease;
+
+    .mat-expansion-panel-header {
+        padding-inline-start: 0;
+    }
+
+    .notification-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        * {
+            color: black;
+        }
+
+        .icon {
+            margin-inline-end: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+
+            mat-icon {
+                font-size: x-large;
+            }
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+
+            .details {
+                font-size: small;
+                display: flex;
+
+                // time
+                span:nth-child(1) {
+                    direction: ltr;
+                }
+
+                // separator
+                span:nth-child(2) {
+                    margin: 0 0.3rem;
+                }
+            }
+        }
+    }
+
+    .delivery-info {
+        color: gray;
+    }
+
+    .item-actions {
+        display: flex;
+        justify-content: flex-end;
+
+        .delete-item {
+            color: red;
+        }
+    }
+}
