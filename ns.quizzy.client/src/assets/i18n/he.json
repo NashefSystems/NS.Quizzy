@@ -110,6 +110,7 @@
         "CREATED_TIME": "זמן התראה",
         "TITLE": "כותרת",
         "TARGET": "יעד",
+        "BODY": "הודעה",
         "TARGET_IDS": "מזהה יעדים",
         "DELIVERY_INFO": {
             "TARGET_USER_QUANTITY": "ההתראה שוייכה ל <b>{{value}}</b> משתמשים",

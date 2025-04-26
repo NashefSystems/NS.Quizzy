@@ -77,7 +77,6 @@
         </mat-select>
     </mat-form-field>
 
-    <div dir="ltr">{{form.value|json}}</div>
     <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
         {{ (id ? 'UPDATE' : 'ADD') | translate }}
     </button>

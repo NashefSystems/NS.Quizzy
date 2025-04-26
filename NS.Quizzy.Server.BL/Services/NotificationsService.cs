@@ -126,7 +126,6 @@ namespace NS.Quizzy.Server.BL.Services
                 .OrderByDescending(x => x.CreatedTime)
                 .Take(_notificationsGetLimitValue)
                 .ToListAsync();
-            items.ForEach(x => x.UserNotifications = x.UserNotifications.Where(x => x.IsDeleted == false).ToList());
             var res = _mapper.Map<List<NotificationDto>>(items);
             return res;
         }
