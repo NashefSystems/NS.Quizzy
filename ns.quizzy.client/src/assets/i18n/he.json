@@ -212,6 +212,7 @@
         "STUDENTS": "תלמידים",
         "TEACHERS": "מורים",
         "TEACHERSANDSTUDENTS": "מורים ותלמידים",
+        "ADMINS": "מנהלי מערכת",
         "ALLUSERS": "כל המשתמשים"
     }
 }

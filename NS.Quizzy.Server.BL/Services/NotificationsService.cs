@@ -13,9 +13,7 @@ using NS.Shared.QueueManager.Models;
 using Microsoft.Extensions.Configuration;
 using static NS.Quizzy.Server.Common.Enums;
 using NS.Quizzy.Server.Common.Extensions;
-using System.Collections.Generic;
 using NS.Quizzy.Server.BL.CustomExceptions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using NS.Quizzy.Server.BL.Utils;
 
 namespace NS.Quizzy.Server.BL.Services
@@ -320,6 +318,21 @@ namespace NS.Quizzy.Server.BL.Services
                         {
                             roles.Add(Roles.Teacher);
                         }
+
+                        var ids = await _appDbContext.Users
+                            .Where(x => x.IsDeleted == false && roles.Contains(x.Role))
+                            .Select(x => x.Id)
+                            .ToListAsync();
+
+                        if (ids.Count > 0)
+                        {
+                            userIds.AddRange(ids);
+                        }
+                        break;
+                    }
+                case NotificationTarget.Admins:
+                    {
+                        List<Roles> roles = [Roles.Admin, Roles.Developer, Roles.SuperAdmin];
 
                         var ids = await _appDbContext.Users
                             .Where(x => x.IsDeleted == false && roles.Contains(x.Role))

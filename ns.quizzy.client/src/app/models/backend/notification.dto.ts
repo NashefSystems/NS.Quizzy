@@ -7,6 +7,7 @@ export enum NotificationTarget {
     STUDENTS = "Students",
     TEACHERS = "Teachers",
     TEACHERS_AND_STUDENTS = "TeachersAndStudents",
+    ADMINS = "Admins",
     ALL_USERS = "AllUsers"
 }
 

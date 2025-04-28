@@ -44,6 +44,7 @@ namespace NS.Quizzy.Server.DAL
             Students,
             Teachers,
             TeachersAndStudents,
+            Admins,
             AllUsers
         }
     }
