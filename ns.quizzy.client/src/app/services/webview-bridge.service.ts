@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
   providedIn: 'root'
 })
 export class WebviewBridgeService {
+
   async writeToConsoleAsync(message: string, logLevel: 'log' | 'info' | 'warn' | 'error' = 'info') {
     try {
       const payload: IWriteToConsolePayload = {
@@ -115,7 +116,7 @@ export class WebviewBridgeService {
     return !!reactNativeWebView;
   }
 
-  private getEventType = (requestId: string) => `app_response_${requestId.replaceAll('-', '')}`;
+  private getEventType = (requestId: string) => `onAppResponse${requestId}`.replaceAll('-', '');
 
   sendMessageToNative(action: MESSAGE_ACTIONS, payload: any = null): Promise<IResponseMessage> {
     return new Promise((resolve, reject) => {
@@ -130,7 +131,6 @@ export class WebviewBridgeService {
           payload: payload
         };
 
-
         const _reactNativeWebView = this.getReactNativeWebView();
         if (!_reactNativeWebView) {
           const errorResponse: IResponseMessage = {
@@ -144,7 +144,9 @@ export class WebviewBridgeService {
           reject(errorResponse);
         }
 
-        const listener = (event: MessageEvent) => {
+        const listener = (gEvent: any) => {
+          const event = gEvent as MessageEvent;
+          console.log("event listener:\n[gEvent] ", gEvent, ",\n[event] ", event);
           try {
             const eData = event.data;
             const responseMsg = eData as IResponseMessage;
@@ -160,7 +162,6 @@ export class WebviewBridgeService {
               reject(errorResponse);
             }
             if (responseMsg?.requestId === rid) {
-              _window[eventType] = null;
               if (responseMsg.isSuccess) {
                 resolve(responseMsg);
               } else {

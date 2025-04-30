@@ -55,7 +55,9 @@ export class RootComponent implements AfterViewInit, OnInit {
     const _window = window as any;
     const eventType = this._appSettingsService.PUSH_NOTIFICATION_IS_RECEIVED_EVENT_TYPE;
 
-    const listener = (event: MessageEvent) => {
+    const listener = (gEvent: any) => {
+      const event = gEvent as MessageEvent;
+      console.log("event listener:\n[gEvent] ", gEvent, ",\n[event] ", event);
       try {
         console.info("onPushNotificationReceived | Listener event: ", event);
         const eData = event.data;
