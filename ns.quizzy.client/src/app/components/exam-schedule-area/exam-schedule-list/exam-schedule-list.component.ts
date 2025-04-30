@@ -65,7 +65,6 @@ export class ExamScheduleListComponent implements OnInit {
   }
 
   onPrint() {
-    debugger;
     this.accordion().openAll();
     setTimeout(() => {
       this.printDiv('exam-list');
@@ -186,7 +185,6 @@ export class ExamScheduleListComponent implements OnInit {
   }
 
   onExport() {
-    debugger;
     const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
     const sheetData: ExportDataItem[] = this.exams.map(x => {
