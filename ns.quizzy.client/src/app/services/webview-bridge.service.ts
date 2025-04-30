@@ -115,7 +115,7 @@ export class WebviewBridgeService {
     return !!reactNativeWebView;
   }
 
-  private getEventType = (requestId: string) => `app_response_${requestId}`;
+  private getEventType = (requestId: string) => `app_response_${requestId.replaceAll('-', '')}`;
 
   sendMessageToNative(action: MESSAGE_ACTIONS, payload: any = null): Promise<IResponseMessage> {
     return new Promise((resolve, reject) => {
