@@ -3,6 +3,8 @@ import { AppSettingsService } from '../../../services/app-settings.service';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { AccountService } from '../../../services/backend/account.service';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
+import { INotificationEvent } from '../../../models/webview-bridge.models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +17,7 @@ export class RootComponent implements AfterViewInit, OnInit {
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
   private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _accountService = inject(AccountService);
+  private readonly _router = inject(Router);
 
   userLoggedIn = false;
   isReady = false;
@@ -43,6 +46,28 @@ export class RootComponent implements AfterViewInit, OnInit {
     });
 
     this._accountService.userChange.subscribe(user => this.userLoggedIn = !!(user?.id));
+
+
+    this.onPushNotificationReceived();
+  }
+
+  onPushNotificationReceived() {
+    const _window = window as any;
+    const eventType = this._appSettingsService.PUSH_NOTIFICATION_IS_RECEIVED_EVENT_TYPE;
+
+    const listener = (event: MessageEvent) => {
+      try {
+        console.info("onPushNotificationReceived | Listener event: ", event);
+        const eData = event.data;
+        const notificationEvent = eData as INotificationEvent;
+        console.info("onPushNotificationReceived | Listener notificationEvent: ", notificationEvent);
+        this._router.navigate(['/my-notifications']);
+      } catch (err: any) {
+        console.error("onPushNotificationReceived | Listener exception: ", err);
+      }
+    };
+
+    _window.addEventListener(eventType, listener);
   }
 
   ngAfterViewInit(): void {

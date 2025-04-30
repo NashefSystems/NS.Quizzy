@@ -86,3 +86,9 @@ export interface IGetPlatformInfoResponse {
     isMacOS: boolean,
     isWeb: boolean,
 }
+
+
+export interface INotificationEvent {
+    source?: 'tapped' | 'background';
+    data?: any;
+}

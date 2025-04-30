@@ -6,8 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
   providedIn: 'root'
 })
 export class WebviewBridgeService {
-  private readonly EVENT_TYPE = 'message';
-
   async writeToConsoleAsync(message: string, logLevel: 'log' | 'info' | 'warn' | 'error' = 'info') {
     try {
       const payload: IWriteToConsolePayload = {
@@ -117,16 +115,21 @@ export class WebviewBridgeService {
     return !!reactNativeWebView;
   }
 
+  private getEventType = (requestId: string) => `app_response_${requestId}`;
+
   sendMessageToNative(action: MESSAGE_ACTIONS, payload: any = null): Promise<IResponseMessage> {
     return new Promise((resolve, reject) => {
       let rid = '';
       try {
         rid = uuidv4();
+        const eventType = this.getEventType(rid);
+        const _window = window as any;
         const requestMsg: IRequestMessage = {
           requestId: rid,
           action: action,
           payload: payload
         };
+
 
         const _reactNativeWebView = this.getReactNativeWebView();
         if (!_reactNativeWebView) {
@@ -157,7 +160,7 @@ export class WebviewBridgeService {
               reject(errorResponse);
             }
             if (responseMsg?.requestId === rid) {
-              window.removeEventListener(this.EVENT_TYPE, listener);
+              _window.removeEventListener(eventType, listener);
               if (responseMsg.isSuccess) {
                 resolve(responseMsg);
               } else {
@@ -178,7 +181,7 @@ export class WebviewBridgeService {
           }
         };
 
-        window.addEventListener(this.EVENT_TYPE, listener);
+        _window.addEventListener(eventType, listener);
         const eventRNWebView = JSON.stringify(requestMsg);
         _reactNativeWebView.postMessage(eventRNWebView);
 

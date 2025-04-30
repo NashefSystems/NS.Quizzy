@@ -8,6 +8,8 @@ export class AppSettingsService {
   readonly homeUrl = '/exam-schedule';
   readonly loginUrl = '/login';
   readonly appMaxWidth = 450; // in px  
+  readonly PUSH_NOTIFICATION_IS_RECEIVED_EVENT_TYPE = "onPushNotificationReceived";
+
 
   private isLargeScreenModeSubject = new BehaviorSubject<boolean>(false);
   public readonly onLargeScreenModeChange = this.isLargeScreenModeSubject.asObservable();
