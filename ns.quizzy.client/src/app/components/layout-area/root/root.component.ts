@@ -67,7 +67,7 @@ export class RootComponent implements AfterViewInit, OnInit {
       }
     };
 
-    _window.addEventListener(eventType, listener);
+    _window[eventType] = listener;
   }
 
   ngAfterViewInit(): void {

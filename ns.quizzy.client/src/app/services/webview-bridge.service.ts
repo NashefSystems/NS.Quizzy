@@ -160,7 +160,7 @@ export class WebviewBridgeService {
               reject(errorResponse);
             }
             if (responseMsg?.requestId === rid) {
-              _window.removeEventListener(eventType, listener);
+              _window[eventType] = null;
               if (responseMsg.isSuccess) {
                 resolve(responseMsg);
               } else {
@@ -180,8 +180,7 @@ export class WebviewBridgeService {
             reject(exceptionResponse);
           }
         };
-
-        _window.addEventListener(eventType, listener);
+        _window[eventType] = listener;
         const eventRNWebView = JSON.stringify(requestMsg);
         _reactNativeWebView.postMessage(eventRNWebView);
 
