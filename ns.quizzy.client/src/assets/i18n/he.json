@@ -112,6 +112,7 @@
         "TARGET": "יעד",
         "BODY": "הודעה",
         "TARGET_IDS": "מזהה יעדים",
+        "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "הודעת הדחיפה נשלחה בהצלחה",
         "DELIVERY_INFO": {
             "TARGET_USER_QUANTITY": "ההתראה שוייכה ל <b>{{value}}</b> משתמשים",
             "READ_QUANTITY": "ההתראה נקראה ע\"י <b>{{value}}</b> משתמשים",
@@ -186,6 +187,7 @@
     },
     "ADD": "הוסף",
     "UPDATE": "עדכן",
+    "TEST": "בדיקה",
     "FILTER": "סינון",
     "CLEAR": "נקה",
     "EXPAND_ALL": "הרחב הכל",

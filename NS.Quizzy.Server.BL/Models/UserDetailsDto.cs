@@ -20,5 +20,6 @@ namespace NS.Quizzy.Server.Models.Models
 
         public DALEnums.Roles Role { get; set; }
         public Guid? ClassId { get; set; }
+        public bool PushNotificationIsEnabled { get; set; }
     }
 }

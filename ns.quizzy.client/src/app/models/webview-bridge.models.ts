@@ -8,6 +8,7 @@ export enum MESSAGE_ACTIONS {
     GET_NOTIFICATION_TOKEN = "getNotificationToken",
     GET_MOBILE_SERIAL_NUMBER = "getMobileSerialNumber",
     GET_PLATFORM_INFO = "getPlatformInfo",
+    SHOW_NOTIFICATION = "showNotification",
 }
 
 export interface IRequestMessage {
@@ -22,6 +23,11 @@ export interface IResponseMessage {
     isSuccess: boolean;
     isException: boolean;
     error?: any;
+    data?: any;
+}
+
+export interface INotificationEvent {
+    source?: 'tapped' | 'background';
     data?: any;
 }
 
@@ -87,8 +93,9 @@ export interface IGetPlatformInfoResponse {
     isWeb: boolean,
 }
 
-
-export interface INotificationEvent {
-    source?: 'tapped' | 'background';
-    data?: any;
+// SHOW_NOTIFICATION
+export interface IShowNotificationPayload {
+    title: string;
+    body: string;
+    data?: { [key: string]: string | object };
 }

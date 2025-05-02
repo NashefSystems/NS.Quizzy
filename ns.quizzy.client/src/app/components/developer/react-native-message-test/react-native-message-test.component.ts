@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { IReadDataPayload, IResponseMessage, IStoreDataPayload, IVerifyBiometricSignaturePayload, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
+import { IReadDataPayload, IResponseMessage, IShowNotificationPayload, IStoreDataPayload, IVerifyBiometricSignaturePayload, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
 @Component({
@@ -23,6 +23,7 @@ export class ReactNativeMessageTestComponent implements OnInit {
     MESSAGE_ACTIONS.GET_NOTIFICATION_TOKEN,
     MESSAGE_ACTIONS.GET_MOBILE_SERIAL_NUMBER,
     MESSAGE_ACTIONS.GET_PLATFORM_INFO,
+    MESSAGE_ACTIONS.SHOW_NOTIFICATION,
   ];
 
   ngOnInit(): void {
@@ -68,6 +69,19 @@ export class ReactNativeMessageTestComponent implements OnInit {
         {
           const payload: IVerifyBiometricSignaturePayload = {
             promptMessage: 'בדיקה'
+          };
+          requestPayload = payload;
+          break;
+        }
+      case MESSAGE_ACTIONS.SHOW_NOTIFICATION:
+        {
+          const payload: IShowNotificationPayload = {
+            title: 'בדיקה',
+            body: 'הודעת בדיקה',
+            data: {
+              isTest: "true",
+              source: "developer.react-native-message-test"
+            },
           };
           requestPayload = payload;
           break;

@@ -155,10 +155,12 @@ namespace NS.Quizzy.Server.BL.Services
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
+                IdNumber = user.IdNumber,
                 TokenId = tokenId,
                 Token = token,
                 Role = user.Role,
                 ClassId = user.ClassId,
+                PushNotificationIsEnabled = !string.IsNullOrWhiteSpace(user.NotificationToken),
             };
         }
 
@@ -247,10 +249,12 @@ namespace NS.Quizzy.Server.BL.Services
                 Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
+                IdNumber = user.IdNumber,
                 TokenId = tokenId,
                 Token = token,
                 Role = user.Role,
                 ClassId = user.ClassId,
+                PushNotificationIsEnabled = !string.IsNullOrWhiteSpace(user.NotificationToken),
             };
         }
 
@@ -281,9 +285,10 @@ namespace NS.Quizzy.Server.BL.Services
                 Email = user.Email,
                 FullName = user.FullName,
                 IdNumber = user.IdNumber,
-                Role = user.Role,
                 TokenId = tokenId,
+                Role = user.Role,
                 ClassId = user.ClassId,
+                PushNotificationIsEnabled = !string.IsNullOrWhiteSpace(user.NotificationToken),
             };
         }
 

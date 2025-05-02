@@ -79,7 +79,14 @@
         </mat-select>
     </mat-form-field>
 
-    <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
-        {{ (id ? 'UPDATE' : 'ADD') | translate }}
-    </button>
+    <div class="footer-actions">
+        <button mat-button *ngIf="pushNotificationIsEnabled" class="full-width" [disabled]="form.invalid" type="button"
+            (click)="onTest()">
+            {{'TEST' | translate}}
+        </button>
+
+        <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+            {{'ADD' | translate}}
+        </button>
+    </div>
 </form>

@@ -90,6 +90,9 @@
         "NAME": "Moed",
         "ITEM_ORDER": "Item order"
     },
+    "NOTIFICATION_AREA": {
+        "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "The push notification was sent successfully"
+    },
     "GRADE_AREA": {
         "NAME": "Name",
         "CODE": "Grade code"

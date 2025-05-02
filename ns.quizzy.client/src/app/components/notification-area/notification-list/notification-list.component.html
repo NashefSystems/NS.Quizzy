@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </mat-expansion-panel-header>
-            <div class="body" [innerHTML]="notification.body?.replaceAll('\n','<br>')"></div>
+            <div class="body" [innerHTML]="notification.body.replaceAll('\n','<br>')"></div>
             <hr>
             <div class="delivery-info"
                 [innerHTML]="'NOTIFICATION_AREA.DELIVERY_INFO.TARGET_USER_QUANTITY' | translate:{value:notification.totalUsers}">

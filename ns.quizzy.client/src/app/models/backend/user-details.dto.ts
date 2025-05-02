@@ -13,4 +13,5 @@ export class UserDetailsDto {
     email: string;
     role: UserRoles;
     classId!: string;
+    pushNotificationIsEnabled: boolean
 }

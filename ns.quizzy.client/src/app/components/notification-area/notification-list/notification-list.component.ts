@@ -3,11 +3,9 @@ import { NotificationsService } from '../../../services/backend/notifications.se
 import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { INotificationDto } from '../../../models/backend/notification.dto';
-import { TableColumnInfo } from '../../global-area/table/table-column-info';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
 import { ConfirmDialogComponent } from '../../global-area/confirm-dialog/confirm-dialog.component';
 import { AppTranslateService } from '../../../services/app-translate.service';
-import moment from 'moment';
 
 @Component({
   selector: 'app-notification-list',
