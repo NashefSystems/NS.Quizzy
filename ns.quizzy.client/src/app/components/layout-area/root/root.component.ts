@@ -52,25 +52,16 @@ export class RootComponent implements AfterViewInit, OnInit {
   }
 
   onPushNotificationReceived() {
-    debugger;
     const _window = window as any;
     const eventType = this._appSettingsService.PUSH_NOTIFICATION_IS_RECEIVED_EVENT_TYPE;
-
-    const listener = (gEvent: any) => {
-      debugger;
-      const event = gEvent as MessageEvent;
-      console.log("event listener:\n[gEvent] ", gEvent, ",\n[event] ", event);
+    const listener = (notificationEvent: INotificationEvent) => {
       try {
-        console.info("onPushNotificationReceived | Listener event: ", event);
-        const eData = event.data;
-        const notificationEvent = eData as INotificationEvent;
-        console.info("onPushNotificationReceived | Listener notificationEvent: ", notificationEvent);
+        console.log("event listener:\n[notificationEvent] ", notificationEvent);
         this._router.navigate(['/my-notifications']);
       } catch (err: any) {
         console.error("onPushNotificationReceived | Listener exception: ", err);
       }
     };
-
     _window[eventType] = listener;
   }
 

@@ -144,12 +144,9 @@ export class WebviewBridgeService {
           reject(errorResponse);
         }
 
-        const listener = (gEvent: any) => {
-          const event = gEvent as MessageEvent;
-          console.log("event listener:\n[gEvent] ", gEvent, ",\n[event] ", event);
+        const listener = (responseMsg: IResponseMessage) => {
           try {
-            const eData = event.data;
-            const responseMsg = eData as IResponseMessage;
+            console.log("event listener:\n[responseMsg] ", responseMsg);
             if (!responseMsg) {
               const errorResponse: IResponseMessage = {
                 isException: false,
