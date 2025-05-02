@@ -1,6 +1,5 @@
 
 export enum MESSAGE_TYPES {
-    CONSOLE = 'console',
     STORE_DATA = 'storeData',
     READ_DATA = 'readData',
     CHECK_BIOMETRIC_AVAILABILITY = "checkBiometricAvailability",

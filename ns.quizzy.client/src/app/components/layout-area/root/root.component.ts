@@ -52,10 +52,12 @@ export class RootComponent implements AfterViewInit, OnInit {
   }
 
   onPushNotificationReceived() {
+    debugger;
     const _window = window as any;
     const eventType = this._appSettingsService.PUSH_NOTIFICATION_IS_RECEIVED_EVENT_TYPE;
 
     const listener = (gEvent: any) => {
+      debugger;
       const event = gEvent as MessageEvent;
       console.log("event listener:\n[gEvent] ", gEvent, ",\n[event] ", event);
       try {
