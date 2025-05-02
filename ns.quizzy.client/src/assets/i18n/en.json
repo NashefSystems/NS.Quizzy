@@ -4,56 +4,69 @@
         "FIELD_REQUIRED": "This field is required",
         "MIN": "The value must be at least {{min}}",
         "MAX": "The value must be at most {{max}}",
-        "MIN_LENGTH": "The entered text is too short. You must enter at least {requiredLength} characters",
-        "MAX_LENGTH": "The entered text is too long. You may enter up to {requiredLength} characters only",
+        "MIN_LENGTH": "The entered text is too short. You must enter at least {{requiredLength}} characters",
+        "MAX_LENGTH": "The entered text is too long. You may enter up to {{requiredLength}} characters only",
         "FORBID": "You do not have sufficient permissions to access this page"
     },
     "PAGE_TITLES": {
         "EXAM_SCHEDULE": "Exam schedule",
         "EXAM_LIST": "Exams",
-        "EXAM_ADD": "Adding an exam",
-        "EXAM_EDIT": "Editing an exam",
+        "EXAM_ADD": "Add exam",
+        "EXAM_EDIT": "Edit exam",
         "GRADE_LIST": "Grades",
-        "GRADE_ADD": "Adding a grade",
-        "GRADE_EDIT": "Editing a grade",
+        "GRADE_ADD": "Add grade",
+        "GRADE_EDIT": "Edit grade",
         "CLASS_LIST": "Classes",
-        "CLASS_ADD": "Adding a class",
-        "CLASS_EDIT": "Editing a class",
+        "CLASS_ADD": "Add class",
+        "CLASS_EDIT": "Edit class",
+        "USER_LIST": "Users",
+        "USER_ADD": "Add user",
+        "USER_EDIT": "Edit user",
         "QUESTIONNAIRE_LIST": "Questionnaires",
-        "QUESTIONNAIRE_ADD": "Adding a questionnaire",
-        "QUESTIONNAIRE_EDIT": "Editing a questionnaire",
+        "QUESTIONNAIRE_ADD": "Add questionnaire",
+        "QUESTIONNAIRE_EDIT": "Edit questionnaire",
         "EXAM_TYPE_LIST": "Exam types",
-        "EXAM_TYPE_ADD": "Adding an exam type",
-        "EXAM_TYPE_EDIT": "Editing an exam type",
+        "EXAM_TYPE_ADD": "Add exam type",
+        "EXAM_TYPE_EDIT": "Edit exam type",
         "MOED_LIST": "Moeds",
-        "MOED_ADD": "Adding a moed",
-        "MOED_EDIT": "Editing a moed",
+        "MOED_ADD": "Add moed",
+        "MOED_EDIT": "Edit moed",
         "SUBJECT_LIST": "Subjects",
-        "SUBJECT_ADD": "Adding a subject",
-        "SUBJECT_EDIT": "Editing a subject",
-        "PRIVACY_POLICY": "Privacy policy"
+        "SUBJECT_ADD": "Add subject",
+        "SUBJECT_EDIT": "Edit subject",
+        "PRIVACY_POLICY": "Privacy policy",
+        "MY_NOTIFICATIONS": "My notifications",
+        "NOTIFICATION_LIST": "Notifications",
+        "NOTIFICATION_ADD": "Add notification"
     },
     "LOGIN": {
         "TITLE": "Log in",
         "EMAIL": "Email",
         "PASSWORD": "Password",
-        "REMEMBER_ME": "Remember Me",
+        "REMEMBER_ME": "Remember me",
         "LOGIN_BUTTON": "Log in",
+        "ID_NUMBER": "ID number",
+        "LOGIN_WITH_EMAIL": "Log in with email",
+        "LOGIN_WITH_ID_NUMBER": "Log in with ID number",
         "EMAIL_REQUIRED": "Email is required.",
         "EMAIL_INVALID": "Please enter a valid email address.",
         "PASSWORD_REQUIRED": "Password is required.",
         "INVALID_CREDENTIALS": "Invalid credentials",
+        "INVALID_ID_NUMBER": "ID number is not authorized",
         "LOGIN_SUCCESSFULLY": "Welcome back, {{fullName}}!",
         "TWO_FACTOR": {
-            "TITLE": "Two-Factor Authentication",
+            "TITLE": "Two‑Factor Authentication",
             "SETUP": {
                 "LINE_1": "1. Install an authenticator app on your mobile device",
                 "LINE_2": "2. Scan the following QR code in your authenticator app",
                 "LINE_3": "3. Enter the code from your authenticator app below"
             },
-            "TOKEN_TITLE": "Enter an authenticator app code:",
-            "ERROR": "Invalid authentication token entered!<br>Please use the token provided by your authentication app on your phone."
+            "TOKEN_TITLE": "Enter authenticator code:",
+            "ERROR": "Invalid authentication code entered!<br>Please use the code provided by your authentication app."
         }
+    },
+    "USER-DETAILS": {
+        "CLASS": "Class"
     },
     "MAIN_MENU": {
         "LOGOUT": "Log out",
@@ -65,17 +78,20 @@
             "EXAM_TYPE_LIST": "Exam types",
             "MOED_LIST": "Moeds",
             "QUESTIONNAIRE_LIST": "Questionnaires",
-            "SUBJECT_LIST": "Subjects"
+            "SUBJECT_LIST": "Subjects",
+            "USER_LIST": "Users",
+            "NOTIFICATION_LIST": "Notifications"
         }
     },
     "TABLE": {
         "SEARCH": "Search",
         "SEARCH_PLACEHOLDER": "Search...",
         "EMPTY_STATUS": "🤔</br>No matching results found</br>Please try again!",
+        "ROW_COUNT": "Total rows: {{value}}",
         "ACTIONS": {
-            "ADD": "Add New Item",
+            "ADD": "Add new item",
             "EDIT": "Edit",
-            "DELETE": "delete"
+            "DELETE": "Delete"
         }
     },
     "SUBJECT_AREA": {
@@ -91,7 +107,18 @@
         "ITEM_ORDER": "Item order"
     },
     "NOTIFICATION_AREA": {
-        "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "The push notification was sent successfully"
+        "CREATED_TIME": "Notification time",
+        "TITLE": "Title",
+        "TARGET": "Target",
+        "BODY": "Message",
+        "TARGET_IDS": "Target IDs",
+        "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "The push notification was sent successfully",
+        "DELIVERY_INFO": {
+            "TARGET_USER_QUANTITY": "The notification was assigned to <b>{{value}}</b> users",
+            "READ_QUANTITY": "The notification was read by <b>{{value}}</b> users",
+            "READ_PERCENTAGE": "Read percentage <b>{{value}}</b>%",
+            "PUSH_NOTIFICATION_TEXT": "The notification was sent to <b>{{value}}</b> users"
+        }
     },
     "GRADE_AREA": {
         "NAME": "Name",
@@ -112,15 +139,15 @@
     },
     "EXAM_AREA": {
         "START_TIME": "Exam time",
-        "EXAM_TYPE": "Exam Type",
+        "EXAM_TYPE": "Exam type",
         "MOED": "Moed",
         "QUESTIONNAIRE": "Questionnaire",
         "DURATION": "Exam duration",
         "DURATION_WITH_EXTRA": "Exam duration with extra time",
         "GRADES": "Grades",
-        "GRADES_GRADE_IMPROVEMENT": "Grades (Grade improvement)",
+        "GRADES_GRADE_IMPROVEMENT": "Grades (grade improvement)",
         "CLASSES": "Classes",
-        "CLASSES_GRADE_IMPROVEMENT": "Classes (Grade improvement)",
+        "CLASSES_GRADE_IMPROVEMENT": "Classes (grade improvement)",
         "FILTER_COMPLETED_EXAMS": "Filter completed exams",
         "GRADE_IMPROVEMENT": "Grade improvement"
     },
@@ -135,6 +162,13 @@
         "SUBJECTS": "Subjects",
         "LIST": "List",
         "CALENDAR": "Calendar"
+    },
+    "USER_AREA": {
+        "EMAIL": "Email",
+        "ID_NUMBER": "ID number",
+        "FULL_NAME": "Full name",
+        "ROLE": "Role",
+        "CLASS": "Class"
     },
     "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {
@@ -153,12 +187,34 @@
     },
     "ADD": "Add",
     "UPDATE": "Update",
+    "TEST": "Test",
     "FILTER": "Filter",
     "CLEAR": "Clear",
-    "EXPAND_ALL": "Expand All",
-    "COLLAPSE_ALL": "Collapse All",
+    "EXPAND_ALL": "Expand all",
+    "COLLAPSE_ALL": "Collapse all",
     "PRINT": "Print",
     "EXPORT": "Export",
+    "IMPORT": "Import",
     "ITEM_ADDED_SUCCESSFULLY": "Item added successfully",
-    "ITEM_UPDATED_SUCCESSFULLY": "Item updated successfully"
+    "ITEM_UPDATED_SUCCESSFULLY": "Item updated successfully",
+    "Subject already exists": "Subject already exists",
+    "Exam type already exists": "Exam type already exists",
+    "Class already exists": "Class already exists",
+    "USER_ROLES": {
+        "STUDENT": "Student",
+        "TEACHER": "Teacher",
+        "ADMIN": "Admin",
+        "DEVELOPER": "Developer",
+        "SUPERADMIN": "Superadmin"
+    },
+    "NOTIFICATION_TARGETS": {
+        "SPECIFICUSERS": "Specific users",
+        "CLASSES": "Classes",
+        "GRADES": "Grades",
+        "STUDENTS": "Students",
+        "TEACHERS": "Teachers",
+        "TEACHERSANDSTUDENTS": "Teachers and students",
+        "ADMINS": "Administrators",
+        "ALLUSERS": "All users"
+    }
 }
