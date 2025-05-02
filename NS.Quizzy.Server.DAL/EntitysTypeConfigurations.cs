@@ -7,7 +7,6 @@ using System.Reflection;
 using static NS.Quizzy.Server.DAL.DALEnums;
 using NS.Quizzy.Server.DAL.Extensions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace NS.Quizzy.Server.DAL
 {
@@ -31,6 +30,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new LoginHistoryItemEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserNotificationEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new DeviceEntityConfiguration());
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -367,5 +367,27 @@ namespace NS.Quizzy.Server.DAL
                     .HasForeignKey(c => c.UserId);
             }
         }
+
+        internal class DeviceEntityConfiguration : IEntityTypeConfiguration<Device>
+        {
+            public virtual void Configure(EntityTypeBuilder<Device> entity)
+            {
+                entity
+                      .HasKey(x => x.Key);
+                entity
+                    .Property(x => x.Key)
+                    .HasMaxLength(150);
+
+                entity
+                    .Property(p => p.CreatedTime)
+                    .ValueGeneratedOnAdd()
+                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+                entity
+                    .Property(p => p.LastHeartBeat)
+                    .ValueGeneratedOnAdd()
+                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+            }
+        }
+
     }
 }

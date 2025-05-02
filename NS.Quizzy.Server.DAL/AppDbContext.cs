@@ -20,6 +20,7 @@ namespace NS.Quizzy.Server.DAL
         public DbSet<LoginHistoryItem> LoginHistory { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<Device> Devices { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
