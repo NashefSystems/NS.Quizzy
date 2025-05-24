@@ -20,9 +20,9 @@ namespace NS.Quizzy.Server.BL.Services
             _logger = logger;
         }
 
-        public async Task<bool> SendPushNotificationAsync(PushNotificationRequest request)
+        public async Task<bool> SendPushNotificationAsync(PushNotificationRequest request, INSLogBag parentLogBag = null)
         {
-            using var logBag = _logger.CreateLogBag(nameof(SendPushNotificationAsync));
+            using var logBag = _logger.CreateLogBag(nameof(SendPushNotificationAsync), parentLogBag);
             try
             {
                 var credential = GoogleCredential
@@ -55,7 +55,14 @@ namespace NS.Quizzy.Server.BL.Services
                 var response = await client.PostAsync(url, content);
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                logBag.Trace($"Response: {response.StatusCode} | Body: {responseContent}");
+                logBag.Trace($"ResponseStatusCode: {response.StatusCode}");
+                logBag.Trace($"ResponseContent: {responseContent}");
+                if (!response.IsSuccessStatusCode)
+                {
+                    logBag.LogLevel = NSLogLevel.Error;
+                    logBag.AddOrUpdateParameter("ResponseStatusCode", response.StatusCode);
+                    logBag.AddOrUpdateParameter("ResponseContent", responseContent);
+                }
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)

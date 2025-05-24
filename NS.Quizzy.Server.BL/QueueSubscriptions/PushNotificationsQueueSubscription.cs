@@ -26,6 +26,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 logBag.LogLevel = NSLogLevel.Warn;
                 return res.SetOk("User notification id is null or empty");
             }
+            logBag.AddOrUpdateParameter("UserNotificationId", userNotificationId);
 
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var fcmService = scope.ServiceProvider.GetRequiredService<IFcmService>();
@@ -40,6 +41,9 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 logBag.LogLevel = NSLogLevel.Warn;
                 return res.SetOk("User notification is null");
             }
+
+            logBag.AddOrUpdateParameter("NotificationId", userNotification.NotificationId);
+            logBag.AddOrUpdateParameter("UserId", userNotification.UserId);
 
             if (userNotification.Notification.IsDeleted)
             {
@@ -68,7 +72,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             };
             request.Data["userNotificationId"] = userNotification.Id.ToString();
             request.Data["notificationId"] = userNotification.Notification.Id.ToString();
-            var isSuccess = await fcmService.SendPushNotificationAsync(request);
+            var isSuccess = await fcmService.SendPushNotificationAsync(request, logBag);
             await setMessageProgressPercentage(100);
             if (isSuccess)
             {
