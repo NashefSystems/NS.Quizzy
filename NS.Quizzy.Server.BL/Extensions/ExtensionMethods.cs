@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.AppConfiguration;
@@ -165,10 +166,13 @@ namespace NS.Quizzy.Server.BL.Extensions
         private static IServiceCollection AddMappingProfiles(this IServiceCollection services)
         {
             // Auto Mapper Configurations
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
+            var mapperConfig = new MapperConfiguration(
+                mc =>
+                {
+                    mc.AddProfile(new MappingProfile());
+                },
+                new NullLoggerFactory()
+            );
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
 
