@@ -54,4 +54,5 @@ jobs:
             HELM_VALUE_FILE_NAME: "values.yaml"
             IMAGE_REPO: "${{ vars.V_IMAGE_REPO_BASE }}/ns-quizzy"
             ENVIRONMENT_NAME: "Production"
+            K8S_INSTANCE: "SajiNasOCI"            
         secrets: inherit
