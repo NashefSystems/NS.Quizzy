@@ -5,6 +5,16 @@ on:
     types: [API]  # This should match the event type you'll use in the API call
 
   workflow_dispatch:
+    inputs:
+        K8S_INSTANCE:
+            description: 'Kubernetes environment instance'
+            required: false
+            type: choice
+            options:
+              - NS
+              - NashefSysOCI
+              - SajiNasOCI
+            default: NS
 
   push:
     branches:
