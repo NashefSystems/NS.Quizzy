@@ -11,7 +11,7 @@ EXPOSE 8080
 
 
 # This stage is used to build the service project
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS with-node
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS with-node
 RUN apt-get update
 RUN apt-get install curl -y
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash
