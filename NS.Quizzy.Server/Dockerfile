@@ -4,10 +4,11 @@ ARG ENV
 ARG APP_VERSION
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
+
 
 
 # This stage is used to build the service project
