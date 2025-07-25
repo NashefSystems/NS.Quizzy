@@ -4,14 +4,14 @@ ARG ENV
 ARG APP_VERSION
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM --platform=linux/arm64 mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
 
 
 # This stage is used to build the service project
-FROM --platform=linux/arm64 mcr.microsoft.com/dotnet/sdk:9.0 AS with-node
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:9.0 AS with-node
 RUN apt-get update
 RUN apt-get install curl -y
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash
