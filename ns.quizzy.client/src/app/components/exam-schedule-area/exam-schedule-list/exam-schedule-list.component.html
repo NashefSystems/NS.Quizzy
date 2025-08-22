@@ -11,7 +11,7 @@
                 <span>{{ 'COLLAPSE_ALL' | translate }}</span>
             </button>
         </div>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+        <button *ngIf="nativeAppIsAvailable === false" mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">

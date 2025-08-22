@@ -11,6 +11,7 @@ import { IMoedDto } from '../../../models/backend/moed.dto';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 import { ExportDataItem, ExportService } from './export.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
+import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
 @Component({
   selector: 'app-exam-schedule-list',
@@ -19,9 +20,12 @@ import { DateTimeUtils } from '../../../utils/date-time.utils';
   styleUrl: './exam-schedule-list.component.scss'
 })
 export class ExamScheduleListComponent implements OnInit {
+  private readonly _webviewBridgeService = inject(WebviewBridgeService);
+
   isLoading: boolean = true;
   iconColor: string = '#0053E7';
   appVersion: string = "";
+  nativeAppIsAvailable: boolean | null = null;
 
   @Input() exams: IExamDto[] = [];
   @Input() grades: IGradeDto[] = [];
@@ -46,6 +50,7 @@ export class ExamScheduleListComponent implements OnInit {
   ExportService: any;
 
   ngOnInit(): void {
+    this.nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
     this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion })
   }
 
