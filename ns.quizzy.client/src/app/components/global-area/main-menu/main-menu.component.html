@@ -10,7 +10,7 @@
         </button>
     </header>
     <div class="dark-400 app-version">
-        V{{appVersion}}
+        V{{appVersion}}<span *ngIf="nativeAppVersion"> (V{{nativeAppVersion}})</span>
     </div>
     <img src="assets/images/logo.png">
     <!-- <app-language-selector></app-language-selector> -->

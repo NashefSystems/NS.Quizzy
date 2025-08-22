@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UserDetailsDto, UserRoles } from '../../../models/backend/user-details.dto';
 import { UserRolesService } from '../../../services/user-roles.service';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
+import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -19,13 +20,17 @@ export class MainMenuComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _dialogRef = inject(MatDialogRef<MainMenuComponent>);
   private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
+  private readonly _webviewBridgeService = inject(WebviewBridgeService);
+
 
   menuItems: IMenuItemInfo[];
   appVersion: string = "";
+  nativeAppVersion: string = "";
 
   ngOnInit(): void {
     this._accountService.userChange.subscribe(x => this.setMenuItems(x));
-    this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion })
+    this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion });
+    this._webviewBridgeService.getPlatformInfoAsync().then(x => this.nativeAppVersion = x?.appVersionName || "");
   }
 
   setMenuItems(userDetails: UserDetailsDto | null) {
