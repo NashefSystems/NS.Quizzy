@@ -1,18 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Newtonsoft.Json;
 using NS.Quizzy.Server.DAL.Attributes;
 using NS.Quizzy.Server.DAL.Entities;
+using NS.Quizzy.Server.DAL.Extensions;
 using NS.Security;
 using System.Reflection;
+using System.Text;
 using static NS.Quizzy.Server.DAL.DALEnums;
-using NS.Quizzy.Server.DAL.Extensions;
-using Newtonsoft.Json;
 
 namespace NS.Quizzy.Server.DAL
 {
     internal static class EntitysTypeConfigurations
     {
         private static readonly SecurityLogic _securityLogic = new("678rfrgf789plkfmk_NS.Quizzy.Server.DAL_890kjnfdd66");
+        private static readonly bool _columnOrderLogEnabled = false;
 
         internal static void SetConfigurations(this ModelBuilder modelBuilder)
         {
@@ -32,15 +34,25 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new UserNotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new DeviceEntityConfiguration());
 
+            var columnOrderLog = _columnOrderLogEnabled ? new StringBuilder() : null;
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var entity = modelBuilder.Entity(entityType.ClrType);
                 int columnOrder = 1;
+                columnOrderLog?.AppendLine($"************** Order '{entityType}' **************");
                 foreach (var property in entityType.GetProperties())
                 {
                     var columnOrderAttribute = property.PropertyInfo?.GetCustomAttribute<DBColumnOrderAttribute>();
-                    entity.Property(property.Name).HasColumnOrder(columnOrderAttribute?.Order ?? columnOrder++);
+                    var propertyOrder = columnOrderAttribute?.Order ?? columnOrder++;
+                    columnOrderLog?.AppendLine($"{property.Name} >> {propertyOrder}");
+                    entity.Property(property.Name).HasColumnOrder(propertyOrder);
                 }
+                columnOrderLog?.AppendLine($"**************************************************************");
+            }
+
+            if (_columnOrderLogEnabled)
+            {
+                Console.WriteLine(columnOrderLog.ToString());
             }
         }
 
@@ -50,6 +62,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 entity
                       .HasKey(x => x.Id);
+
                 entity
                     .Property(x => x.Id)
                     .HasColumnType("uniqueidentifier")
@@ -60,10 +73,12 @@ namespace NS.Quizzy.Server.DAL
                     .Property(p => p.CreatedTime)
                     .ValueGeneratedOnAdd()
                     .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+
                 entity
                     .Property(p => p.ModifiedTime)
                     .ValueGeneratedOnAdd()
                     .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+
                 entity
                     .Property(p => p.IsDeleted)
                     .HasDefaultValue(false);
@@ -154,6 +169,7 @@ namespace NS.Quizzy.Server.DAL
                 entity.ToTable("Classes");
 
                 entity.HasIndex(p => new { p.Name, p.GradeId }).IsUnique(true).HasFilter("IsDeleted = '0'");
+
                 entity
                     .HasOne(c => c.Grade)
                     .WithMany(c => c.Classes)
@@ -251,7 +267,6 @@ namespace NS.Quizzy.Server.DAL
                   .HasOne(c => c.Subject)
                   .WithMany(c => c.Questionnaires)
                   .HasForeignKey(c => c.SubjectId);
-
             }
         }
 
@@ -264,7 +279,6 @@ namespace NS.Quizzy.Server.DAL
                 entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
 
                 entity.HasData(InitialData.SubjectEntityData.GetData());
-
             }
         }
 
@@ -302,7 +316,6 @@ namespace NS.Quizzy.Server.DAL
                   .HasOne(c => c.User)
                   .WithMany(c => c.LoginHistory)
                   .HasForeignKey(c => c.UserId);
-
             }
         }
 
@@ -372,9 +385,11 @@ namespace NS.Quizzy.Server.DAL
         {
             public virtual void Configure(EntityTypeBuilder<Device> entity)
             {
-                entity.ToTable("UserDevices");
+                entity.ToTable("Devices");
+
                 entity
                       .HasKey(x => x.ID);
+
                 entity
                     .Property(x => x.ID)
                     .HasMaxLength(150);
@@ -383,6 +398,7 @@ namespace NS.Quizzy.Server.DAL
                     .Property(p => p.CreatedTime)
                     .ValueGeneratedOnAdd()
                     .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+
                 entity
                     .Property(p => p.LastHeartBeat)
                     .ValueGeneratedOnAdd()
