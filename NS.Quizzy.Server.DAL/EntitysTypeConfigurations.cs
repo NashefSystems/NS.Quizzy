@@ -372,6 +372,7 @@ namespace NS.Quizzy.Server.DAL
         {
             public virtual void Configure(EntityTypeBuilder<Device> entity)
             {
+                entity.ToTable("UserDevices");
                 entity
                       .HasKey(x => x.ID);
                 entity

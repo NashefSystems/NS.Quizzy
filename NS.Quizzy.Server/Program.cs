@@ -1,10 +1,8 @@
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
-using NS.Quizzy.Server.BL.CustomizationsForSwagger;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Utils;
 using NS.Shared.Logging.Extensions;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace NS.Quizzy.Server
 {

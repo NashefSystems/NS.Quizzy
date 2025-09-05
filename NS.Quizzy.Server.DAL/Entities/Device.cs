@@ -3,8 +3,6 @@
     public class Device
     {
         public required string ID { get; set; }
-        public string? SerialNumber { get; set; }
-        public string? UniqueId { get; set; }
         public string? AppVersion { get; set; }
         public string? AppBuildNumber { get; set; }
         public string? OS { get; set; }
@@ -16,6 +14,8 @@
         public bool IsWindows { get; set; }
         public bool IsMacOS { get; set; }
         public bool IsWeb { get; set; }
+        public string? SerialNumber { get; set; }
+        public string? UniqueId { get; set; }
         public DateTimeOffset CreatedTime { get; set; }
         public DateTimeOffset LastHeartBeat { get; set; }
     }
