@@ -31,18 +31,18 @@ namespace NS.Quizzy.Server.BL.Services
             }
             var startActionTime = DateTimeOffset.Now;
 
-            var key = payload.UniqueId;
-            if (string.IsNullOrWhiteSpace(key))
+            var id = payload.UniqueId;
+            if (string.IsNullOrWhiteSpace(id))
             {
-                key = payload.SerialNumber;
+                id = payload.SerialNumber;
             }
-            key = key.ToUpper().Trim();
-            var item = await _appDbContext.Devices.FirstOrDefaultAsync(x => x.Key == key);
+            id = id.ToUpper().Trim();
+            var item = await _appDbContext.Devices.FirstOrDefaultAsync(x => x.ID == id);
             if (item == null)
             {
                 item = new DAL.Entities.Device()
                 {
-                    Key = key,
+                    ID = id,
                     SerialNumber = payload.SerialNumber,
                     UniqueId = payload.UniqueId,
                     OS = payload.OS,
@@ -59,7 +59,8 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             item.OSVersion = payload.OSVersion;
-            item.AppVersionName = payload.AppVersionName;
+            item.AppVersion = payload.AppVersion;
+            item.AppBuildNumber = payload.AppBuildNumber;
             item.LastHeartBeat = startActionTime;
             await _appDbContext.SaveChangesAsync();
 

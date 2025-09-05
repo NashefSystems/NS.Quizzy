@@ -2,12 +2,13 @@
 {
     public class Device
     {
-        public string Key { get; set; }
-        public string SerialNumber { get; set; }
-        public string UniqueId { get; set; }
-        public string AppVersionName { get; set; }
-        public string OS { get; set; }
-        public string OSVersion { get; set; }
+        public required string ID { get; set; }
+        public string? SerialNumber { get; set; }
+        public string? UniqueId { get; set; }
+        public string? AppVersion { get; set; }
+        public string? AppBuildNumber { get; set; }
+        public string? OS { get; set; }
+        public string? OSVersion { get; set; }
         public bool IsTV { get; set; }
         public bool IsTesting { get; set; }
         public bool IsIOS { get; set; }

@@ -373,9 +373,9 @@ namespace NS.Quizzy.Server.DAL
             public virtual void Configure(EntityTypeBuilder<Device> entity)
             {
                 entity
-                      .HasKey(x => x.Key);
+                      .HasKey(x => x.ID);
                 entity
-                    .Property(x => x.Key)
+                    .Property(x => x.ID)
                     .HasMaxLength(150);
 
                 entity
@@ -388,6 +388,5 @@ namespace NS.Quizzy.Server.DAL
                     .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
             }
         }
-
     }
 }

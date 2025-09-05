@@ -6,9 +6,8 @@ namespace NS.Quizzy.Server.BL.DTOs
     {
         public string? SerialNumber { get; set; }
         public string? UniqueId { get; set; }
-        public string? AppVersionNumber { get; set; }
+        public string? AppVersion { get; set; }
         public string? AppBuildNumber { get; set; }
-        public string? AppVersionName { get; set; }
 
         [JsonProperty("os")]
         public string? OS { get; set; }
@@ -26,7 +25,7 @@ namespace NS.Quizzy.Server.BL.DTOs
 
     public class DeviceDto : DevicePayloadDto
     {
-        public string Key { get; set; }
+        public string ID { get; set; }
         public DateTimeOffset CreatedTime { get; set; }
         public DateTimeOffset LastHeartBeat { get; set; }
     }

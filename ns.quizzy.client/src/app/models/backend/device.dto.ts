@@ -3,7 +3,7 @@ import { IBaseEntityDto } from './base-entity.dto';
 export interface IDevicePayloadDto {
     serialNumber: string;
     uniqueId: string;
-    appVersionNumber: string,
+    appVersion: string,
     appBuildNumber: string,
     os: string;
     osVersion: string;
