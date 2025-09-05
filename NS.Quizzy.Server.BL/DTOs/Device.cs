@@ -4,13 +4,17 @@ namespace NS.Quizzy.Server.BL.DTOs
 {
     public class DevicePayloadDto
     {
-        public string SerialNumber { get; set; }
-        public string UniqueId { get; set; }
-        public string AppVersionName { get; set; }
+        public string? SerialNumber { get; set; }
+        public string? UniqueId { get; set; }
+        public string? AppVersionNumber { get; set; }
+        public string? AppBuildNumber { get; set; }
+        public string? AppVersionName { get; set; }
+
         [JsonProperty("os")]
-        public string OS{ get; set; }
+        public string? OS { get; set; }
+
         [JsonProperty("osVersion")]
-        public string OSVersion { get; set; }
+        public string? OSVersion { get; set; }
         public bool IsTV { get; set; }
         public bool IsTesting { get; set; }
         public bool IsIOS { get; set; }

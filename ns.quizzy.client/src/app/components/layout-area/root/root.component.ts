@@ -81,7 +81,8 @@ export class RootComponent implements AfterViewInit, OnInit {
       const request: IDevicePayloadDto = {
         serialNumber: mobileSerialNumber.serialNumber ?? '',
         uniqueId: mobileSerialNumber.uniqueId ?? '',
-        appVersionName: platformInfo.appVersionName,
+        appVersionNumber: platformInfo.appVersionNumber,
+        appBuildNumber: platformInfo.appBuildNumber,
         os: platformInfo.os,
         osVersion: platformInfo.version.toString(),
         isTV: platformInfo.isTV,

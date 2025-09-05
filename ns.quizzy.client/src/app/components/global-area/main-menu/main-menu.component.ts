@@ -30,7 +30,7 @@ export class MainMenuComponent implements OnInit {
   ngOnInit(): void {
     this._accountService.userChange.subscribe(x => this.setMenuItems(x));
     this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion });
-    this._webviewBridgeService.getPlatformInfoAsync().then(x => this.nativeAppVersion = x?.appVersionName || "");
+    this._webviewBridgeService.getPlatformInfoAsync().then(x => this.nativeAppVersion = x?.appVersionNumber|| "");
   }
 
   setMenuItems(userDetails: UserDetailsDto | null) {

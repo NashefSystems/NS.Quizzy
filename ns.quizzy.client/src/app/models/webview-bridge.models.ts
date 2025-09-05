@@ -82,7 +82,8 @@ export interface IGetMobileSerialNumberResponse {
 
 // GET_PLATFORM_INFO
 export interface IGetPlatformInfoResponse {
-    appVersionName: string,
+    appVersionNumber: string,
+    appBuildNumber: string,
     os: "ios" | "android" | "windows" | "macos" | "web",
     version: string | number,
     isTV: boolean,
