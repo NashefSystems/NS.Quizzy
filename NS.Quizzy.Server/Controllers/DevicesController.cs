@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.Attributes;
 using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Interfaces;
@@ -8,6 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace NS.Quizzy.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
@@ -22,7 +24,6 @@ namespace NS.Quizzy.Server.Controllers
         }
 
         [HttpPatch]
-        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
         [SwaggerResponse(StatusCodes.Status200OK, null, typeof(DeviceDto))]
         public async Task<ActionResult<DeviceDto>> UpdateInfoAsync([FromBody] DevicePayloadDto payload)
         {
