@@ -141,6 +141,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<IFcmService, FcmService>();
             services.AddScoped<INotificationsService, NotificationsService>();
             services.AddScoped<IDevicesService, DevicesService>();
+            services.AddScoped<IDeveloperService, DeveloperService>();
 
             services.AddHostedService<AppLifetimeInfoHostedService>();
 
