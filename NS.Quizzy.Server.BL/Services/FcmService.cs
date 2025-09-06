@@ -1,6 +1,5 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
-using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Shared.Logging;
@@ -25,6 +24,12 @@ namespace NS.Quizzy.Server.BL.Services
             using var logBag = _logger.CreateLogBag(nameof(SendPushNotificationAsync), parentLogBag);
             try
             {
+
+                if (!File.Exists(_jsonPath))
+                {
+                    throw new FileNotFoundException($"json file '{_jsonPath}' not found");
+                }
+
                 var credential = GoogleCredential
                     .FromFile(_jsonPath)
                     .CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
