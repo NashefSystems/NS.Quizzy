@@ -468,6 +468,16 @@ namespace NS.Quizzy.Server.DAL
                         Value = "50",
                         IsSecured = false,
                         IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("D57B4DC7-D933-477F-8CD4-16C7FAB8B9FF"),
+                        Key =  AppSettingKeys.GoogleCredentialJson.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.Json,
+                        Value = "{}",
+                        IsSecured = false,
+                        IsDeleted = false,
                     }
                 ];
             }

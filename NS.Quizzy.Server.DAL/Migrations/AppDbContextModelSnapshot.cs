@@ -187,6 +187,18 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             Target = "Server",
                             Value = "50",
                             ValueType = "Integer"
+                        },
+                        new
+                        {
+                            Id = new Guid("d57b4dc7-d933-477f-8cd4-16c7fab8b9ff"),
+                            CreatedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            IsSecured = false,
+                            Key = "GoogleCredentialJson",
+                            ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Target = "Server",
+                            Value = "{}",
+                            ValueType = "Json"
                         });
                 });
 

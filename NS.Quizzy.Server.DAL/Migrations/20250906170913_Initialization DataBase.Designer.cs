@@ -12,15 +12,15 @@ using NS.Quizzy.Server.DAL;
 namespace NS.Quizzy.Server.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250905062437_Add AppBuildNumber to devices table")]
-    partial class AddAppBuildNumbertodevicestable
+    [Migration("20250906170913_Initialization DataBase")]
+    partial class InitializationDataBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -190,6 +190,18 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             Target = "Server",
                             Value = "50",
                             ValueType = "Integer"
+                        },
+                        new
+                        {
+                            Id = new Guid("d57b4dc7-d933-477f-8cd4-16c7fab8b9ff"),
+                            CreatedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            IsDeleted = false,
+                            IsSecured = false,
+                            Key = "GoogleCredentialJson",
+                            ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Target = "Server",
+                            Value = "{}",
+                            ValueType = "Json"
                         });
                 });
 
@@ -631,71 +643,71 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<string>("AppBuildNumber")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(3);
 
                     b.Property<string>("AppVersion")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(2);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
-                        .HasColumnOrder(4)
+                        .HasColumnOrder(15)
                         .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsAndroid")
                         .HasColumnType("bit")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(9);
 
                     b.Property<bool>("IsIOS")
                         .HasColumnType("bit")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(8);
 
                     b.Property<bool>("IsMacOS")
                         .HasColumnType("bit")
-                        .HasColumnOrder(7);
+                        .HasColumnOrder(11);
 
                     b.Property<bool>("IsTV")
                         .HasColumnType("bit")
-                        .HasColumnOrder(8);
+                        .HasColumnOrder(6);
 
                     b.Property<bool>("IsTesting")
                         .HasColumnType("bit")
-                        .HasColumnOrder(9);
+                        .HasColumnOrder(7);
 
                     b.Property<bool>("IsWeb")
                         .HasColumnType("bit")
-                        .HasColumnOrder(10);
+                        .HasColumnOrder(12);
 
                     b.Property<bool>("IsWindows")
                         .HasColumnType("bit")
-                        .HasColumnOrder(11);
+                        .HasColumnOrder(10);
 
                     b.Property<DateTimeOffset>("LastHeartBeat")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
-                        .HasColumnOrder(12)
+                        .HasColumnOrder(16)
                         .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("OS")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(13);
+                        .HasColumnOrder(4);
 
                     b.Property<string>("OSVersion")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(14);
+                        .HasColumnOrder(5);
 
                     b.Property<string>("SerialNumber")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(15);
+                        .HasColumnOrder(13);
 
                     b.Property<string>("UniqueId")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(16);
+                        .HasColumnOrder(14);
 
                     b.HasKey("ID");
 
-                    b.ToTable("Devices");
+                    b.ToTable("Devices", (string)null);
                 });
 
             modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.Exam", b =>

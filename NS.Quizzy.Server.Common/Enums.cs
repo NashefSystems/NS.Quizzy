@@ -32,6 +32,9 @@ namespace NS.Quizzy.Server.Common
 
             [DBStringValue(nameof(NotificationsGetLimitValue))]
             NotificationsGetLimitValue,
+
+            [DBStringValue(nameof(GoogleCredentialJson))]
+            GoogleCredentialJson,
         }
     }
 }

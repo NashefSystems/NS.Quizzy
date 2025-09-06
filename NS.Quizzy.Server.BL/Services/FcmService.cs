@@ -1,22 +1,26 @@
 ﻿using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
+using NS.Quizzy.Server.Common.Extensions;
 using NS.Shared.Logging;
 using System.Net.Http.Headers;
 using System.Text;
+using static NS.Quizzy.Server.Common.Enums;
 
 namespace NS.Quizzy.Server.BL.Services
 {
     internal class FcmService : IFcmService
     {
         private readonly string _projectId = "quizzy-74a09"; // Replace with your actual project ID
-        private readonly string _jsonPath = "firebase-service-account.json"; // Path to your service account JSON
+        private readonly string _googleCredentialJson;
         private readonly INSLogger _logger;
 
-        public FcmService(INSLogger logger)
+        public FcmService(INSLogger logger, IConfiguration config)
         {
             _logger = logger;
+            _googleCredentialJson = config.GetValue(AppSettingKeys.GoogleCredentialJson.GetDBStringValue(), string.Empty);
         }
 
         public async Task<bool> SendPushNotificationAsync(PushNotificationRequest request, INSLogBag parentLogBag = null)
@@ -24,14 +28,7 @@ namespace NS.Quizzy.Server.BL.Services
             using var logBag = _logger.CreateLogBag(nameof(SendPushNotificationAsync), parentLogBag);
             try
             {
-
-                if (!File.Exists(_jsonPath))
-                {
-                    throw new FileNotFoundException($"json file '{_jsonPath}' not found");
-                }
-
-                var credential = GoogleCredential
-                    .FromFile(_jsonPath)
+                var credential = GoogleCredential.FromJson(_googleCredentialJson)
                     .CreateScoped("https://www.googleapis.com/auth/firebase.messaging");
 
                 var accessToken = await credential.UnderlyingCredential

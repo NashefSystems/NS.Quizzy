@@ -21,7 +21,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     IsSecured = table.Column<bool>(type: "bit", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Target = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ValueType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
                     ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
@@ -30,6 +30,32 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppSettings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Devices",
+                columns: table => new
+                {
+                    ID = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    AppVersion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AppBuildNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OS = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OSVersion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsTV = table.Column<bool>(type: "bit", nullable: false),
+                    IsTesting = table.Column<bool>(type: "bit", nullable: false),
+                    IsIOS = table.Column<bool>(type: "bit", nullable: false),
+                    IsAndroid = table.Column<bool>(type: "bit", nullable: false),
+                    IsWindows = table.Column<bool>(type: "bit", nullable: false),
+                    IsMacOS = table.Column<bool>(type: "bit", nullable: false),
+                    IsWeb = table.Column<bool>(type: "bit", nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UniqueId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    LastHeartBeat = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Devices", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,6 +91,22 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Moeds",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    ItemOrder = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Moeds", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Subjects",
                 columns: table => new
                 {
@@ -78,25 +120,6 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Subjects", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Student"),
-                    TwoFactorSecretKey = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -148,6 +171,33 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NotificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    TwoFactorSecretKey = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Classes_ClassId",
+                        column: x => x.ClassId,
+                        principalTable: "Classes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Exams",
                 columns: table => new
                 {
@@ -155,6 +205,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     Duration = table.Column<TimeSpan>(type: "time", nullable: false),
                     DurationWithExtra = table.Column<TimeSpan>(type: "time", nullable: false),
                     ExamTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MoedId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     QuestionnaireId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
@@ -171,11 +222,72 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Exams_Moeds_MoedId",
+                        column: x => x.MoedId,
+                        principalTable: "Moeds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Exams_Questionnaires_QuestionnaireId",
                         column: x => x.QuestionnaireId,
                         principalTable: "Questionnaires",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LoginHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    ClientIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeviceId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsMobile = table.Column<bool>(type: "bit", nullable: false),
+                    NotificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Platform = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserAgent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoginHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LoginHistory_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Target = table.Column<int>(type: "int", nullable: false),
+                    TargetIdsJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,6 +297,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
                     ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsImprovement = table.Column<bool>(type: "bit", nullable: false),
                     CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
                     ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
@@ -213,6 +326,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
                     ExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GradeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsImprovement = table.Column<bool>(type: "bit", nullable: false),
                     CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
                     ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
@@ -234,10 +348,52 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserNotifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    NotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PushNotificationsSendingTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    SeenAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Notifications_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotifications_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AppSettings",
                 columns: new[] { "Id", "IsSecured", "Key", "Target", "Value", "ValueType" },
-                values: new object[] { new Guid("795b0b48-4238-4d27-be60-3dd2cb66e424"), false, "SavePasswordOnRememberMe", "Client", "true", "Boolean" });
+                values: new object[,]
+                {
+                    { new Guid("4aaa77c9-37e3-417d-8549-0c541869ca6c"), false, "ServerInfoTTLMin", "Server", "20160", "Integer" },
+                    { new Guid("4d9c6810-644d-4ac4-b00f-245aa2b69086"), false, "CacheDataTTLMin", "Server", "300", "Integer" },
+                    { new Guid("4f43fb54-4bbd-4f04-8dfe-14bd5078946e"), false, "Email", "All", "Quizzy@ExamProduction.com", "String" },
+                    { new Guid("586641c6-6289-4dcf-bc0b-0f5513cbd911"), false, "CacheLoginsTTLMin", "Server", "20160", "Integer" },
+                    { new Guid("648308a0-690f-45e7-b4a8-c0f0680625ac"), false, "IgnoreOTPValidationUserIds", "Server", "[]", "Json" },
+                    { new Guid("795b0b48-4238-4d27-be60-3dd2cb66e424"), false, "SavePasswordOnRememberMe", "Client", "true", "Boolean" },
+                    { new Guid("795b147f-6de4-44e1-bd09-6b2b778fc2d3"), false, "IdNumberEmailDomain", "All", "Quizzy.ExamProduction.com", "String" },
+                    { new Guid("a36301b7-8fdd-4677-9e49-13c17614ab07"), false, "NotificationsGetLimitValue", "Server", "50", "Integer" },
+                    { new Guid("c34bf183-1ff4-4b96-8524-076243aad56b"), false, "CacheOTPTTLMin", "Server", "60", "Integer" },
+                    { new Guid("d57b4dc7-d933-477f-8cd4-16c7fab8b9ff"), false, "GoogleCredentialJson", "Server", "{}", "Json" }
+                });
 
             migrationBuilder.InsertData(
                 table: "ExamTypes",
@@ -262,6 +418,17 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     { new Guid("9c9f2aac-66e7-4ac0-a407-23698cced44a"), 12L, "שכבה י\"ב" },
                     { new Guid("bd904a61-1129-42fb-aab4-a6b7c3dbc037"), 11L, "שכבה י\"א" },
                     { new Guid("cde133c3-0e33-4bcb-bee0-cc7d93ae3cb9"), 13L, "שכבה י\"ג" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Moeds",
+                columns: new[] { "Id", "ItemOrder", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("159bb5e6-9460-4e43-ba3c-b5967cf99f4e"), 3, "קיץ" },
+                    { new Guid("1c3a5be0-9727-4a9d-b525-1461f33ded8f"), 4, "קיץ מועד ב'" },
+                    { new Guid("1e33f673-6773-4db1-b6cf-909586a6544b"), 2, "אביב" },
+                    { new Guid("72cde11d-b3f6-47f2-9909-51bcd30ff086"), 1, "חורף" }
                 });
 
             migrationBuilder.InsertData(
@@ -292,18 +459,18 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "FullName", "Password", "Role", "TwoFactorSecretKey" },
-                values: new object[] { new Guid("2325b8ae-f12a-43d8-be46-7041e57c9283"), "saji.nashef@gmail.com", "Saji Nashef", "jXg9GRdykHODQX8Kzxs8kiiZ92sfPDa3kH+lHmwHq+Q=", "Admin", null });
+                columns: new[] { "Id", "ClassId", "Email", "FullName", "IdNumber", "NotificationToken", "Password", "Role", "TwoFactorSecretKey" },
+                values: new object[] { new Guid("2325b8ae-f12a-43d8-be46-7041e57c9283"), null, "saji.nashef@gmail.com", "Saji Nashef", null, "eeCTLExNRcGRRTmz1yXhue:APA91bHtF4PgtFbLsqAJHDw8-koBVRjZBCy6A_15OI_NfavWtvQwtytXsGQDoVa9Y_w__nap_jgQkOoA_YYAVM6UyKpeONooPgfCd4y5CItcIfUOizkmvHU", "6zWwt5ux4Dcvu6wk+JXvUQ==", 2, "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX" });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "FullName", "IsDeleted", "Password", "Role", "TwoFactorSecretKey" },
-                values: new object[] { new Guid("4320e74b-5821-4a30-94b7-cc88dddc45ee"), "Nashef.Systems@Gmail.com", "System", true, "yYZo4vAwJn7BtJ1x3MvbIHoQul3eoSduPbhS+pkZL/8=", "SuperAdmin", "97F1AFCD316343B4B2D492A10B036680" });
+                columns: new[] { "Id", "ClassId", "Email", "FullName", "IdNumber", "IsDeleted", "NotificationToken", "Password", "Role", "TwoFactorSecretKey" },
+                values: new object[] { new Guid("4320e74b-5821-4a30-94b7-cc88dddc45ee"), null, "Nashef.Systems@Gmail.com", "System", null, true, null, "yYZo4vAwJn7BtJ1x3MvbIHoQul3eoSduPbhS+pkZL/8=", 4, "97F1AFCD316343B4B2D492A10B036680" });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "FullName", "Password", "Role", "TwoFactorSecretKey" },
-                values: new object[] { new Guid("b900d543-90ab-4e7a-83ba-b961918dcc8c"), "Nashef90@Gmail.com", "Admin", "j9Q7vYJckIupzSmvlKwiPg==", "Developer", "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO" });
+                columns: new[] { "Id", "ClassId", "Email", "FullName", "IdNumber", "NotificationToken", "Password", "Role", "TwoFactorSecretKey" },
+                values: new object[] { new Guid("b900d543-90ab-4e7a-83ba-b961918dcc8c"), null, "Nashef90@Gmail.com", "Admin", null, "dxkmG0jIQyWsrrnlihsPzp:APA91bEZptXfWbtClGiGQsnoJyFlgZOvb8ezRkv0aBeUNMJv-OxAKNofrXSh3CNAV2Ix4qB5c_11LmcnFSgqH4dzZo5f-zQSIVfF3j1jvmqQfG-uRHcJ4Oc", "sRL3XKwpyrsHf16K4ft3gw==", 3, "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO" });
 
             migrationBuilder.InsertData(
                 table: "Classes",
@@ -380,6 +547,11 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 column: "ExamTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Exams_MoedId",
+                table: "Exams",
+                column: "MoedId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Exams_QuestionnaireId",
                 table: "Exams",
                 column: "QuestionnaireId");
@@ -409,6 +581,24 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 filter: "IsDeleted = '0'");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LoginHistory_UserId",
+                table: "LoginHistory",
+                column: "UserId",
+                filter: "IsDeleted = '0'");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Moeds_Name",
+                table: "Moeds",
+                column: "Name",
+                unique: true,
+                filter: "IsDeleted = '0'");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_CreatedById",
+                table: "Notifications",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questionnaires_Code",
                 table: "Questionnaires",
                 column: "Code",
@@ -428,6 +618,21 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 filter: "IsDeleted = '0'");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_NotificationId",
+                table: "UserNotifications",
+                column: "NotificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserNotifications_UserId",
+                table: "UserNotifications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ClassId",
+                table: "Users",
+                column: "ClassId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -445,28 +650,43 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "ClassExams");
 
             migrationBuilder.DropTable(
+                name: "Devices");
+
+            migrationBuilder.DropTable(
                 name: "GradeExams");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "LoginHistory");
 
             migrationBuilder.DropTable(
-                name: "Classes");
+                name: "UserNotifications");
 
             migrationBuilder.DropTable(
                 name: "Exams");
 
             migrationBuilder.DropTable(
-                name: "Grades");
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "ExamTypes");
 
             migrationBuilder.DropTable(
+                name: "Moeds");
+
+            migrationBuilder.DropTable(
                 name: "Questionnaires");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "Classes");
+
+            migrationBuilder.DropTable(
+                name: "Grades");
         }
     }
 }
