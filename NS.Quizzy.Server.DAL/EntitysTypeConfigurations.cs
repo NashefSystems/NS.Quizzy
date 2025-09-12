@@ -388,7 +388,7 @@ namespace NS.Quizzy.Server.DAL
                 entity.ToTable("Devices");
 
                 entity
-                      .HasKey(x => x.ID);
+                      .HasKey(x => new { x.ID, x.AppVersion });
 
                 entity
                     .Property(x => x.ID)

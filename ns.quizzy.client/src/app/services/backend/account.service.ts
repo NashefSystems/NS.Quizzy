@@ -39,9 +39,12 @@ export class AccountService extends BaseService {
         notificationToken: null
       }
     }
-    const platformInfo = await this._webviewBridgeService.getPlatformInfoAsync();
-    const mobileSerialNumber = await this._webviewBridgeService.getMobileSerialNumberAsync();
-    const notificationToken = await this._webviewBridgeService.getNotificationTokenAsync();
+    const [platformInfo, mobileSerialNumber, notificationToken] = await Promise.all([
+      this._webviewBridgeService.getPlatformInfoAsync(),
+      this._webviewBridgeService.getMobileSerialNumberAsync(),
+      this._webviewBridgeService.getNotificationTokenAsync()
+    ]);
+
     return {
       platformInfo,
       mobileSerialNumber,

@@ -29,6 +29,7 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 throw new BadRequestException($"Either '{nameof(payload.UniqueId)}' or '{nameof(payload.SerialNumber)}' must be provided");
             }
+
             var startActionTime = DateTimeOffset.Now;
 
             var id = payload.UniqueId;
@@ -36,8 +37,9 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 id = payload.SerialNumber;
             }
+
             id = id.ToUpper().Trim();
-            var item = await _appDbContext.Devices.FirstOrDefaultAsync(x => x.ID == id);
+            var item = await _appDbContext.Devices.FirstOrDefaultAsync(x => x.ID == id && x.AppBuildNumber == payload.AppBuildNumber);
             if (item == null)
             {
                 item = new DAL.Entities.Device()

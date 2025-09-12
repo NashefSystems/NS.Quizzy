@@ -68,12 +68,4 @@ export class GlobalService {
       console.error('updateDeviceInfoAsync | Exception: ', err);
     }
   }
-
-  async getAppVersion() {
-    const nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
-    if (nativeAppIsAvailable && !GlobalService._platformInfoResponse) {
-      GlobalService._platformInfoResponse = await this._webviewBridgeService.getPlatformInfoAsync();
-    }
-    return GlobalService._platformInfoResponse?.appVersion || null;
-  }
 }

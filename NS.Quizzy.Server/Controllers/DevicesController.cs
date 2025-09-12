@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using NS.Quizzy.Server.BL.Attributes;
+﻿using Microsoft.AspNetCore.Mvc;
 using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.Models.Models;
@@ -9,7 +7,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace NS.Quizzy.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
