@@ -65,7 +65,16 @@ export class AccountService extends BaseService {
         if (did) {
           request.deviceId = did;
         }
-        request.appVersion = res?.platformInfo?.appVersion || null;
+        if (!res) {
+          request.appVersion = "res is null";
+        } else if (!res.platformInfo) {
+          request.appVersion = "platformInfo is null";
+        }
+        else if (!res.platformInfo.appVersion) {
+          request.appVersion = `appVersion is null [${JSON.stringify(res.platformInfo)}]`;
+        } else {
+          request.appVersion = res.platformInfo.appVersion;
+        }
         request.notificationToken = res?.notificationToken?.token || null;
         return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
       })
