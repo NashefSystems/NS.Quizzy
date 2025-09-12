@@ -61,7 +61,7 @@ export class LoginWithIdNumberComponent implements OnInit {
     };
     this._accountService.loginWithIdNumber(loginRequest).subscribe({
       next: (data) => {
-        this._globalService.updateDeviceInfoAsync();
+        this._globalService.updateDeviceInfoAsync().then();
         this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: data?.fullName });
         this._router.navigate([this._appSettingsService.homeUrl]);
       },

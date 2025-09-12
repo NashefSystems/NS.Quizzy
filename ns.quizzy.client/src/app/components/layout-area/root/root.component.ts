@@ -60,7 +60,7 @@ export class RootComponent implements AfterViewInit, OnInit {
     }
 
     this.onPushNotificationReceived();
-    this._globalService.updateDeviceInfoAsync();
+    this._globalService.updateDeviceInfoAsync().then();
   }
 
   onPushNotificationReceived() {

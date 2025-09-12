@@ -37,7 +37,7 @@ namespace NS.Quizzy.Server
                 c.EnableAnnotations();
                 c.UseInlineDefinitionsForEnums();
                 c.AddCustomOperationFilters();
-                
+
                 var docXmlPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory)
                      .Where(x => x.EndsWith(".xml", StringComparison.CurrentCultureIgnoreCase) && Path.GetFileName(x).StartsWith("ns.", StringComparison.CurrentCultureIgnoreCase))
                      .ToList();
@@ -106,11 +106,11 @@ namespace NS.Quizzy.Server
                 logBag.AddOrUpdateParameter("StatusCode", apiCallInfoData.StatusCode);
                 logBag.AddOrUpdateParameter("IsSuccessful", apiCallInfoData.IsSuccessful());
                 logBag.Exception = apiCallInfoData.Exception;
-                if (!apiCallInfoData.IsSuccessful())
-                {
-                    logBag.AddOrUpdateParameter("RequestBody", apiCallInfoData.RequestBody);
-                    logBag.AddOrUpdateParameter("ResponseBody", apiCallInfoData.ResponseBody);
-                }
+                //if (!apiCallInfoData.IsSuccessful())
+                //{
+                logBag.AddOrUpdateParameter("RequestBody", apiCallInfoData.RequestBody);
+                logBag.AddOrUpdateParameter("ResponseBody", apiCallInfoData.ResponseBody);
+                //}
                 return Task.CompletedTask;
             });
             #endregion

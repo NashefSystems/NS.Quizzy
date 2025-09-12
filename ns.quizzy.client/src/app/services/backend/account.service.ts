@@ -65,8 +65,8 @@ export class AccountService extends BaseService {
         if (did) {
           request.deviceId = did;
         }
-        request.notificationToken = res?.notificationToken?.token || null;
         request.appVersion = res?.platformInfo?.appVersion || null;
+        request.notificationToken = res?.notificationToken?.token || null;
         return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
       })
     );
@@ -85,8 +85,8 @@ export class AccountService extends BaseService {
         if (did) {
           request.deviceId = did;
         }
-        request.notificationToken = res?.notificationToken?.token || null;
         request.appVersion = res?.platformInfo?.appVersion || null;
+        request.notificationToken = res?.notificationToken?.token || null;
         return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/LoginWithIdNumber`, request).pipe(
           tap({
             next: (data) => this.userSubject.next(data),

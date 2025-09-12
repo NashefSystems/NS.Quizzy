@@ -85,7 +85,7 @@ export class LoginWithEmailComponent implements OnInit {
     };
     this._accountService.login(loginRequest).subscribe({
       next: (responseBody) => {
-        this._globalService.updateDeviceInfoAsync();
+        this._globalService.updateDeviceInfoAsync().then();
         this.loginResponse = responseBody;
         if (responseBody.requiresTwoFactor) {
           this.step = LoginSteps.OTP;
