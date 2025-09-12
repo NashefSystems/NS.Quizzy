@@ -7,6 +7,7 @@ import { AppSettingsService } from '../../../services/app-settings.service';
 import { LoginWithIdNumberRequest } from '../../../models/backend/login-with-id-number.request';
 import { StorageService } from '../../../services/storage.service';
 import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
+import { GlobalService } from '../../../services/global.service';
 
 @Component({
   selector: 'app-login-with-id-number',
@@ -18,6 +19,7 @@ import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
 export class LoginWithIdNumberComponent implements OnInit {
   private readonly localStorageKey = LocalStorageKeys.loginWithIdNumberInfo;
   private readonly _fb = inject(FormBuilder);
+  private readonly _globalService = inject(GlobalService);
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _accountService = inject(AccountService);
   private readonly _notificationsService = inject(NotificationsService);
@@ -59,6 +61,7 @@ export class LoginWithIdNumberComponent implements OnInit {
     };
     this._accountService.loginWithIdNumber(loginRequest).subscribe({
       next: (data) => {
+        this._globalService.updateDeviceInfoAsync();
         this._notificationsService.success("LOGIN.LOGIN_SUCCESSFULLY", { fullName: data?.fullName });
         this._router.navigate([this._appSettingsService.homeUrl]);
       },

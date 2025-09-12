@@ -15,6 +15,7 @@ namespace NS.Quizzy.Server.Models.Models
         public string Password { get; set; }
 
         public string? DeviceId { get; set; }
+        public string? AppVersion { get; set; }
         public string? NotificationToken { get; set; }
     }
 }

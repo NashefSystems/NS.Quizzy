@@ -30,28 +30,41 @@ export class AccountService extends BaseService {
     return this.httpClient.post<string>(`${this.getBaseUrl()}/test`, null);
   }
 
+  private async getAppNativeInfo() {
+    const nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
+    if (!nativeAppIsAvailable) {
+      return {
+        platformInfo: null,
+        mobileSerialNumber: null,
+        notificationToken: null
+      }
+    }
+    const platformInfo = await this._webviewBridgeService.getPlatformInfoAsync();
+    const mobileSerialNumber = await this._webviewBridgeService.getMobileSerialNumberAsync();
+    const notificationToken = await this._webviewBridgeService.getNotificationTokenAsync();
+    return {
+      platformInfo,
+      mobileSerialNumber,
+      notificationToken
+    }
+  }
+
   login(request: LoginRequest): Observable<LoginResponse> {
     this.userSubject.next(null);
     request.deviceId = null;
     request.notificationToken = null;
+    request.appVersion = null;
 
-    return from(this._webviewBridgeService.getMobileSerialNumberAsync()).pipe(
+    return from(this.getAppNativeInfo()).pipe(
       catchError(() => of(null)), // handle error silently
       mergeMap(res => {
-        const did = res?.uniqueId ?? res?.serialNumber;
+        const did = res?.mobileSerialNumber?.uniqueId || res?.mobileSerialNumber?.serialNumber;
         if (did) {
           request.deviceId = did;
         }
-
-        return from(this._webviewBridgeService.getNotificationTokenAsync()).pipe(
-          catchError(() => of(null)),
-          mergeMap(tokenRes => {
-            if (tokenRes?.token) {
-              request.notificationToken = tokenRes.token;
-            }
-            return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
-          })
-        );
+        request.notificationToken = res?.notificationToken?.token || null;
+        request.appVersion = res?.platformInfo?.appVersion || null;
+        return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
       })
     );
   }
@@ -60,28 +73,21 @@ export class AccountService extends BaseService {
     this.userSubject.next(null);
     request.deviceId = null;
     request.notificationToken = null;
+    request.appVersion = null;
 
-    return from(this._webviewBridgeService.getMobileSerialNumberAsync()).pipe(
-      catchError(() => of(null)),
+    return from(this.getAppNativeInfo()).pipe(
+      catchError(() => of(null)), // handle error silently
       mergeMap(res => {
-        const did = res?.uniqueId ?? res?.serialNumber;
+        const did = res?.mobileSerialNumber?.uniqueId || res?.mobileSerialNumber?.serialNumber;
         if (did) {
           request.deviceId = did;
         }
-
-        return from(this._webviewBridgeService.getNotificationTokenAsync()).pipe(
-          catchError(() => of(null)),
-          mergeMap(tokenRes => {
-            if (tokenRes?.token) {
-              request.notificationToken = tokenRes.token;
-            }
-
-            return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/LoginWithIdNumber`, request).pipe(
-              tap({
-                next: (data) => this.userSubject.next(data),
-                error: () => this.userSubject.next(null),
-              })
-            );
+        request.notificationToken = res?.notificationToken?.token || null;
+        request.appVersion = res?.platformInfo?.appVersion || null;
+        return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/LoginWithIdNumber`, request).pipe(
+          tap({
+            next: (data) => this.userSubject.next(data),
+            error: () => this.userSubject.next(null),
           })
         );
       })

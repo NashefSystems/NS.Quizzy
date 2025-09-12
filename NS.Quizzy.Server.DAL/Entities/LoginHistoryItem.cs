@@ -11,6 +11,8 @@
         public string? Country { get; set; }
         public string? DeviceId { get; set; }
         public string? NotificationToken { get; set; }
+        public string? AppVersion { get; set; }
+        public string? ServerVersion { get; set; }
 
         public virtual User User { get; set; }
     }

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
+using NS.Quizzy.Server.BL.Utils;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
@@ -88,6 +89,7 @@ namespace NS.Quizzy.Server.BL.Services
                 UserId = user.Id,
                 TwoFactorSecretKey = res.TwoFactorSecretKey,
                 DeviceId = loginRequest.DeviceId,
+                AppVersion = loginRequest.AppVersion,
                 NotificationToken = loginRequest.NotificationToken,
             };
             await _cacheProvider.SetOrUpdateAsync(GetTwoFactorCacheKey(res.ContextId), cacheInfo, _cacheOTPTTL);
@@ -126,6 +128,8 @@ namespace NS.Quizzy.Server.BL.Services
                 UserId = user.Id,
                 NotificationToken = loginRequest.NotificationToken,
                 DeviceId = loginRequest.DeviceId,
+                AppVersion = loginRequest.AppVersion,
+                ServerVersion = AppUtils.GetAppVersionAsString(),
                 ClientIP = httpContext.GetClientIP(),
                 IsMobile = httpContext.IsMobile(),
                 Platform = httpContext.GetPlatform(),
@@ -218,8 +222,10 @@ namespace NS.Quizzy.Server.BL.Services
             var loginHistoryItem = new LoginHistoryItem()
             {
                 UserId = user.Id,
-                NotificationToken = cacheInfo.NotificationToken,
                 DeviceId = cacheInfo.DeviceId,
+                AppVersion = cacheInfo.AppVersion,
+                ServerVersion = AppUtils.GetAppVersionAsString(),
+                NotificationToken = cacheInfo.NotificationToken,
                 ClientIP = httpContext.GetClientIP(),
                 IsMobile = httpContext.IsMobile(),
                 Platform = httpContext.GetPlatform(),

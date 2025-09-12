@@ -11,6 +11,7 @@ import { LoginResponse } from '../../../models/backend/login.response';
 import { VerifyOTPRequest } from '../../../models/backend/verify-otp.request';
 import { Router } from '@angular/router';
 import { AppSettingsService } from '../../../services/app-settings.service';
+import { GlobalService } from '../../../services/global.service';
 
 @Component({
   selector: 'app-login-with-email',
@@ -22,6 +23,7 @@ import { AppSettingsService } from '../../../services/app-settings.service';
 export class LoginWithEmailComponent implements OnInit {
   private readonly localStorageKey = LocalStorageKeys.loginWithIdNumberInfo;
   private readonly _fb = inject(FormBuilder);
+  private readonly _globalService = inject(GlobalService);
   private readonly _storageService = inject(StorageService);
   private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
   private readonly _appSettingsService = inject(AppSettingsService);
@@ -83,6 +85,7 @@ export class LoginWithEmailComponent implements OnInit {
     };
     this._accountService.login(loginRequest).subscribe({
       next: (responseBody) => {
+        this._globalService.updateDeviceInfoAsync();
         this.loginResponse = responseBody;
         if (responseBody.requiresTwoFactor) {
           this.step = LoginSteps.OTP;
@@ -128,5 +131,4 @@ export class LoginWithEmailComponent implements OnInit {
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
-
 }

@@ -5,8 +5,7 @@ import { AccountService } from '../../../services/backend/account.service';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 import { INotificationEvent } from '../../../models/webview-bridge.models';
 import { Router } from '@angular/router';
-import { DevicesService } from '../../../services/backend/devices.service';
-import { IDevicePayloadDto } from '../../../models/backend/device.dto';
+import { GlobalService } from '../../../services/global.service';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +14,9 @@ import { IDevicePayloadDto } from '../../../models/backend/device.dto';
   styleUrl: './root.component.scss'
 })
 export class RootComponent implements AfterViewInit, OnInit {
-  private readonly _appSettingsService = inject(AppSettingsService);
-  private readonly _devicesService = inject(DevicesService);
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
+  private readonly _globalService = inject(GlobalService);
+  private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _accountService = inject(AccountService);
   private readonly _router = inject(Router);
@@ -61,44 +60,7 @@ export class RootComponent implements AfterViewInit, OnInit {
     }
 
     this.onPushNotificationReceived();
-    this.updateDeviceInfoAsync();
-  }
-
-  async updateDeviceInfoAsync() {
-    try {
-      console.info('updateDeviceInfoAsync | Starting');
-      const mobileSerialNumber = await this._webviewBridgeService.getMobileSerialNumberAsync();
-      const platformInfo = await this._webviewBridgeService.getPlatformInfoAsync();
-      if (!mobileSerialNumber) {
-        console.error('updateDeviceInfoAsync | mobileSerialNumber is null, ', mobileSerialNumber);
-        return;
-      }
-      if (!platformInfo) {
-        console.error('updateDeviceInfoAsync | platformInfo is null, ', platformInfo);
-        return;
-      }
-
-      const request: IDevicePayloadDto = {
-        serialNumber: mobileSerialNumber.serialNumber ?? '',
-        uniqueId: mobileSerialNumber.uniqueId ?? '',
-        appVersion: platformInfo.appVersion,
-        appBuildNumber: platformInfo.appBuildNumber,
-        os: platformInfo.os,
-        osVersion: platformInfo.version.toString(),
-        isTV: platformInfo.isTV,
-        isTesting: platformInfo.isTesting,
-        isIOS: platformInfo.isIOS,
-        isAndroid: platformInfo.isAndroid,
-        isWindows: platformInfo.isWindows,
-        isMacOS: platformInfo.isMacOS,
-        isWeb: platformInfo.isWeb,
-      };
-      this._devicesService.updateInfoAsync(request)
-        .subscribe(x => console.info('updateDeviceInfoAsync | response: ', x));
-    }
-    catch (err: any) {
-      console.error('updateDeviceInfoAsync | Exception: ', err);
-    }
+    this._globalService.updateDeviceInfoAsync();
   }
 
   onPushNotificationReceived() {

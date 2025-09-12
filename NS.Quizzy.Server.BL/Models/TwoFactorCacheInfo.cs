@@ -12,6 +12,7 @@ namespace NS.Quizzy.Server.BL.Models
         public string? TwoFactorSecretKey { get; set; }
 
         public string? DeviceId { get; set; }
+        public string? AppVersion { get; set; }
         public string? NotificationToken { get; set; }
     }
 }

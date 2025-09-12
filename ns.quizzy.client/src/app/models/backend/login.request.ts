@@ -3,4 +3,5 @@ export class LoginRequest {
     password: string;
     deviceId?: string | null;
     notificationToken?: string | null;
+    appVersion?: string | null;
 }
