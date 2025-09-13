@@ -4,6 +4,7 @@ using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.BL.DTOs;
+using NS.Quizzy.Server.BL.Utils;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -32,19 +33,21 @@ namespace NS.Quizzy.Server.BL.Services
 
             var startActionTime = DateTimeOffset.Now;
 
-            var id = payload.UniqueId;
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                id = payload.SerialNumber;
-            }
-
-            id = id.ToUpper().Trim();
-            var item = await _appDbContext.Devices.FirstOrDefaultAsync(x => x.ID == id && x.AppBuildNumber == payload.AppBuildNumber);
+            var id = (StringUtils.FirstNotNullOrWhiteSpace(
+                    payload.UniqueId,
+                    payload.SerialNumber
+                ) ?? string.Empty)
+                .ToUpper()
+                .Trim();
+            payload.AppVersion ??= string.Empty;
+            var item = await _appDbContext.Devices.FirstOrDefaultAsync(x => x.ID == id && x.AppVersion == payload.AppVersion);
             if (item == null)
             {
                 item = new DAL.Entities.Device()
                 {
                     ID = id,
+                    AppBuildNumber = payload.AppBuildNumber,
+                    AppVersion = payload.AppVersion,
                     SerialNumber = payload.SerialNumber,
                     UniqueId = payload.UniqueId,
                     OS = payload.OS,
