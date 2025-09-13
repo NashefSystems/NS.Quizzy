@@ -18,6 +18,7 @@ namespace NS.Quizzy.Server.DAL
                 TwoFactorSecretKey = "97F1AFCD316343B4B2D492A10B036680",
                 IsDeleted = true,
             };
+
             internal static readonly User adminUser = new()
             {
                 Id = Guid.Parse("B900D543-90AB-4E7A-83BA-B961918DCC8C"),
@@ -25,9 +26,10 @@ namespace NS.Quizzy.Server.DAL
                 FullName = "Admin",
                 Email = "Nashef90@Gmail.com",
                 TwoFactorSecretKey = "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO",
-                NotificationToken = "dxkmG0jIQyWsrrnlihsPzp:APA91bEZptXfWbtClGiGQsnoJyFlgZOvb8ezRkv0aBeUNMJv-OxAKNofrXSh3CNAV2Ix4qB5c_11LmcnFSgqH4dzZo5f-zQSIVfF3j1jvmqQfG-uRHcJ4Oc",
+                NotificationToken = "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs",
                 Role = DALEnums.Roles.Developer,
             };
+
             internal static readonly User sajiUser = new()
             {
                 Id = Guid.Parse("2325B8AE-F12A-43D8-BE46-7041E57C9283"),
@@ -39,13 +41,25 @@ namespace NS.Quizzy.Server.DAL
                 Role = DALEnums.Roles.Admin,
             };
 
+            internal static readonly User DemoUser = new()
+            {
+                Id = Guid.Parse("F8178F51-6D73-45E1-A4E7-1B01BAF9884D"),
+                Password = "B@Juor*W@Bg8CHX-PqwJwhio2!XcELsn",
+                FullName = "Demo user",
+                Email = "QuizzyDemo@ExamProduction.com",
+                TwoFactorSecretKey = "USUYJXW3QXUHA7R53YP4QBPPXHH54KHS",
+                NotificationToken = "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs",
+                Role = DALEnums.Roles.Admin,
+            };
+
             internal static List<User> GetData()
             {
                 return
                 [
                     systemUser,
                     adminUser,
-                    sajiUser
+                    sajiUser,
+                    DemoUser,
                 ];
             }
         }
