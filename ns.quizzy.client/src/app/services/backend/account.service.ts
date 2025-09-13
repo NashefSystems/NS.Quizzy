@@ -54,35 +54,7 @@ export class AccountService extends BaseService {
 
   login(request: LoginRequest): Observable<LoginResponse> {
     this.userSubject.next(null);
-    request.deviceId = null;
-    request.notificationToken = null;
-    request.appVersion = null;
-
-    return from(this.getAppNativeInfo()).pipe(
-      catchError(() => of(null)), // handle error silently
-      mergeMap(res => {
-        const did = res?.mobileSerialNumber?.uniqueId || res?.mobileSerialNumber?.serialNumber;
-        if (did) {
-          request.deviceId = did;
-        }
-        if (!res) {
-          request.appVersion = "res is null";
-        } else if (!res.platformInfo) {
-          request.appVersion = "platformInfo is null";
-        }
-        else if (!res.platformInfo.appVersion) {
-          request.appVersion = `appVersion is null [${JSON.stringify(res.platformInfo)}]`;
-        } else {
-          request.appVersion = res.platformInfo.appVersion;
-        }
-        request.notificationToken = res?.notificationToken?.token || null;
-        return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
-      })
-    );
-  }
-
-  loginWithIdNumber(request: LoginWithIdNumberRequest): Observable<UserDetailsDto> {
-    this.userSubject.next(null);
+    request.platform = null;
     request.deviceId = null;
     request.notificationToken = null;
     request.appVersion = null;
@@ -95,6 +67,29 @@ export class AccountService extends BaseService {
           request.deviceId = did;
         }
         request.appVersion = res?.platformInfo?.appVersion || null;
+        request.platform = res?.platformInfo?.os || null;
+        request.notificationToken = res?.notificationToken?.token || null;
+        return this.httpClient.post<LoginResponse>(`${this.getBaseUrl()}/Login`, request);
+      })
+    );
+  }
+
+  loginWithIdNumber(request: LoginWithIdNumberRequest): Observable<UserDetailsDto> {
+    this.userSubject.next(null);
+    request.platform = null;
+    request.deviceId = null;
+    request.notificationToken = null;
+    request.appVersion = null;
+
+    return from(this.getAppNativeInfo()).pipe(
+      catchError(() => of(null)), // handle error silently
+      mergeMap(res => {
+        const did = res?.mobileSerialNumber?.uniqueId || res?.mobileSerialNumber?.serialNumber;
+        if (did) {
+          request.deviceId = did;
+        }
+        request.appVersion = res?.platformInfo?.appVersion || null;
+        request.platform = res?.platformInfo?.os || null;
         request.notificationToken = res?.notificationToken?.token || null;
         return this.httpClient.post<UserDetailsDto>(`${this.getBaseUrl()}/LoginWithIdNumber`, request).pipe(
           tap({

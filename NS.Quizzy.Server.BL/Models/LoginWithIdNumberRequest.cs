@@ -7,6 +7,7 @@ namespace NS.Quizzy.Server.Models.Models
         [Required]
         public string IdNumber { get; set; }
 
+        public string? Platform { get; set; }
         public string? DeviceId { get; set; }
         public string? AppVersion { get; set; }
         public string? NotificationToken { get; set; }

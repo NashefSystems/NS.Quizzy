@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -88,6 +89,7 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 UserId = user.Id,
                 TwoFactorSecretKey = res.TwoFactorSecretKey,
+                Platform = loginRequest.Platform,
                 DeviceId = loginRequest.DeviceId,
                 AppVersion = loginRequest.AppVersion,
                 NotificationToken = loginRequest.NotificationToken,
@@ -131,8 +133,8 @@ namespace NS.Quizzy.Server.BL.Services
                 AppVersion = loginRequest.AppVersion,
                 ServerVersion = AppUtils.GetAppVersionAsString(),
                 ClientIP = httpContext.GetClientIP(),
-                IsMobile = httpContext.IsMobile(),
-                Platform = httpContext.GetPlatform(),
+                IsMobile = !string.IsNullOrWhiteSpace(loginRequest.Platform) || httpContext.IsMobile(),
+                Platform = StringUtils.FirstNotNullOrWhiteSpace(loginRequest.Platform, httpContext.GetPlatform()),
                 UserAgent = httpContext.GetUserAgent(),
                 Country = httpContext.GetCountryInfo()?.Name
             };
@@ -227,8 +229,8 @@ namespace NS.Quizzy.Server.BL.Services
                 ServerVersion = AppUtils.GetAppVersionAsString(),
                 NotificationToken = cacheInfo.NotificationToken,
                 ClientIP = httpContext.GetClientIP(),
-                IsMobile = httpContext.IsMobile(),
-                Platform = httpContext.GetPlatform(),
+                IsMobile = !string.IsNullOrWhiteSpace(cacheInfo.Platform) || httpContext.IsMobile(),
+                Platform = StringUtils.FirstNotNullOrWhiteSpace(cacheInfo.Platform, httpContext.GetPlatform()),
                 UserAgent = httpContext.GetUserAgent(),
                 Country = httpContext.GetCountryInfo()?.Name
             };

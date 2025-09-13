@@ -14,6 +14,7 @@ namespace NS.Quizzy.Server.Models.Models
         [SensitiveData(SensitiveDataMode.Sha1)]
         public string Password { get; set; }
 
+        public string? Platform { get; set; }
         public string? DeviceId { get; set; }
         public string? AppVersion { get; set; }
         public string? NotificationToken { get; set; }

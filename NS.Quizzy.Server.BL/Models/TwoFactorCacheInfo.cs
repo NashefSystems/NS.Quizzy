@@ -14,5 +14,6 @@ namespace NS.Quizzy.Server.BL.Models
         public string? DeviceId { get; set; }
         public string? AppVersion { get; set; }
         public string? NotificationToken { get; set; }
+        public string? Platform { get; set; }
     }
 }
