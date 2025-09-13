@@ -8,7 +8,7 @@ namespace NS.Quizzy.Server.DAL.Entities
         public required string ID { get; set; }
 
         [DBColumnOrder(2)]
-        public string? AppVersion { get; set; }
+        public string AppVersion { get; set; }
 
         [DBColumnOrder(3)]
         public string? AppBuildNumber { get; set; }

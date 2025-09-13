@@ -61,7 +61,7 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             item.OSVersion = payload.OSVersion;
-            item.AppVersion = payload.AppVersion;
+            item.AppVersion = payload.AppVersion ?? string.Empty;
             item.AppBuildNumber = payload.AppBuildNumber;
             item.LastHeartBeat = startActionTime;
             await _appDbContext.SaveChangesAsync();
