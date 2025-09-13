@@ -20,7 +20,7 @@ export const developerGuard: CanActivateFn = async (route, state) => {
     const allowRoles = [UserRoles.DEVELOPER, UserRoles.SUPERADMIN];
     res = !!(userDetailsDto?.id) && allowRoles.includes(userDetailsDto.role);
   } catch (error) {
-    console.error('developerGuard error:', error);
+    console.error('💂🏿 developerGuard error:', error);
   }
 
   if (!isAuthenticated) {
@@ -31,6 +31,6 @@ export const developerGuard: CanActivateFn = async (route, state) => {
     notificationsService.error("ERRORS.FORBID");
     router.navigate([appSettingsService.homeUrl]);
   }
-  console.log(`developerGuard => ${res}`);
+  console.log(`💂🏿 developerGuard => ${res}`);
   return res;
 };

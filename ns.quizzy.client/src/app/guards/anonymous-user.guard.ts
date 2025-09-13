@@ -13,12 +13,12 @@ export const anonymousUserGuard: CanActivateFn = async (route, state) => {
     const userDetailsDto = await firstValueFrom(accountService.getDetails());
     res = !(userDetailsDto?.id);
   } catch (error) {
-    console.error('anonymousUserGuard error:', error);
+    console.error('💂🏿 anonymousUserGuard error:', error);
   }
 
   if (!res) {
     router.navigate([appSettingsService.homeUrl]);
   }
-  console.log(`anonymousUserGuard => ${res}`);
+  console.log(`💂🏿 anonymousUserGuard => ${res}`);
   return res;
 };

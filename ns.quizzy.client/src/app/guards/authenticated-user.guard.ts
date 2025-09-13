@@ -13,12 +13,12 @@ export const authenticatedUserGuard: CanActivateFn = async (route, state) => {
     const userDetailsDto = await firstValueFrom(accountService.getDetails());
     res = !!(userDetailsDto?.id);
   } catch (error) {
-    console.error('authenticatedUserGuard error:', error);
+    console.error('💂🏿 authenticatedUserGuard error:', error);
   }
 
   if (!res) {
     router.navigate([appSettingsService.loginUrl]);
   }
-  console.log(`authenticatedUserGuard => ${res}`);
+  console.log(`💂🏿 authenticatedUserGuard => ${res}`);
   return res;
 };

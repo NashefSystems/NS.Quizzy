@@ -20,7 +20,7 @@ export const adminUserGuard: CanActivateFn = async (route, state) => {
     const allowRoles = [UserRoles.ADMIN, UserRoles.DEVELOPER, UserRoles.SUPERADMIN];
     res = !!(userDetailsDto?.id) && allowRoles.includes(userDetailsDto.role);
   } catch (error) {
-    console.error('adminUserGuard error:', error);
+    console.error('💂🏿 adminUserGuard error:', error);
   }
 
   if (!isAuthenticated) {
@@ -31,6 +31,6 @@ export const adminUserGuard: CanActivateFn = async (route, state) => {
     notificationsService.error("ERRORS.FORBID");
     router.navigate([appSettingsService.homeUrl]);
   }
-  console.log(`adminUserGuard => ${res}`);
+  console.log(`💂🏿 adminUserGuard => ${res}`);
   return res;
 };
