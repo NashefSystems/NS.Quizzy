@@ -19,6 +19,6 @@ export const authenticatedUserGuard: CanActivateFn = async (route, state) => {
   if (!res) {
     router.navigate([appSettingsService.loginUrl]);
   }
-
+  console.log(`authenticatedUserGuard => ${res}`);
   return res;
 };

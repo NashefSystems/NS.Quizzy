@@ -31,6 +31,6 @@ export const developerGuard: CanActivateFn = async (route, state) => {
     notificationsService.error("ERRORS.FORBID");
     router.navigate([appSettingsService.homeUrl]);
   }
-
+  console.log(`developerGuard => ${res}`);
   return res;
 };

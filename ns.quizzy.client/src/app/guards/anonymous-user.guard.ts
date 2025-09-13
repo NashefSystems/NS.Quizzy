@@ -19,6 +19,6 @@ export const anonymousUserGuard: CanActivateFn = async (route, state) => {
   if (!res) {
     router.navigate([appSettingsService.homeUrl]);
   }
-
+  console.log(`anonymousUserGuard => ${res}`);
   return res;
 };

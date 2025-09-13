@@ -31,6 +31,6 @@ export const adminUserGuard: CanActivateFn = async (route, state) => {
     notificationsService.error("ERRORS.FORBID");
     router.navigate([appSettingsService.homeUrl]);
   }
-
+  console.log(`adminUserGuard => ${res}`);
   return res;
 };
