@@ -1,6 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Shared.CacheProvider.Interfaces;
 using static NS.Quizzy.Server.Common.Enums;
@@ -12,7 +12,7 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
         private readonly IServiceProvider _rootServiceProvider;
         private readonly Timer _reloadTimer;
         private readonly TimeSpan _reloadInterval = TimeSpan.FromMinutes(10);
-        
+
         private const string _query = "SELECT [Key], [Value] FROM [AppSettings] WHERE [IsDeleted] = 0 AND [Target] != 'Client';"; // Except Client
 
         public DbConfigurationProvider(IServiceProvider rootServiceProvider)
@@ -31,8 +31,8 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
                 var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
                 var settings = new Dictionary<string, string?>();
-                using var connection = new SqlConnection(config.GetConnectionString("QuizzyDB"));
-                using var query = new SqlCommand(_query, connection);
+                using var connection = new NpgsqlConnection(config.GetConnectionString("QuizzyDB"));
+                using var query = new NpgsqlCommand(_query, connection);
                 query.Connection.Open();
                 using var reader = query.ExecuteReader();
                 while (reader.Read())

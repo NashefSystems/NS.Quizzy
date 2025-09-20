@@ -17,15 +17,15 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "AppSettings",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    IsSecured = table.Column<bool>(type: "bit", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Target = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ValueType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    IsSecured = table.Column<bool>(type: "boolean", nullable: false),
+                    Key = table.Column<string>(type: "text", nullable: false),
+                    Target = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true),
+                    ValueType = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -36,38 +36,38 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Devices",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    AppVersion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AppBuildNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OS = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OSVersion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsTV = table.Column<bool>(type: "bit", nullable: false),
-                    IsTesting = table.Column<bool>(type: "bit", nullable: false),
-                    IsIOS = table.Column<bool>(type: "bit", nullable: false),
-                    IsAndroid = table.Column<bool>(type: "bit", nullable: false),
-                    IsWindows = table.Column<bool>(type: "bit", nullable: false),
-                    IsMacOS = table.Column<bool>(type: "bit", nullable: false),
-                    IsWeb = table.Column<bool>(type: "bit", nullable: false),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UniqueId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    LastHeartBeat = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())")
+                    ID = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    AppVersion = table.Column<string>(type: "text", nullable: false),
+                    AppBuildNumber = table.Column<string>(type: "text", nullable: true),
+                    OS = table.Column<string>(type: "text", nullable: true),
+                    OSVersion = table.Column<string>(type: "text", nullable: true),
+                    IsTV = table.Column<bool>(type: "boolean", nullable: false),
+                    IsTesting = table.Column<bool>(type: "boolean", nullable: false),
+                    IsIOS = table.Column<bool>(type: "boolean", nullable: false),
+                    IsAndroid = table.Column<bool>(type: "boolean", nullable: false),
+                    IsWindows = table.Column<bool>(type: "boolean", nullable: false),
+                    IsMacOS = table.Column<bool>(type: "boolean", nullable: false),
+                    IsWeb = table.Column<bool>(type: "boolean", nullable: false),
+                    SerialNumber = table.Column<string>(type: "text", nullable: true),
+                    UniqueId = table.Column<string>(type: "text", nullable: true),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    LastHeartBeat = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Devices", x => x.ID);
+                    table.PrimaryKey("PK_Devices", x => new { x.ID, x.AppVersion });
                 });
 
             migrationBuilder.CreateTable(
                 name: "ExamTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    ItemOrder = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    ItemOrder = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -78,12 +78,12 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Grades",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
                     Code = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -94,12 +94,12 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Moeds",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    ItemOrder = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    ItemOrder = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -110,12 +110,12 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Subjects",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    ItemOrder = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    ItemOrder = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -126,13 +126,13 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Classes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
                     Code = table.Column<long>(type: "bigint", nullable: false),
-                    GradeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    GradeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -149,15 +149,15 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Questionnaires",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
                     Code = table.Column<long>(type: "bigint", nullable: false),
-                    Duration = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DurationWithExtra = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    DurationWithExtra = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    SubjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -174,18 +174,18 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NotificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    TwoFactorSecretKey = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    FullName = table.Column<string>(type: "text", nullable: false),
+                    IdNumber = table.Column<string>(type: "text", nullable: true),
+                    NotificationToken = table.Column<string>(type: "text", nullable: true),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    TwoFactorSecretKey = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -201,16 +201,16 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Exams",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    Duration = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DurationWithExtra = table.Column<TimeSpan>(type: "time", nullable: false),
-                    ExamTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MoedId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuestionnaireId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StartTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    DurationWithExtra = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    ExamTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MoedId = table.Column<Guid>(type: "uuid", nullable: false),
+                    QuestionnaireId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StartTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -239,19 +239,21 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "LoginHistory",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    ClientIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeviceId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsMobile = table.Column<bool>(type: "bit", nullable: false),
-                    NotificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Platform = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserAgent = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    AppVersion = table.Column<string>(type: "text", nullable: true),
+                    ClientIP = table.Column<string>(type: "text", nullable: true),
+                    Country = table.Column<string>(type: "text", nullable: true),
+                    DeviceId = table.Column<string>(type: "text", nullable: true),
+                    IsMobile = table.Column<bool>(type: "boolean", nullable: false),
+                    NotificationToken = table.Column<string>(type: "text", nullable: true),
+                    Platform = table.Column<string>(type: "text", nullable: true),
+                    ServerVersion = table.Column<string>(type: "text", nullable: true),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    UserAgent = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -268,16 +270,16 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DataJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Target = table.Column<int>(type: "int", nullable: false),
-                    TargetIdsJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    Body = table.Column<string>(type: "text", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
+                    DataJson = table.Column<string>(type: "jsonb", nullable: true),
+                    Target = table.Column<int>(type: "integer", nullable: false),
+                    TargetIdsJson = table.Column<string>(type: "jsonb", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -294,13 +296,13 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "ClassExams",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    ClassId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsImprovement = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    ClassId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsImprovement = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -323,13 +325,13 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "GradeExams",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    ExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GradeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsImprovement = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    ExamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GradeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsImprovement = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -352,14 +354,14 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "UserNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(NewId())"),
-                    NotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PushNotificationsSendingTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    SeenAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    ModifiedTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false, defaultValueSql: "(SYSDATETIMEOFFSET())"),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "(gen_random_uuid())"),
+                    NotificationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PushNotificationsSendingTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    SeenAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    ModifiedTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "(CURRENT_TIMESTAMP)"),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -470,7 +472,12 @@ namespace NS.Quizzy.Server.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "ClassId", "Email", "FullName", "IdNumber", "NotificationToken", "Password", "Role", "TwoFactorSecretKey" },
-                values: new object[] { new Guid("b900d543-90ab-4e7a-83ba-b961918dcc8c"), null, "Nashef90@Gmail.com", "Admin", null, "dxkmG0jIQyWsrrnlihsPzp:APA91bEZptXfWbtClGiGQsnoJyFlgZOvb8ezRkv0aBeUNMJv-OxAKNofrXSh3CNAV2Ix4qB5c_11LmcnFSgqH4dzZo5f-zQSIVfF3j1jvmqQfG-uRHcJ4Oc", "sRL3XKwpyrsHf16K4ft3gw==", 3, "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO" });
+                values: new object[] { new Guid("b900d543-90ab-4e7a-83ba-b961918dcc8c"), null, "Nashef90@Gmail.com", "Admin", null, "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs", "sRL3XKwpyrsHf16K4ft3gw==", 3, "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "ClassId", "Email", "FullName", "IdNumber", "NotificationToken", "Password", "TwoFactorSecretKey" },
+                values: new object[] { new Guid("f8178f51-6d73-45e1-a4e7-1b01baf9884d"), null, "QuizzyDemo@ExamProduction.com", "Demo user", null, "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs", "nS+ja7PyR+pO3sNsUm4c3vleK3reskgbk++4+vlPrSK6jjQ0RCV3JJfENUr/zesg", "USUYJXW3QXUHA7R53YP4QBPPXHH54KHS" });
 
             migrationBuilder.InsertData(
                 table: "Classes",
@@ -516,8 +523,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "IX_AppSettings_Key",
                 table: "AppSettings",
                 column: "Key",
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Classes_GradeId",
@@ -528,8 +534,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "IX_Classes_Name_GradeId",
                 table: "Classes",
                 columns: new[] { "Name", "GradeId" },
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClassExams_ClassId",
@@ -560,8 +565,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "IX_ExamTypes_Name",
                 table: "ExamTypes",
                 column: "Name",
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GradeExams_ExamId",
@@ -577,21 +581,18 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "IX_Grades_Name",
                 table: "Grades",
                 column: "Name",
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_LoginHistory_UserId",
                 table: "LoginHistory",
-                column: "UserId",
-                filter: "IsDeleted = '0'");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Moeds_Name",
                 table: "Moeds",
                 column: "Name",
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_CreatedById",
@@ -602,8 +603,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "IX_Questionnaires_Code",
                 table: "Questionnaires",
                 column: "Code",
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questionnaires_SubjectId",
@@ -614,8 +614,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "IX_Subjects_Name",
                 table: "Subjects",
                 column: "Name",
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserNotifications_NotificationId",
@@ -636,8 +635,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
-                unique: true,
-                filter: "IsDeleted = '0'");
+                unique: true);
         }
 
         /// <inheritdoc />

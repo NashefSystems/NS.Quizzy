@@ -65,19 +65,19 @@ namespace NS.Quizzy.Server.DAL
 
                 entity
                     .Property(x => x.Id)
-                    .HasColumnType("uniqueidentifier")
+                    .HasColumnType("uuid")
                     .ValueGeneratedOnAdd()
-                    .HasDefaultValueSql("(NewId())");
+                    .HasDefaultValueSql("(gen_random_uuid())");
 
                 entity
                     .Property(p => p.CreatedTime)
                     .ValueGeneratedOnAdd()
-                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+                    .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
 
                 entity
                     .Property(p => p.ModifiedTime)
                     .ValueGeneratedOnAdd()
-                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+                    .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
 
                 entity
                     .Property(p => p.IsDeleted)
@@ -92,7 +92,7 @@ namespace NS.Quizzy.Server.DAL
                 base.Configure(entity);
                 entity.ToTable("Users");
 
-                entity.HasIndex(p => p.Email).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.Email).IsUnique(true);//.HasFilter("IsDeleted = '0'");
                 entity.Property(e => e.Email).IsRequired(true);
 
                 entity
@@ -168,7 +168,7 @@ namespace NS.Quizzy.Server.DAL
                 base.Configure(entity);
                 entity.ToTable("Classes");
 
-                entity.HasIndex(p => new { p.Name, p.GradeId }).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => new { p.Name, p.GradeId }).IsUnique(true);//.HasFilter("IsDeleted = '0'");
 
                 entity
                     .HasOne(c => c.Grade)
@@ -205,7 +205,7 @@ namespace NS.Quizzy.Server.DAL
                 base.Configure(entity);
                 entity.ToTable("Grades");
 
-                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.Name).IsUnique(true);//.HasFilter("IsDeleted = '0'");
                 entity.HasData(InitialData.GradeEntityData.GetData());
             }
         }
@@ -235,7 +235,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("ExamTypes");
-                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.Name).IsUnique(true);//.HasFilter("IsDeleted = '0'");
                 entity.Property(p => p.Name).IsRequired(true);
 
                 entity.HasData(InitialData.ExamTypeEntityData.GetData());
@@ -248,7 +248,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("Moeds");
-                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.Name).IsUnique(true);//.HasFilter("IsDeleted = '0'");
                 entity.Property(p => p.Name).IsRequired(true);
 
                 entity.HasData(InitialData.MoedEntityData.GetData());
@@ -261,7 +261,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("Questionnaires");
-                entity.HasIndex(p => p.Code).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.Code).IsUnique(true);//.HasFilter("IsDeleted = '0'");
 
                 entity
                   .HasOne(c => c.Subject)
@@ -276,7 +276,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("Subjects");
-                entity.HasIndex(p => p.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.Name).IsUnique(true);//.HasFilter("IsDeleted = '0'");
 
                 entity.HasData(InitialData.SubjectEntityData.GetData());
             }
@@ -288,7 +288,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("AppSettings");
-                entity.HasIndex(p => p.Key).IsUnique(true).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.Key).IsUnique(true);//.HasFilter("IsDeleted = '0'");
 
                 entity
                     .Property(e => e.ValueType)
@@ -310,7 +310,7 @@ namespace NS.Quizzy.Server.DAL
             {
                 base.Configure(entity);
                 entity.ToTable("LoginHistory");
-                entity.HasIndex(p => p.UserId).HasFilter("IsDeleted = '0'");
+                entity.HasIndex(p => p.UserId);//.HasFilter("IsDeleted = '0'");
 
                 entity
                   .HasOne(c => c.User)
@@ -329,11 +329,13 @@ namespace NS.Quizzy.Server.DAL
                 entity
                     .Property(e => e.Data)
                     .HasColumnName("DataJson")
+                    .HasColumnType("jsonb") // PostgreSQL native type
                     .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<Dictionary<string, string>>(dbv));
 
                 entity
                     .Property(e => e.TargetIds)
                     .HasColumnName("TargetIdsJson")
+                    .HasColumnType("jsonb") // PostgreSQL native type
                     .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<List<Guid>>(dbv));
 
                 entity
@@ -397,12 +399,12 @@ namespace NS.Quizzy.Server.DAL
                 entity
                     .Property(p => p.CreatedTime)
                     .ValueGeneratedOnAdd()
-                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+                    .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
 
                 entity
                     .Property(p => p.LastHeartBeat)
                     .ValueGeneratedOnAdd()
-                    .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+                    .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
             }
         }
     }
