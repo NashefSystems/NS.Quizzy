@@ -86,3 +86,14 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+environmentSecrets: 
+  - ConnectionStrings__QuizzyDB
+  - Jwt__Key
+  - NSLoggerConfig__ElasticSearchConfig__Username
+  - NSLoggerConfig__ElasticSearchConfig__Password
+  - NSQueueManagerConfig__Host
+  - NSQueueManagerConfig__UserName
+  - NSQueueManagerConfig__Password
+  - NSQueueManagerConfig__DefaultVirtualHost
+

@@ -27,12 +27,28 @@ spec:
       serviceAccountName: {{ include "ns-quizzy.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: appsettings
+          configMap:
+            name: quizzy-config
       containers:
         - name: {{ .Chart.Name }}
+          env:
+          {{- range .Values.environmentSecrets }}
+            - name: {{ . }}
+              valueFrom:
+                secretKeyRef:
+                  name: quizzy-secrets
+                  key: {{ . }}
+          {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: appsettings
+              mountPath: /app/appsettings.json
+              subPath: appsettings.json
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
