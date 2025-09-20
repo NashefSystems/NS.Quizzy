@@ -28,7 +28,6 @@ COPY ["ns.quizzy.client/ns.quizzy.client.esproj", "ns.quizzy.client/"]
 COPY ["NS.Quizzy.Server.BL/NS.Quizzy.Server.BL.csproj", "NS.Quizzy.Server.BL/"]
 COPY ["NS.Quizzy.Server.DAL/NS.Quizzy.Server.DAL.csproj", "NS.Quizzy.Server.DAL/"]
 COPY ["NS.Quizzy.Server.Common/NS.Quizzy.Server.Common.csproj", "NS.Quizzy.Server.Common/"]
-COPY ["nuget.config", "nuget.config"]
 ENV ASPNETCORE_ENVIRONMENT=$ENV
 RUN dotnet nuget add source "https://nuget.pkg.github.com/NashefSystems/index.json" --name NashefSystems --username GitHub --password $FEED_TOKEN --store-password-in-clear-text
 
