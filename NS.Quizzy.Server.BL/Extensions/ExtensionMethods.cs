@@ -19,6 +19,7 @@ using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
 using NS.Security;
 using NS.Shared.CacheProvider.Extensions;
+using NS.Shared.CacheProvider.models;
 using NS.Shared.Logging;
 using NS.Shared.Logging.Configs;
 using NS.Shared.Logging.Extensions;
@@ -51,8 +52,11 @@ namespace NS.Quizzy.Server.BL.Extensions
 
             var appName = config.GetValue<string>("AppName");
             var environment = config.GetValue<string>("Environment");
-            var cachePrefix = $"{appName}:{environment}";
-            services.AddNSCacheProvider(cachePrefix);
+
+
+            var cacheProviderConfigs = config.GetSection("NSCacheProviderConfigs").Get<NSCacheProviderConfigs>();
+            cacheProviderConfigs.CachePrefix = $"{appName}:{environment}";
+            services.AddNSCacheProvider(cacheProviderConfigs);
 
             var queueManagerConfig = config.GetSection("NSQueueManagerConfig").Get<NSQueueManagerConfig>();
             services.AddNSQueueManager(queueManagerConfig);
