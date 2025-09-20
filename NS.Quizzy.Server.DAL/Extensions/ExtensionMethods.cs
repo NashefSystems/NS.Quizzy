@@ -18,7 +18,7 @@ namespace NS.Quizzy.Server.DAL.Extensions
                     var connectionString = configuration.GetConnectionString("QuizzyDB");
                     //Console.WriteLine($"ConnectionString: '{connectionString}'");
                     //options.UseSqlServer(connectionString);
-                    options.UseMySQL(connectionString);
+                    options.UseNpgsql(connectionString);
                 },
                 ServiceLifetime.Scoped,
                 getChangeBy: (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value,

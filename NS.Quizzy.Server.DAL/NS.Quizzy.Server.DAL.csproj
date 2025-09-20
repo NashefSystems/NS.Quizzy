@@ -19,7 +19,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
-		<PackageReference Include="MySql.EntityFrameworkCore" Version="9.0.6" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
 		<PackageReference Include="NS.Security" Version="1.0.1" />
 		<PackageReference Include="NS.Shared.EFDBAudit" Version="1.0.6" />
 		<PackageReference Include="QRCoder" Version="1.6.0" />
