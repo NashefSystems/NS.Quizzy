@@ -33,7 +33,6 @@ RUN dotnet nuget add source "https://nuget.pkg.github.com/NashefSystems/index.js
 
 RUN dotnet restore "./NS.Quizzy.Server/NS.Quizzy.Server.csproj"
 COPY . .
-RUN rm appsettings*.json
 WORKDIR "/src/NS.Quizzy.Server"
 RUN dotnet build "./NS.Quizzy.Server.csproj" -c $BUILD_CONFIGURATION -p:Version=$APP_VERSION -o /app/build
 
@@ -52,4 +51,5 @@ ENV ASPNETCORE_ENVIRONMENT=$ENV
 ENV TZ=Asia/Jerusalem
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN rm appsettings*.json
 ENTRYPOINT ["dotnet", "NS.Quizzy.Server.dll"]
