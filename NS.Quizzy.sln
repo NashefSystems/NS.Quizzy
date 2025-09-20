@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		NS.Quizzy.Server\Dockerfile = NS.Quizzy.Server\Dockerfile
 		ReadMe.md = ReadMe.md
+		.github\workflows\workflow.yml = .github\workflows\workflow.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NS.Quizzy.Server.Common", "NS.Quizzy.Server.Common\NS.Quizzy.Server.Common.csproj", "{081EAF04-61FD-4E2D-9B4C-08DB1523EFA2}"

@@ -47,11 +47,13 @@ jobs:
         uses: NashefSystems/NS.DevOps.Files/.github/workflows/DotNetKubernetes_CI-CD.yml@master
         with:
             BRANCH: "master"
-            DOCKER_FILE_PATH: "./NS.Quizzy.Server/Dockerfile"
-            K8S_NAMESPACE: "exam-production-prod"
+            K8S_NAMESPACE: "quizzy-system"
             HELM_NAME: "ns-quizzy"
             HELM_DIR: "./k8s/ns-quizzy"
             HELM_VALUE_FILE_NAME: "values.yaml"
             IMAGE_REPO: "${{ vars.V_IMAGE_REPO_BASE }}/ns-quizzy"
             ENVIRONMENT_NAME: "Production"
+            DOCKER_FILE_PATH: "./NS.Quizzy.Server/Dockerfile"
+            VERSION_FRAGMENT: "patch"
+            K8S_INSTANCE: "SAJI_OCI"
         secrets: inherit
