@@ -131,7 +131,7 @@ export class UserListComponent implements OnInit {
         }
       });
 
-    }, 100);
+    }, 1000);
   }
 
   onFileSelected(event: any) {

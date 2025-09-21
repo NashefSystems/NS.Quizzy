@@ -23,63 +23,73 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
         public override async Task<QueueSubscriptionAcceptMethodResult> ProcessMessageAsync(NSQueueMessage message, Func<double, Task> setMessageProgressPercentage, INSLogBag logBag, IServiceScope scope, CancellationToken cancellationToken)
         {
             var res = new QueueSubscriptionAcceptMethodResult();
-            logBag.Trace("Starting ProcessMessageAsync");
-            await setMessageProgressPercentage(0);
-            var items = JsonConvert.DeserializeObject<List<CsvFileItem>>(message.Payload);
-            if (items == null || items.Count == 0)
+            try
             {
-                logBag.LogLevel = NSLogLevel.Warn;
-                return res.SetOk("Item is null or empty");
-            }
-
-            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-            var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
-            var configKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
-            var idNumberEmailDomain = configuration.GetValue<string>(configKey);
-
-            var userDic = await dbContext.Users
-                .Where(x => x.IsDeleted == false && (x.Role == DALEnums.Roles.Student || x.Role == DALEnums.Roles.Teacher))
-                .ToDictionaryAsync(k => k.Email.ToLower(), v => v);
-
-            var classDic = await dbContext.Classes
-                .Include(x => x.Grade)
-                .Where(x => x.IsDeleted == false)
-                .ToDictionaryAsync(k => k.GetFullCode().ToString(), v => v.Id);
-
-            foreach (var item in userDic.Values)
-            {
-                item.IsDeleted = true;
-            }
-
-            await setMessageProgressPercentage(0);
-            for (int i = 0; i < items.Count; i++)
-            {
-                await setMessageProgressPercentage(Math.Truncate(100.0 * i / items.Count));
-                var email = $"{items[i].IdNumber}@{idNumberEmailDomain}";
-                var role = items[i].Role.ToUserRole();
-
-                classDic.TryGetValue(items[i].Class, out var classId);
-
-                if (!userDic.TryGetValue(email.ToLower(), out var user))
+                logBag.Trace("Starting ProcessMessageAsync");
+                await setMessageProgressPercentage(0);
+                var items = JsonConvert.DeserializeObject<List<CsvFileItem>>(message.Payload);
+                if (items == null || items.Count == 0)
                 {
-                    user = new User();
-                    await dbContext.Users.AddAsync(user);
-                    userDic.Add(email.ToLower(), user);
+                    logBag.LogLevel = NSLogLevel.Warn;
+                    return res.SetOk("Item is null or empty");
                 }
 
-                user.Email = email;
-                user.Password = email.ToLower();
-                user.IdNumber = items[i].IdNumber;
-                user.FullName = items[i].FullName;
-                user.Role = role;
-                user.ClassId = role == DALEnums.Roles.Teacher ? null : classId;
-                user.IsDeleted = false;
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
+                var configKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
+                var idNumberEmailDomain = configuration.GetValue<string>(configKey);
+
+                var userDic = await dbContext.Users
+                    .Where(x => x.IsDeleted == false && (x.Role == DALEnums.Roles.Student || x.Role == DALEnums.Roles.Teacher))
+                    .ToDictionaryAsync(k => k.Email.ToLower(), v => v);
+
+                var classDic = await dbContext.Classes
+                    .Include(x => x.Grade)
+                    .Where(x => x.IsDeleted == false)
+                    .ToDictionaryAsync(k => k.GetFullCode().ToString(), v => v.Id);
+
+                foreach (var item in userDic.Values)
+                {
+                    item.IsDeleted = true;
+                }
+
+                await setMessageProgressPercentage(0);
+                for (int i = 0; i < items.Count; i++)
+                {
+                    await setMessageProgressPercentage(Math.Truncate(100.0 * i / items.Count));
+                    var email = $"{items[i].IdNumber}@{idNumberEmailDomain}";
+                    var role = items[i].Role.ToUserRole();
+                    Guid? classId = null;
+                    if (classDic.TryGetValue(items[i].Class, out var _classId))
+                    {
+                        classId = _classId;
+                    }
+
+                    if (!userDic.TryGetValue(email.ToLower(), out var user))
+                    {
+                        user = new User();
+                        await dbContext.Users.AddAsync(user);
+                        userDic.Add(email.ToLower(), user);
+                    }
+
+                    user.Email = email;
+                    user.Password = email.ToLower();
+                    user.IdNumber = items[i].IdNumber;
+                    user.FullName = items[i].FullName;
+                    user.Role = role;
+                    user.ClassId = role == DALEnums.Roles.Teacher ? null : classId;
+                    user.IsDeleted = false;
+                }
+                await dbContext.SaveChangesAsync();
+                await usersService.ClearCacheAsync();
+                await setMessageProgressPercentage(100);
+                return res.SetOk();
             }
-            await dbContext.SaveChangesAsync();
-            await usersService.ClearCacheAsync();
-            await setMessageProgressPercentage(100);
-            return res.SetOk();
+            catch (Exception ex)
+            {
+                return res.SetError(ex.Message);
+            }
         }
     }
 }
