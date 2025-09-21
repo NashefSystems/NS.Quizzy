@@ -44,9 +44,9 @@ namespace NS.Quizzy.Server.BL.AppConfiguration
                     }
                 }
 
-                var cacheKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
+                var configKey = AppSettingKeys.ServerInfoTTLMin.GetDBStringValue();
 
-                var serverInfoTTLMin = settings.TryGetValue(cacheKey, out var ttlMinStr) && double.TryParse(ttlMinStr, out double ttlMin) ?
+                var serverInfoTTLMin = settings.TryGetValue(configKey, out var ttlMinStr) && double.TryParse(ttlMinStr, out double ttlMin) ?
                 ttlMin : 10080; //1 Week
 
                 var cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();

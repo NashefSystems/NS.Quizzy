@@ -25,8 +25,8 @@ namespace NS.Quizzy.Server.BL.Services
             _cacheProvider = cacheProvider;
             _mapper = mapper;
             {
-                var cacheKey = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
-                var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 60;
+                var configKey = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(configKey), out double val) ? val : 60;
                 _cacheDataTTL = TimeSpan.FromMinutes(valueInMin);
             }
         }

@@ -43,13 +43,13 @@ namespace NS.Quizzy.Server.BL.Services
             _queueService = queueService;
             _roles = [Roles.Teacher, Roles.Student];
             {
-                var key = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
-                var valueInMin = double.TryParse(configuration.GetValue<string>(key), out double val) ? val : 60;
+                var configKey = AppSettingKeys.CacheDataTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(configKey), out double val) ? val : 60;
                 _cacheDataTTL = TimeSpan.FromMinutes(valueInMin);
             }
             {
-                var key = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
-                _idNumberEmailDomain = configuration.GetValue<string>(key) ?? "";
+                var configKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
+                _idNumberEmailDomain = configuration.GetValue<string>(configKey) ?? "";
             }
         }
 

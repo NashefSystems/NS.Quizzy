@@ -20,7 +20,8 @@ namespace NS.Quizzy.Server.BL.Services
         public FcmService(INSLogger logger, IConfiguration config)
         {
             _logger = logger;
-            _googleCredentialJson = config.GetValue(AppSettingKeys.GoogleCredentialJson.GetDBStringValue(), string.Empty);
+            var configKey = AppSettingKeys.GoogleCredentialJson.GetDBStringValue();
+            _googleCredentialJson = config.GetValue(configKey, string.Empty);
         }
 
         public async Task<bool> SendPushNotificationAsync(PushNotificationRequest request, INSLogBag parentLogBag = null)

@@ -37,8 +37,8 @@ namespace NS.Quizzy.Server.BL.Services
 
             {
                 int value = 50; // default
-                var cacheKey = AppSettingKeys.NotificationsGetLimitValue.GetDBStringValue();
-                if (int.TryParse(configuration.GetValue<string>(cacheKey), out int val) && val > 0)
+                var configKey = AppSettingKeys.NotificationsGetLimitValue.GetDBStringValue();
+                if (int.TryParse(configuration.GetValue<string>(configKey), out int val) && val > 0)
                 {
                     value = val;
                 }

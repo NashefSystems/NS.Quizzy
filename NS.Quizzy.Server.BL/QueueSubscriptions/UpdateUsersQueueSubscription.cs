@@ -35,11 +35,11 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
             var usersService = scope.ServiceProvider.GetRequiredService<IUsersService>();
-            var cacheKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
-            var idNumberEmailDomain = configuration.GetValue<string>(cacheKey);
+            var configKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
+            var idNumberEmailDomain = configuration.GetValue<string>(configKey);
 
             var userDic = await dbContext.Users
-                .Where(x => x.Role == DALEnums.Roles.Student || x.Role == DALEnums.Roles.Teacher)
+                .Where(x => x.IsDeleted == false && (x.Role == DALEnums.Roles.Student || x.Role == DALEnums.Roles.Teacher))
                 .ToDictionaryAsync(k => k.Email.ToLower(), v => v);
 
             var classDic = await dbContext.Classes

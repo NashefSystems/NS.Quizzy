@@ -41,18 +41,18 @@ namespace NS.Quizzy.Server.BL.Services
             _configuration = configuration;
 
             {
-                var cacheKey = AppSettingKeys.CacheOTPTTLMin.GetDBStringValue();
-                var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 60;
+                var configKey = AppSettingKeys.CacheOTPTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(configKey), out double val) ? val : 60;
                 _cacheOTPTTL = TimeSpan.FromMinutes(valueInMin);
             }
             {
-                var cacheKey = AppSettingKeys.CacheLoginsTTLMin.GetDBStringValue();
-                var valueInMin = double.TryParse(configuration.GetValue<string>(cacheKey), out double val) ? val : 20160;
+                var configKey = AppSettingKeys.CacheLoginsTTLMin.GetDBStringValue();
+                var valueInMin = double.TryParse(configuration.GetValue<string>(configKey), out double val) ? val : 20160;
                 _cacheLoginsTTL = TimeSpan.FromMinutes(valueInMin);
             }
             {
-                var cacheKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
-                _idNumberEmailDomain = configuration.GetValue<string>(cacheKey);
+                var configKey = AppSettingKeys.IdNumberEmailDomain.GetDBStringValue();
+                _idNumberEmailDomain = configuration.GetValue<string>(configKey);
             }
         }
 
@@ -189,8 +189,8 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
-            var cacheKey = AppSettingKeys.IgnoreOTPValidationUserIds.GetDBStringValue();
-            var ignoreOTPValidationUserIdsJson = _configuration.GetValue<string>(cacheKey) ?? "[]";
+            var configKey = AppSettingKeys.IgnoreOTPValidationUserIds.GetDBStringValue();
+            var ignoreOTPValidationUserIdsJson = _configuration.GetValue<string>(configKey) ?? "[]";
             var ignoreOTPValidationUserIds = JsonConvert.DeserializeObject<List<Guid>>(ignoreOTPValidationUserIdsJson) ?? [];
             if (!ignoreOTPValidationUserIds.Contains(user.Id))
             {
