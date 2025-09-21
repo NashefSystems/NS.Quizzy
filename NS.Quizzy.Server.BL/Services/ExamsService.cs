@@ -50,18 +50,28 @@ namespace NS.Quizzy.Server.BL.Services
                     .Where(x => request.QuestionnaireIds.Contains(x.QuestionnaireId));
             }
 
-            if (request.GradeIds?.Count > 0)
+            if (request.ClassIds?.Count > 0 || request.GradeIds?.Count > 0)
             {
-                query = query
-                    .Where(x => x.GradeExams.Any(y => request.GradeIds.Contains(y.GradeId)));
-            }
+                var classIds = request.ClassIds ?? [];
+                var gradeIds = request.GradeIds ?? [];
 
-            if (request.ClassIds?.Count > 0)
-            {
-                query = query
-                    .Where(x => x.ClassExams.Any(y => request.ClassIds.Contains(y.ClassId)));
-            }
+                var classGradeIds = await _appDbContext.Classes
+                    .Where(x => request.ClassIds.Contains(x.Id))
+                    .Select(x => x.GradeId)
+                    .ToListAsync();
 
+                if (classGradeIds.Count != 0)
+                {
+                    gradeIds.AddRange(classGradeIds);
+                    gradeIds = [.. gradeIds.Distinct()];
+                }
+
+                query = query.Where(x =>
+                    x.ClassExams.Any(y => classIds.Contains(y.ClassId)) ||
+                    x.GradeExams.Any(y => gradeIds.Contains(y.GradeId))
+                  );
+            }
+            
             if (request.SubjectIds?.Count > 0)
             {
                 query = query
