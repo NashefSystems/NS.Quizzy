@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NS.Quizzy.Server.DAL;
 
@@ -11,9 +12,11 @@ using NS.Quizzy.Server.DAL;
 namespace NS.Quizzy.Server.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250906170913_Initialization DataBase")]
+    partial class InitializationDataBase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -638,13 +641,13 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         .HasColumnType("nvarchar(150)")
                         .HasColumnOrder(1);
 
-                    b.Property<string>("AppVersion")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnOrder(2);
-
                     b.Property<string>("AppBuildNumber")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
+
+                    b.Property<string>("AppVersion")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(2);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
@@ -702,7 +705,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(14);
 
-                    b.HasKey("ID", "AppVersion");
+                    b.HasKey("ID");
 
                     b.ToTable("Devices", (string)null);
                 });
@@ -1014,17 +1017,13 @@ namespace NS.Quizzy.Server.DAL.Migrations
                         .HasColumnOrder(-2147483648)
                         .HasDefaultValueSql("(NewId())");
 
-                    b.Property<string>("AppVersion")
+                    b.Property<string>("ClientIP")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(1);
 
-                    b.Property<string>("ClientIP")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(2);
-
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(2);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
@@ -1034,7 +1033,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<string>("DeviceId")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(3);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -1044,7 +1043,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<bool>("IsMobile")
                         .HasColumnType("bit")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(4);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
@@ -1054,28 +1053,24 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<string>("NotificationToken")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(5);
 
                     b.Property<string>("Platform")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(7);
-
-                    b.Property<string>("ServerVersion")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(8);
+                        .HasColumnOrder(6);
 
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(9);
+                        .HasColumnOrder(7);
 
                     b.Property<string>("UserAgent")
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(10);
+                        .HasColumnOrder(8);
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier")
-                        .HasColumnOrder(11);
+                        .HasColumnOrder(9);
 
                     b.HasKey("Id");
 
@@ -1598,7 +1593,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             FullName = "Admin",
                             IsDeleted = false,
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            NotificationToken = "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs",
+                            NotificationToken = "dxkmG0jIQyWsrrnlihsPzp:APA91bEZptXfWbtClGiGQsnoJyFlgZOvb8ezRkv0aBeUNMJv-OxAKNofrXSh3CNAV2Ix4qB5c_11LmcnFSgqH4dzZo5f-zQSIVfF3j1jvmqQfG-uRHcJ4Oc",
                             Password = "sRL3XKwpyrsHf16K4ft3gw==",
                             Role = 3,
                             TwoFactorSecretKey = "XD2GB3DYXAGZGGOXG46TD3QKBQXQYYKO"
@@ -1615,19 +1610,6 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             Password = "6zWwt5ux4Dcvu6wk+JXvUQ==",
                             Role = 2,
                             TwoFactorSecretKey = "L2PUPNK2U5SIIDHZUPWW6HHYRY7ZQSYX"
-                        },
-                        new
-                        {
-                            Id = new Guid("f8178f51-6d73-45e1-a4e7-1b01baf9884d"),
-                            CreatedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Email = "QuizzyDemo@ExamProduction.com",
-                            FullName = "Demo user",
-                            IsDeleted = false,
-                            ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            NotificationToken = "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs",
-                            Password = "nS+ja7PyR+pO3sNsUm4c3vleK3reskgbk++4+vlPrSK6jjQ0RCV3JJfENUr/zesg",
-                            Role = 0,
-                            TwoFactorSecretKey = "USUYJXW3QXUHA7R53YP4QBPPXHH54KHS"
                         });
                 });
 

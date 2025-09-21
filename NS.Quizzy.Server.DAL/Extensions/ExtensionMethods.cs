@@ -17,15 +17,14 @@ namespace NS.Quizzy.Server.DAL.Extensions
                     var configuration = provider.GetRequiredService<IConfiguration>();
                     var connectionString = configuration.GetConnectionString("QuizzyDB");
                     //Console.WriteLine($"ConnectionString: '{connectionString}'");
-                    //options.UseSqlServer(connectionString);
-                    options.UseNpgsql(connectionString);
+                    options.UseSqlServer(connectionString);
                 },
                 ServiceLifetime.Scoped,
                 getChangeBy: (httpContext) => httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value,
                 getContextId: (httpContext) => httpContext?.GetContextId()
             );
             return services;
-        }
+        }            
 
         public static T? ToEnumValue<T>(this string? dbValue)
         {

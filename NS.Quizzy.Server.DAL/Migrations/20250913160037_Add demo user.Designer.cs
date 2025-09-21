@@ -2,82 +2,83 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NS.Quizzy.Server.DAL;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace NS.Quizzy.Server.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250920144722_Initialization DataBase")]
-    partial class InitializationDataBase
+    [Migration("20250913160037_Add demo user")]
+    partial class Adddemouser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("NS.Quizzy.Server.DAL.Entities.AppSetting", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<bool>("IsSecured")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(1);
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Target")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
                     b.Property<string>("Value")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
                     b.Property<string>("ValueType")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(5);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Key")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("AppSettings", (string)null);
 
@@ -208,9 +209,9 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<long>("Code")
                         .HasColumnType("bigint")
@@ -218,29 +219,29 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<Guid>("GradeId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(3);
 
                     b.HasKey("Id");
@@ -248,7 +249,8 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     b.HasIndex("GradeId");
 
                     b.HasIndex("Name", "GradeId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("Classes", (string)null);
 
@@ -589,39 +591,39 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<Guid>("ClassId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<Guid>("ExamId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<bool>("IsImprovement")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(3);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.HasKey("Id");
 
@@ -636,71 +638,71 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<string>("ID")
                         .HasMaxLength(150)
-                        .HasColumnType("character varying(150)")
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnOrder(1);
 
                     b.Property<string>("AppVersion")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
                     b.Property<string>("AppBuildNumber")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(15)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsAndroid")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(9);
 
                     b.Property<bool>("IsIOS")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(8);
 
                     b.Property<bool>("IsMacOS")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(11);
 
                     b.Property<bool>("IsTV")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(6);
 
                     b.Property<bool>("IsTesting")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(7);
 
                     b.Property<bool>("IsWeb")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(12);
 
                     b.Property<bool>("IsWindows")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(10);
 
                     b.Property<DateTimeOffset>("LastHeartBeat")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(16)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("OS")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
                     b.Property<string>("OSVersion")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(5);
 
                     b.Property<string>("SerialNumber")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(13);
 
                     b.Property<string>("UniqueId")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(14);
 
                     b.HasKey("ID", "AppVersion");
@@ -712,50 +714,50 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<TimeSpan>("Duration")
-                        .HasColumnType("interval")
+                        .HasColumnType("time")
                         .HasColumnOrder(1);
 
                     b.Property<TimeSpan>("DurationWithExtra")
-                        .HasColumnType("interval")
+                        .HasColumnType("time")
                         .HasColumnOrder(2);
 
                     b.Property<Guid>("ExamTypeId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(3);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<Guid>("MoedId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(4);
 
                     b.Property<Guid>("QuestionnaireId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(5);
 
                     b.Property<DateTimeOffset>("StartTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(6);
 
                     b.HasKey("Id");
@@ -773,41 +775,42 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<int>("ItemOrder")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnOrder(1);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("ExamTypes", (string)null);
 
@@ -872,9 +875,9 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<long>("Code")
                         .HasColumnType("bigint")
@@ -882,31 +885,32 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("Grades", (string)null);
 
@@ -962,39 +966,39 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<Guid>("ExamId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
                     b.Property<Guid>("GradeId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<bool>("IsImprovement")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(3);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.HasKey("Id");
 
@@ -1009,76 +1013,77 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<string>("AppVersion")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(1);
 
                     b.Property<string>("ClientIP")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(2);
 
                     b.Property<string>("Country")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("DeviceId")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<bool>("IsMobile")
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasColumnOrder(5);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("NotificationToken")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(6);
 
                     b.Property<string>("Platform")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(7);
 
                     b.Property<string>("ServerVersion")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(8);
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(9);
 
                     b.Property<string>("UserAgent")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(10);
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(11);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("LoginHistory", (string)null);
                 });
@@ -1087,41 +1092,42 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<int>("ItemOrder")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnOrder(1);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("Moeds", (string)null);
 
@@ -1168,54 +1174,54 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(1);
 
                     b.Property<Guid>("CreatedById")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(2);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Data")
-                        .HasColumnType("jsonb")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("DataJson")
                         .HasColumnOrder(3);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<int>("Target")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnOrder(4);
 
                     b.Property<string>("TargetIds")
-                        .HasColumnType("jsonb")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("TargetIdsJson")
                         .HasColumnOrder(5);
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(6);
 
                     b.HasKey("Id");
@@ -1229,9 +1235,9 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<long>("Code")
                         .HasColumnType("bigint")
@@ -1239,43 +1245,44 @@ namespace NS.Quizzy.Server.DAL.Migrations
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<TimeSpan>("Duration")
-                        .HasColumnType("interval")
+                        .HasColumnType("time")
                         .HasColumnOrder(2);
 
                     b.Property<TimeSpan>("DurationWithExtra")
-                        .HasColumnType("interval")
+                        .HasColumnType("time")
                         .HasColumnOrder(3);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
                     b.Property<Guid>("SubjectId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(5);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.HasIndex("SubjectId");
 
@@ -1286,41 +1293,42 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<int>("ItemOrder")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnOrder(1);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("Subjects", (string)null);
 
@@ -1502,64 +1510,64 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<Guid?>("ClassId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(2);
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
                     b.Property<string>("IdNumber")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(4);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<string>("NotificationToken")
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(5);
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(6);
 
                     b.Property<int>("Role")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasDefaultValue(0)
                         .HasColumnOrder(7);
 
                     b.Property<string>("TwoFactorSecretKey")
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnOrder(8);
 
                     b.HasKey("Id");
@@ -1567,7 +1575,8 @@ namespace NS.Quizzy.Server.DAL.Migrations
                     b.HasIndex("ClassId");
 
                     b.HasIndex("Email")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("IsDeleted = '0'");
 
                     b.ToTable("Users", (string)null);
 
@@ -1620,7 +1629,7 @@ namespace NS.Quizzy.Server.DAL.Migrations
                             ModifiedTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NotificationToken = "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs",
                             Password = "nS+ja7PyR+pO3sNsUm4c3vleK3reskgbk++4+vlPrSK6jjQ0RCV3JJfENUr/zesg",
-                            Role = 0,
+                            Role = 2,
                             TwoFactorSecretKey = "USUYJXW3QXUHA7R53YP4QBPPXHH54KHS"
                         });
                 });
@@ -1629,42 +1638,42 @@ namespace NS.Quizzy.Server.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(-2147483648)
-                        .HasDefaultValueSql("(gen_random_uuid())");
+                        .HasDefaultValueSql("(NewId())");
 
                     b.Property<DateTimeOffset>("CreatedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483645)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
+                        .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnOrder(2147483647);
 
                     b.Property<DateTimeOffset>("ModifiedTime")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2147483646)
-                        .HasDefaultValueSql("(CURRENT_TIMESTAMP)");
+                        .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
 
                     b.Property<Guid>("NotificationId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
                     b.Property<DateTimeOffset?>("PushNotificationsSendingTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(2);
 
                     b.Property<DateTimeOffset?>("SeenAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnOrder(3);
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(4);
 
                     b.HasKey("Id");
