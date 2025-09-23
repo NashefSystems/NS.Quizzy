@@ -34,7 +34,7 @@
                         {{questionnairesDic[exam.questionnaireId].name}}
                     </div>
                     <div class="exam-description">
-                        {{exam.startTime | date: 'dd/MM/yyyy HH:mm'}} {{getDay(exam.startTime) | translate}}
+                        {{exam.startTime | date: isTimeValid(exam.startTime) ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy'}} {{getDay(exam.startTime) | translate}}
                         |
                         {{examTypesDic[exam.examTypeId].name }} - {{moedsDic[exam.moedId].name }}
                     </div>

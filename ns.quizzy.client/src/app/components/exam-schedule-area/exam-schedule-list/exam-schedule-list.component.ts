@@ -174,6 +174,11 @@ export class ExamScheduleListComponent implements OnInit {
     return names.join(' | ');
   }
 
+  isTimeValid(date: Date | string): boolean {
+    const d = new Date(date);
+    return d.getHours() !== 0 || d.getMinutes() !== 0;
+  }
+
   getDay(isoDateTime: string) {
     if (!isoDateTime) {
       return '';
