@@ -67,11 +67,11 @@ namespace NS.Quizzy.Server.BL.Services
                 }
 
                 query = query.Where(x =>
-                    x.ClassExams.Any(y => classIds.Contains(y.ClassId)) ||
-                    x.GradeExams.Any(y => gradeIds.Contains(y.GradeId))
+                    x.ClassExams.Any(y => x.IsDeleted == false && classIds.Contains(y.ClassId)) ||
+                    x.GradeExams.Any(y => x.IsDeleted == false && gradeIds.Contains(y.GradeId))
                   );
             }
-            
+
             if (request.SubjectIds?.Count > 0)
             {
                 query = query

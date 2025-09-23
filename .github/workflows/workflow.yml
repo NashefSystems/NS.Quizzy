@@ -12,7 +12,6 @@ on:
 
 concurrency:
     group: "${{ github.event.repository.name }}_group"
-    cancel-in-progress: false
 
 jobs:
     CheckBranch:
