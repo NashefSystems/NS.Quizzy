@@ -35,7 +35,7 @@
         </form>
     </ng-container>
     
-    <ng-container *ngIf="step === LoginSteps.OTP">
+    <ng-container *ngIf="step === LoginSteps.OTP" >
         <label class="H200">{{ 'LOGIN.TWO_FACTOR.TITLE' | translate }}</label>
         <ng-container *ngIf="loginResponse?.twoFactorUrl">
             <label class="L200 full-width">{{ 'LOGIN.TWO_FACTOR.SETUP.LINE_1' | translate }}</label>
@@ -56,7 +56,7 @@
                 {{ 'LOGIN.TWO_FACTOR.TOKEN_TITLE' | translate }}
             </label>
             <mat-form-field appearance="outline" class="full-width">
-                <input matInput formControlName="token" dir="ltr" autocomplete="off" autocapitalize="off"
+                <input #otpInput matInput formControlName="token" dir="ltr" autocomplete="off" autocapitalize="off"
                     name="twofactor_token" inputmode="numeric" />
                 <mat-error *ngIf="twoFactorForm.get('token')?.invalid && twoFactorForm.get('token')?.touched">
                     <ng-container *ngIf="twoFactorForm.get('token')?.errors?.['required']">

@@ -16,7 +16,9 @@ export class WebviewBridgeService {
       const res = await this.sendMessageToNative(MESSAGE_ACTIONS.WRITE_TO_CONSOLE, payload);
       return res.isSuccess;
     } catch (err: any) {
-      console.error("WebviewBridgeService | writeToConsoleAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | writeToConsoleAsync exception:", err);
+      }
       return false;
     }
   }
@@ -30,7 +32,9 @@ export class WebviewBridgeService {
       const res = await this.sendMessageToNative(MESSAGE_ACTIONS.STORE_DATA, payload);
       return res.isSuccess;
     } catch (err: any) {
-      console.error("WebviewBridgeService | storeDataAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | storeDataAsync exception:", err);
+      }
       return false;
     }
   }
@@ -43,7 +47,9 @@ export class WebviewBridgeService {
       const res = await this.sendMessageToNative(MESSAGE_ACTIONS.READ_DATA, payload);
       return res.data;
     } catch (err: any) {
-      console.error("WebviewBridgeService | readDataAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | readDataAsync exception:", err);
+      }
       return null;
     }
   }
@@ -54,7 +60,9 @@ export class WebviewBridgeService {
       const resData = res.data as IGetBiometricAvailabilityResponse;
       return resData;
     } catch (err: any) {
-      console.error("WebviewBridgeService | getBiometricAvailabilityAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | getBiometricAvailabilityAsync exception:", err);
+      }
       return null;
     }
   }
@@ -68,7 +76,9 @@ export class WebviewBridgeService {
       const resData = res.data as IVerifyBiometricSignatureResponse;
       return resData;
     } catch (err: any) {
-      console.error("WebviewBridgeService | verifyBiometricSignatureAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | verifyBiometricSignatureAsync exception:", err);
+      }
       return null;
     }
   }
@@ -79,7 +89,9 @@ export class WebviewBridgeService {
       const resData = res.data as IGetNotificationTokenResponse;
       return resData;
     } catch (err: any) {
-      console.error("WebviewBridgeService | getNotificationTokenAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | getNotificationTokenAsync exception:", err);
+      }
       return null;
     }
   }
@@ -90,7 +102,9 @@ export class WebviewBridgeService {
       const resData = res.data as IGetMobileSerialNumberResponse;
       return resData;
     } catch (err: any) {
-      console.error("WebviewBridgeService | getMobileSerialNumberAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | getMobileSerialNumberAsync exception:", err);
+      }
       return null;
     }
   }
@@ -101,7 +115,9 @@ export class WebviewBridgeService {
       const resData = res.data as IGetPlatformInfoResponse;
       return resData;
     } catch (err: any) {
-      console.error("WebviewBridgeService | getPlatformInfoAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | getPlatformInfoAsync exception:", err);
+      }
       return null;
     }
   }
@@ -112,7 +128,9 @@ export class WebviewBridgeService {
       const resData = res.data as IGetPlatformInfoResponse;
       return resData;
     } catch (err: any) {
-      console.error("WebviewBridgeService | showNotificationAsync exception:", err);
+      if (err.isException) {
+        console.error("WebviewBridgeService | showNotificationAsync exception:", err);
+      }
       return null;
     }
   }
@@ -153,6 +171,7 @@ export class WebviewBridgeService {
             error: `window.ReactNativeWebView is null`
           }
           reject(errorResponse);
+          return;
         }
 
         const listener = (responseMsg: IResponseMessage) => {
@@ -168,12 +187,15 @@ export class WebviewBridgeService {
                 error: `Response message is null`
               }
               reject(errorResponse);
+              return;
             }
             if (responseMsg?.requestId === rid) {
               if (responseMsg.isSuccess) {
                 resolve(responseMsg);
+                return;
               } else {
                 reject(responseMsg);
+                return;
               }
             }
           } catch (err: any) {
@@ -187,6 +209,7 @@ export class WebviewBridgeService {
               error: err
             }
             reject(exceptionResponse);
+            return;
           }
         };
         _window[eventType] = listener;

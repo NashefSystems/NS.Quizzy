@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StorageService } from '../../../services/storage.service';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
@@ -30,6 +30,8 @@ export class LoginWithEmailComponent implements OnInit {
   private readonly _accountService = inject(AccountService);
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _router = inject(Router);
+
+  @ViewChild('otpInput') otpInput!: ElementRef<HTMLInputElement>;
 
   LoginSteps = LoginSteps;
   step = LoginSteps.UserNameAndPassword;
@@ -89,6 +91,13 @@ export class LoginWithEmailComponent implements OnInit {
         this.loginResponse = responseBody;
         if (responseBody.requiresTwoFactor) {
           this.step = LoginSteps.OTP;
+
+          // Use setTimeout to ensure the DOM is updated
+          setTimeout(() => {
+            if (this.otpInput) {
+              this.otpInput.nativeElement.focus();
+            }
+          }, 50);
         } else {
           this._accountService.getDetails().subscribe({
             next: (data) => {

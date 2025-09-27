@@ -9,6 +9,7 @@ export enum MESSAGE_ACTIONS {
     GET_MOBILE_SERIAL_NUMBER = "getMobileSerialNumber",
     GET_PLATFORM_INFO = "getPlatformInfo",
     SHOW_NOTIFICATION = "showNotification",
+    DOWNLOAD_FILE = "DownloadFile",
 }
 
 export interface IRequestMessage {
@@ -70,7 +71,9 @@ export interface IVerifyBiometricSignatureResponse {
 
 // GET_NOTIFICATION_TOKEN
 export interface IGetNotificationTokenResponse {
-    token?: string;
+    token: string | null;
+    isGranted: boolean;
+    error: string | null;
 }
 
 // GET_MOBILE_SERIAL_NUMBER
@@ -100,4 +103,15 @@ export interface IShowNotificationPayload {
     title: string;
     body: string;
     data?: { [key: string]: string | object };
+}
+
+// DOWNLOAD_FILE
+export interface IDownloadFilePayload {
+    fileName: string;
+    base64: string;
+}
+
+export interface IDownloadFileResponse {
+    downloadPath: string | null;
+    isGranted: boolean | null;
 }
