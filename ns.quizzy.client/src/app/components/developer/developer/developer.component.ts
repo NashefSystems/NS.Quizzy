@@ -1,4 +1,4 @@
-import { Component, inject, NgZone, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NotificationsService } from '../../../services/notifications.service';
 import { AppSettingsService } from '../../../services/app-settings.service';
 
@@ -11,7 +11,6 @@ import { AppSettingsService } from '../../../services/app-settings.service';
 export class DeveloperComponent implements OnInit {
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _appSettingsService = inject(AppSettingsService);
-  private readonly _ngZone = inject(NgZone);
   isLoading = false;
 
   ngOnInit(): void {

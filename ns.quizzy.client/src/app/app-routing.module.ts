@@ -26,6 +26,7 @@ import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/
 import { NotificationListComponent } from './components/notification-area/notification-list/notification-list.component';
 import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
 import { MyNotificationsComponent } from './components/notification-area/my-notifications/my-notifications.component';
+import { DeveloperModule } from './components/developer/developer.module';
 
 const routes: Routes = [
   {
@@ -338,7 +339,7 @@ const routes: Routes = [
   {
     path: 'developer',
     canActivate: [developerGuard],
-    loadChildren: () => import('./components/developer/developer.module').then((m) => m.DeveloperModule),
+    loadChildren: () => DeveloperModule,
     data: {
       page_title: "Developer"
     }
