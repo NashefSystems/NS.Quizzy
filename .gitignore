@@ -399,3 +399,4 @@ FodyWeavers.xsd
 **/elk-buffer*
 NS.Quizzy.Server/invalid-*.json
 nuget.config
+ns.quizzy.client/.claude/
