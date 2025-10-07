@@ -11,5 +11,6 @@ namespace NS.Quizzy.Server.BL.Interfaces
         Task ClearCacheAsync();
         Task<UploadFileResponse> UploadAsync(IFormFile file);
         Task<UploadFileStatusResponse> UploadFileStatusAsync(Guid uploadMessageId);
+        Task<List<UserLoginStatusDto>> GetUsersLoginStatusAsync();
     }
 }

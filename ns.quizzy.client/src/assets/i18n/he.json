@@ -65,7 +65,7 @@
             "ERROR": "הוזן קוד אימות לא חוקי!<br>אנא השתמש בקוד שסופק על ידי אפליקציית האימות שלך."
         }
     },
-    "USER-DETAILS": {
+    "USER_DETAILS": {
         "CLASS": "כיתה"
     },
     "MAIN_MENU": {
@@ -168,7 +168,8 @@
         "ID_NUMBER": "תעודת זהות",
         "FULL_NAME": "שם מלא",
         "ROLE": "תפקיד",
-        "CLASS": "כיתה"
+        "CLASS": "כיתה",
+        "EXPORT_USERS_LOGIN_STATUS": "ייצוא סטטוס התחברות של משתמשים"
     },
     "UNEXPECTED_ERROR": "אופס,<br>התקבלה שגיאה לא צפויה,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {

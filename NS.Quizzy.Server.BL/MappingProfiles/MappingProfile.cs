@@ -32,6 +32,7 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
                 .ForMember(dst => dst.NumberOfPushNotificationsReceived, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Where(x => x.PushNotificationsSendingTime.HasValue).Count()))
                 .ForMember(dst => dst.PushNotificationReceivedPercentage, opt => opt.MapFrom(src => src.UserNotifications == null ? default : NumberUtils.GetPercentage(src.UserNotifications.Where(x => x.PushNotificationsSendingTime.HasValue).Count(), src.UserNotifications.Count())));
             CreateMap<Device, DeviceDto>();
+            CreateMap<UserLoginStatus, UserLoginStatusDto>();
         }
     }
 }

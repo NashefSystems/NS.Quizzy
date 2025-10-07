@@ -33,6 +33,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new NotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserNotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new DeviceEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserLoginStatusViewConfiguration());
 
             var columnOrderLog = _columnOrderLogEnabled ? new StringBuilder() : null;
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
@@ -403,6 +404,15 @@ namespace NS.Quizzy.Server.DAL
                     .Property(p => p.LastHeartBeat)
                     .ValueGeneratedOnAdd()
                     .HasDefaultValueSql("(SYSDATETIMEOFFSET())");
+            }
+        }
+
+        internal class UserLoginStatusViewConfiguration : IEntityTypeConfiguration<UserLoginStatus>
+        {
+            public virtual void Configure(EntityTypeBuilder<UserLoginStatus> entity)
+            {
+                entity.ToView("V_USER_LOGIN_STATUS");
+                entity.HasNoKey();
             }
         }
     }

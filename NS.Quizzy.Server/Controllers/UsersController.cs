@@ -108,5 +108,12 @@ namespace NS.Quizzy.Server.Controllers
             var res = await _service.UploadFileStatusAsync(uploadMessageId);
             return Ok(res);
         }
+
+        [HttpGet("UsersLoginStatus")]
+        public async Task<ActionResult<List<UserLoginStatusDto>>> GetUsersLoginStatusAsync()
+        {
+            var res = await _service.GetUsersLoginStatusAsync();
+            return Ok(res);
+        }
     }
 }

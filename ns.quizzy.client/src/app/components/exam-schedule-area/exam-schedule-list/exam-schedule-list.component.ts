@@ -9,7 +9,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { IMoedDto } from '../../../models/backend/moed.dto';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
-import { ExportDataItem, ExportService } from './export.service';
+import { IExportDataItem, ExportService } from './export.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 
@@ -21,6 +21,7 @@ import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 })
 export class ExamScheduleListComponent implements OnInit {
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
+  private readonly _exportService = inject(ExportService);
 
   isLoading: boolean = true;
   iconColor: string = '#0053E7';
@@ -69,90 +70,90 @@ export class ExamScheduleListComponent implements OnInit {
     }, 100);
   }
 
-  onPrint() {
-    this.accordion().openAll();
-    setTimeout(() => {
-      this.printDiv('exam-list');
-    }, 100);
-  }
+  // onPrint() {
+  //   this.accordion().openAll();
+  //   setTimeout(() => {
+  //     this.printDiv('exam-list');
+  //   }, 100);
+  // }
 
-  printDiv(elementId: string) {
-    const printContent = document.getElementById(elementId)?.outerHTML;
-    if (!printContent) {
-      console.error('Print content not found');
-      return;
-    }
+  // printDiv(elementId: string) {
+  //   const printContent = document.getElementById(elementId)?.outerHTML;
+  //   if (!printContent) {
+  //     console.error('Print content not found');
+  //     return;
+  //   }
 
-    // Extract all stylesheets safely
-    let styles = '';
-    for (const styleSheet of Array.from(document.styleSheets)) {
-      try {
-        styles += Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('\n');
-      } catch (e) {
-        console.warn('Skipping cross-origin stylesheet:', e);
-      }
-    }
+  //   // Extract all stylesheets safely
+  //   let styles = '';
+  //   for (const styleSheet of Array.from(document.styleSheets)) {
+  //     try {
+  //       styles += Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('\n');
+  //     } catch (e) {
+  //       console.warn('Skipping cross-origin stylesheet:', e);
+  //     }
+  //   }
 
-    const dir = this._appTranslateService.translate("DIR");
-    const title = this._appTranslateService.translate("PAGE_TITLES.EXAM_SCHEDULE");
+  //   const dir = this._appTranslateService.translate("DIR");
+  //   const title = this._appTranslateService.translate("PAGE_TITLES.EXAM_SCHEDULE");
 
-    // Create an iframe for printing
-    const printFrame = document.createElement('iframe');
-    printFrame.style.position = 'absolute';
-    printFrame.style.width = '0px';
-    printFrame.style.height = '0px';
-    printFrame.style.border = 'none';
-    document.body.appendChild(printFrame);
+  //   // Create an iframe for printing
+  //   const printFrame = document.createElement('iframe');
+  //   printFrame.style.position = 'absolute';
+  //   printFrame.style.width = '0px';
+  //   printFrame.style.height = '0px';
+  //   printFrame.style.border = 'none';
+  //   document.body.appendChild(printFrame);
 
-    const printDoc = printFrame.contentWindow?.document;
-    if (!printDoc) {
-      console.error('Failed to create print document');
-      return;
-    }
+  //   const printDoc = printFrame.contentWindow?.document;
+  //   if (!printDoc) {
+  //     console.error('Failed to create print document');
+  //     return;
+  //   }
 
-    printDoc.open();
-    printDoc.write(`
-      <html>
-        <head>
-          <title>${title}</title>
-          <style>${styles}</style>
-          <style>
-            body {
-              padding: 16px;
-              background-color: white;
-            }
-            .page-title {
-              margin-bottom: 16px;
-              text-align: center;
-            }
-            .app-info {
-                margin-top: 1rem;
-                display: flex;
-                justify-content: center;
-                color: gray;
-                direction: ltr;
-            }
-          </style>
-        </head>
-        <body dir="${dir}">
-          <h1 class="page-title">${title}</h1>            
-          ${printContent}
-          <div class="app-info">
-              <small>Quizzy App (V${this.appVersion})</small>
-          </div>
-        </body>
-      </html>
-    `);
-    printDoc.close();
+  //   printDoc.open();
+  //   printDoc.write(`
+  //     <html>
+  //       <head>
+  //         <title>${title}</title>
+  //         <style>${styles}</style>
+  //         <style>
+  //           body {
+  //             padding: 16px;
+  //             background-color: white;
+  //           }
+  //           .page-title {
+  //             margin-bottom: 16px;
+  //             text-align: center;
+  //           }
+  //           .app-info {
+  //               margin-top: 1rem;
+  //               display: flex;
+  //               justify-content: center;
+  //               color: gray;
+  //               direction: ltr;
+  //           }
+  //         </style>
+  //       </head>
+  //       <body dir="${dir}">
+  //         <h1 class="page-title">${title}</h1>            
+  //         ${printContent}
+  //         <div class="app-info">
+  //             <small>Quizzy App (V${this.appVersion})</small>
+  //         </div>
+  //       </body>
+  //     </html>
+  //   `);
+  //   printDoc.close();
 
-    printFrame.contentWindow?.focus();
-    printFrame.contentWindow?.print();
+  //   printFrame.contentWindow?.focus();
+  //   printFrame.contentWindow?.print();
 
-    // Remove the iframe after printing (wait a bit to ensure printing starts)
-    setTimeout(() => {
-      document.body.removeChild(printFrame);
-    }, 500);
-  }
+  //   // Remove the iframe after printing (wait a bit to ensure printing starts)
+  //   setTimeout(() => {
+  //     document.body.removeChild(printFrame);
+  //   }, 500);
+  // }
 
   onFilterClick() {
     this.onFilter.emit();
@@ -197,7 +198,7 @@ export class ExamScheduleListComponent implements OnInit {
   onExport() {
     const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
-    const sheetData: ExportDataItem[] = this.exams.map(x => {
+    const sheetData: IExportDataItem[] = this.exams.map(x => {
       const examDate = new Date(x.startTime);
       const questionnaire = this.questionnairesDic[x.questionnaireId];
       return {
@@ -220,6 +221,6 @@ export class ExamScheduleListComponent implements OnInit {
         ],
       };
     });
-    ExportService.exportToExcel(sheetData);
+    this._exportService.exportToExcel(sheetData);
   }
 }

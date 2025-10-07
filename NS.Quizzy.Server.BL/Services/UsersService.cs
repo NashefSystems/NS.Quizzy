@@ -9,12 +9,10 @@ using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
-using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.BL.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.QueueManager.Interfaces;
-using NS.Shared.QueueManager.Models;
 using System.Text;
 using static NS.Quizzy.Server.Common.Enums;
 using static NS.Quizzy.Server.DAL.DALEnums;
@@ -32,7 +30,6 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly string _idNumberEmailDomain;
         private readonly Roles[] _roles;
         private readonly INSLogger _logger;
-
 
         public UsersService(INSLogger logger, AppDbContext appDbContext, INSCacheProvider cacheProvider, IMapper mapper, IConfiguration configuration, INSQueueService queueService)
         {
@@ -259,6 +256,12 @@ namespace NS.Quizzy.Server.BL.Services
                 IsCompleted = messageInfo.IsCompleted,
                 ProgressPercentage = messageInfo.ProgressPercentage
             };
+        }
+
+        public async Task<List<UserLoginStatusDto>> GetUsersLoginStatusAsync()
+        {
+            var res = await _appDbContext.UsersLoginStatusView.ToListAsync();
+            return _mapper.Map<List<UserLoginStatusDto>>(res);
         }
 
         private (List<CsvFileItem> items, List<string> errors) CsvFileValidatorAndExtractor(string csvContent)

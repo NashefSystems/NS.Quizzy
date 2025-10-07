@@ -2,22 +2,8 @@ import moment from 'moment';
 import { Buffer } from 'buffer';
 import { inject, Injectable } from '@angular/core';
 import ExcelJS from 'exceljs';
-// import { saveAs } from 'file-saver';
 import { GlobalService } from '../../../services/global.service';
-
-export interface IExportDataItem {
-    examDay: string;
-    startTime: string;
-    subject: string;
-    questionnaireName: string;
-    questionnaireCode: number;
-    examType: string;
-    moed: string;
-    duration: string;
-    durationWithExtra: string;
-    firstTime?: string[];
-    improvement?: string[];
-}
+import { IUserLoginStatusDto } from '../../../models/backend/user-login-status.dto';
 
 @Injectable({
     providedIn: 'root'
@@ -25,43 +11,31 @@ export interface IExportDataItem {
 export class ExportService {
     private readonly _globalService = inject(GlobalService);
 
-    async exportToExcel(data: IExportDataItem[]) {
-        const title = 'מערך בחינות בית ספרי';
+    async exportToExcel(data: IUserLoginStatusDto[]) {
+        const title = 'Quizzy login status';
         const columns = [
-            "יום הבחינה",
-            "תאריך הבחינה",
-            "נושא",
-            "שם שאלון",
-            "מס' שאלון",
-            "סוג בחינה",
-            "מועד",
-            "משך הבחינה",
-            "ניגשים לראשונה",
-            "שיפור ציון",
+            "תעודת זהות",
+            "שם מלא",
+            "תפקיד",
+            "כיתה",
+            "התחברות אחרונה",
+            "התראות מאופשרות"
         ];
         const colAlignmentHorizontal: ('left' | 'center' | 'right')[] = [
-            "right", //יום הבחינה,
-            "right", //תאריך הבחינה,
-            "right", //נושא,
-            "right", //שם שאלון,
-            "center", //מס' שאלון,
-            "center", //סוג בחינה,
-            "center", //מועד,
-            "right", //משך הבחינה,
-            "right", //ניגשים לראשונה,
-            "right", //שיפור ציון,
+            "left",     // תעודת זהות
+            "right",    // שם מלא
+            "right",    // תפקיד            
+            "center",   // כיתה
+            "center",   // התחברות אחרונה
+            "center",   // התראות מאופשרות
         ]
         const sheetData = data.map(item => [
-            item.examDay,
-            item.startTime,
-            item.subject,
-            item.questionnaireName,
-            item.questionnaireCode,
-            item.examType,
-            item.moed,
-            item.duration === item.durationWithExtra ? item.duration : `${item.duration} [${item.durationWithExtra}]`,
-            item.firstTime?.join(', '),
-            item.improvement?.join(', '),
+            item.idNumber,
+            item.fullName,
+            item.role,
+            item.class || '',
+            !!item.lastLogin ? moment(item.lastLogin).format('YYYY-MM-DD HH:mm') : '',
+            item.isAllowNotifications === 'No' ? 'לא' : item.isAllowNotifications === 'Yes' ? 'כן' : ''
         ]);
 
         const workbook = new ExcelJS.Workbook();
@@ -79,7 +53,7 @@ export class ExportService {
             }
         });
 
-        worksheet.mergeCells('A1:J1');
+        worksheet.mergeCells('A1:F1');
         const titleRow = worksheet.getCell('A1');
         titleRow.value = title;
         titleRow.font = { bold: true, size: 14, color: { argb: '000000' } };
@@ -129,7 +103,6 @@ export class ExportService {
         const buffer = await workbook.xlsx.writeBuffer();
         const base64 = Buffer.from(buffer).toString('base64');
         this._globalService.downloadFileAsync(base64, this.getFileName(title), 'application/octet-stream');
-        // saveAs(new Blob([buffer], { type: 'application/octet-stream' }), this.getFileName(title));
     }
 
     private getFileName(title: string) {

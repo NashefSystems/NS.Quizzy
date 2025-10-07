@@ -3,6 +3,7 @@ import { EntityBaseService } from './entity-base.service';
 import { IUserDto, IUserPayloadDto } from '../../models/backend/user.dto';
 import { IUploadFileStatusResponse } from '../../models/backend/upload-file-status.response';
 import { IUploadFileResponse } from '../../models/backend/upload-file.response';
+import { IUserLoginStatusDto } from '../../models/backend/user-login-status.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,9 @@ export class UsersService extends EntityBaseService<IUserPayloadDto, IUserDto> {
 
   uploadFileStatus(uploadMessageId: string) {
     return this.httpClient.get<IUploadFileStatusResponse>(`${this.getBaseUrl()}/UploadFileStatus/${uploadMessageId}`);
+  }
+
+  getUsersLoginStatus() {
+    return this.httpClient.get<IUserLoginStatusDto[]>(`${this.getBaseUrl()}/UsersLoginStatus`);
   }
 }

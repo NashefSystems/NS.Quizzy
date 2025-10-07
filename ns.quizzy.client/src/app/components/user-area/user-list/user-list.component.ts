@@ -10,6 +10,7 @@ import { ClassesService } from '../../../services/backend/classes.service';
 import { IClassDto } from '../../../models/backend/class.dto';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { NotificationsService } from '../../../services/notifications.service';
+import { ExportService } from './export.service';
 
 @Component({
   selector: 'app-user-list',
@@ -25,6 +26,7 @@ export class UserListComponent implements OnInit {
   private readonly _dialogService = inject(DialogService);
   private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _notificationsService = inject(NotificationsService);
+  private readonly _exportService = inject(ExportService);
 
   @ViewChild('fileInput') fileInput!: ElementRef;
   selectedFile: File | null = null;
@@ -109,6 +111,17 @@ export class UserListComponent implements OnInit {
 
   onImport() {
     this.fileInput.nativeElement.click();
+  }
+
+  onExportUsersLoginStatus() {
+    this._usersService.getUsersLoginStatus().subscribe({
+      next: async (data) => {
+        await this._exportService.exportToExcel(data);
+      },
+      error: (err) => {
+        console.log("getUsersLoginStatus error: ", err);
+      }
+    });
   }
 
   checkUploadFileIsCompleted(messageId: string) {

@@ -65,7 +65,7 @@
             "ERROR": "Invalid authentication code entered!<br>Please use the code provided by your authentication app."
         }
     },
-    "USER-DETAILS": {
+    "USER_DETAILS": {
         "CLASS": "Class"
     },
     "MAIN_MENU": {
@@ -168,7 +168,8 @@
         "ID_NUMBER": "ID number",
         "FULL_NAME": "Full name",
         "ROLE": "Role",
-        "CLASS": "Class"
+        "CLASS": "Class",
+        "EXPORT_USERS_LOGIN_STATUS": "Export users login status"
     },
     "UNEXPECTED_ERROR": "Oops,<br>An unexpected error occurred,<br>{{message}}",
     "CONFIRM_DELETE_DIALOG": {

@@ -2,7 +2,7 @@
     <div class="full-name">{{user.fullName}}</div>
     <div class="role" [style.color]="getFontColor()">{{getRole() | translate}}</div>
     <div class="class-info" *ngIf="user.classId">
-        <span translate>USER-DETAILS.CLASS</span>
+        <span translate>USER_DETAILS.CLASS</span>
         <span>: </span>
         <span>{{getClassName(user.classId)}}</span>
     </div>
