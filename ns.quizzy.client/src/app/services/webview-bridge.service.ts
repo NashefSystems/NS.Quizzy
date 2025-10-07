@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IGetBiometricAvailabilityResponse, IGetMobileSerialNumberResponse, IGetNotificationTokenResponse, IGetPlatformInfoResponse, IReadDataPayload, IRequestMessage, IResponseMessage, IShowNotificationPayload, IStoreDataPayload, IVerifyBiometricSignaturePayload, IVerifyBiometricSignatureResponse, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../models/webview-bridge.models';
+import { IDownloadFilePayload, IDownloadFileResponse, IGetBiometricAvailabilityResponse, IGetMobileSerialNumberResponse, IGetNotificationTokenResponse, IGetPlatformInfoResponse, IOpenURLPayload, IReadDataPayload, IRequestMessage, IResponseMessage, IShowNotificationPayload, IStoreDataPayload, IVerifyBiometricSignaturePayload, IVerifyBiometricSignatureResponse, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../models/webview-bridge.models';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -125,11 +125,35 @@ export class WebviewBridgeService {
   async showNotificationAsync(payload: IShowNotificationPayload) {
     try {
       const res = await this.sendMessageToNative(MESSAGE_ACTIONS.SHOW_NOTIFICATION, payload);
-      const resData = res.data as IGetPlatformInfoResponse;
-      return resData;
+      return res.isSuccess;
     } catch (err: any) {
       if (err.isException) {
         console.error("WebviewBridgeService | showNotificationAsync exception:", err);
+      }
+      return null;
+    }
+  }
+
+  async downloadFileAsync(payload: IDownloadFilePayload) {
+    try {
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.DOWNLOAD_FILE, payload);
+      const resData = res.data as IDownloadFileResponse;
+      return resData;
+    } catch (err: any) {
+      if (err.isException) {
+        console.error("WebviewBridgeService | downloadFileAsync exception:", err);
+      }
+      return null;
+    }
+  }
+
+  async openURLAsync(payload: IOpenURLPayload) {
+    try {
+      const res = await this.sendMessageToNative(MESSAGE_ACTIONS.OPEN_URL, payload);
+      return res.isSuccess;
+    } catch (err: any) {
+      if (err.isException) {
+        console.error("WebviewBridgeService | downloadFileAsync exception:", err);
       }
       return null;
     }

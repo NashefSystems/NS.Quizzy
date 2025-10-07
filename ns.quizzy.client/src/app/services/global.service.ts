@@ -2,7 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { DevicesService } from './backend/devices.service';
 import { WebviewBridgeService } from './webview-bridge.service';
 import { IDevicePayloadDto } from '../models/backend/device.dto';
-import { IGetMobileSerialNumberResponse, IGetPlatformInfoResponse } from '../models/webview-bridge.models';
+import { IDownloadFilePayload, IGetMobileSerialNumberResponse, IGetPlatformInfoResponse, IOpenURLPayload } from '../models/webview-bridge.models';
+import { DownloadFileUtils } from '../utils/download-file.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,29 @@ export class GlobalService {
     }
     catch (err: any) {
       console.error('updateDeviceInfoAsync | Exception: ', err);
+    }
+  }
+
+  async downloadFileAsync(base64: string, fileName: string, mimeType: string) {
+    let url: string = ''
+    try {
+      const appIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
+      console.info(`downloadFile | appIsAvailable: '${appIsAvailable}', fileName: '${fileName}', mimeType: '${mimeType}'`);
+      if (appIsAvailable) {
+        const payload: IDownloadFilePayload = {
+          base64,
+          fileName,
+          mimeType
+        };
+        const res = await this._webviewBridgeService.downloadFileAsync(payload);
+        console.info(`downloadFile | WebView | res: `, res);
+      } else {
+        const blob = DownloadFileUtils.base64ToBlob(base64, mimeType);
+        DownloadFileUtils.downloadBlobFile(blob, fileName);
+        console.info(`downloadFile | local download`);
+      }
+    } catch (err) {
+      console.error(`downloadFile | Exception: `, err);
     }
   }
 }

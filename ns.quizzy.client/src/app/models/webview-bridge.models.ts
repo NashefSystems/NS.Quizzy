@@ -10,6 +10,7 @@ export enum MESSAGE_ACTIONS {
     GET_PLATFORM_INFO = "getPlatformInfo",
     SHOW_NOTIFICATION = "showNotification",
     DOWNLOAD_FILE = "DownloadFile",
+    OPEN_URL = "OpenURL",
 }
 
 export interface IRequestMessage {
@@ -108,10 +109,15 @@ export interface IShowNotificationPayload {
 // DOWNLOAD_FILE
 export interface IDownloadFilePayload {
     fileName: string;
+    mimeType: string;
     base64: string;
 }
 
 export interface IDownloadFileResponse {
     downloadPath: string | null;
-    isGranted: boolean | null;
+}
+
+// OPEN_URL
+export interface IOpenURLPayload {
+    URL: string;
 }
