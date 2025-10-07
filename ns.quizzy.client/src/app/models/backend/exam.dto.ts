@@ -11,6 +11,7 @@ export interface IExamPayloadDto {
     improvementGradeIds?: string[];
     classIds?: string[];
     improvementClassIds?: string[];
+    isVisible: boolean;
 }
 
 export interface IExamDto extends IExamPayloadDto, IBaseEntityDto { }

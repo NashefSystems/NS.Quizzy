@@ -84,14 +84,10 @@
         }
     },
     "TABLE": {
-        "SEARCH": "Search",
-        "SEARCH_PLACEHOLDER": "Search...",
         "EMPTY_STATUS": "🤔</br>No matching results found</br>Please try again!",
         "ROW_COUNT": "Total rows: {{value}}",
         "ACTIONS": {
-            "ADD": "Add new item",
-            "EDIT": "Edit",
-            "DELETE": "Delete"
+            "ADD": "Add new item"
         }
     },
     "SUBJECT_AREA": {
@@ -217,5 +213,11 @@
         "TEACHERSANDSTUDENTS": "Teachers and students",
         "ADMINS": "Administrators",
         "ALLUSERS": "All users"
-    }
+    },
+    "SEARCH": "Search",
+    "SEARCH_PLACEHOLDER": "Search...",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "IS_VISIBLE": "Is visible",
+    "SET_AS_VISIBLE": "Set as visible"
 }

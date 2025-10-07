@@ -6,10 +6,11 @@
         <div class="H200 primary-dark center-text page-title" *ngIf="title">{{title|translate}}</div>
         <div class="left-text menu">
             <button mat-icon-button [routerLink]="'/my-notifications'">
-                <mat-icon [matBadge]="notificationsBadge" matBadgePosition="before">notifications</mat-icon>
+                <mat-icon [matBadge]="notificationsBadge" aria-hidden="false"
+                    matBadgePosition="before">notifications</mat-icon>
             </button>
             <button mat-icon-button (click)="onMenuClick()">
-                <mat-icon>menu</mat-icon>
+                <mat-icon aria-hidden="false">menu</mat-icon>
             </button>
         </div>
     </div>

@@ -8,7 +8,8 @@
         public DateTimeOffset StartTime { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan DurationWithExtra { get; set; }
-      
+        public bool IsVisible { get; set; }
+
 
         public virtual Questionnaire Questionnaire { get; set; }
         public virtual ExamType ExamType { get; set; }

@@ -1,6 +1,5 @@
 <app-back-button></app-back-button>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'EXAM_AREA.START_TIME' | translate }}</mat-label>
         <input matInput formControlName="startTime" autocomplete="off" type="datetime-local" />
@@ -121,6 +120,8 @@
             </ng-container>
         </mat-error>
     </mat-form-field>
+
+    <mat-checkbox formControlName="isVisible">{{ 'IS_VISIBLE' | translate }}</mat-checkbox>
 
     <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
         {{ (id ? 'UPDATE' : 'ADD') | translate }}

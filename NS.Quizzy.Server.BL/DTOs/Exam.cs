@@ -10,6 +10,7 @@ namespace NS.Quizzy.Server.BL.DTOs
         public Guid MoedId { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan DurationWithExtra { get; set; }
+        public bool IsVisible { get; set; }
         public List<Guid>? GradeIds { get; set; }
         public List<Guid>? ImprovementGradeIds { get; set; }
         public List<Guid>? ClassIds { get; set; }

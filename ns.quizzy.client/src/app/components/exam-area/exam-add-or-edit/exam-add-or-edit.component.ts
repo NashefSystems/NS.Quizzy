@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NotificationsService } from '../../../services/notifications.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ClassesService } from '../../../services/backend/classes.service';
 import { IClassDto } from '../../../models/backend/class.dto';
 import { GradesService } from '../../../services/backend/grades.service';
@@ -16,6 +16,7 @@ import { ExamsService } from '../../../services/backend/exams.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
 import { MoedsService } from '../../../services/backend/moeds.service';
 import { IMoedDto } from '../../../models/backend/moed.dto';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-exam-add-or-edit',
@@ -35,8 +36,9 @@ export class ExamAddOrEditComponent implements OnInit {
   private readonly _examsService = inject(ExamsService);
 
   private readonly _notificationsService = inject(NotificationsService);
-  private readonly _router = inject(Router);
+  private readonly _navigationService = inject(NavigationService);
   private readonly _activatedRoute = inject(ActivatedRoute);
+
   id: string | null = null;
 
   classes: IClassDto[] = [];
@@ -51,6 +53,7 @@ export class ExamAddOrEditComponent implements OnInit {
   moeds: IMoedDto[] = [];
 
   form: FormGroup = this._fb.group({
+    isVisible: [false],
     startTime: ['', [Validators.required]],
     questionnaireId: ['', [Validators.required]],
     examTypeId: ['', [Validators.required]],
@@ -87,12 +90,12 @@ export class ExamAddOrEditComponent implements OnInit {
       if (id) {
         this._examsService.getById(id).subscribe({
           next: data => {
-            const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, moedId } = data;
+            const { isVisible, startTime, questionnaireId, examTypeId, duration, durationWithExtra, moedId } = data;
             const classIds = [...data.classIds || [], ...data.improvementClassIds || []];
             const gradeIds = [...data.gradeIds || [], ...data.improvementGradeIds || []];
             const newValue = {
               ...this.form.value,
-              startTime: DateTimeUtils.getDateTimeFromIso(startTime), questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId
+              isVisible, startTime: DateTimeUtils.getDateTimeFromIso(startTime), questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId
             };
             data.improvementGradeIds?.forEach(x => this.improvementGrades[x] = true);
             data.improvementClassIds?.forEach(x => this.improvementClasses[x] = true);
@@ -167,12 +170,13 @@ export class ExamAddOrEditComponent implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    const { startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = this.form.value;
+    const { isVisible, startTime, questionnaireId, examTypeId, duration, durationWithExtra, classIds, gradeIds, moedId } = this.form.value;
 
     const selectedGradeIds = (gradeIds as string[]) || [];
     const selectedClassIds = (classIds as string[]) || [];
 
     const payload: IExamPayloadDto = {
+      isVisible: isVisible,
       startTime: DateTimeUtils.getDateTimeAsIso(startTime),
       questionnaireId: questionnaireId,
       examTypeId: examTypeId,
@@ -209,6 +213,6 @@ export class ExamAddOrEditComponent implements OnInit {
   }
 
   navigateToList() {
-    this._router.navigate(['/exams']);
+    this._navigationService.navigateBack('/exams');
   }
 }

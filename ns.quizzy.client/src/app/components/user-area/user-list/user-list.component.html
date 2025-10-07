@@ -14,19 +14,19 @@
         (edit)="onEdit($event)" (delete)="onDelete($event)">
         <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden />
         <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
+            <mat-icon aria-hidden="false">more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="onExport()">
-                <mat-icon>download</mat-icon>
+                <mat-icon aria-hidden="false">download</mat-icon>
                 <span>{{ 'EXPORT' | translate }}</span>
             </button>
             <button mat-menu-item (click)="onImport()">
-                <mat-icon>upload</mat-icon>
+                <mat-icon aria-hidden="false">upload</mat-icon>
                 <span>{{ 'IMPORT' | translate }}</span>
             </button>
             <button mat-menu-item (click)="onExportUsersLoginStatus()">
-                <mat-icon>timeline</mat-icon>
+                <mat-icon aria-hidden="false">timeline</mat-icon>
                 <span>{{ 'USER_AREA.EXPORT_USERS_LOGIN_STATUS' | translate }}</span>
             </button>
         </mat-menu>

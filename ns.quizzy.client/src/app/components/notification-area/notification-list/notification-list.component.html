@@ -8,7 +8,7 @@
             <mat-expansion-panel-header>
                 <div class="notification-header">
                     <div class="icon">
-                        <mat-icon>notifications</mat-icon>
+                        <mat-icon aria-hidden="false">notifications</mat-icon>
                     </div>
                     <div class="info">
                         <div class="title">{{ notification.title }}</div>
@@ -36,8 +36,8 @@
             </div>
             <div class="item-actions">
                 <button class="delete-item" mat-button (click)="onDelete(notification)">
-                    <mat-icon>delete</mat-icon>
-                    {{'TABLE.ACTIONS.DELETE' | translate}}</button>
+                    <mat-icon aria-hidden="false">delete</mat-icon>
+                    {{'DELETE' | translate}}</button>
             </div>
         </mat-expansion-panel>
     </mat-accordion>

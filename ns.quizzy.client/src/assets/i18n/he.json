@@ -84,14 +84,10 @@
         }
     },
     "TABLE": {
-        "SEARCH": "חפש",
-        "SEARCH_PLACEHOLDER": "חיפוש...",
         "EMPTY_STATUS": "🤔</br>לא מצאנו תוצאות תואמות</br>אנא נסה שוב!",
         "ROW_COUNT": "סה\"כ שורות: {{value}}",
         "ACTIONS": {
-            "ADD": "הוספת פריט חדש",
-            "EDIT": "עריכה",
-            "DELETE": "מחיקה"
+            "ADD": "הוספת פריט חדש"
         }
     },
     "SUBJECT_AREA": {
@@ -217,5 +213,11 @@
         "TEACHERSANDSTUDENTS": "מורים ותלמידים",
         "ADMINS": "מנהלי מערכת",
         "ALLUSERS": "כל המשתמשים"
-    }
+    },
+    "SEARCH": "חפש",
+    "SEARCH_PLACEHOLDER": "חיפוש...",
+    "EDIT": "עריכה",
+    "DELETE": "מחיקה",
+    "IS_VISIBLE": "גלוי",
+    "SET_AS_VISIBLE": "הגדר כגלוי"
 }

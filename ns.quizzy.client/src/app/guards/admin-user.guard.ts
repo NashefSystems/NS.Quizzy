@@ -2,9 +2,9 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AccountService } from '../services/backend/account.service';
 import { firstValueFrom } from 'rxjs';
-import { UserRoles } from '../models/backend/user-details.dto';
 import { NotificationsService } from '../services/notifications.service';
 import { AppSettingsService } from '../services/app-settings.service';
+import { CheckPermissionsUtils } from '../utils/check-permissions.utils';
 
 export const adminUserGuard: CanActivateFn = async (route, state) => {
   const appSettingsService = inject(AppSettingsService);
@@ -17,8 +17,7 @@ export const adminUserGuard: CanActivateFn = async (route, state) => {
   try {
     const userDetailsDto = await firstValueFrom(accountService.getDetails());
     isAuthenticated = !!(userDetailsDto?.id);
-    const allowRoles = [UserRoles.ADMIN, UserRoles.DEVELOPER, UserRoles.SUPERADMIN];
-    res = !!(userDetailsDto?.id) && allowRoles.includes(userDetailsDto.role);
+    res = CheckPermissionsUtils.isAdminUser(userDetailsDto);
   } catch (error) {
     console.error('💂🏿 adminUserGuard error:', error);
   }

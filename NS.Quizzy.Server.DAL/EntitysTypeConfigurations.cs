@@ -145,6 +145,8 @@ namespace NS.Quizzy.Server.DAL
 
                 entity.Property(x => x.MoedId).IsRequired(true);
 
+                entity.Property(x => x.IsVisible).HasDefaultValue(false);
+
                 entity
                     .HasOne(c => c.Questionnaire)
                     .WithMany(c => c.Exams)

@@ -21,4 +21,9 @@ export class ExamsService extends EntityBaseService<IExamPayloadDto, IExamDto> {
     let url = `${this.getBaseUrl()}/filter`;
     return this.httpClient.post<IExamDto[]>(url, request);
   }
+
+  setAsVisible(examId: string) {
+    let url = `${this.getBaseUrl()}/SetAsVisible/${examId}`;
+    return this.httpClient.patch<IExamDto>(url, null);
+  }
 }

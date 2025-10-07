@@ -3,30 +3,35 @@
     <div class="action-buttons">
         <div>
             <button mat-stroked-button (click)="accordion().openAll()">
-                <mat-icon>keyboard_arrow_up</mat-icon>
+                <mat-icon aria-hidden="false">keyboard_arrow_up</mat-icon>
                 <span>{{ 'EXPAND_ALL' | translate }}</span>
             </button>
             <button mat-stroked-button (click)="accordion().closeAll()">
-                <mat-icon>keyboard_arrow_down</mat-icon>
+                <mat-icon aria-hidden="false">keyboard_arrow_down</mat-icon>
                 <span>{{ 'COLLAPSE_ALL' | translate }}</span>
             </button>
         </div>
         <button mat-icon-button [matMenuTriggerFor]="menu">
-            <mat-icon>more_vert</mat-icon>
+            <mat-icon aria-hidden="false">more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
             <!-- <button mat-menu-item (click)="onPrint()">
-                <mat-icon>print</mat-icon>
+                <mat-icon aria-hidden="false">print</mat-icon>
                 <span>{{ 'PRINT' | translate }}</span>
             </button> -->
             <button mat-menu-item (click)="onExport()">
-                <mat-icon>download</mat-icon>
+                <mat-icon aria-hidden="false">download</mat-icon>
                 <span>{{ 'EXPORT' | translate }}</span>
             </button>
         </mat-menu>
     </div>
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{'SEARCH'|translate}}</mat-label>
+        <input matInput [(ngModel)]="searchValue" (input)="applyFilter()"
+            [placeholder]="'SEARCH_PLACEHOLDER' | translate" />
+    </mat-form-field>
     <mat-accordion multi id="exam-list">
-        <mat-expansion-panel *ngFor="let exam of exams" expanded="true">
+        <mat-expansion-panel *ngFor="let exam of filteredExams" [class.isHide]="!exam.isVisible" expanded="true">
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     <div class="exam-info-questionnaire">
@@ -65,6 +70,16 @@
                 <app-exam-info-value *ngIf="exam.improvementClassIds && exam.improvementClassIds.length > 0"
                     [icon]="'school'" [iconColor]="iconColor" [name]="'EXAM_AREA.CLASSES_GRADE_IMPROVEMENT' | translate"
                     [value]="getClasses(exam.improvementClassIds)"></app-exam-info-value>
+            </div>
+            <div class="exam-item-actions" *ngIf="isEditor">
+                <button mat-button matFab extended (click)="onSetAsVisible(exam.id)" *ngIf="!exam.isVisible">
+                    {{ 'SET_AS_VISIBLE' | translate }}
+                    <mat-icon aria-hidden="false">visibility</mat-icon>
+                </button>
+                <button mat-button matFab extended [routerLink]="'/exams/edit/' + exam.id">
+                    {{ 'EDIT' | translate }}
+                    <mat-icon aria-hidden="false">edit</mat-icon>
+                </button>
             </div>
         </mat-expansion-panel>
     </mat-accordion>

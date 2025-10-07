@@ -43,3 +43,17 @@ mat-panel-title {
 .class-list {
     margin: 0 1.5rem;
 }
+
+.exam-item-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.isHide {
+    background-color: rgba(211, 211, 211, 0.58);
+
+    .exam-info-questionnaire {
+        text-decoration: line-through;
+        color: darkred !important;
+    }
+}

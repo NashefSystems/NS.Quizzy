@@ -6,12 +6,16 @@ import { IQuestionnaireDto } from '../../../models/backend/questionnaire.dto';
 import { IExamTypeDto } from '../../../models/backend/exam-type.dto';
 import { ISubjectDto } from '../../../models/backend/subject.dto';
 import { MatAccordion } from '@angular/material/expansion';
-import { AppTranslateService } from '../../../services/app-translate.service';
 import { IMoedDto } from '../../../models/backend/moed.dto';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 import { IExportDataItem, ExportService } from './export.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
+import { TimePipe } from '../../../pipes/time.pipe';
+import { DatePipe } from '@angular/common';
+import { AccountService } from '../../../services/backend/account.service';
+import { CheckPermissionsUtils } from '../../../utils/check-permissions.utils';
+import { ExamsService } from '../../../services/backend/exams.service';
 
 @Component({
   selector: 'app-exam-schedule-list',
@@ -22,13 +26,29 @@ import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 export class ExamScheduleListComponent implements OnInit {
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
   private readonly _exportService = inject(ExportService);
+  private readonly _timePipe = inject(TimePipe);
+  private readonly _datePipe = inject(DatePipe);
+  private readonly _accountService = inject(AccountService);
+  private readonly _examsService = inject(ExamsService);
 
+  isEditor: boolean = false;
   isLoading: boolean = true;
   iconColor: string = '#0053E7';
   appVersion: string = "";
   nativeAppIsAvailable: boolean | null = null;
 
-  @Input() exams: IExamDto[] = [];
+  @Input()
+  set exams(value: IExamDto[]) {
+    this._exams = value;
+    this.onExamsChange(value);
+  }
+
+  get exams(): IExamDto[] {
+    return this._exams;
+  }
+  searchValue: string = '';
+  _exams: IExamDto[] = [];
+  filteredExams: IExamDto[] = [];
   @Input() grades: IGradeDto[] = [];
   @Input() classes: IClassDto[] = [];
   @Input() questionnaires: IQuestionnaireDto[] = [];
@@ -46,13 +66,16 @@ export class ExamScheduleListComponent implements OnInit {
   subjectsDic: { [key: string]: ISubjectDto } = {};
   accordion = viewChild.required(MatAccordion);
 
-  private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
   ExportService: any;
 
   ngOnInit(): void {
     this.nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
-    this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion })
+    this._clientAppSettingsService.get().subscribe({ next: result => this.appVersion = result?.AppVersion });
+    this.filteredExams = [...this.exams];
+    this._accountService.getDetails().subscribe({
+      next: data => this.isEditor = CheckPermissionsUtils.isAdminUser(data)
+    });
   }
 
   ngOnChanges(): void {
@@ -68,6 +91,11 @@ export class ExamScheduleListComponent implements OnInit {
     setTimeout(() => {
       this.isLoading = false;
     }, 100);
+  }
+
+  private onExamsChange(exams: IExamDto[]): void {
+    this._exams = [...exams];
+    this.applyFilter();
   }
 
   // onPrint() {
@@ -155,6 +183,30 @@ export class ExamScheduleListComponent implements OnInit {
   //   }, 500);
   // }
 
+  isFilteredExam(exam: IExamDto, filterValue: string): boolean {
+    filterValue = filterValue.trim();
+    let strValue = `
+        ${this.questionnairesDic[exam.questionnaireId].code}
+        ${this.questionnairesDic[exam.questionnaireId].name}
+        ${this._datePipe.transform(exam.startTime, this.isTimeValid(exam.startTime) ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy')}
+        ${this.getDay(exam.startTime)}
+        ${this.examTypesDic[exam.examTypeId].name}
+        ${this.moedsDic[exam.moedId].name}
+        ${this.subjectsDic[this.questionnairesDic[exam.questionnaireId].subjectId].name}
+        ${this._timePipe.transform(exam.duration, 'HH:mm')}
+        ${this._timePipe.transform(exam.durationWithExtra, 'HH:mm')}
+        ${(exam.gradeIds && exam.gradeIds.length > 0) ? this.getGrades(exam.gradeIds) : ''}
+        ${(exam.improvementGradeIds && exam.improvementGradeIds.length) ? this.getGrades(exam.improvementGradeIds) : ''}
+        ${(exam.classIds && exam.classIds.length > 0) ? this.getClasses(exam.classIds) : ''}
+        ${(exam.improvementClassIds && exam.improvementClassIds.length > 0) ? this.getClasses(exam.improvementClassIds) : ''}
+      `;
+    return strValue.indexOf(filterValue) === -1;
+  }
+
+  applyFilter(): void {
+    this.filteredExams = [... this._exams.filter(e => !this.isFilteredExam(e, this.searchValue)).map(x => x)];
+  }
+
   onFilterClick() {
     this.onFilter.emit();
   }
@@ -195,10 +247,22 @@ export class ExamScheduleListComponent implements OnInit {
     return days[date.getDay()];
   }
 
+  onSetAsVisible(examId: string) {
+    this._examsService.setAsVisible(examId).subscribe({
+      next: examDto => {
+        const index = this._exams.findIndex(x => x.id === examDto.id);
+        if (index !== -1) {
+          this._exams[index].isVisible = examDto.isVisible;
+          this.applyFilter();
+        }
+      }
+    })
+  }
+
   onExport() {
     const days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
-    const sheetData: IExportDataItem[] = this.exams.map(x => {
+    const sheetData: IExportDataItem[] = this.filteredExams.map(x => {
       const examDate = new Date(x.startTime);
       const questionnaire = this.questionnairesDic[x.questionnaireId];
       return {

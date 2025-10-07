@@ -127,6 +127,7 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 Duration = model.Duration,
                 DurationWithExtra = model.DurationWithExtra,
+                IsVisible = model.IsVisible,
                 ExamTypeId = model.ExamTypeId,
                 MoedId = model.MoedId,
                 QuestionnaireId = model.QuestionnaireId,
@@ -195,6 +196,7 @@ namespace NS.Quizzy.Server.BL.Services
             await ValidationMethod(model);
 
             item.Duration = model.Duration;
+            item.IsVisible = model.IsVisible;
             item.DurationWithExtra = model.DurationWithExtra;
             item.ExamTypeId = model.ExamTypeId;
             item.MoedId = model.MoedId;
@@ -297,6 +299,18 @@ namespace NS.Quizzy.Server.BL.Services
             res.GradeIds = model.GradeIds;
             res.ImprovementGradeIds = model.ImprovementGradeIds;
             return res;
+        }
+
+        public async Task<ExamDto?> SetAsVisibleAsync(Guid id)
+        {
+            var item = await _appDbContext.Exams.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Id == id);
+            if (item == null)
+            {
+                return null;
+            }
+            item.IsVisible = true;
+            await _appDbContext.SaveChangesAsync();
+            return await GetAsync(id);
         }
 
         private async Task ValidationMethod(ExamPayloadDto model)

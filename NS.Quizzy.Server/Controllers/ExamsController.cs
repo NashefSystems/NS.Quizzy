@@ -93,5 +93,19 @@ namespace NS.Quizzy.Server.Controllers
             }
             return NoContent();
         }
+
+        [HttpPatch("SetAsVisible/{id}")]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
+        [SwaggerResponse(StatusCodes.Status200OK, null, typeof(ExamDto))]
+        public async Task<ActionResult<ExamDto>> SetAsVisibleAsync(Guid id)
+        {
+            var res = await _service.SetAsVisibleAsync(id);
+            if (res == null)
+            {
+                return NotFound("Item not found");
+            }
+
+            return Ok(res);
+        }
     }
 }

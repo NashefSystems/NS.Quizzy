@@ -79,6 +79,7 @@ import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/
 import { MyNotificationsComponent } from './components/notification-area/my-notifications/my-notifications.component';
 import { NotificationListComponent } from './components/notification-area/notification-list/notification-list.component';
 import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
+import { DatePipe } from '@angular/common';
 
 // Factory function for HttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -148,7 +149,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   providers: [
     provideHttpClient(withInterceptors([LoadingInterceptor])),
     provideAnimationsAsync(),
-    TimePipe
+    TimePipe,
+    DatePipe,
   ],
   bootstrap: [
     RootComponent
