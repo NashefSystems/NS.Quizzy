@@ -50,7 +50,7 @@ namespace NS.Quizzy.Server.DAL
                 TwoFactorSecretKey = "USUYJXW3QXUHA7R53YP4QBPPXHH54KHS",
                 NotificationToken = "eiP6Nt2PTK-oE-gd2hD_0a:APA91bGCpOImJoDUpEbrRBqPWqu50Z-bx90hdVLEhscx1og2FPtPt5Xn1UMT0siClSbXpAMdeie6d41FxnJtUpEPEzaU7p2tlMETwyng_YT4kEQ5sBd-0Zs",
                 IdNumber = "000000018",
-                Role = DALEnums.Roles.Student,
+                Role = DALEnums.Roles.Teacher,
             };
 
             internal static List<User> GetData()
