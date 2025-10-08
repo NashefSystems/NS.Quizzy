@@ -19,7 +19,7 @@ dotnet ef migrations remove -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\ -y
 
 #### To generate migration script:
 ```
-dotnet ef migrations script "20250418111313_Remove IsSeen property" "20250419085214_changes in Notifications table" -o ScriptName_MigrationScript.sql -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
+dotnet ef migrations script "<<PreviousMigrationName>>" "<<NewMigrationName>>" -o ScriptName_MigrationScript.sql -s .\NS.Quizzy.Server\ -p .\NS.Quizzy.Server.DAL\
 ```
 
 #### To get migrations list:
