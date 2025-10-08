@@ -219,5 +219,6 @@
     "EDIT": "Edit",
     "DELETE": "Delete",
     "IS_VISIBLE": "Is visible",
-    "SET_AS_VISIBLE": "Set as visible"
+    "SET_AS_VISIBLE": "Set as visible",
+    "NO_OPTIONS_FOUND": "No options found"
 }

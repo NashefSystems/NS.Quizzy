@@ -3,10 +3,11 @@ import { AccountService } from '../../../services/backend/account.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { IMenuItemInfo } from './menu-item-info';
 import { Router } from '@angular/router';
-import { UserDetailsDto, UserRoles } from '../../../models/backend/user-details.dto';
+import { UserDetailsDto } from '../../../models/backend/user-details.dto';
 import { UserRolesService } from '../../../services/user-roles.service';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
+import { UserRoles } from '../../../enums/user-roles.enum';
 
 @Component({
   selector: 'app-main-menu',

@@ -6,7 +6,6 @@ using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.BL.DTOs;
-using System.Linq;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -55,15 +54,26 @@ namespace NS.Quizzy.Server.BL.Services
                 var classIds = request.ClassIds ?? [];
                 var gradeIds = request.GradeIds ?? [];
 
-                var classGradeIds = await _appDbContext.Classes
+                var classGradeIds = request.ClassIds?.Count > 0 ? await _appDbContext.Classes
                     .Where(x => request.ClassIds.Contains(x.Id))
                     .Select(x => x.GradeId)
-                    .ToListAsync();
+                    .ToListAsync() : [];
+
+                var gradeClassIds = request.GradeIds?.Count > 0 ? await _appDbContext.Classes
+                    .Where(x => request.GradeIds.Contains(x.GradeId))
+                    .Select(x => x.Id)
+                    .ToListAsync() : [];
 
                 if (classGradeIds.Count != 0)
                 {
                     gradeIds.AddRange(classGradeIds);
                     gradeIds = [.. gradeIds.Distinct()];
+                }
+
+                if (gradeClassIds.Count != 0)
+                {
+                    classIds.AddRange(gradeClassIds);
+                    classIds = [.. classIds.Distinct()];
                 }
 
                 query = query.Where(x =>

@@ -1,4 +1,5 @@
-import { UserDetailsDto, UserRoles } from "../models/backend/user-details.dto";
+import { UserRoles } from "../enums/user-roles.enum";
+import { UserDetailsDto } from "../models/backend/user-details.dto";
 
 export class CheckPermissionsUtils {
 

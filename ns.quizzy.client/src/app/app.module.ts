@@ -80,6 +80,7 @@ import { MyNotificationsComponent } from './components/notification-area/my-noti
 import { NotificationListComponent } from './components/notification-area/notification-list/notification-list.component';
 import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
 import { DatePipe } from '@angular/common';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 // Factory function for HttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -145,6 +146,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     QRCodeComponent,
     SkeletonLoaderComponent,
+    NgxMatSelectSearchModule,
   ],
   providers: [
     provideHttpClient(withInterceptors([LoadingInterceptor])),

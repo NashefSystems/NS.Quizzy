@@ -52,9 +52,13 @@
     <mat-form-field *ngIf="isSpecificUsers()" appearance="outline" class="full-width">
         <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
         <mat-select formControlName="targetIds" multiple>
-            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of users"
+            <mat-option>
+                <ngx-mat-select-search [formControl]="targetIdsSearchCtrl"
+                    [noEntriesFoundLabel]="'NO_OPTIONS_FOUND' | translate"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of filteredUsers"
                 [value]="item.id">
-                {{item.fullName}}
+                {{item.text}}
             </mat-option>
         </mat-select>
     </mat-form-field>

@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AccountService } from '../../../services/backend/account.service';
-import { UserDetailsDto, UserRoles } from '../../../models/backend/user-details.dto';
+import { UserDetailsDto } from '../../../models/backend/user-details.dto';
 import { ClassesService } from '../../../services/backend/classes.service';
 import { IClassDto } from '../../../models/backend/class.dto';
+import { UserRoles } from '../../../enums/user-roles.enum';
 
 @Component({
   selector: 'app-user-details',

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using NS.Quizzy.Server.DAL.Entities;
 using static NS.Quizzy.Server.DAL.DALEnums;
 
 namespace NS.Quizzy.Server.BL.DTOs

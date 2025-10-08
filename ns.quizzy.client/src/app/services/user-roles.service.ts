@@ -1,8 +1,6 @@
-import { inject, Injectable } from '@angular/core';
-import { SecurityUtils } from '../utils/security.utils';
-import { LocalStorageKeys } from '../enums/local-storage-keys.enum';
-import { UserDetailsDto, UserRoles } from '../models/backend/user-details.dto';
-import { AccountService } from './backend/account.service';
+import { Injectable } from '@angular/core';
+import { UserDetailsDto } from '../models/backend/user-details.dto';
+import { UserRoles } from '../enums/user-roles.enum';
 
 
 @Injectable({

@@ -1,10 +1,4 @@
-export enum UserRoles {
-    STUDENT = "Student",
-    TEACHER = "Teacher",
-    ADMIN = "Admin",
-    DEVELOPER = "Developer",
-    SUPERADMIN = "SuperAdmin",
-}
+import { UserRoles } from "../../enums/user-roles.enum";
 
 export class UserDetailsDto {
     id: string;

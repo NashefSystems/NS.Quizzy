@@ -219,5 +219,6 @@
     "EDIT": "עריכה",
     "DELETE": "מחיקה",
     "IS_VISIBLE": "גלוי",
-    "SET_AS_VISIBLE": "הגדר כגלוי"
+    "SET_AS_VISIBLE": "הגדר כגלוי",
+    "NO_OPTIONS_FOUND": "לא נמצאו תוצאות"
 }

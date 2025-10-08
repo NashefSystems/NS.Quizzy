@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 import { IClassDto } from '../../../models/backend/class.dto';
 import { ClassesService } from '../../../services/backend/classes.service';
-import { UserRoles } from '../../../models/backend/user-details.dto';
+import { UserRoles } from '../../../enums/user-roles.enum';
 
 @Component({
   selector: 'app-user-add-or-edit',
