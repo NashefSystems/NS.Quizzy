@@ -16,6 +16,8 @@ import { DatePipe } from '@angular/common';
 import { AccountService } from '../../../services/backend/account.service';
 import { CheckPermissionsUtils } from '../../../utils/check-permissions.utils';
 import { ExamsService } from '../../../services/backend/exams.service';
+import { GlobalService } from '../../../services/global.service';
+import { FeatureFlags } from '../../../enums/feature-flags.enum';
 
 @Component({
   selector: 'app-exam-schedule-list',
@@ -30,25 +32,17 @@ export class ExamScheduleListComponent implements OnInit {
   private readonly _datePipe = inject(DatePipe);
   private readonly _accountService = inject(AccountService);
   private readonly _examsService = inject(ExamsService);
-
-  isEditor: boolean = false;
-  isLoading: boolean = true;
-  iconColor: string = '#0053E7';
-  appVersion: string = "";
-  nativeAppIsAvailable: boolean | null = null;
+  private readonly _globalService = inject(GlobalService);
 
   @Input()
   set exams(value: IExamDto[]) {
     this._exams = value;
     this.onExamsChange(value);
   }
-
   get exams(): IExamDto[] {
     return this._exams;
   }
-  searchValue: string = '';
-  _exams: IExamDto[] = [];
-  filteredExams: IExamDto[] = [];
+
   @Input() grades: IGradeDto[] = [];
   @Input() classes: IClassDto[] = [];
   @Input() questionnaires: IQuestionnaireDto[] = [];
@@ -58,6 +52,15 @@ export class ExamScheduleListComponent implements OnInit {
   @Input() filterIsActive: boolean;
   @Input() onFilter = new EventEmitter<void>();
 
+  downloadFileIsAvailable: boolean = false;
+  isEditor: boolean = false;
+  isLoading: boolean = true;
+  iconColor: string = '#0053E7';
+  appVersion: string = "";
+  nativeAppIsAvailable: boolean | null = null;
+  searchValue: string = '';
+  _exams: IExamDto[] = [];
+  filteredExams: IExamDto[] = [];
   gradesDic: { [key: string]: IGradeDto } = {};
   classesDic: { [key: string]: IClassDto } = {};
   questionnairesDic: { [key: string]: IQuestionnaireDto } = {};
@@ -76,6 +79,10 @@ export class ExamScheduleListComponent implements OnInit {
     this._accountService.getDetails().subscribe({
       next: data => this.isEditor = CheckPermissionsUtils.isAdminUser(data)
     });
+    
+    this._globalService
+      .featureIsAvailableAsync(FeatureFlags.EXAM_SCHEDULE_LIST__DOWNLOAD_FILE)
+      .then(x => this.downloadFileIsAvailable = x);
   }
 
   ngOnChanges(): void {

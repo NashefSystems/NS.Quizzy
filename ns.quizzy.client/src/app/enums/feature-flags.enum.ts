@@ -1,0 +1,4 @@
+export enum FeatureFlags {
+    EXAM_SCHEDULE_LIST__DOWNLOAD_FILE,
+    USER_LIST__DOWNLOAD_FILE
+}

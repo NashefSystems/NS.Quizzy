@@ -4,6 +4,7 @@ import { WebviewBridgeService } from './webview-bridge.service';
 import { IDevicePayloadDto } from '../models/backend/device.dto';
 import { IDownloadFilePayload, IGetMobileSerialNumberResponse, IGetPlatformInfoResponse, IOpenURLPayload } from '../models/webview-bridge.models';
 import { DownloadFileUtils } from '../utils/download-file.utils';
+import { FeatureFlags } from '../enums/feature-flags.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -90,6 +91,24 @@ export class GlobalService {
       }
     } catch (err) {
       console.error(`downloadFile | Exception: `, err);
+    }
+  }
+
+  async featureIsAvailableAsync(featureFlag: FeatureFlags) {
+    switch (featureFlag) {
+      case FeatureFlags.EXAM_SCHEDULE_LIST__DOWNLOAD_FILE:
+      case FeatureFlags.USER_LIST__DOWNLOAD_FILE:
+        {
+          const nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
+          if (!nativeAppIsAvailable) {
+            return true;
+          }
+          const platformInfo = await this._webviewBridgeService.getPlatformInfoAsync();
+          const buildNumber = !platformInfo ? 0 : +platformInfo.appBuildNumber;
+          return buildNumber >= 1000000040; // v1.0.40
+        }
+      default:
+        return false;
     }
   }
 }

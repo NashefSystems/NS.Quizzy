@@ -17,7 +17,7 @@
             <mat-icon aria-hidden="false">more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="onExport()">
+            <button *ngIf="downloadFileIsAvailable" mat-menu-item (click)="onExport()">
                 <mat-icon aria-hidden="false">download</mat-icon>
                 <span>{{ 'EXPORT' | translate }}</span>
             </button>
@@ -25,7 +25,7 @@
                 <mat-icon aria-hidden="false">upload</mat-icon>
                 <span>{{ 'IMPORT' | translate }}</span>
             </button>
-            <button mat-menu-item (click)="onExportUsersLoginStatus()">
+            <button *ngIf="downloadFileIsAvailable" mat-menu-item (click)="onExportUsersLoginStatus()">
                 <mat-icon aria-hidden="false">timeline</mat-icon>
                 <span>{{ 'USER_AREA.EXPORT_USERS_LOGIN_STATUS' | translate }}</span>
             </button>

@@ -11,6 +11,8 @@ import { IClassDto } from '../../../models/backend/class.dto';
 import { AppTranslateService } from '../../../services/app-translate.service';
 import { NotificationsService } from '../../../services/notifications.service';
 import { ExportService } from './export.service';
+import { GlobalService } from '../../../services/global.service';
+import { FeatureFlags } from '../../../enums/feature-flags.enum';
 
 @Component({
   selector: 'app-user-list',
@@ -27,10 +29,12 @@ export class UserListComponent implements OnInit {
   private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _exportService = inject(ExportService);
+  private readonly _globalService = inject(GlobalService);
 
   @ViewChild('fileInput') fileInput!: ElementRef;
   selectedFile: File | null = null;
 
+  downloadFileIsAvailable: boolean = false;
   uploadFileProgressPercentage: number | null = null;
   classes: IClassDto[] = [];
   items: IUserDto[] | null = null;
@@ -65,6 +69,9 @@ export class UserListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this._globalService
+      .featureIsAvailableAsync(FeatureFlags.USER_LIST__DOWNLOAD_FILE)
+      .then(x => this.downloadFileIsAvailable = x);
   }
 
   loadData() {
