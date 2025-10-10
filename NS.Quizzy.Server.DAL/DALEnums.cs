@@ -30,7 +30,7 @@
             SuperAdmin,
         }
 
-        public enum NotificationTarget
+        public enum NotificationTargetTypes
         {
             SpecificUsers,
             Classes,
@@ -39,7 +39,8 @@
             Teachers,
             TeachersAndStudents,
             Admins,
-            AllUsers
+            AllUsers,
+            NotificationGroups,
         }
     }
 }

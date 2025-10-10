@@ -192,14 +192,14 @@ namespace NS.Quizzy.Server.BL.Services
                 Title = model.Title,
                 Body = model.Body,
                 Data = model.Data,
-                Target = model.Target,
-                TargetIds = model.TargetIds,
+                Targets = [.. model.Targets.Select(x => new DAL.Models.NotificationTarget() { Type = x.Type, Ids = x.Ids, })],
                 CreatedById = myUserId.Value,
                 UserNotifications = [],
             };
+
             await _appDbContext.Notifications.AddAsync(item);
 
-            List<Guid> userIds = await GetTargetUserIds(item.Target, item.TargetIds);
+            List<Guid> userIds = await GetTargetUserIds(item.Targets);
             logBag.AddOrUpdateParameter("TargetUserIds", userIds);
             if (userIds.Count != 0)
             {
@@ -263,104 +263,123 @@ namespace NS.Quizzy.Server.BL.Services
             return _mapper.Map<NotificationDto>(item);
         }
 
-        private async Task<List<Guid>> GetTargetUserIds(NotificationTarget target, List<Guid>? tIds)
+        private async Task<List<Guid>> GetTargetUserIds(List<DAL.Models.NotificationTarget> targets)
         {
-            List<Guid> targetIds = tIds ?? [];
             var userIds = new List<Guid>();
-            targetIds ??= [];
-            switch (target)
+            targets ??= [];
+            foreach (var targetItem in targets)
             {
-                case NotificationTarget.SpecificUsers:
-                    {
-                        userIds.AddRange(targetIds);
-                        break;
-                    }
-                case NotificationTarget.Classes:
-                    {
-                        var ids = await _appDbContext.Users
-                            .Where(x => x.IsDeleted == false && x.ClassId.HasValue && targetIds.Contains(x.ClassId.Value))
-                            .Select(x => x.Id)
-                            .ToListAsync();
-                        if (ids.Count > 0)
+                List<Guid> typeIds = targetItem.Ids ?? [];
+                switch (targetItem.Type)
+                {
+                    case NotificationTargetTypes.SpecificUsers:
                         {
-                            userIds.AddRange(ids);
+                            userIds.AddRange(typeIds);
+                            break;
                         }
-                        break;
-                    }
-                case NotificationTarget.Grades:
-                    {
-                        var classIds = await _appDbContext.Classes
-                            .Where(x => x.IsDeleted == false && targetIds.Contains(x.GradeId))
-                            .Select(x => x.Id)
-                            .ToListAsync();
-
-                        var ids = await _appDbContext.Users
-                            .Where(x => x.IsDeleted == false && x.ClassId.HasValue && classIds.Contains(x.ClassId.Value))
-                            .Select(x => x.Id)
-                            .ToListAsync();
-
-                        if (ids.Count > 0)
+                    case NotificationTargetTypes.Classes:
                         {
-                            userIds.AddRange(ids);
+                            var ids = await _appDbContext.Users
+                                .Where(x => x.IsDeleted == false && x.ClassId.HasValue && typeIds.Contains(x.ClassId.Value))
+                                .Select(x => x.Id)
+                                .ToListAsync();
+                            if (ids.Count > 0)
+                            {
+                                userIds.AddRange(ids);
+                            }
+                            break;
                         }
-                        break;
-                    }
-                case NotificationTarget.Students:
-                case NotificationTarget.Teachers:
-                case NotificationTarget.TeachersAndStudents:
-                    {
-                        List<Roles> roles = [];
-                        if (target == NotificationTarget.Students || target == NotificationTarget.TeachersAndStudents)
+                    case NotificationTargetTypes.Grades:
                         {
-                            roles.Add(Roles.Student);
-                        }
-                        if (target == NotificationTarget.Teachers || target == NotificationTarget.TeachersAndStudents)
-                        {
-                            roles.Add(Roles.Teacher);
-                        }
-
-                        var ids = await _appDbContext.Users
-                            .Where(x => x.IsDeleted == false && roles.Contains(x.Role))
-                            .Select(x => x.Id)
-                            .ToListAsync();
-
-                        if (ids.Count > 0)
-                        {
-                            userIds.AddRange(ids);
-                        }
-                        break;
-                    }
-                case NotificationTarget.Admins:
-                    {
-                        List<Roles> roles = [Roles.Admin, Roles.Developer, Roles.SuperAdmin];
-
-                        var ids = await _appDbContext.Users
-                            .Where(x => x.IsDeleted == false && roles.Contains(x.Role))
-                            .Select(x => x.Id)
-                            .ToListAsync();
-
-                        if (ids.Count > 0)
-                        {
-                            userIds.AddRange(ids);
-                        }
-                        break;
-                    }
-                case NotificationTarget.AllUsers:
-                    {
-                        var ids = await _appDbContext.Users
-                                .Where(x => x.IsDeleted == false)
+                            var classIds = await _appDbContext.Classes
+                                .Where(x => x.IsDeleted == false && typeIds.Contains(x.GradeId))
                                 .Select(x => x.Id)
                                 .ToListAsync();
 
-                        if (ids.Count > 0)
-                        {
-                            userIds.AddRange(ids);
-                        }
-                        break;
-                    }
-            }
+                            var ids = await _appDbContext.Users
+                                .Where(x => x.IsDeleted == false && x.ClassId.HasValue && classIds.Contains(x.ClassId.Value))
+                                .Select(x => x.Id)
+                                .ToListAsync();
 
-            return userIds;
+                            if (ids.Count > 0)
+                            {
+                                userIds.AddRange(ids);
+                            }
+                            break;
+                        }
+                    case NotificationTargetTypes.Students:
+                    case NotificationTargetTypes.Teachers:
+                    case NotificationTargetTypes.TeachersAndStudents:
+                        {
+                            List<Roles> roles = [];
+                            if (targetItem.Type == NotificationTargetTypes.Students || targetItem.Type == NotificationTargetTypes.TeachersAndStudents)
+                            {
+                                roles.Add(Roles.Student);
+                            }
+
+                            if (targetItem.Type == NotificationTargetTypes.Teachers || targetItem.Type == NotificationTargetTypes.TeachersAndStudents)
+                            {
+                                roles.Add(Roles.Teacher);
+                            }
+
+                            var ids = await _appDbContext.Users
+                                .Where(x => x.IsDeleted == false && roles.Contains(x.Role))
+                                .Select(x => x.Id)
+                                .ToListAsync();
+
+                            if (ids.Count > 0)
+                            {
+                                userIds.AddRange(ids);
+                            }
+                            break;
+                        }
+                    case NotificationTargetTypes.Admins:
+                        {
+                            List<Roles> roles = [Roles.Admin, Roles.Developer, Roles.SuperAdmin];
+
+                            var ids = await _appDbContext.Users
+                                .Where(x => x.IsDeleted == false && roles.Contains(x.Role))
+                                .Select(x => x.Id)
+                                .ToListAsync();
+
+                            if (ids.Count > 0)
+                            {
+                                userIds.AddRange(ids);
+                            }
+                            break;
+                        }
+                    case NotificationTargetTypes.AllUsers:
+                        {
+                            var ids = await _appDbContext.Users
+                                    .Where(x => x.IsDeleted == false)
+                                    .Select(x => x.Id)
+                                    .ToListAsync();
+
+                            if (ids.Count > 0)
+                            {
+                                userIds.AddRange(ids);
+                            }
+                            break;
+                        }
+                    case NotificationTargetTypes.NotificationGroups:
+                        {
+                            var notificationGroup = await _appDbContext.NotificationGroups
+                                .FirstOrDefaultAsync(x => x.IsDeleted == false && typeIds.Contains(x.Id));
+                            var notificationGroupUserIds = notificationGroup?.UserIds ?? [];
+                            var ids = await _appDbContext.Users
+                                .Where(x => x.IsDeleted == false && notificationGroupUserIds.Contains(x.Id))
+                                .Select(x => x.Id)
+                                .ToListAsync();
+                            if (ids.Count > 0)
+                            {
+                                userIds.AddRange(ids);
+                            }
+                            break;
+                        }
+                }
+
+            }
+            return [.. userIds.Distinct()];
         }
 
         public Task<NotificationDto?> UpdateAsync(Guid id, NotificationPayloadDto model)

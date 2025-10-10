@@ -66,6 +66,7 @@ import { ExamAddOrEditComponent } from './components/exam-area/exam-add-or-edit/
 import { ExamScheduleFilterComponent } from './components/exam-schedule-area/exam-schedule-filter/exam-schedule-filter.component';
 import { ExamInfoValueComponent } from './components/exam-schedule-area/exam-schedule-list/exam-info-value/exam-info-value.component';
 import { TimePipe } from './pipes/time.pipe';
+import { CamelToSnakePipe } from './pipes/camel-to-snake.pipe';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { MoedListComponent } from './components/moed-area/moed-list/moed-list.component';
 import { MoedAddOrEditComponent } from './components/moed-area/moed-add-or-edit/moed-add-or-edit.component';
@@ -79,6 +80,8 @@ import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/
 import { MyNotificationsComponent } from './components/notification-area/my-notifications/my-notifications.component';
 import { NotificationListComponent } from './components/notification-area/notification-list/notification-list.component';
 import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
+import { NotificationGroupListComponent } from './components/notification-group-area/notification-group-list/notification-group-list.component';
+import { NotificationGroupAddOrEditComponent } from './components/notification-group-area/notification-group-add-or-edit/notification-group-add-or-edit.component';
 import { DatePipe } from '@angular/common';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
@@ -89,45 +92,48 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    RootComponent,
-    HeaderComponent,
-    PrettyJsonPipe,
-    TimePipe,
-    LoginComponent,
-    MainMenuComponent,
-    LanguageSelectorComponent,
-    NotificationSnackBarComponent,
+    BackButtonComponent,
+    CamelToSnakePipe,
+    ClassAddOrEditComponent,
+    ClassListComponent,
+    ConfirmDialogComponent,
+    ExamAddOrEditComponent,
+    ExamInfoValueComponent,
     ExamListComponent,
+    ExamScheduleCalendarComponent,
+    ExamScheduleFilterComponent,
+    ExamScheduleHomeComponent,
+    ExamScheduleListComponent,
+    ExamTypeAddOrEditComponent,
     ExamTypeListComponent,
+    GradeAddOrEditComponent,
+    GradeListComponent,
+    HeaderComponent,
+    LanguageSelectorComponent,
+    LoginComponent,
+    LoginWithEmailComponent,
+    LoginWithIdNumberComponent,
+    MainMenuComponent,
+    MoedAddOrEditComponent,
     MoedListComponent,
+    MyNotificationsComponent,
+    NotificationAddComponent,
+    NotificationGroupAddOrEditComponent,
+    NotificationGroupListComponent,
+    NotificationListComponent,
+    NotificationSnackBarComponent,
+    PrettyJsonPipe,
+    PrivacyPolicyComponent,
+    QuestionnaireAddOrEditComponent,
+    QuestionnaireListComponent,
+    RootComponent,
+    SubjectAddOrEditComponent,
     SubjectListComponent,
     TableComponent,
-    SubjectAddOrEditComponent,
-    ConfirmDialogComponent,
-    BackButtonComponent,
-    ExamTypeAddOrEditComponent,
-    MoedAddOrEditComponent,
-    ClassListComponent,
-    ClassAddOrEditComponent,
-    GradeListComponent,
-    GradeAddOrEditComponent,
-    QuestionnaireListComponent,
-    QuestionnaireAddOrEditComponent,
-    ExamScheduleListComponent,
-    ExamScheduleHomeComponent,
-    ExamScheduleCalendarComponent,
-    ExamAddOrEditComponent,
-    ExamScheduleFilterComponent,
-    ExamInfoValueComponent,
-    PrivacyPolicyComponent,
-    LoginWithIdNumberComponent,
-    LoginWithEmailComponent,
+    TimePipe,
+    UserAddOrEditComponent,
     UserDetailsComponent,
     UserListComponent,
-    UserAddOrEditComponent,
-    MyNotificationsComponent,
-    NotificationListComponent,
-    NotificationAddComponent,
   ],
   imports: [
     BrowserModule,
@@ -152,6 +158,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     provideHttpClient(withInterceptors([LoadingInterceptor])),
     provideAnimationsAsync(),
     TimePipe,
+    CamelToSnakePipe,
     DatePipe,
   ],
   bootstrap: [

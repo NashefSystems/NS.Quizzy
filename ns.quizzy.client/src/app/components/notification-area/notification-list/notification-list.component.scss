@@ -38,14 +38,19 @@ mat-expansion-panel {
         .info {
             display: flex;
             flex-direction: column;
+            max-width: 85%;
 
             .details {
                 font-size: small;
                 display: flex;
+                flex-wrap: wrap;
+                line-height: 1rem;
+                margin-bottom: 0.5rem;
 
                 // time
                 span:nth-child(1) {
                     direction: ltr;
+                    color: gray;
                 }
 
                 // separator
@@ -66,6 +71,10 @@ mat-expansion-panel {
 
         .delete-item {
             color: red;
+        }
+
+        .clone-item {
+            //color: blue;
         }
     }
 }

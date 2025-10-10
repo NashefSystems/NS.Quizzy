@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute } from '@angular/router';
 import { ClassesService } from '../../../services/backend/classes.service';
 import { IClassDto } from '../../../models/backend/class.dto';
@@ -35,7 +35,7 @@ export class ExamAddOrEditComponent implements OnInit {
   private readonly _moedsService = inject(MoedsService);
   private readonly _examsService = inject(ExamsService);
 
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _navigationService = inject(NavigationService);
   private readonly _activatedRoute = inject(ActivatedRoute);
 

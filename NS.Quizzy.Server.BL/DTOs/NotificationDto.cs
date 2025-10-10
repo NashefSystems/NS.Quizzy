@@ -10,10 +10,15 @@ namespace NS.Quizzy.Server.BL.DTOs
         public Dictionary<string, string>? Data { get; set; }
     }
 
+    public class NotificationTargetDto
+    {
+        public NotificationTargetTypes Type { get; set; }
+        public List<Guid>? Ids { get; set; }
+    }
+
     public class NotificationPayloadDto : NotificationBasePayloadDto
     {
-        public NotificationTarget Target { get; set; }
-        public List<Guid>? TargetIds { get; set; }
+        public List<NotificationTargetDto> Targets { get; set; }
     }
 
     public class NotificationDto : NotificationPayloadDto, IBaseEntityDto

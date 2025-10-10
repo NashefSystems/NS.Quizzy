@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using NS.Quizzy.Server.DAL.Attributes;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.DAL.Extensions;
+using NS.Quizzy.Server.DAL.Models;
 using NS.Security;
 using System.Reflection;
 using System.Text;
@@ -31,6 +32,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new AppSettingEntityConfiguration());
             modelBuilder.ApplyConfiguration(new LoginHistoryItemEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationGroupEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserNotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new DeviceEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserLoginStatusViewConfiguration());
@@ -335,15 +337,50 @@ namespace NS.Quizzy.Server.DAL
                     .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<Dictionary<string, string>>(dbv));
 
                 entity
-                    .Property(e => e.TargetIds)
-                    .HasColumnName("TargetIdsJson")
-                    .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<List<Guid>>(dbv));
+                    .Property(e => e.Targets)
+                    .HasColumnName("TargetsJson")
+                    .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<List<NotificationTarget>>(dbv) ?? new List<NotificationTarget>());
 
                 entity
                   .HasOne(c => c.CreatedBy)
                   .WithMany(c => c.NotificationsICreated)
                   .HasForeignKey(c => c.CreatedById)
                   .OnDelete(DeleteBehavior.Restrict);
+            }
+
+            private static T? JsonToObject<T>(string dbValue)
+            {
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(dbValue))
+                    {
+                        return JsonConvert.DeserializeObject<T>(dbValue);
+                    }
+                }
+                catch (Exception) { }
+                return default;
+            }
+
+            private static string ObjectToJson<T>(T value)
+            {
+                return JsonConvert.SerializeObject(value);
+            }
+        }
+
+        internal class NotificationGroupEntityConfiguration : BaseEntityTypeConfiguration<NotificationGroup>
+        {
+            public override void Configure(EntityTypeBuilder<NotificationGroup> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("NotificationGroups");
+
+                entity.Property(e => e.Name).HasMaxLength(200);
+                entity.HasIndex(p => p.Name).IsUnique(true);
+
+                entity
+                   .Property(e => e.UserIds)
+                   .HasColumnName("UserIdsJson")
+                   .HasConversion(v => ObjectToJson(v), dbv => JsonToObject<List<Guid>>(dbv) ?? new List<Guid>());
             }
 
             private static T? JsonToObject<T>(string dbValue)

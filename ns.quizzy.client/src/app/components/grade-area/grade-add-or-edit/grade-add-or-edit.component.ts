@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GradesService } from '../../../services/backend/grades.service';
 import { IGradePayloadDto } from '../../../models/backend/grade.dto';
@@ -14,7 +14,7 @@ import { IGradePayloadDto } from '../../../models/backend/grade.dto';
 export class GradeAddOrEditComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _gradesService = inject(GradesService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _router = inject(Router);
   private readonly _activatedRoute = inject(ActivatedRoute);
   id: string | null = null;

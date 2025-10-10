@@ -1,0 +1,31 @@
+<app-back-button></app-back-button>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_GROUP_AREA.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" autocomplete="off" />
+        <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            <ng-container *ngIf="form.get('name')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_GROUP_AREA.USER_IDS' | translate }}</mat-label>
+        <mat-select formControlName="userIds" multiple>
+            <mat-option>
+                <ngx-mat-select-search [formControl]="userIdsSearchCtrls"
+                    [noEntriesFoundLabel]="'NO_OPTIONS_FOUND' | translate"
+                    [placeholderLabel]="'SEARCH_PLACEHOLDER' | translate"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of filteredUsers"
+                [value]="item.id">
+                {{item.text}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+        {{ (id ? 'UPDATE' : 'ADD') | translate }}
+    </button>
+</form>

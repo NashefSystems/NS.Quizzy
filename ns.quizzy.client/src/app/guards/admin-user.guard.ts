@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AccountService } from '../services/backend/account.service';
 import { firstValueFrom } from 'rxjs';
-import { NotificationsService } from '../services/notifications.service';
+import { AppNotificationsService } from '../services/notifications.service';
 import { AppSettingsService } from '../services/app-settings.service';
 import { CheckPermissionsUtils } from '../utils/check-permissions.utils';
 
@@ -10,7 +10,7 @@ export const adminUserGuard: CanActivateFn = async (route, state) => {
   const appSettingsService = inject(AppSettingsService);
   const accountService = inject(AccountService);
   const router = inject(Router);
-  const notificationsService = inject(NotificationsService);
+  const notificationsService = inject(AppNotificationsService);
 
   let isAuthenticated = false;
   let res = false;

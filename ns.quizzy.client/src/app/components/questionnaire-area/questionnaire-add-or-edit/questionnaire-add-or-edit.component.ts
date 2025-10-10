@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { QuestionnairesService } from '../../../services/backend/questionnaires.service';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IQuestionnairePayloadDto } from '../../../models/backend/questionnaire.dto';
 import { ISubjectDto } from '../../../models/backend/subject.dto';
@@ -17,7 +17,7 @@ export class QuestionnaireAddOrEditComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _questionnairesService = inject(QuestionnairesService);
   private readonly _subjectsService = inject(SubjectsService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _router = inject(Router);
   private readonly _activatedRoute = inject(ActivatedRoute);
   id: string | null = null;

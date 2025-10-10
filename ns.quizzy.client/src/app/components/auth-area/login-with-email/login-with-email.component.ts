@@ -4,7 +4,7 @@ import { StorageService } from '../../../services/storage.service';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 import { AccountService } from '../../../services/backend/account.service';
 import { LoginRequest } from '../../../models/backend/login.request';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
 import { LoginSteps } from './login-steps.enum'
 import { LoginResponse } from '../../../models/backend/login.response';
@@ -28,7 +28,7 @@ export class LoginWithEmailComponent implements OnInit {
   private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _accountService = inject(AccountService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _router = inject(Router);
 
   @ViewChild('otpInput') otpInput!: ElementRef<HTMLInputElement>;

@@ -16,7 +16,7 @@ import { ExamScheduleFilterComponent } from '../exam-schedule-filter/exam-schedu
 import { DialogService } from '../../../services/dialog.service';
 import { SubjectsService } from '../../../services/backend/subjects.service';
 import { ISubjectDto } from '../../../models/backend/subject.dto';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
 import { StorageService } from '../../../services/storage.service';
 import { LocalStorageKeys } from '../../../enums/local-storage-keys.enum';
@@ -40,7 +40,7 @@ export class ExamScheduleHomeComponent {
   private readonly _moedsService = inject(MoedsService);
   private readonly _subjectsService = inject(SubjectsService);
   private readonly _examsService = inject(ExamsService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _storageService = inject(StorageService);
 
   exams: IExamDto[] = [];

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from '../../../services/backend/account.service';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { Router } from '@angular/router';
 import { AppSettingsService } from '../../../services/app-settings.service';
 import { LoginWithIdNumberRequest } from '../../../models/backend/login-with-id-number.request';
@@ -22,7 +22,7 @@ export class LoginWithIdNumberComponent implements OnInit {
   private readonly _globalService = inject(GlobalService);
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _accountService = inject(AccountService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _router = inject(Router);
   private readonly _storageService = inject(StorageService);
 

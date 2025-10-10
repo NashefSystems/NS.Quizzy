@@ -1,4 +1,5 @@
-﻿using static NS.Quizzy.Server.DAL.DALEnums;
+﻿using NS.Quizzy.Server.DAL.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NS.Quizzy.Server.DAL.Entities
 {
@@ -6,8 +7,7 @@ namespace NS.Quizzy.Server.DAL.Entities
     {
         public string Title { get; set; }
         public string Body { get; set; }
-        public NotificationTarget Target { get; set; }
-        public List<Guid>? TargetIds { get; set; }
+        public List<NotificationTarget> Targets { get; set; }
         public Dictionary<string, string>? Data { get; set; }
         public Guid CreatedById { get; set; }
 

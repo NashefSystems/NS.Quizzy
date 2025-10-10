@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../../services/backend/users.service';
 import { IUserPayloadDto } from '../../../models/backend/user.dto';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
 import { IClassDto } from '../../../models/backend/class.dto';
@@ -21,7 +21,7 @@ export class UserAddOrEditComponent implements OnInit {
   private readonly _usersService = inject(UsersService);
   private readonly _classesService = inject(ClassesService);
   private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _router = inject(Router);
   private readonly _activatedRoute = inject(ActivatedRoute);
   classes: IClassDto[] = [];

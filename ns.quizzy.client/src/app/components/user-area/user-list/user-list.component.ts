@@ -9,7 +9,7 @@ import { IUserDto } from '../../../models/backend/user.dto';
 import { ClassesService } from '../../../services/backend/classes.service';
 import { IClassDto } from '../../../models/backend/class.dto';
 import { AppTranslateService } from '../../../services/app-translate.service';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { ExportService } from './export.service';
 import { GlobalService } from '../../../services/global.service';
 import { FeatureFlags } from '../../../enums/feature-flags.enum';
@@ -27,7 +27,7 @@ export class UserListComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
   private readonly _appTranslateService = inject(AppTranslateService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _exportService = inject(ExportService);
   private readonly _globalService = inject(GlobalService);
 

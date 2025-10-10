@@ -10,3 +10,7 @@ export interface IUserPayloadDto {
 }
 
 export interface IUserDto extends IUserPayloadDto, IBaseEntityDto { }
+
+export interface IUserDtoExt extends IUserDto {
+    text: string;
+}

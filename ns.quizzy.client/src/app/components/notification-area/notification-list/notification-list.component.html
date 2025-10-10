@@ -2,9 +2,15 @@
     <app-back-button></app-back-button>
     <button mat-raised-button (click)="onAdd()">{{'TABLE.ACTIONS.ADD' | translate}}</button>
 </div>
+<mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{'SEARCH'|translate}}</mat-label>
+    <input matInput [(ngModel)]="searchValue" (input)="applyFilter()"
+        [placeholder]="'SEARCH_PLACEHOLDER' | translate" />
+</mat-form-field>
+
 <div class="notifications-container">
     <mat-accordion>
-        <mat-expansion-panel *ngFor="let notification of items" [expanded]="false">
+        <mat-expansion-panel *ngFor="let notification of filteredItems" [expanded]="false">
             <mat-expansion-panel-header>
                 <div class="notification-header">
                     <div class="icon">
@@ -14,8 +20,11 @@
                         <div class="title">{{ notification.title }}</div>
                         <div class="details">
                             <span>{{ notification.createdTime | date:'yyyy/MM/dd HH:mm' }}</span>
-                            <span>|</span>
-                            <span [translate]="'NOTIFICATION_TARGETS.'+notification.target.toUpperCase() "></span>
+                            <span *ngIf="notification.targets?.length">|</span>
+                            <ng-content *ngFor="let target of notification.targets; first as isFirst">
+                                <span *ngIf="!isFirst">,&nbsp;</span>
+                                <span translate>{{ 'NOTIFICATION_TYPES.'+(target.type | camelToSnake) }}</span>
+                            </ng-content>
                         </div>
                     </div>
                 </div>
@@ -35,9 +44,14 @@
                 [innerHTML]="'NOTIFICATION_AREA.DELIVERY_INFO.READ_PERCENTAGE' | translate:{value:notification.readPercentage}">
             </div>
             <div class="item-actions">
+                <button class="clone-item" mat-button (click)="onDuplicate(notification)">
+                    <mat-icon aria-hidden="false">content_copy</mat-icon>
+                    {{'DUPLICATE' | translate}}
+                </button>
                 <button class="delete-item" mat-button (click)="onDelete(notification)">
                     <mat-icon aria-hidden="false">delete</mat-icon>
-                    {{'DELETE' | translate}}</button>
+                    {{'DELETE' | translate}}
+                </button>
             </div>
         </mat-expansion-panel>
     </mat-accordion>

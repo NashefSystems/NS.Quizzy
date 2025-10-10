@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { AppSettingsService } from '../../../services/app-settings.service';
 import { GlobalService } from '../../../services/global.service';
 
@@ -10,7 +10,7 @@ import { GlobalService } from '../../../services/global.service';
   styleUrl: './developer.component.scss'
 })
 export class DeveloperComponent implements OnInit {
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _appSettingsService = inject(AppSettingsService);
   private readonly _globalService = inject(GlobalService);
   isLoading = false;

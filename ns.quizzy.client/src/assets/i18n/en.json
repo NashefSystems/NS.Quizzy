@@ -37,7 +37,10 @@
         "PRIVACY_POLICY": "Privacy policy",
         "MY_NOTIFICATIONS": "My notifications",
         "NOTIFICATION_LIST": "Notifications",
-        "NOTIFICATION_ADD": "Add notification"
+        "NOTIFICATION_ADD": "Add notification",
+        "NOTIFICATION_GROUP_LIST": "Notification groups",
+        "NOTIFICATION_GROUP_ADD": "Add notification group",
+        "NOTIFICATION_GROUP_EDIT": "Edit notification group"
     },
     "LOGIN": {
         "TITLE": "Log in",
@@ -80,7 +83,8 @@
             "QUESTIONNAIRE_LIST": "Questionnaires",
             "SUBJECT_LIST": "Subjects",
             "USER_LIST": "Users",
-            "NOTIFICATION_LIST": "Notifications"
+            "NOTIFICATION_LIST": "Notifications",
+            "NOTIFICATION_GROUP_LIST": "Notification groups"
         }
     },
     "TABLE": {
@@ -105,7 +109,9 @@
     "NOTIFICATION_AREA": {
         "CREATED_TIME": "Notification time",
         "TITLE": "Title",
+        "TYPE": "Type",
         "TARGET": "Target",
+        "ADD_TARGET_SECTION": "Add a new target",
         "BODY": "Message",
         "TARGET_IDS": "Target IDs",
         "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "The push notification was sent successfully",
@@ -115,6 +121,10 @@
             "READ_PERCENTAGE": "Read percentage <b>{{value}}</b>%",
             "PUSH_NOTIFICATION_TEXT": "The notification was sent to <b>{{value}}</b> users"
         }
+    },
+    "NOTIFICATION_GROUP_AREA": {
+        "NAME": "Group name",
+        "USER_IDS": "User Ids"
     },
     "GRADE_AREA": {
         "NAME": "Name",
@@ -204,20 +214,22 @@
         "DEVELOPER": "Developer",
         "SUPERADMIN": "Superadmin"
     },
-    "NOTIFICATION_TARGETS": {
-        "SPECIFICUSERS": "Specific users",
+    "NOTIFICATION_TYPES": {
+        "SPECIFIC_USERS": "Specific users",
         "CLASSES": "Classes",
         "GRADES": "Grades",
         "STUDENTS": "Students",
         "TEACHERS": "Teachers",
-        "TEACHERSANDSTUDENTS": "Teachers and students",
+        "TEACHERS_AND_STUDENTS": "Teachers and students",
         "ADMINS": "Administrators",
-        "ALLUSERS": "All users"
+        "ALL_USERS": "All users",
+        "NOTIFICATION_GROUPS": "Notification groups"
     },
     "SEARCH": "Search",
     "SEARCH_PLACEHOLDER": "Search...",
     "EDIT": "Edit",
     "DELETE": "Delete",
+    "DUPLICATE": "Duplicate",
     "IS_VISIBLE": "Is visible",
     "SET_AS_VISIBLE": "Set as visible",
     "NO_OPTIONS_FOUND": "No options found"

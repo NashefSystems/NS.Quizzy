@@ -21,68 +21,83 @@
         </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'NOTIFICATION_AREA.TARGET' | translate }}</mat-label>
-        <mat-select formControlName="target" (valueChange)="onTargetChange()">
-            <mat-option [dir]="'DIR' | translate" [value]="'SpecificUsers'">{{'NOTIFICATION_TARGETS.SPECIFICUSERS' |
-                translate}}</mat-option>
-            <mat-option [dir]="'DIR' | translate" [value]="'Classes'">{{'NOTIFICATION_TARGETS.CLASSES' |
-                translate}}</mat-option>
-            <mat-option [dir]="'DIR' | translate" [value]="'Grades'">{{'NOTIFICATION_TARGETS.GRADES' |
-                translate}}</mat-option>
-            <mat-option [dir]="'DIR' | translate" [value]="'Students'">{{'NOTIFICATION_TARGETS.STUDENTS' |
-                translate}}</mat-option>
-            <mat-option [dir]="'DIR' | translate" [value]="'Teachers'">{{'NOTIFICATION_TARGETS.TEACHERS' |
-                translate}}</mat-option>
-            <mat-option [dir]="'DIR' | translate"
-                [value]="'TeachersAndStudents'">{{'NOTIFICATION_TARGETS.TEACHERSANDSTUDENTS' |
-                translate}}</mat-option>
-            <mat-option [dir]="'DIR' | translate" [value]="'Admins'">{{'NOTIFICATION_TARGETS.ADMINS' |
-                translate}}</mat-option>
-            <mat-option [dir]="'DIR' | translate" [value]="'AllUsers'">{{'NOTIFICATION_TARGETS.ALLUSERS' |
-                translate}}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get('target')?.invalid && form.get('target')?.touched">
-            <ng-container *ngIf="form.get('target')?.errors?.['required']">
-                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
-            </ng-container>
-        </mat-error>
-    </mat-form-field>
+    <div formArrayName="targets">
+        <section class="target-section" *ngFor="let target of targets.controls; let i = index" [formGroupName]="i">
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+                <h3 style="flex: 1; margin: 0;">{{ 'NOTIFICATION_AREA.TARGET' | translate }} {{i + 1}}</h3>
+                <button mat-icon-button type="button" (click)="removeTarget(i)" [disabled]="targets.length === 1"
+                    [attr.aria-label]="'REMOVE' | translate">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
 
-    <mat-form-field *ngIf="isSpecificUsers()" appearance="outline" class="full-width">
-        <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
-        <mat-select formControlName="targetIds" multiple>
-            <mat-option>
-                <ngx-mat-select-search [formControl]="targetIdsSearchCtrl"
-                    [noEntriesFoundLabel]="'NO_OPTIONS_FOUND' | translate"></ngx-mat-select-search>
-            </mat-option>
-            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of filteredUsers"
-                [value]="item.id">
-                {{item.text}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'NOTIFICATION_AREA.TYPE' | translate }}</mat-label>
+                <mat-select formControlName="type" (valueChange)="onTargetChange(i)">
+                    <ng-container *ngFor="let item of targetTypeOptions()">
+                        <mat-option [dir]="'DIR' | translate" [value]="item">
+                            {{ "NOTIFICATION_TYPES."+(item| camelToSnake)| translate }}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error *ngIf="target.get('type')?.invalid && target.get('type')?.touched">
+                    <ng-container *ngIf="target.get('type')?.errors?.['required']">
+                        {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+                    </ng-container>
+                </mat-error>
+            </mat-form-field>
 
-    <mat-form-field *ngIf="isClasses()" appearance="outline" class="full-width">
-        <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
-        <mat-select formControlName="targetIds" multiple>
-            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of classes"
-                [value]="item.id">
-                {{item.fullCode}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+            <mat-form-field *ngIf="isSpecificUsers(i)" appearance="outline" class="full-width">
+                <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
+                <mat-select formControlName="ids" multiple>
+                    <mat-option>
+                        <ngx-mat-select-search [formControl]="targetIdsSearchCtrls[i]"
+                            [noEntriesFoundLabel]="'NO_OPTIONS_FOUND' | translate"
+                            [placeholderLabel]="'SEARCH_PLACEHOLDER' | translate"></ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option class="full-width-option" [dir]="'DIR' | translate"
+                        *ngFor="let item of filteredUsers[i]" [value]="item.id">
+                        {{item.text}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
 
-    <mat-form-field *ngIf="isGrades()" appearance="outline" class="full-width">
-        <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
-        <mat-select formControlName="targetIds" multiple>
-            <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of grades"
-                [value]="item.id">
-                {{item.name}}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+            <mat-form-field *ngIf="isClasses(i)" appearance="outline" class="full-width">
+                <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
+                <mat-select formControlName="ids" multiple>
+                    <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of classes"
+                        [value]="item.id">
+                        {{item.fullCode}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
 
+            <mat-form-field *ngIf="isGrades(i)" appearance="outline" class="full-width">
+                <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
+                <mat-select formControlName="ids" multiple>
+                    <mat-option class="full-width-option" [dir]="'DIR' | translate" *ngFor="let item of grades"
+                        [value]="item.id">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="isNotificationGroups(i)" appearance="outline" class="full-width">
+                <mat-label>{{ 'NOTIFICATION_AREA.TARGET_IDS' | translate }}</mat-label>
+                <mat-select formControlName="ids" multiple>
+                    <mat-option class="full-width-option" [dir]="'DIR' | translate"
+                        *ngFor="let item of notificationGroups" [value]="item.id">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </section>
+    </div>
+
+    <button mat-button type="button" (click)="addTarget()" class="full-width" style="margin-bottom: 16px;">
+        <mat-icon>add</mat-icon>
+        {{ 'NOTIFICATION_AREA.ADD_TARGET_SECTION' | translate }}
+    </button>
     <div class="footer-actions">
         <button mat-button *ngIf="pushNotificationIsEnabled" class="full-width" [disabled]="form.invalid" type="button"
             (click)="onTest()">

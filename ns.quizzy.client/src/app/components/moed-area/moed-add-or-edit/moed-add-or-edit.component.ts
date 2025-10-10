@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NotificationsService } from '../../../services/notifications.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MoedsService } from '../../../services/backend/moeds.service';
 import { IMoedPayloadDto } from '../../../models/backend/moed.dto';
@@ -14,7 +14,7 @@ import { IMoedPayloadDto } from '../../../models/backend/moed.dto';
 export class MoedAddOrEditComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _moedsService = inject(MoedsService);
-  private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationsService = inject(AppNotificationsService);
   private readonly _router = inject(Router);
   private readonly _activatedRoute = inject(ActivatedRoute);
   id: string | null = null;

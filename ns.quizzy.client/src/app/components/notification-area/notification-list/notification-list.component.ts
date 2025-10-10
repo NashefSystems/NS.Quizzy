@@ -6,6 +6,12 @@ import { INotificationDto } from '../../../models/backend/notification.dto';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
 import { ConfirmDialogComponent } from '../../global-area/confirm-dialog/confirm-dialog.component';
 import { AppTranslateService } from '../../../services/app-translate.service';
+import { CamelToSnakePipe } from '../../../pipes/camel-to-snake.pipe';
+import { DatePipe } from '@angular/common';
+
+export interface INotificationDtoEx extends INotificationDto {
+  text: string;
+}
 
 @Component({
   selector: 'app-notification-list',
@@ -14,20 +20,56 @@ import { AppTranslateService } from '../../../services/app-translate.service';
   styleUrl: './notification-list.component.scss'
 })
 export class NotificationListComponent implements OnInit {
+  private readonly _camelToSnakePipe = inject(CamelToSnakePipe);
+  private readonly _datePipe = inject(DatePipe);
   private readonly _appTranslateService = inject(AppTranslateService);
   private readonly _notificationsService = inject(NotificationsService);
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
 
-  items: INotificationDto[];
+  searchValue: string = '';
+  _items: INotificationDtoEx[];
+  filteredItems: INotificationDtoEx[];
 
   ngOnInit(): void {
     this.loadData();
   }
 
+  applyFilter(): void {
+    this.filteredItems = [... this._items.filter(e => !this.isFilteredItem(e, this.searchValue)).map(x => x)];
+  }
+
+  isFilteredItem(item: INotificationDtoEx, filterValue: string): boolean {
+    filterValue = filterValue.trim();
+    return item.text.indexOf(filterValue) === -1;
+  }
+
+  getSearchTextValue(item: INotificationDto) {
+    const types = item.targets.map(x => {
+      const camelToSnakeValue = this._camelToSnakePipe.transform(x.type);
+      return this._appTranslateService.translate(`NOTIFICATION_TYPES.${camelToSnakeValue}`);
+    });
+
+    return `
+      ${item.title}
+      ${item.body}
+      ${this._datePipe.transform(item.createdTime, 'yyyy/MM/dd HH:mm')}
+      ${types.join('\r\n')}
+    `;
+  }
+
   loadData() {
     this._notificationsService.get().subscribe({
-      next: (responseBody) => this.items = responseBody
+      next: (responseBody) => {
+        this._items = responseBody.map(x => {
+          const res: INotificationDtoEx = {
+            ...x,
+            text: this.getSearchTextValue(x)
+          };
+          return res;
+        });
+        this.applyFilter();
+      }
     });
   }
 
@@ -35,8 +77,19 @@ export class NotificationListComponent implements OnInit {
     this._router.navigate(['/notifications/new']);
   };
 
+  onDuplicate(selected: INotificationDto) {
+    this._router.navigate(
+      ['/notifications/new'],
+      {
+        //queryParams:
+        state: {
+          DuplicateItemId: selected.id
+        }
+      });
+  }
+
   onDelete(selected: INotificationDto) {
-    const item = this.items.find(x => x.id == selected.id);
+    const item = this.filteredItems.find(x => x.id == selected.id);
     if (!item) {
       return;
     }

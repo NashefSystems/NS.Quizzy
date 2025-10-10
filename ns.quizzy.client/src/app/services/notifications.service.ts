@@ -7,7 +7,7 @@ import { AppTranslateService } from './app-translate.service';
 @Injectable({
     providedIn: 'root'
 })
-export class NotificationsService {
+export class AppNotificationsService {
     private _snackBar = inject(MatSnackBar);
     private _appTranslateService = inject(AppTranslateService);
 

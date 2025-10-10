@@ -37,7 +37,10 @@
         "PRIVACY_POLICY": "מדיניות הפרטיות",
         "MY_NOTIFICATIONS": "ההתראות שלי",
         "NOTIFICATION_LIST": "התראות",
-        "NOTIFICATION_ADD": "הוספת התראה"
+        "NOTIFICATION_ADD": "הוספת התראה",
+        "NOTIFICATION_GROUP_LIST": "קבוצות התראות",
+        "NOTIFICATION_GROUP_ADD": "הוספת קבוצת התראות",
+        "NOTIFICATION_GROUP_EDIT": "עריכת קבוצת התראות"
     },
     "LOGIN": {
         "TITLE": "התחברות",
@@ -80,7 +83,8 @@
             "QUESTIONNAIRE_LIST": "שאלונים",
             "SUBJECT_LIST": "נושאים",
             "USER_LIST": "משתמשים",
-            "NOTIFICATION_LIST": "התראות"
+            "NOTIFICATION_LIST": "התראות",
+            "NOTIFICATION_GROUP_LIST": "קבוצות התראות"
         }
     },
     "TABLE": {
@@ -105,7 +109,9 @@
     "NOTIFICATION_AREA": {
         "CREATED_TIME": "זמן התראה",
         "TITLE": "כותרת",
+        "TYPE": "סוג",
         "TARGET": "יעד",
+        "ADD_TARGET_SECTION": "הוסף יעד חדש",
         "BODY": "הודעה",
         "TARGET_IDS": "מזהה יעדים",
         "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "הודעת הדחיפה נשלחה בהצלחה",
@@ -115,6 +121,10 @@
             "READ_PERCENTAGE": "אחוז הקריאה <b>{{value}}</b>%",
             "PUSH_NOTIFICATION_TEXT": "ההתראה נשלחה ל <b>{{value}}</b> משתמשים"
         }
+    },
+    "NOTIFICATION_GROUP_AREA": {
+        "NAME": "שם קבוצה",
+        "USER_IDS": "מזהה משתמשים"
     },
     "GRADE_AREA": {
         "NAME": "שם",
@@ -204,20 +214,22 @@
         "DEVELOPER": "מפתח",
         "SUPERADMIN": "מנהל מערכת"
     },
-    "NOTIFICATION_TARGETS": {
-        "SPECIFICUSERS": "משתמשים ספציפיים",
+    "NOTIFICATION_TYPES": {
+        "SPECIFIC_USERS": "משתמשים ספציפיים",
         "CLASSES": "כיתות",
         "GRADES": "שכבות",
         "STUDENTS": "תלמידים",
         "TEACHERS": "מורים",
-        "TEACHERSANDSTUDENTS": "מורים ותלמידים",
+        "TEACHERS_AND_STUDENTS": "מורים ותלמידים",
         "ADMINS": "מנהלי מערכת",
-        "ALLUSERS": "כל המשתמשים"
+        "ALL_USERS": "כל המשתמשים",
+        "NOTIFICATION_GROUPS": "קבוצות התראות"
     },
-    "SEARCH": "חפש",
-    "SEARCH_PLACEHOLDER": "חיפוש...",
+    "SEARCH": "חיפוש",
+    "SEARCH_PLACEHOLDER": "חפש...",
     "EDIT": "עריכה",
     "DELETE": "מחיקה",
+    "DUPLICATE": "שכפל",
     "IS_VISIBLE": "גלוי",
     "SET_AS_VISIBLE": "הגדר כגלוי",
     "NO_OPTIONS_FOUND": "לא נמצאו תוצאות"

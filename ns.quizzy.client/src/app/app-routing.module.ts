@@ -26,6 +26,8 @@ import { UserAddOrEditComponent } from './components/user-area/user-add-or-edit/
 import { NotificationListComponent } from './components/notification-area/notification-list/notification-list.component';
 import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
 import { MyNotificationsComponent } from './components/notification-area/my-notifications/my-notifications.component';
+import { NotificationGroupListComponent } from './components/notification-group-area/notification-group-list/notification-group-list.component';
+import { NotificationGroupAddOrEditComponent } from './components/notification-group-area/notification-group-add-or-edit/notification-group-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -85,6 +87,38 @@ const routes: Routes = [
     data: {
       page_title: "PAGE_TITLES.MY_NOTIFICATIONS"
     }
+  },
+  {
+    path: 'notification-groups',
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: NotificationGroupListComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_GROUP_LIST"
+        }
+      }, {
+        path: 'new',
+        component: NotificationGroupAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_GROUP_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: NotificationGroupAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_GROUP_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/notification-groups',
+      }
+    ]
   },
   {
     path: 'notifications',

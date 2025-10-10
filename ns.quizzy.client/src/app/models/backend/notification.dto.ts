@@ -1,14 +1,15 @@
 import { IBaseEntityDto } from './base-entity.dto';
 
-export enum NotificationTarget {
+export enum NotificationTargetTypes {
     SPECIFIC_USERS = "SpecificUsers",
     CLASSES = "Classes",
     GRADES = "Grades",
+    NOTIFICATION_GROUPS = "NotificationGroups",
     STUDENTS = "Students",
     TEACHERS = "Teachers",
     TEACHERS_AND_STUDENTS = "TeachersAndStudents",
     ADMINS = "Admins",
-    ALL_USERS = "AllUsers"
+    ALL_USERS = "AllUsers",
 }
 
 export interface INotificationBasePayloadDto {
@@ -17,9 +18,13 @@ export interface INotificationBasePayloadDto {
     data?: { [key: string]: string };
 }
 
+export interface INotificationTarget {
+    type: NotificationTargetTypes;
+    ids?: string[];
+}
+
 export interface INotificationPayloadDto extends INotificationBasePayloadDto {
-    target: NotificationTarget;
-    targetIds?: string[];
+    targets: INotificationTarget[];
 }
 
 export interface INotificationDto extends INotificationPayloadDto, IBaseEntityDto {
