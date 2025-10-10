@@ -225,6 +225,15 @@
         "ALL_USERS": "All users",
         "NOTIFICATION_GROUPS": "Notification groups"
     },
+    "FULL_LOADING": {
+        "MESSAGE": "Loading..."
+    },
+    "FORCE_UPDATE": {
+        "TITLE": "Update Required",
+        "MESSAGE": "A new version is available. Please update to continue.",
+        "UPDATE_NOW": "Update Now",
+        "MUST_UPDATE": "You must update to continue using the app"
+    },
     "SEARCH": "Search",
     "SEARCH_PLACEHOLDER": "Search...",
     "EDIT": "Edit",

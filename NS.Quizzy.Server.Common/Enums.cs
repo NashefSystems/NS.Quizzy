@@ -35,6 +35,18 @@ namespace NS.Quizzy.Server.Common
 
             [DBStringValue(nameof(GoogleCredentialJson))]
             GoogleCredentialJson,
+
+            [DBStringValue(nameof(MinAppBuildNumberAndroid))]
+            MinAppBuildNumberAndroid,
+
+            [DBStringValue(nameof(MinAppBuildNumberIOS))]
+            MinAppBuildNumberIOS,
+
+            [DBStringValue(nameof(StoreUrlAndroid))]
+            StoreUrlAndroid,
+
+            [DBStringValue(nameof(StoreUrlIOS))]
+            StoreUrlIOS,
         }
     }
 }

@@ -1,0 +1,141 @@
+.update-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.update-content {
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.update-icon {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: center;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.update-icon svg {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    stroke: white;
+}
+
+.update-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 16px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.update-message {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+    margin: 0 0 32px 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.update-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.btn-update {
+    background: white;
+    color: #667eea;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 32px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.btn-update:active {
+    transform: translateY(0);
+}
+
+.store-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .update-title {
+        font-size: 28px;
+    }
+
+    .update-message {
+        font-size: 16px;
+    }
+
+    .update-icon img {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        border-radius: 20px;
+    }
+}

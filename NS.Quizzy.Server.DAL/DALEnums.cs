@@ -12,6 +12,7 @@
         public enum AppSettingValueTypes
         {
             Integer,
+            Long,
             Double,
             Float,
             Boolean,

@@ -493,6 +493,46 @@ namespace NS.Quizzy.Server.DAL
                         Value = "{}",
                         IsSecured = false,
                         IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("AA59C143-8DFE-4C7B-A95A-AEDB9B823318"),
+                        Key =  AppSettingKeys.MinAppBuildNumberAndroid.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Client,
+                        ValueType = DALEnums.AppSettingValueTypes.Long,
+                        Value = "1000000040",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("C0F44347-DA88-4BDA-A872-F467CDC3DE1B"),
+                        Key =  AppSettingKeys.MinAppBuildNumberIOS.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Client,
+                        ValueType = DALEnums.AppSettingValueTypes.Long,
+                        Value = "1000000040",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("7A0F5B70-1B02-4E4B-898F-7C69B577D1C6"),
+                        Key =  AppSettingKeys.StoreUrlAndroid.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Client,
+                        ValueType = DALEnums.AppSettingValueTypes.String,
+                        Value = "market://details?id=com.nashefsys.quizzy",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("E7EA810B-7B7F-429E-A46B-A2C6E85FF595"),
+                        Key =  AppSettingKeys.StoreUrlIOS.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Client,
+                        ValueType = DALEnums.AppSettingValueTypes.String,
+                        Value = "itms-apps://apps.apple.com/app/id6745685962",
+                        IsSecured = false,
+                        IsDeleted = false,
                     }
                 ];
             }

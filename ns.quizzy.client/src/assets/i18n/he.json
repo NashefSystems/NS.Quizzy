@@ -225,6 +225,15 @@
         "ALL_USERS": "כל המשתמשים",
         "NOTIFICATION_GROUPS": "קבוצות התראות"
     },
+    "FULL_LOADING": {
+        "MESSAGE": "טוען..."
+    },
+    "FORCE_UPDATE": {
+        "TITLE": "נדרש עדכון",
+        "MESSAGE": "גרסה חדשה זמינה. אנא עדכן כדי להמשיך.",
+        "UPDATE_NOW": "עדכן עכשיו",
+        "MUST_UPDATE": "עליך לעדכן את האפליקציה כדי להמשיך להשתמש בה"
+    },
     "SEARCH": "חיפוש",
     "SEARCH_PLACEHOLDER": "חפש...",
     "EDIT": "עריכה",

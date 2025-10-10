@@ -7,7 +7,15 @@
                 </div>
             </app-header>
             <div class="page">
-                <router-outlet></router-outlet>
+                <ng-content *ngIf="updateIsRequired === false">
+                    <router-outlet></router-outlet>
+                </ng-content>
+                <ng-content *ngIf="updateIsRequired === true">
+                    <app-force-update></app-force-update>
+                </ng-content>
+                <ng-content *ngIf="updateIsRequired === null">
+                    <app-full-loading></app-full-loading>
+                </ng-content>
             </div>
         </ng-content>
     </div>

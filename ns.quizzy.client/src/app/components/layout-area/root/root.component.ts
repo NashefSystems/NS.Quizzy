@@ -24,6 +24,7 @@ export class RootComponent implements AfterViewInit, OnInit {
   userLoggedIn = false;
   isReady = false;
   isLoading = false;
+  updateIsRequired: boolean | null = true;
 
   appContainerClasses = {
     "app-container": true,
@@ -48,8 +49,7 @@ export class RootComponent implements AfterViewInit, OnInit {
     });
 
     this._accountService.userChange.subscribe(user => this.userLoggedIn = !!(user?.id));
-
-
+    this._globalService.updateAppCheck().then(updateAppCheckResponse => this.updateIsRequired = updateAppCheckResponse.updateRequired);
     this.runAppTasks();
   }
 

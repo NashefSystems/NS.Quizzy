@@ -1,6 +1,10 @@
 export interface ClientAppSettingsResponse {
-    SavePasswordOnRememberMe: boolean;
     Email: string;
-    AppVersion: string;
+    SavePasswordOnRememberMe: boolean;
     IdNumberEmailDomain: string;
+    AppVersion: string;
+    StoreUrlAndroid: string;
+    StoreUrlIOS: string;
+    MinAppBuildNumberAndroid: number;
+    MinAppBuildNumberIOS: number;
 }

@@ -84,6 +84,8 @@ import { NotificationGroupListComponent } from './components/notification-group-
 import { NotificationGroupAddOrEditComponent } from './components/notification-group-area/notification-group-add-or-edit/notification-group-add-or-edit.component';
 import { DatePipe } from '@angular/common';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { FullLoadingComponent } from './components/global-area/full-loading/full-loading.component';
+import { ForceUpdateComponent } from './components/global-area/force-update/force-update.component';
 
 // Factory function for HttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -134,6 +136,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserAddOrEditComponent,
     UserDetailsComponent,
     UserListComponent,
+    FullLoadingComponent,
+    ForceUpdateComponent,
   ],
   imports: [
     BrowserModule,

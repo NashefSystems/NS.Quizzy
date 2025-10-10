@@ -2,9 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { DevicesService } from './backend/devices.service';
 import { WebviewBridgeService } from './webview-bridge.service';
 import { IDevicePayloadDto } from '../models/backend/device.dto';
-import { IDownloadFilePayload, IGetMobileSerialNumberResponse, IGetPlatformInfoResponse, IOpenURLPayload } from '../models/webview-bridge.models';
+import { IDownloadFilePayload, IGetMobileSerialNumberResponse, IGetPlatformInfoResponse } from '../models/webview-bridge.models';
 import { DownloadFileUtils } from '../utils/download-file.utils';
 import { FeatureFlags } from '../enums/feature-flags.enum';
+import { ClientAppSettingsService } from './backend/client-app-settings.service';
+import { IUpdateAppCheckResponse } from '../models/check-update-is-nedded.response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +16,54 @@ export class GlobalService {
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
   private static _platformInfoResponse: IGetPlatformInfoResponse | null = null;
   private static _mobileSerialNumberResponse: IGetMobileSerialNumberResponse | null = null;
+  private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
+
 
   constructor() {
     this._webviewBridgeService.getPlatformInfoAsync().then(x => GlobalService._platformInfoResponse = x);
+  }
+
+  async updateAppCheck() {
+    console.info('updateIsNedded | Starting');
+
+    const response: IUpdateAppCheckResponse = {
+      updateRequired: false
+    };
+
+    const nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
+    if (!nativeAppIsAvailable) {
+      console.error('updateIsNedded | native app is not available');
+      return response;
+    }
+
+    if (!GlobalService._platformInfoResponse) {
+      GlobalService._platformInfoResponse = await this._webviewBridgeService.getPlatformInfoAsync();
+    }
+
+    const platformInfo = GlobalService._platformInfoResponse;
+    if (!platformInfo) {
+      console.error('updateIsNedded | platformInfo is null, ', platformInfo);
+      return response;
+    }
+
+    const clientAppSettings = await this._clientAppSettingsService.get().toPromise();
+    if (!clientAppSettings) {
+      console.error('updateIsNedded | clientAppSettings is null, ', platformInfo);
+      return response;
+    }
+
+    const currentAppBuildNumber = +platformInfo.appBuildNumber;
+    const minAppBuildNumber = platformInfo.os === 'android' ? clientAppSettings.MinAppBuildNumberAndroid : clientAppSettings.MinAppBuildNumberIOS;
+    if (currentAppBuildNumber < minAppBuildNumber) {
+      if (platformInfo.os === 'android') {
+        response.platform = 'android';
+        response.storeURL = clientAppSettings.StoreUrlAndroid;
+      } else {
+        response.platform = 'ios';
+        response.storeURL = clientAppSettings.StoreUrlIOS;
+      }
+    }
+    return response;
   }
 
   async updateDeviceInfoAsync() {

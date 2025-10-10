@@ -257,6 +257,15 @@ namespace NS.Quizzy.Server.BL.Extensions
                         {
                             return default(int);
                         }
+                    case DAL.DALEnums.AppSettingValueTypes.Long:
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            return long.Parse(value);
+                        }
+                        else
+                        {
+                            return default(long);
+                        }
                     case DAL.DALEnums.AppSettingValueTypes.Double:
                         if (!string.IsNullOrWhiteSpace(value))
                         {
