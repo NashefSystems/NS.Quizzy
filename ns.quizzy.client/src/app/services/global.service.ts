@@ -24,7 +24,7 @@ export class GlobalService {
   }
 
   async updateAppCheck() {
-    console.info('updateIsNedded | Starting');
+    console.info('updateAppCheck | Starting');
 
     const response: IUpdateAppCheckResponse = {
       updateRequired: false
@@ -32,7 +32,7 @@ export class GlobalService {
 
     const nativeAppIsAvailable = this._webviewBridgeService.nativeAppIsAvailable();
     if (!nativeAppIsAvailable) {
-      console.error('updateIsNedded | native app is not available');
+      console.error('updateAppCheck | native app is not available');
       return response;
     }
 
@@ -42,19 +42,21 @@ export class GlobalService {
 
     const platformInfo = GlobalService._platformInfoResponse;
     if (!platformInfo) {
-      console.error('updateIsNedded | platformInfo is null, ', platformInfo);
+      console.error('updateAppCheck | platformInfo is null, ', platformInfo);
       return response;
     }
 
     const clientAppSettings = await this._clientAppSettingsService.get().toPromise();
     if (!clientAppSettings) {
-      console.error('updateIsNedded | clientAppSettings is null, ', platformInfo);
+      console.error('updateAppCheck | clientAppSettings is null, ', platformInfo);
       return response;
     }
 
     const currentAppBuildNumber = +platformInfo.appBuildNumber;
     const minAppBuildNumber = platformInfo.os === 'android' ? clientAppSettings.MinAppBuildNumberAndroid : clientAppSettings.MinAppBuildNumberIOS;
-    if (currentAppBuildNumber < minAppBuildNumber) {
+    console.info(`updateAppCheck | currentAppBuildNumber: '${currentAppBuildNumber}', OS: '${platformInfo.os}', minAppBuildNumber: '${minAppBuildNumber}'`);
+    response.updateRequired = currentAppBuildNumber < minAppBuildNumber;
+    if (response.updateRequired) {
       if (platformInfo.os === 'android') {
         response.platform = 'android';
         response.storeURL = clientAppSettings.StoreUrlAndroid;
@@ -63,6 +65,7 @@ export class GlobalService {
         response.storeURL = clientAppSettings.StoreUrlIOS;
       }
     }
+    console.info('updateAppCheck | response: ', response);
     return response;
   }
 

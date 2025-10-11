@@ -8,6 +8,7 @@
     <ng-container *ngFor="let action of reactNativeActions">
         <button mat-stroked-button (click)="onReactNativeMessage(action)">{{action}}</button>
     </ng-container>
+    <button mat-stroked-button (click)="openStoreAsync()">Open store</button>
 </div>
 <hr>
 <div class="result">

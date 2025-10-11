@@ -1,6 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { IDownloadFilePayload, IOpenURLPayload, IReadDataPayload, IResponseMessage, IShowNotificationPayload, IStoreDataPayload, IVerifyBiometricSignaturePayload, IWriteToConsolePayload, MESSAGE_ACTIONS } from '../../../models/webview-bridge.models';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
+import { ClientAppSettingsService } from '../../../services/backend/client-app-settings.service';
+import { AppNotificationsService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'app-react-native-message-test',
@@ -10,6 +12,8 @@ import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 })
 export class ReactNativeMessageTestComponent implements OnInit {
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
+  private readonly _clientAppSettingsService = inject(ClientAppSettingsService);
+  private readonly _appNotificationsService = inject(AppNotificationsService);
   nativeAppIsAvailable = false;
   isLoading = false;
   result: any = null;
@@ -119,5 +123,32 @@ export class ReactNativeMessageTestComponent implements OnInit {
         this.resultSource = `catch | response is null: ${!response}`;
         this.result = response;
       });
+  }
+
+  async openStoreAsync() {
+    try {
+      const clientAppSettings = await this._clientAppSettingsService.get().toPromise();
+      if (!clientAppSettings) {
+        this._appNotificationsService.error("clientAppSettings is null");
+        return;
+      }
+
+      const platformInfo = await this._webviewBridgeService.getPlatformInfoAsync();
+      if (!platformInfo) {
+        this._appNotificationsService.error("platformInfo is null");
+        return;
+      }
+
+      const payload: IOpenURLPayload = {
+        URL: platformInfo.os === 'android' ? clientAppSettings.StoreUrlAndroid : clientAppSettings.StoreUrlIOS
+      };
+      const response = await this._webviewBridgeService.openURLAsync(payload);
+      this.result = response;
+    } catch (e) {
+      this._appNotificationsService.httpErrorHandler(e);
+      const response = e as IResponseMessage;
+      this.resultSource = `catch | response is null: ${!response}`;
+      this.result = response;
+    }
   }
 }

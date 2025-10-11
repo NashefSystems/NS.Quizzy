@@ -24,7 +24,7 @@ export class RootComponent implements AfterViewInit, OnInit {
   userLoggedIn = false;
   isReady = false;
   isLoading = false;
-  updateIsRequired: boolean | null = true;
+  updateIsRequired: boolean | null = null;
 
   appContainerClasses = {
     "app-container": true,
