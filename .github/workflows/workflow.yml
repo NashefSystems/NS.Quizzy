@@ -11,7 +11,7 @@ on:
       - master
 
 concurrency:
-    group: "${{ github.event.repository.name }}_group"
+    group: "${{ github.event.repository.name }}_n_group"
 
 jobs:
     CheckBranch:
