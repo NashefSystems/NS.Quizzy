@@ -14,7 +14,9 @@ export interface IExamPayloadDto {
     isVisible: boolean;
 }
 
-export interface IExamDto extends IExamPayloadDto, IBaseEntityDto { }
+export interface IExamDto extends IExamPayloadDto, IBaseEntityDto {
+    startTimeStr: string;
+}
 
 export interface IExamFilterRequest {
     fromTime: string;

@@ -21,5 +21,7 @@ namespace NS.Quizzy.Server.BL.DTOs
     {
         [JsonProperty(Order = int.MinValue)]
         public Guid Id { get; set; }
+
+        public string StartTimeStr { get; set; }
     }
 }

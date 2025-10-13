@@ -44,7 +44,7 @@ namespace NS.Quizzy.Server.BL.Services
             var query = _appDbContext.Exams
                 .Include(x => x.GradeExams)
                 .Include(x => x.ClassExams)
-                .Where(x =>
+                .Where(x =>                    
                     x.IsDeleted == false &&
                     x.StartTime >= request.FromTime &&
                     x.StartTime <= request.ToTime
@@ -123,10 +123,10 @@ namespace NS.Quizzy.Server.BL.Services
 
             var data = await query.OrderBy(x => x.StartTime).ToListAsync();
             logBag.AddOrUpdateParameter("DbRows", data.Count);
-           
+
             var res = _mapper.Map<List<ExamDto>>(data);
             logBag.AddOrUpdateParameter("ResultRows", res.Count);
-           
+
             logBag.Trace("Completed");
             return res;
         }

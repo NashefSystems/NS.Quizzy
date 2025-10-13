@@ -15,10 +15,6 @@
             <mat-icon aria-hidden="false">more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <!-- <button mat-menu-item (click)="onPrint()">
-                <mat-icon aria-hidden="false">print</mat-icon>
-                <span>{{ 'PRINT' | translate }}</span>
-            </button> -->
             <button mat-menu-item (click)="onExport()">
                 <mat-icon aria-hidden="false">download</mat-icon>
                 <span>{{ 'EXPORT' | translate }}</span>
@@ -35,11 +31,10 @@
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     <div class="exam-info-questionnaire">
-                        ({{questionnairesDic[exam.questionnaireId].code}})
-                        {{questionnairesDic[exam.questionnaireId].name}}
+                        {{getQuestionnaireInfo(exam)}}                     
                     </div>
                     <div class="exam-description">
-                        {{exam.startTime | date: isTimeValid(exam.startTime) ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy'}}
+                        {{exam.startTimeStr}}
                         {{getDay(exam.startTime) | translate}}
                         |
                         {{examTypesDic[exam.examTypeId].name }} - {{moedsDic[exam.moedId].name }}
@@ -48,7 +43,7 @@
             </mat-expansion-panel-header>
             <div class="exam-info-container">
                 <app-exam-info-value [icon]="'category'" [name]="'SUBJECT_AREA.NAME' | translate"
-                    [value]="subjectsDic[questionnairesDic[exam.questionnaireId].subjectId].name"></app-exam-info-value>
+                    [value]="getSubjectName(exam)"></app-exam-info-value>
 
                 <app-exam-info-value [icon]="'schedule'" [name]="'EXAM_AREA.DURATION' | translate"
                     [value]="exam.duration | time : 'HH:mm'"></app-exam-info-value>

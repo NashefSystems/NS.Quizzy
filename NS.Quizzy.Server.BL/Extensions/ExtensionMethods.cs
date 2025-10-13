@@ -360,5 +360,15 @@ namespace NS.Quizzy.Server.BL.Extensions
                 _ => throw new Exception($"Unknown role '{role}'"),
             };
         }
+
+        internal static string ToExamStringTime(this DateTimeOffset dt)
+        {
+            var val = dt.DateTime;
+            if (val.Hour == 0 && val.Minute == 0)
+            {
+                return val.ToString("dd/MM/yyyy");
+            }
+            return val.ToString("dd/MM/yyyy HH:mm");
+        }
     }
 }

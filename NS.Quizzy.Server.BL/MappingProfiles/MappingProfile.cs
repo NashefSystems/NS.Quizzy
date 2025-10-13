@@ -3,6 +3,7 @@ using NS.Quizzy.Server.DAL.Entities;
 using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Utils;
 using NS.Quizzy.Server.DAL.Models;
+using NS.Quizzy.Server.BL.Extensions;
 
 namespace NS.Quizzy.Server.BL.MappingProfiles
 {
@@ -15,6 +16,7 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
             CreateMap<Class, ClassDto>();
             CreateMap<ClassExam, ClassExamDto>();
             CreateMap<Exam, ExamDto>()
+                .ForMember(dst => dst.StartTimeStr, opt => opt.MapFrom(src => src.StartTime.ToExamStringTime()))
                 .ForMember(dst => dst.GradeIds, opt => opt.MapFrom(src => src.GradeExams.Where(x => x.IsDeleted == false && x.IsImprovement == false).Select(x => x.GradeId).ToList()))
                 .ForMember(dst => dst.ImprovementGradeIds, opt => opt.MapFrom(src => src.GradeExams.Where(x => x.IsDeleted == false && x.IsImprovement == true).Select(x => x.GradeId).ToList()))
                 .ForMember(dst => dst.ClassIds, opt => opt.MapFrom(src => src.ClassExams.Where(x => x.IsDeleted == false && x.IsImprovement == false).Select(x => x.ClassId).ToList()))

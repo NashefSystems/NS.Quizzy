@@ -116,6 +116,11 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             item.IsDeleted = true;
+
+            var exams = await _appDbContext.Exams.Where(x => x.QuestionnaireId == id && x.IsDeleted == false).ToListAsync();
+            exams.ForEach(x => x.IsDeleted = true);
+
+            item.IsDeleted = true;
             await _appDbContext.SaveChangesAsync();
             await _cacheProvider.DeleteAsync(CACHE_KEY);
             return true;

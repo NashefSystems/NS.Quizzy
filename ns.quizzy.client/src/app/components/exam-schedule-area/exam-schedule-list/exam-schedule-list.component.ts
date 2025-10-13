@@ -12,7 +12,6 @@ import { IExportDataItem, ExportService } from './export.service';
 import { DateTimeUtils } from '../../../utils/date-time.utils';
 import { WebviewBridgeService } from '../../../services/webview-bridge.service';
 import { TimePipe } from '../../../pipes/time.pipe';
-import { DatePipe } from '@angular/common';
 import { AccountService } from '../../../services/backend/account.service';
 import { CheckPermissionsUtils } from '../../../utils/check-permissions.utils';
 import { ExamsService } from '../../../services/backend/exams.service';
@@ -29,7 +28,6 @@ export class ExamScheduleListComponent implements OnInit {
   private readonly _webviewBridgeService = inject(WebviewBridgeService);
   private readonly _exportService = inject(ExportService);
   private readonly _timePipe = inject(TimePipe);
-  private readonly _datePipe = inject(DatePipe);
   private readonly _accountService = inject(AccountService);
   private readonly _examsService = inject(ExamsService);
   private readonly _globalService = inject(GlobalService);
@@ -79,7 +77,7 @@ export class ExamScheduleListComponent implements OnInit {
     this._accountService.getDetails().subscribe({
       next: data => this.isEditor = CheckPermissionsUtils.isAdminUser(data)
     });
-    
+
     this._globalService
       .featureIsAvailableAsync(FeatureFlags.EXAM_SCHEDULE_LIST__DOWNLOAD_FILE)
       .then(x => this.downloadFileIsAvailable = x);
@@ -193,13 +191,12 @@ export class ExamScheduleListComponent implements OnInit {
   isFilteredExam(exam: IExamDto, filterValue: string): boolean {
     filterValue = filterValue.trim();
     let strValue = `
-        ${this.questionnairesDic[exam.questionnaireId].code}
-        ${this.questionnairesDic[exam.questionnaireId].name}
-        ${this._datePipe.transform(exam.startTime, this.isTimeValid(exam.startTime) ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy')}
+        ${this.getQuestionnaireInfo(exam)}
+        ${exam.startTimeStr}
         ${this.getDay(exam.startTime)}
         ${this.examTypesDic[exam.examTypeId].name}
         ${this.moedsDic[exam.moedId].name}
-        ${this.subjectsDic[this.questionnairesDic[exam.questionnaireId].subjectId].name}
+        ${this.getSubjectName(exam)}
         ${this._timePipe.transform(exam.duration, 'HH:mm')}
         ${this._timePipe.transform(exam.durationWithExtra, 'HH:mm')}
         ${(exam.gradeIds && exam.gradeIds.length > 0) ? this.getGrades(exam.gradeIds) : ''}
@@ -208,6 +205,29 @@ export class ExamScheduleListComponent implements OnInit {
         ${(exam.improvementClassIds && exam.improvementClassIds.length > 0) ? this.getClasses(exam.improvementClassIds) : ''}
       `;
     return strValue.indexOf(filterValue) === -1;
+  }
+
+  getQuestionnaireInfo(exam: IExamDto) {
+    if (!exam) {
+      return '';
+    }
+    const questionnaire = this.questionnairesDic[exam.questionnaireId];
+    if (!questionnaire) {
+      return '';
+    }
+    return `(${questionnaire.code}) ${questionnaire.name}`;
+  }
+
+  getSubjectName(exam: IExamDto) {
+    if (!exam) {
+      return '';
+    }
+    const questionnaire = this.questionnairesDic[exam.questionnaireId];
+    if (!questionnaire) {
+      return '';
+    }
+    const subject = this.subjectsDic[questionnaire.subjectId];
+    return subject?.name;
   }
 
   applyFilter(): void {
@@ -232,11 +252,6 @@ export class ExamScheduleListComponent implements OnInit {
     }
     var names = this.grades.filter(x => ids.includes(x.id)).map(x => x.name);
     return names.join(' | ');
-  }
-
-  isTimeValid(date: Date | string): boolean {
-    const d = new Date(date);
-    return d.getHours() !== 0 || d.getMinutes() !== 0;
   }
 
   getDay(isoDateTime: string) {
