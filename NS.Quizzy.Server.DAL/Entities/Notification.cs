@@ -1,5 +1,4 @@
 ﻿using NS.Quizzy.Server.DAL.Models;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NS.Quizzy.Server.DAL.Entities
 {

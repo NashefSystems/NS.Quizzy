@@ -32,6 +32,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new AppSettingEntityConfiguration());
             modelBuilder.ApplyConfiguration(new LoginHistoryItemEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationTemplateEntityConfiguration());
             modelBuilder.ApplyConfiguration(new NotificationGroupEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserNotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new DeviceEntityConfiguration());
@@ -364,6 +365,17 @@ namespace NS.Quizzy.Server.DAL
             private static string ObjectToJson<T>(T value)
             {
                 return JsonConvert.SerializeObject(value);
+            }
+        }
+
+        internal class NotificationTemplateEntityConfiguration : BaseEntityTypeConfiguration<NotificationTemplate>
+        {
+            public override void Configure(EntityTypeBuilder<NotificationTemplate> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("NotificationTemplates");
+
+                entity.HasIndex(x => x.Name).IsUnique(true).HasFilter("IsDeleted = '0'");
             }
         }
 

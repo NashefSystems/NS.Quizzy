@@ -19,12 +19,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatRadioModule } from '@angular/material/radio';
 const matModules = [
   MatFormFieldModule, MatChipsModule, MatIconModule, MatAutocompleteModule,
   MatDialogModule, MatButtonModule, MatInputModule, MatCheckboxModule, MatCardModule,
   MatExpansionModule, MatProgressBarModule, MatProgressSpinner, MatSidenavModule, MatMenuModule,
   MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSelectModule, MatTabsModule, MatTooltipModule,
-  MatBadgeModule
+  MatBadgeModule, MatRadioModule
 ];
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -82,10 +83,14 @@ import { NotificationListComponent } from './components/notification-area/notifi
 import { NotificationAddComponent } from './components/notification-area/notification-add/notification-add.component';
 import { NotificationGroupListComponent } from './components/notification-group-area/notification-group-list/notification-group-list.component';
 import { NotificationGroupAddOrEditComponent } from './components/notification-group-area/notification-group-add-or-edit/notification-group-add-or-edit.component';
+import { NotificationTemplateListComponent } from './components/notification-template-area/notification-template-list/notification-template-list.component';
+import { NotificationTemplateAddOrEditComponent } from './components/notification-template-area/notification-template-add-or-edit/notification-template-add-or-edit.component';
+
 import { DatePipe } from '@angular/common';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { FullLoadingComponent } from './components/global-area/full-loading/full-loading.component';
 import { ForceUpdateComponent } from './components/global-area/force-update/force-update.component';
+import { SelectNotificationTemplateDialogComponent } from './components/notification-template-area/select-notification-template-dialog/select-notification-template-dialog.component';
 
 // Factory function for HttpLoader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -120,8 +125,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     MoedListComponent,
     MyNotificationsComponent,
     NotificationAddComponent,
-    NotificationGroupAddOrEditComponent,
     NotificationGroupListComponent,
+    NotificationGroupAddOrEditComponent,
+    NotificationTemplateListComponent,
+    NotificationTemplateAddOrEditComponent,
+    SelectNotificationTemplateDialogComponent,
     NotificationListComponent,
     NotificationSnackBarComponent,
     PrettyJsonPipe,

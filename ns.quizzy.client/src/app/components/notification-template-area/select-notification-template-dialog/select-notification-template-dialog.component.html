@@ -1,0 +1,19 @@
+<div mat-dialog-title>
+  <mat-icon style="vertical-align: middle; margin-right: 8px;">category</mat-icon>
+  <label id="example-radio-group-label">
+    {{ 'NOTIFICATION_TEMPLATE_AREA.SELECT_DIALOG.TITLE' | translate }}
+  </label>
+  <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group" [(ngModel)]="selectedItem">
+    @for (item of items; track item) {
+    <mat-radio-button class="example-radio-button" [value]="item">{{item.name}}</mat-radio-button>
+    }
+  </mat-radio-group>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button (click)="cancel()">
+    {{ 'NOTIFICATION_TEMPLATE_AREA.SELECT_DIALOG.CANCEL' | translate }}
+  </button>
+  <button mat-flat-button (click)="confirm()" [disabled]="!selectedItem">
+    {{ 'NOTIFICATION_TEMPLATE_AREA.SELECT_DIALOG.CONFIRM' | translate }}
+  </button>
+</div>

@@ -21,7 +21,7 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class UsersService : IUsersService
     {
-        const string CACHE_KEY = "Users";
+        const string CACHE_KEY = "DBCache:Users";
         private readonly INSQueueService _queueService;
         private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;

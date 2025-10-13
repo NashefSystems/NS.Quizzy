@@ -144,6 +144,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<IOTPService, OTPService>();
             services.AddScoped<IFcmService, FcmService>();
             services.AddScoped<INotificationGroupsService, NotificationGroupsService>();
+            services.AddScoped<INotificationTemplatesService, NotificationTemplatesService>();
             services.AddScoped<INotificationsService, NotificationsService>();
             services.AddScoped<IDevicesService, DevicesService>();
             services.AddScoped<IDeveloperService, DeveloperService>();

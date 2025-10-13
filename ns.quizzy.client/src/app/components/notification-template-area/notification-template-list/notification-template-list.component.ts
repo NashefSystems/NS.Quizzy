@@ -4,30 +4,34 @@ import { Router } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
 import { ConfirmDialogComponent } from '../../global-area/confirm-dialog/confirm-dialog.component';
-import { NotificationGroupsService } from '../../../services/backend/notification-groups.service';
+import { NotificationTemplatesService } from '../../../services/backend/notification-templates.service';
 import { UsersService } from '../../../services/backend/users.service';
-import { INotificationGroupDto } from '../../../models/backend/notification-group.dto';
+import { INotificationTemplateDto } from '../../../models/backend/notification-template.dto';
 import { IUserDto } from '../../../models/backend/user.dto';
 import { forkJoin } from 'rxjs';
 
 @Component({
   standalone: false,
-  selector: 'app-notification-group-list',
-  templateUrl: './notification-group-list.component.html',
-  styleUrl: './notification-group-list.component.scss'
+  selector: 'app-notification-template-list',
+  templateUrl: './notification-template-list.component.html',
+  styleUrl: './notification-template-list.component.scss'
 })
-export class NotificationGroupListComponent implements OnInit {
-  private readonly _notificationGroupsService = inject(NotificationGroupsService);
+export class NotificationTemplateListComponent implements OnInit {
+  private readonly _notificationTemplatesService = inject(NotificationTemplatesService);
   private readonly _userService = inject(UsersService);
   private readonly _router = inject(Router);
   private readonly _dialogService = inject(DialogService);
 
   users: IUserDto[] = [];
-  items: INotificationGroupDto[] = [];
+  items: INotificationTemplateDto[] = [];
   columns: TableColumnInfo[] = [
     {
       key: 'name',
-      title: 'NOTIFICATION_GROUP_AREA.NAME'
+      title: 'NOTIFICATION_TEMPLATE_AREA.NAME'
+    },
+    {
+      key: 'title',
+      title: 'NOTIFICATION_TEMPLATE_AREA.TITLE'
     }
   ];
 
@@ -37,23 +41,23 @@ export class NotificationGroupListComponent implements OnInit {
 
   loadData() {
     forkJoin([
-      this._notificationGroupsService.get(),
+      this._notificationTemplatesService.get(),
       this._userService.get(),
-    ]).subscribe(([notificationGroups, users]) => {
+    ]).subscribe(([notificationTemplates, users]) => {
       this.users = users;
-      this.items = notificationGroups;
+      this.items = notificationTemplates;
     });
   }
 
   onAdd() {
-    this._router.navigate(['/notification-groups/new']);
+    this._router.navigate(['/notification-templates/new']);
   };
 
-  onEdit(item: INotificationGroupDto) {
-    this._router.navigate([`/notification-groups/edit/${item?.id}`]);
+  onEdit(item: INotificationTemplateDto) {
+    this._router.navigate([`/notification-templates/edit/${item?.id}`]);
   };
 
-  onDelete(selected: INotificationGroupDto) {
+  onDelete(selected: INotificationTemplateDto) {
     const item = this.items.find(x => x.id == selected.id);
     if (!item) {
       return;
@@ -70,7 +74,7 @@ export class NotificationGroupListComponent implements OnInit {
       .openDialog(dialogPayload)
       .then(isConfirmed => {
         if (isConfirmed) {
-          this._notificationGroupsService.delete(item.id).subscribe({
+          this._notificationTemplatesService.delete(item.id).subscribe({
             next: () => this.loadData()
           });
         }

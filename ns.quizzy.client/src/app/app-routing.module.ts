@@ -28,6 +28,8 @@ import { NotificationAddComponent } from './components/notification-area/notific
 import { MyNotificationsComponent } from './components/notification-area/my-notifications/my-notifications.component';
 import { NotificationGroupListComponent } from './components/notification-group-area/notification-group-list/notification-group-list.component';
 import { NotificationGroupAddOrEditComponent } from './components/notification-group-area/notification-group-add-or-edit/notification-group-add-or-edit.component';
+import { NotificationTemplateListComponent } from './components/notification-template-area/notification-template-list/notification-template-list.component';
+import { NotificationTemplateAddOrEditComponent } from './components/notification-template-area/notification-template-add-or-edit/notification-template-add-or-edit.component';
 
 const routes: Routes = [
   {
@@ -111,6 +113,38 @@ const routes: Routes = [
         component: NotificationGroupAddOrEditComponent,
         data: {
           page_title: "PAGE_TITLES.NOTIFICATION_GROUP_EDIT"
+        }
+      },
+      {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: '/notification-groups',
+      }
+    ]
+  },
+  {
+    path: 'notification-templates',
+    canActivate: [adminUserGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: NotificationTemplateListComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_TEMPLATE_LIST"
+        }
+      }, {
+        path: 'new',
+        component: NotificationTemplateAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_TEMPLATE_ADD"
+        }
+      },
+      {
+        path: 'edit/:id',
+        component: NotificationTemplateAddOrEditComponent,
+        data: {
+          page_title: "PAGE_TITLES.NOTIFICATION_TEMPLATE_EDIT"
         }
       },
       {

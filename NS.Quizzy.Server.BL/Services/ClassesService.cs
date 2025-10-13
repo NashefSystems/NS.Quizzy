@@ -13,7 +13,7 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class ClassesService : IClassesService
     {
-        const string CACHE_KEY = "Classes";
+        const string CACHE_KEY = "DBCache:Classes";
         private readonly INSCacheProvider _cacheProvider;
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;

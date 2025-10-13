@@ -40,7 +40,10 @@
         "NOTIFICATION_ADD": "Add notification",
         "NOTIFICATION_GROUP_LIST": "Notification groups",
         "NOTIFICATION_GROUP_ADD": "Add notification group",
-        "NOTIFICATION_GROUP_EDIT": "Edit notification group"
+        "NOTIFICATION_GROUP_EDIT": "Edit notification group",
+        "NOTIFICATION_TEMPLATE_LIST": "Notification templates",
+        "NOTIFICATION_TEMPLATE_ADD": "Add notification template",
+        "NOTIFICATION_TEMPLATE_EDIT": "Edit notification template"
     },
     "LOGIN": {
         "TITLE": "Log in",
@@ -84,7 +87,8 @@
             "SUBJECT_LIST": "Subjects",
             "USER_LIST": "Users",
             "NOTIFICATION_LIST": "Notifications",
-            "NOTIFICATION_GROUP_LIST": "Notification groups"
+            "NOTIFICATION_GROUP_LIST": "Notification groups",
+            "NOTIFICATION_TEMPLATE_LIST": "Notification templates"
         }
     },
     "TABLE": {
@@ -113,6 +117,7 @@
         "TARGET": "Target",
         "ADD_TARGET_SECTION": "Add a new target",
         "BODY": "Message",
+        "LOAD_FROM_TEMPLATE": "Load from template",
         "TARGET_IDS": "Target IDs",
         "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "The push notification was sent successfully",
         "DELIVERY_INFO": {
@@ -125,6 +130,16 @@
     "NOTIFICATION_GROUP_AREA": {
         "NAME": "Group name",
         "USER_IDS": "User Ids"
+    },
+    "NOTIFICATION_TEMPLATE_AREA": {
+        "NAME": "Template name",
+        "TITLE": "Title",
+        "BODY": "Message",
+        "SELECT_DIALOG": {
+            "TITLE": "Pick the desired template",
+            "CONFIRM": "Confirm",
+            "CANCEL": "Cancel"
+        }
     },
     "GRADE_AREA": {
         "NAME": "Name",

@@ -1,0 +1,36 @@
+<app-back-button></app-back-button>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_TEMPLATE_AREA.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name" autocomplete="off" />
+        <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+            <ng-container *ngIf="form.get('name')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_TEMPLATE_AREA.TITLE' | translate }}</mat-label>
+        <input matInput formControlName="title" />
+        <mat-error *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+            <ng-container *ngIf="form.get('title')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'NOTIFICATION_TEMPLATE_AREA.BODY' | translate }}</mat-label>
+        <textarea matInput formControlName="body"></textarea>
+        <mat-error *ngIf="form.get('body')?.invalid && form.get('body')?.touched">
+            <ng-container *ngIf="form.get('body')?.errors?.['required']">
+                {{ 'ERRORS.FIELD_REQUIRED' | translate }}
+            </ng-container>
+        </mat-error>
+    </mat-form-field>
+
+    <button mat-stroked-button class="full-width" [disabled]="form.invalid" cdkFocusInitial>
+        {{ (id ? 'UPDATE' : 'ADD') | translate }}
+    </button>
+</form>

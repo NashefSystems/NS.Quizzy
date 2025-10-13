@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { AppNotificationsService } from '../../../services/notifications.service';
 import { NotificationsService } from '../../../services/backend/notifications.service';
 import { Router } from '@angular/router';
-import { INotificationDto, INotificationPayloadDto, NotificationTargetTypes } from '../../../models/backend/notification.dto';
+import { INotificationPayloadDto, NotificationTargetTypes } from '../../../models/backend/notification.dto';
 import { IUserDto, IUserDtoExt } from '../../../models/backend/user.dto';
 import { IGradeDto } from '../../../models/backend/grade.dto';
 import { IClassDto } from '../../../models/backend/class.dto';
@@ -16,6 +16,11 @@ import { AppTranslateService } from '../../../services/app-translate.service';
 import { forkJoin } from 'rxjs';
 import { NotificationGroupsService } from '../../../services/backend/notification-groups.service';
 import { INotificationGroupDto } from '../../../models/backend/notification-group.dto';
+import { NotificationTemplatesService } from '../../../services/backend/notification-templates.service';
+import { INotificationTemplateDto } from '../../../models/backend/notification-template.dto';
+import { DialogService } from '../../../services/dialog.service';
+import { OpenDialogPayload } from '../../../models/dialog/open-dialog.payload';
+import { SelectNotificationTemplateDialogComponent } from '../../notification-template-area/select-notification-template-dialog/select-notification-template-dialog.component';
 
 @Component({
   selector: 'app-notification-add',
@@ -26,13 +31,15 @@ import { INotificationGroupDto } from '../../../models/backend/notification-grou
 export class NotificationAddComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _appNotificationsService = inject(AppNotificationsService);
-  private readonly _notificationGroupsService = inject(NotificationGroupsService);
   private readonly _classesService = inject(ClassesService);
   private readonly _gradesService = inject(GradesService);
   private readonly _usersService = inject(UsersService);
   private readonly _accountService = inject(AccountService);
   private readonly _notificationsService = inject(NotificationsService);
+  private readonly _notificationTemplatesService = inject(NotificationTemplatesService);
+  private readonly _notificationGroupsService = inject(NotificationGroupsService);
   private readonly _router = inject(Router);
+  private readonly _dialogService = inject(DialogService);
   private readonly _appTranslateService = inject(AppTranslateService);
 
   duplicateItemId: string | null = null;
@@ -40,6 +47,7 @@ export class NotificationAddComponent implements OnInit {
   id: string | null = null;
   users: IUserDtoExt[] = [];
   filteredUsers: IUserDtoExt[][] = [];
+  notificationTemplates: INotificationTemplateDto[] = [];
   notificationGroups: INotificationGroupDto[] = [];
   grades: IGradeDto[] = [];
   classes: IClassDto[] = [];
@@ -67,10 +75,12 @@ export class NotificationAddComponent implements OnInit {
       this._gradesService.get(),
       this._classesService.get(),
       this._notificationGroupsService.get(),
-    ]).subscribe(([users, grades, classes, notificationGroups]) => {
+      this._notificationTemplatesService.get(),
+    ]).subscribe(([users, grades, classes, notificationGroups, notificationTemplates]) => {
       this.grades = grades;
       this.classes = classes;
       this.notificationGroups = notificationGroups;
+      this.notificationTemplates = notificationTemplates;
 
       const usersEx = users.map(u => {
         return {
@@ -240,5 +250,24 @@ export class NotificationAddComponent implements OnInit {
         this._appNotificationsService.httpErrorHandler(err);
       }
     });
+  }
+
+  onLoadFromTemplate() {
+    const dialogPayload: OpenDialogPayload = {
+      component: SelectNotificationTemplateDialogComponent,
+      isFullDialog: false,
+      data: [...this.notificationTemplates]
+    };
+    this._dialogService
+      .openDialog(dialogPayload)
+      .then(selectedItem => {
+        if (selectedItem) {
+          const { title, body } = selectedItem as INotificationTemplateDto;
+          this.form.setValue({
+            ...this.form.value,
+            title, body
+          });
+        }
+      });
   }
 }

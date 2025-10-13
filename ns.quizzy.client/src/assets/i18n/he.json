@@ -40,7 +40,10 @@
         "NOTIFICATION_ADD": "הוספת התראה",
         "NOTIFICATION_GROUP_LIST": "קבוצות התראות",
         "NOTIFICATION_GROUP_ADD": "הוספת קבוצת התראות",
-        "NOTIFICATION_GROUP_EDIT": "עריכת קבוצת התראות"
+        "NOTIFICATION_GROUP_EDIT": "עריכת קבוצת התראות",
+        "NOTIFICATION_TEMPLATE_LIST": "תבניות התראות",
+        "NOTIFICATION_TEMPLATE_ADD": "הוספת תבנית התראות",
+        "NOTIFICATION_TEMPLATE_EDIT": "עריכת תבנית התראות"
     },
     "LOGIN": {
         "TITLE": "התחברות",
@@ -84,7 +87,8 @@
             "SUBJECT_LIST": "נושאים",
             "USER_LIST": "משתמשים",
             "NOTIFICATION_LIST": "התראות",
-            "NOTIFICATION_GROUP_LIST": "קבוצות התראות"
+            "NOTIFICATION_GROUP_LIST": "קבוצות התראות",
+            "NOTIFICATION_TEMPLATE_LIST": "תבניות התראות"
         }
     },
     "TABLE": {
@@ -113,6 +117,7 @@
         "TARGET": "יעד",
         "ADD_TARGET_SECTION": "הוסף יעד חדש",
         "BODY": "הודעה",
+        "LOAD_FROM_TEMPLATE": "טעינה מתבנית",
         "TARGET_IDS": "מזהה יעדים",
         "PUSH_NOTIFICATION_SENT_SUCCESSFULLY": "הודעת הדחיפה נשלחה בהצלחה",
         "DELIVERY_INFO": {
@@ -125,6 +130,16 @@
     "NOTIFICATION_GROUP_AREA": {
         "NAME": "שם קבוצה",
         "USER_IDS": "מזהה משתמשים"
+    },
+    "NOTIFICATION_TEMPLATE_AREA": {
+        "NAME": "שם תבנית",
+        "TITLE": "כותרת",
+        "BODY": "הודעה",
+        "SELECT_DIALOG": {
+            "TITLE": "בחר את התבנית הרצויה",
+            "CONFIRM": "אישור",
+            "CANCEL": "ביטול"
+        }
     },
     "GRADE_AREA": {
         "NAME": "שם",

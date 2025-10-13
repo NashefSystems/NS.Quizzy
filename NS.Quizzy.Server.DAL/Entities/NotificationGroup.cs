@@ -1,6 +1,4 @@
-﻿using NS.Quizzy.Server.DAL.Models;
-
-namespace NS.Quizzy.Server.DAL.Entities
+﻿namespace NS.Quizzy.Server.DAL.Entities
 {
     public class NotificationGroup : BaseEntity
     {

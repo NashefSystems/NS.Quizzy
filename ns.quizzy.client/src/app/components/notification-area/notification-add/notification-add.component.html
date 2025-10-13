@@ -1,6 +1,11 @@
-<app-back-button></app-back-button>
+<div class="header-actions">
+    <app-back-button></app-back-button>
+    <button mat-raised-button (click)="onLoadFromTemplate()">
+        <mat-icon aria-hidden="false">category</mat-icon>
+        {{'NOTIFICATION_AREA.LOAD_FROM_TEMPLATE' | translate}}
+    </button>
+</div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
     <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'NOTIFICATION_AREA.TITLE' | translate }}</mat-label>
         <input matInput formControlName="title" />

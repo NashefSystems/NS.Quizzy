@@ -26,6 +26,7 @@ namespace NS.Quizzy.Server.BL.MappingProfiles
             CreateMap<Questionnaire, QuestionnaireDto>();
             CreateMap<Subject, SubjectDto>();
             CreateMap<User, UserDto>();
+            CreateMap<NotificationTemplate, NotificationTemplateDto>();
             CreateMap<NotificationGroup, NotificationGroupDto>();
             CreateMap<Notification, NotificationDto>()
                 .ForMember(dst => dst.TotalUsers, opt => opt.MapFrom(src => src.UserNotifications == null ? default : src.UserNotifications.Count()))
