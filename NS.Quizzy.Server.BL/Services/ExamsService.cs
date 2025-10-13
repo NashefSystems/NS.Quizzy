@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using NS.Quizzy.Server.BL.CustomExceptions;
+using NS.Quizzy.Server.BL.DTOs;
+using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
-using NS.Quizzy.Server.BL.DTOs;
+using NS.Shared.Logging;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -13,15 +16,31 @@ namespace NS.Quizzy.Server.BL.Services
     {
         private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly INSLogger _logger;
 
-        public ExamsService(AppDbContext appDbContext, IMapper mapper)
+        public ExamsService(AppDbContext appDbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, INSLogger logger)
         {
             _appDbContext = appDbContext;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
+        }
+
+        bool IsFilterHiddenExams()
+        {
+            var role = _httpContextAccessor.HttpContext.GetUserRole();
+            if (role == null)
+            {
+                return true;
+            }
+            return role < DALEnums.Roles.Admin;
         }
 
         public async Task<List<ExamDto>> FilterAsync(ExamFilterRequest request)
         {
+            using var logBag = _logger.CreateLogBag(nameof(FilterAsync));
+            logBag.Trace("Starting");
             var query = _appDbContext.Exams
                 .Include(x => x.GradeExams)
                 .Include(x => x.ClassExams)
@@ -30,27 +49,39 @@ namespace NS.Quizzy.Server.BL.Services
                     x.StartTime >= request.FromTime &&
                     x.StartTime <= request.ToTime
                 );
+            logBag.AddOrUpdateParameter(nameof(request), request);
 
             if (request.ExamTypeIds?.Count > 0)
             {
+                logBag.Trace("Filter by ExamTypeIds");
                 query = query
                     .Where(x => request.ExamTypeIds.Contains(x.ExamTypeId));
             }
 
+            if (IsFilterHiddenExams())
+            {
+                logBag.Trace("Filter hidden exams");
+                query = query
+                  .Where(x => x.IsVisible == true);
+            }
+
             if (request.MoedIds?.Count > 0)
             {
+                logBag.Trace("Filter by MoedIds");
                 query = query
                     .Where(x => request.MoedIds.Contains(x.MoedId));
             }
 
             if (request.QuestionnaireIds?.Count > 0)
             {
+                logBag.Trace("Filter by QuestionnaireIds");
                 query = query
                     .Where(x => request.QuestionnaireIds.Contains(x.QuestionnaireId));
             }
 
             if (request.ClassIds?.Count > 0 || request.GradeIds?.Count > 0)
             {
+                logBag.Trace("Filter by ClassIds or GradeIds");
                 var classIds = request.ClassIds ?? [];
                 var gradeIds = request.GradeIds ?? [];
 
@@ -84,13 +115,20 @@ namespace NS.Quizzy.Server.BL.Services
 
             if (request.SubjectIds?.Count > 0)
             {
+                logBag.Trace("Filter by SubjectIds");
                 query = query
                     .Include(x => x.Questionnaire)
                     .Where(x => request.SubjectIds.Contains(x.Questionnaire.SubjectId));
             }
 
             var data = await query.OrderBy(x => x.StartTime).ToListAsync();
-            return _mapper.Map<List<ExamDto>>(data);
+            logBag.AddOrUpdateParameter("DbRows", data.Count);
+           
+            var res = _mapper.Map<List<ExamDto>>(data);
+            logBag.AddOrUpdateParameter("ResultRows", res.Count);
+           
+            logBag.Trace("Completed");
+            return res;
         }
 
         public async Task<List<ExamDto>> GetAllAsync()
@@ -105,6 +143,13 @@ namespace NS.Quizzy.Server.BL.Services
             {
                 query = query.Where(x => x.StartTime >= DateTimeOffset.Now);
             }
+
+            if (IsFilterHiddenExams())
+            {
+                query = query
+                  .Where(x => x.IsVisible == true);
+            }
+
             var items = await query.OrderBy(x => x.StartTime)
               .ThenBy(x => x.QuestionnaireId)
               .ToListAsync();
