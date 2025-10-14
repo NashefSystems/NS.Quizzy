@@ -69,7 +69,7 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
-            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__USER_ID, user.Id);
+            _logger.AddGlobalParam(LoggerConsts.LOGGER_GLOBAL_PROPERTY__USER_ID, user.Id);
 
             var res = new LoginResponse()
             {
@@ -120,7 +120,7 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
-            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__USER_ID, user.Id);
+            _logger.AddGlobalParam(LoggerConsts.LOGGER_GLOBAL_PROPERTY__USER_ID, user.Id);
 
             if (!string.IsNullOrWhiteSpace(loginRequest.NotificationToken))
             {
@@ -143,7 +143,7 @@ namespace NS.Quizzy.Server.BL.Services
             };
 
             var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role, loginHistoryItem.IsMobile);
-            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__TOKEN_ID, tokenId);
+            _logger.AddGlobalParam(LoggerConsts.LOGGER_GLOBAL_PROPERTY__TOKEN_ID, tokenId);
 
             loginHistoryItem.Id = tokenId;
             loginHistoryItem.Token = token;
@@ -241,7 +241,7 @@ namespace NS.Quizzy.Server.BL.Services
             };
 
             var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role, loginHistoryItem.IsMobile);
-            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__TOKEN_ID, tokenId);
+            _logger.AddGlobalParam(LoggerConsts.LOGGER_GLOBAL_PROPERTY__TOKEN_ID, tokenId);
             loginHistoryItem.Id = tokenId;
             loginHistoryItem.Token = token;
 
