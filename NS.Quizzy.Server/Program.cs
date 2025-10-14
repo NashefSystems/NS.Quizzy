@@ -99,7 +99,7 @@ namespace NS.Quizzy.Server
 
             #region RequestResponseLoggingMiddleware
             // Must call Middleware after calling `app.UseRouting()` or `app.MapControllers()`
-            app.UseRequestResponseLoggingMiddleware((logBag, apiCallInfoData) =>
+            app.UseRequestResponseLogging((logBag, apiCallInfoData) =>
             {
                 logBag.AddOrUpdateParameter("Method", apiCallInfoData.Method);
                 logBag.AddOrUpdateParameter("URL", apiCallInfoData.GetFullURL());

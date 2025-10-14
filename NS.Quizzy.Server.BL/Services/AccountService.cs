@@ -69,6 +69,8 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
+            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__USER_ID, user.Id);
+
             var res = new LoginResponse()
             {
                 ContextId = _logger.GetContextId(),
@@ -81,7 +83,7 @@ namespace NS.Quizzy.Server.BL.Services
                 res.TwoFactorSecretKey = secretKey;
                 res.TwoFactorUrl = _otpService.GetTwoFactorUrl(secretKey, user.Email);
                 res.TwoFactorQrCode = _otpService.GenerateQRCode(res.TwoFactorUrl);
-                _logger.Info($"Generated secret key");
+                _logger.Information($"Generated secret key");
             }
 
             var cacheInfo = new TwoFactorCacheInfo()
@@ -118,6 +120,8 @@ namespace NS.Quizzy.Server.BL.Services
                 return null;
             }
 
+            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__USER_ID, user.Id);
+
             if (!string.IsNullOrWhiteSpace(loginRequest.NotificationToken))
             {
                 user.NotificationToken = loginRequest.NotificationToken;
@@ -139,6 +143,8 @@ namespace NS.Quizzy.Server.BL.Services
             };
 
             var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role, loginHistoryItem.IsMobile);
+            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__TOKEN_ID, tokenId);
+
             loginHistoryItem.Id = tokenId;
             loginHistoryItem.Token = token;
 
@@ -153,7 +159,7 @@ namespace NS.Quizzy.Server.BL.Services
                 Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes(loginHistoryItem.IsMobile)) // Set expiration time
             });
 
-            _logger.Info($"LoginWithIdNumber | userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");
+            _logger.Information($"LoginWithIdNumber | userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");
             await AddLoginCacheAsync(user, tokenId, token);
             return new UserDetailsDto()
             {
@@ -235,6 +241,7 @@ namespace NS.Quizzy.Server.BL.Services
             };
 
             var (tokenId, token) = _jwtHelper.GenerateToken(user.Id, user.Email, user.FullName, user.Role, loginHistoryItem.IsMobile);
+            _logger.AddGlobalParam(LoggerConsts.HEADER_KEY__TOKEN_ID, tokenId);
             loginHistoryItem.Id = tokenId;
             loginHistoryItem.Token = token;
 
@@ -249,7 +256,7 @@ namespace NS.Quizzy.Server.BL.Services
                 Expires = DateTime.UtcNow.AddMinutes(_jwtHelper.GetJwtExpiresInMinutes(loginHistoryItem.IsMobile)) // Set expiration time
             });
 
-            _logger.Info($"VerifyOTP userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");
+            _logger.Information($"VerifyOTP userId: '{user.Id}', fullName: '{user.FullName}', tokenId: '{tokenId}'");
             await AddLoginCacheAsync(user, tokenId, token);
             return new UserDetailsDto()
             {
@@ -303,7 +310,7 @@ namespace NS.Quizzy.Server.BL.Services
         {
             var userId = _httpContextAccessor.HttpContext.GetUserId();
             var tokenId = _httpContextAccessor.HttpContext.GetTokenId();
-            _logger.Info($"Logout userId: '{userId}', tokenId: '{tokenId}'");
+            _logger.Information($"Logout userId: '{userId}', tokenId: '{tokenId}'");
             _httpContextAccessor.HttpContext?.Response.Cookies.Delete(BLConsts.AUTH_TOKEN_KEY);
             return Task.CompletedTask;
         }

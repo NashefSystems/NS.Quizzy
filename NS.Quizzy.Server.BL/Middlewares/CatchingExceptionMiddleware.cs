@@ -64,11 +64,11 @@ namespace NS.Quizzy.Server.BL.Middlewares
 
             if (statusCode < StatusCodes.Status500InternalServerError)
             {
-                logger.Error($"CatchingException ({response.Message})", new { StatusCode = statusCode, ErrorMessage = response.Message }, exception);
+                logger.Error(exception, $"CatchingError ({response.Message})", new { StatusCode = statusCode, ErrorMessage = response.Message });
             }
             else
             {
-                logger.Fatal($"CatchingException ({response.Message})", new { StatusCode = statusCode, ErrorMessage = response.Message }, exception);
+                logger.Fatal(exception, $"CatchingException ({response.Message})", new { StatusCode = statusCode, ErrorMessage = response.Message });
             }
 
             context.Response.Clear();

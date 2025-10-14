@@ -224,8 +224,9 @@ namespace NS.Quizzy.Server.BL.Services
             var batchSize = 15;
             var skip = 0;
             var tasks = item.UserNotifications.Skip(skip).Take(batchSize)
-                .Select(x => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+                .Select(x => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
                 {
+                    VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
                     QueueName = BLConsts.QUEUE_PUSH_NOTIFICATIONS,
                     Payload = JsonConvert.SerializeObject(x.Id)
                 }))
@@ -237,8 +238,9 @@ namespace NS.Quizzy.Server.BL.Services
 
                 skip += batchSize;
                 tasks = item.UserNotifications.Skip(skip).Take(batchSize)
-                    .Select(x => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+                    .Select(x => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
                     {
+                        VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
                         QueueName = BLConsts.QUEUE_PUSH_NOTIFICATIONS,
                         Payload = JsonConvert.SerializeObject(x.Id)
                     }))

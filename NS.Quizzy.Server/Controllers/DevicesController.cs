@@ -11,7 +11,6 @@ namespace NS.Quizzy.Server.Controllers
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
-    [LoggingAPICallInfo]
     public class DevicesController : ControllerBase
     {
         private readonly IDevicesService _service;

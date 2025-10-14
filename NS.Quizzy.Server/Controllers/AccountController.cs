@@ -12,7 +12,6 @@ namespace NS.Quizzy.Server.Controllers
     [ApiController]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, null, typeof(GlobalErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
-    [LoggingAPICallInfo]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;

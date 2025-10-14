@@ -7,5 +7,8 @@
 
         internal const string QUEUE_UPDATE_USERS = "update-users";
         internal const string QUEUE_PUSH_NOTIFICATIONS = "push-notifications";
+        internal const string QUEUE_VIRTUAL_HOST = "/ns-quizzy";
+        internal const int MESSAGE_STATUS_CACHE_TTL_IN_DAYS = 10;
+
     }
 }

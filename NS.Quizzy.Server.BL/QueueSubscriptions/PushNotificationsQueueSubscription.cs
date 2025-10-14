@@ -13,13 +13,13 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
     internal class PushNotificationsQueueSubscription : QueueSubscriptionBase
     {
         public override int GetMaximumAttempts() => 2;
+        public override string GetVirtualHost() => BLConsts.QUEUE_VIRTUAL_HOST;
         public override string GetQueueName() => BLConsts.QUEUE_PUSH_NOTIFICATIONS;
 
-        public override async Task<QueueSubscriptionAcceptMethodResult> ProcessMessageAsync(NSQueueMessage message, Func<double, Task> setMessageProgressPercentage, INSLogBag logBag, IServiceScope scope, CancellationToken cancellationToken)
+        public override async Task<QueueSubscriptionAcceptMethodResult> ProcessMessageAsync(Guid messageId, QueueMessage message, INSLogBag logBag, IServiceScope scope, CancellationToken cancellationToken)
         {
             var res = new QueueSubscriptionAcceptMethodResult();
             logBag.Trace("Starting ProcessMessageAsync");
-            await setMessageProgressPercentage(0);
             var userNotificationId = JsonConvert.DeserializeObject<Guid?>(message.Payload);
             if (userNotificationId == null || userNotificationId == Guid.Empty)
             {
@@ -30,7 +30,6 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
 
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var fcmService = scope.ServiceProvider.GetRequiredService<IFcmService>();
-            await setMessageProgressPercentage(30);
             var userNotification = await dbContext.UserNotifications
                 .Include(x => x.User)
                 .Include(x => x.Notification)
@@ -62,7 +61,6 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 return res.SetOk("User notification token is null or empty");
             }
 
-            await setMessageProgressPercentage(60);
             var request = new PushNotificationRequest()
             {
                 DeviceToken = userNotification.User.NotificationToken,
@@ -73,7 +71,6 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             request.Data["userNotificationId"] = userNotification.Id.ToString();
             request.Data["notificationId"] = userNotification.Notification.Id.ToString();
             var isSuccess = await fcmService.SendPushNotificationAsync(request, logBag);
-            await setMessageProgressPercentage(100);
             if (isSuccess)
             {
                 userNotification.PushNotificationsSendingTime = DateTimeOffset.Now;

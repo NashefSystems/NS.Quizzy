@@ -14,7 +14,6 @@ namespace NS.Quizzy.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, null, typeof(GlobalErrorResponse))]
-    [LoggingAPICallInfo]
     public class ClassesController : ControllerBase
     {
         private readonly IClassesService _service;

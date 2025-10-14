@@ -42,8 +42,15 @@ namespace NS.Quizzy.Server.BL.Extensions
             var loggerConfig = config.GetSection("NSLoggerConfig").Get<NSLoggerConfig>();
             if (loggerConfig != null)
             {
-                loggerConfig.GetUserId = (httpContext) => httpContext?.GetUserId()?.ToString();
-                loggerConfig.GetTokenId = (httpContext) => httpContext?.GetTokenId()?.ToString();
+                loggerConfig.GetContextInfos = (httpContext) =>
+                {
+                    var res = new Dictionary<string, object?>
+                    {
+                        { LoggerConsts.LOGGER_GLOBAL_PROPERTY__USER_ID, httpContext.GetUserId() },
+                        { LoggerConsts.LOGGER_GLOBAL_PROPERTY__TOKEN_ID, httpContext.GetTokenId() }
+                    };
+                    return res;
+                };
             }
             services.AddNSLogger(loggerConfig);
             #endregion
@@ -320,7 +327,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             }
             catch (Exception ex)
             {
-                logger.Fatal($"AppSetting value parsing exception '{ex.Message}'", new { AppSettingItem = item }, ex);
+                logger.Fatal(ex, $"AppSetting value parsing exception '{ex.Message}'", new { AppSettingItem = item });
                 throw new Exception($"AppSetting value parsing error '{ex.Message}'");
             }
         }
@@ -369,6 +376,11 @@ namespace NS.Quizzy.Server.BL.Extensions
                 return val.ToString("dd/MM/yyyy");
             }
             return val.ToString("dd/MM/yyyy HH:mm");
+        }
+
+        internal static string GetQueueMessageStatusCacheKey(this Guid messageId)
+        {
+            return $"QueueMsgStatus:{messageId}";
         }
     }
 }

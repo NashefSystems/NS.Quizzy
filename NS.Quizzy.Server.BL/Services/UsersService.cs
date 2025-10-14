@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.CustomExceptions;
+using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.Common.Extensions;
 using NS.Quizzy.Server.DAL;
-using NS.Quizzy.Server.BL.DTOs;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
+using NS.Shared.QueueManager;
 using NS.Shared.QueueManager.Interfaces;
 using System.Text;
 using static NS.Quizzy.Server.Common.Enums;
@@ -228,8 +229,9 @@ namespace NS.Quizzy.Server.BL.Services
                 throw new BadRequestException(errMsg);
             }
 
-            var publishMessageResult = await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.NSQueueMessage()
+            var publishMessageResult = await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
             {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
                 QueueName = BLConsts.QUEUE_UPDATE_USERS,
                 Payload = JsonConvert.SerializeObject(items)
             });
@@ -241,16 +243,24 @@ namespace NS.Quizzy.Server.BL.Services
                 throw new Exception($"Unable to push queue message: '{publishMessageResult.Error}'");
             }
 
+            if (!publishMessageResult.MessageID.HasValue)
+            {
+                throw new Exception($"Unable to push queue message: 'MessageID is null'");
+            }
+
+            string messageStatusCacheKey = publishMessageResult.MessageID.Value.GetQueueMessageStatusCacheKey();
+            await _cacheProvider.SetOrUpdateAsync(messageStatusCacheKey, new MessageStatusInfo(), TimeSpan.FromDays(BLConsts.MESSAGE_STATUS_CACHE_TTL_IN_DAYS));
+
             return new UploadFileResponse()
             {
-                MessageId = publishMessageResult.MessageID
+                MessageId = publishMessageResult.MessageID.Value
             };
         }
 
         public async Task<UploadFileStatusResponse> UploadFileStatusAsync(Guid uploadMessageId)
         {
-            var messageInfo = await _queueService.GetMessageStatusInfoAsync(uploadMessageId);
-
+            string messageStatusCacheKey = uploadMessageId.GetQueueMessageStatusCacheKey();
+            var messageInfo = await _cacheProvider.GetAsync<MessageStatusInfo>(messageStatusCacheKey);
             return new UploadFileStatusResponse()
             {
                 IsCompleted = messageInfo.IsCompleted,
