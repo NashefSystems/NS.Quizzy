@@ -19,15 +19,6 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
 {
     internal class UpdateUsersQueueSubscription : QueueSubscriptionBase
     {
-        private readonly INSCacheProvider _cacheProvider;
-        private readonly INSLogger _logger;
-
-        public UpdateUsersQueueSubscription(INSLogger logger, INSCacheProvider cacheProvider)
-        {
-            _logger = logger;
-            _cacheProvider = cacheProvider;
-        }
-
         public override int GetMaximumAttempts() => 2;
         public override string GetVirtualHost() => BLConsts.QUEUE_VIRTUAL_HOST;
         public override string GetQueueName() => BLConsts.QUEUE_UPDATE_USERS;
@@ -37,14 +28,19 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             var res = new QueueSubscriptionAcceptMethodResult();
             string messageStatusCacheKey = messageId.GetQueueMessageStatusCacheKey();
             MessageStatusInfo? messageStatusInfo = null;
+            INSCacheProvider? _cacheProvider = null;
+            INSLogger? _logger = null;
             try
             {
                 logBag.Trace("Starting ProcessMessageAsync");
                 logBag.AddOrUpdateParameter(nameof(messageStatusCacheKey), messageStatusCacheKey);
+
+                _cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
+                _logger = scope.ServiceProvider.GetRequiredService<INSLogger>();
                 messageStatusInfo = await _cacheProvider.GetAsync<MessageStatusInfo>(messageStatusCacheKey);
                 messageStatusInfo ??= new MessageStatusInfo();
                 messageStatusInfo.DownloadCounter += 1;
-                await SetMessageProgressPercentageAsync(messageStatusCacheKey, messageStatusInfo, 0);
+                await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 0);
                 var items = JsonConvert.DeserializeObject<List<CsvFileItem>>(message.Payload);
                 if (items == null || items.Count == 0)
                 {
@@ -72,10 +68,10 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                     item.IsDeleted = true;
                 }
 
-                await SetMessageProgressPercentageAsync(messageStatusCacheKey, messageStatusInfo, 0);
+                await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 0);
                 for (int i = 0; i < items.Count; i++)
                 {
-                    await SetMessageProgressPercentageAsync(messageStatusCacheKey, messageStatusInfo, 100.0 * i / items.Count);
+                    await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 100.0 * i / items.Count);
                     var email = $"{items[i].IdNumber}@{idNumberEmailDomain}";
                     var role = items[i].Role.ToUserRole();
                     Guid? classId = null;
@@ -101,54 +97,58 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 }
                 await dbContext.SaveChangesAsync();
                 await usersService.ClearCacheAsync();
-                await SuccessHandler(messageStatusCacheKey, messageStatusInfo);
+                await SuccessHandler(_cacheProvider, messageStatusCacheKey, messageStatusInfo);
                 return res.SetOk();
             }
             catch (Exception ex)
             {
                 logBag.Exception = ex;
-                await ErrorHandlerAsync(messageStatusCacheKey, messageStatusInfo, ex.Message);
+                await ErrorHandlerAsync(_cacheProvider, _logger, messageStatusCacheKey, messageStatusInfo, ex.Message);
                 return res.SetError(ex.Message);
             }
         }
 
-        private async Task SuccessHandler(string cacheKey, MessageStatusInfo? statusInfo)
+        private async Task SuccessHandler(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo? statusInfo)
         {
             statusInfo ??= new MessageStatusInfo();
             statusInfo.Error = null;
             statusInfo.IsCompleted = true;
             statusInfo.IsSuccess = true;
             statusInfo.ProgressPercentage = 100;
-            await UpdateMessageStatusInfoAsync(cacheKey, statusInfo);
+            await UpdateMessageStatusInfoAsync(cacheProvider, cacheKey, statusInfo);
         }
 
-        private async Task ErrorHandlerAsync(string cacheKey, MessageStatusInfo? statusInfo, string error)
+        private async Task ErrorHandlerAsync(INSCacheProvider? cacheProvider, INSLogger? logger, string cacheKey, MessageStatusInfo? statusInfo, string error)
         {
             try
             {
+                if (cacheProvider == null)
+                {
+                    return;
+                }
                 statusInfo ??= new MessageStatusInfo();
                 statusInfo.Error = error;
                 statusInfo.IsCompleted = true;
                 statusInfo.IsSuccess = false;
-                await UpdateMessageStatusInfoAsync(cacheKey, statusInfo);
+                await UpdateMessageStatusInfoAsync(cacheProvider, cacheKey, statusInfo);
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, nameof(ErrorHandlerAsync), new { cacheKey });
+                logger?.Fatal(ex, nameof(ErrorHandlerAsync), new { cacheKey });
             }
         }
 
-        private async Task SetMessageProgressPercentageAsync(string cacheKey, MessageStatusInfo statusInfo, double progressPercentage)
+        private async Task SetMessageProgressPercentageAsync(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo statusInfo, double progressPercentage)
         {
             if (progressPercentage < 0) progressPercentage = 0;
             if (progressPercentage > 100) progressPercentage = 100;
             statusInfo.ProgressPercentage = Math.Truncate(progressPercentage);
-            await UpdateMessageStatusInfoAsync(cacheKey, statusInfo);
+            await UpdateMessageStatusInfoAsync(cacheProvider, cacheKey, statusInfo);
         }
 
-        private async Task UpdateMessageStatusInfoAsync(string cacheKey, MessageStatusInfo statusInfo)
+        private async Task UpdateMessageStatusInfoAsync(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo statusInfo)
         {
-            await _cacheProvider.SetOrUpdateAsync(cacheKey, statusInfo, TimeSpan.FromDays(BLConsts.MESSAGE_STATUS_CACHE_TTL_IN_DAYS));
+            await cacheProvider.SetOrUpdateAsync(cacheKey, statusInfo, TimeSpan.FromDays(BLConsts.MESSAGE_STATUS_CACHE_TTL_IN_DAYS));
         }
     }
 }
