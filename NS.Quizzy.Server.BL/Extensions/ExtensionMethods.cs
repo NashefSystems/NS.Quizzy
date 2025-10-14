@@ -51,6 +51,15 @@ namespace NS.Quizzy.Server.BL.Extensions
                     };
                     return res;
                 };
+
+                var assemblyName = System.Reflection.Assembly.GetEntryAssembly()?.GetName();
+                loggerConfig.GlobalProperties = new Dictionary<string, object?>()
+                {
+                    { LoggerConsts.LOGGER_GLOBAL_PROPERTY__SERVICE_NAME, assemblyName?.Name },
+                    { "AppVersion", assemblyName?.Version?.ToString() },
+                    { "Application", "Quizzy" },
+                    { "AppContext", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") },
+                };
             }
             services.AddNSLogger(loggerConfig);
             #endregion
