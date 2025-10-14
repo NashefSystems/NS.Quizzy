@@ -10,7 +10,6 @@ using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
-using NS.Shared.QueueManager;
 using NS.Shared.QueueManager.Models;
 using NS.Shared.QueueManager.Services;
 using static NS.Quizzy.Server.Common.Enums;
