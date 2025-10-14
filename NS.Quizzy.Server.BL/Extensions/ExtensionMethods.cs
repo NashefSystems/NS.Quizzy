@@ -147,6 +147,7 @@ namespace NS.Quizzy.Server.BL.Extensions
                     };
                 });
 
+            services.AddScoped<IHealthService, HealthService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IGradesService, GradesService>();
             services.AddScoped<IClassesService, ClassesService>();
