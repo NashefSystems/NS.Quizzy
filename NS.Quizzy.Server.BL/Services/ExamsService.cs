@@ -378,33 +378,33 @@ namespace NS.Quizzy.Server.BL.Services
             var examTypeIsExists = await _appDbContext.ExamTypes.AnyAsync(x => x.IsDeleted == false && x.Id == model.ExamTypeId);
             if (!examTypeIsExists)
             {
-                throw new BadRequestException("Exam type ID not found");
+                throw new BadRequestException("Exam type Id not found");
             }
 
             var moedIsExists = await _appDbContext.Moeds.AnyAsync(x => x.IsDeleted == false && x.Id == model.MoedId);
             if (!moedIsExists)
             {
-                throw new BadRequestException("Moed ID not found");
+                throw new BadRequestException("Moed Id not found");
             }
 
             var questionnaireIsExists = await _appDbContext.Questionnaires.AnyAsync(x => x.IsDeleted == false && x.Id == model.QuestionnaireId);
             if (!questionnaireIsExists)
             {
-                throw new BadRequestException("Questionnaire ID not found");
+                throw new BadRequestException("Questionnaire Id not found");
             }
 
             var dbClassIds = await _appDbContext.Classes.Where(x => x.IsDeleted == false).Select(x => x.Id).ToListAsync();
             var invalidClassIds = model.ClassIds.Union(model.ImprovementClassIds).Where(x => !dbClassIds.Contains(x)).ToList();
             if (invalidClassIds.Count != 0)
             {
-                throw new BadRequestException($"Invalid class ID's [{string.Join(", ", invalidClassIds)}]");
+                throw new BadRequestException($"Invalid class Id's [{string.Join(", ", invalidClassIds)}]");
             }
 
             var dbGradeIds = await _appDbContext.Grades.Where(x => x.IsDeleted == false).Select(x => x.Id).ToListAsync();
             var invalidGradeIds = model.GradeIds.Union(model.ImprovementGradeIds).Where(x => !dbGradeIds.Contains(x)).ToList();
             if (invalidGradeIds.Count != 0)
             {
-                throw new BadRequestException($"Invalid grade ID's [{string.Join(", ", invalidGradeIds)}]");
+                throw new BadRequestException($"Invalid grade Id's [{string.Join(", ", invalidGradeIds)}]");
             }
         }
 

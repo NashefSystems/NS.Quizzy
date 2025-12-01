@@ -37,6 +37,7 @@ namespace NS.Quizzy.Server.DAL
             modelBuilder.ApplyConfiguration(new UserNotificationEntityConfiguration());
             modelBuilder.ApplyConfiguration(new DeviceEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserLoginStatusViewConfiguration());
+            modelBuilder.ApplyConfiguration(new EventEmailEntityConfiguration());
 
             var columnOrderLog = _columnOrderLogEnabled ? new StringBuilder() : null;
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
@@ -430,6 +431,25 @@ namespace NS.Quizzy.Server.DAL
                     .HasOne(c => c.User)
                     .WithMany(c => c.UserNotifications)
                     .HasForeignKey(c => c.UserId);
+            }
+        }
+
+        internal class EventEmailEntityConfiguration : BaseEntityTypeConfiguration<EventEmail>
+        {
+            public override void Configure(EntityTypeBuilder<EventEmail> entity)
+            {
+                base.Configure(entity);
+                entity.ToTable("EventEmails");
+
+                entity
+                   .Property(c => c.Email)
+                   .HasMaxLength(100);
+
+                entity
+                    .HasIndex(c => c.Email)
+                    .IsUnique(true);
+
+                entity.HasData(InitialData.EventEmailEntityData.GetData());
             }
         }
 

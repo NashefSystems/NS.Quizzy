@@ -533,7 +533,133 @@ namespace NS.Quizzy.Server.DAL
                         Value = "itms-apps://apps.apple.com/app/id6745685962",
                         IsSecured = false,
                         IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("FDCF995F-779A-4972-9850-4453633F475C"),
+                        Key =  AppSettingKeys.GraphTenantId.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.String,
+                        Value = "consumers",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("3171793A-E0F3-4DAE-A9F7-5A1117CC5FC2"),
+                        Key =  AppSettingKeys.GraphClientId.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.String,
+                        Value = "0acb772f-e573-47b4-91b8-1d85a89bebc5",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("5954EE58-2839-4113-8A0B-825F7E0F07E6"),
+                        Key =  AppSettingKeys.GraphRedirectUri.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.String,
+                        Value = "http://localhost",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("DE672B80-C6F0-44BF-AD80-A482FF28545A"),
+                        Key =  AppSettingKeys.GraphScopes.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.Json,
+                        Value = "[ \"Calendars.ReadWrite\" ]",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("64BE7431-20CC-446D-A5FB-D06F69EC8EC5"),
+                        Key =  AppSettingKeys.GraphTimeZone.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.String,
+                        Value = "Israel Standard Time",
+                        IsSecured = false,
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("EBCE4A11-04D3-4C1C-8685-E9EF8E572EE8"),
+                        Key =  AppSettingKeys.GraphAuthRecord.GetDBStringValue(),
+                        Target = DALEnums.AppSettingTargets.Server,
+                        ValueType = DALEnums.AppSettingValueTypes.String,
+                        Value = "{\"username\":\"nashefsys@gmail.com\",\"authority\":\"login.microsoftonline.com\",\"homeAccountId\":\"00000000-0000-0000-54f1-d0995ee01681.9188040d-6c67-4c5b-b112-36a304b66dad\",\"tenantId\":\"9188040d-6c67-4c5b-b112-36a304b66dad\",\"clientId\":\"0acb772f-e573-47b4-91b8-1d85a89bebc5\",\"version\":\"1.0\"}",
+                        IsSecured = false,
+                        IsDeleted = false,
                     }
+                ];
+            }
+        }
+
+        internal static class EventEmailEntityData
+        {
+            internal static List<EventEmail> GetData()
+            {
+                return
+                [
+                    new()
+                    {
+                        Id = Guid.Parse("CFA04E13-77EB-4905-A98F-0FEDA0244137"),
+                        Name = "סאגי נאשף",
+                        Email = "saji.nashef@gmail.com",
+                        IsDeleted = false,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("0C4805CA-3A80-4D25-B5BE-1CBDDC8CA21B"),
+                        Name = "אסראא חג יחיא",
+                        Email = "isradr4@gmail.com",
+                        IsDeleted = true,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("0016A6D6-6164-4E3D-8C74-29053D1C041F"),
+                        Name = "רמי גבאלי",
+                        Email = "Rami33z@gmail.com",
+                        IsDeleted = true,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("2B8DF855-F9B1-47DD-AAD5-31FCB2398F5B"),
+                        Name = "אמיר גבאלי",
+                        Email = "amernj22@gmail.com",
+                        IsDeleted = true,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("F4563844-B894-46C7-9D91-9AD48524635E"),
+                        Name = "שרוק טויל",
+                        Email = "shotawil@gmail.com",
+                        IsDeleted = true,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("F2488B03-254F-46B7-9FD4-AA47A3373EAD"),
+                        Name = "הלאל מסארוה",
+                        Email = "hilalmsa@gmail.com",
+                        IsDeleted = true,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("D469F77E-BE7E-4283-9E1D-BD8603D6D0B2"),
+                        Name = "פרידה גאבר",
+                        Email = "farida.j.81@gmail.com",
+                        IsDeleted = true,
+                    },
+                    new()
+                    {
+                        Id = Guid.Parse("1409A71A-9509-43F6-8697-FF5751A0F1F4"),
+                        Name = "מנאל עאזם",
+                        Email = "Manalazem@gmail.com",
+                        IsDeleted = true,
+                    },
                 ];
             }
         }

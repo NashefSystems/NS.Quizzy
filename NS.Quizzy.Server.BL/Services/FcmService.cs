@@ -13,7 +13,7 @@ namespace NS.Quizzy.Server.BL.Services
 {
     internal class FcmService : IFcmService
     {
-        private readonly string _projectId = "quizzy-74a09"; // Replace with your actual project ID
+        private readonly string _projectId = "quizzy-74a09"; // Replace with your actual project Id
         private readonly string _googleCredentialJson;
         private readonly INSLogger _logger;
 
