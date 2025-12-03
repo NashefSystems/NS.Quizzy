@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph.Models;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.DTOs;

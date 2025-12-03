@@ -2,8 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Extensions;
-using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
+using NS.Quizzy.Server.BL.Services;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.CacheProvider.Interfaces;
@@ -49,11 +49,12 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                     logBag.LogLevel = NSLogLevel.Error;
                     return res.SetError($"Exam ID '{examId}' not found");
                 }
-
-                var outlookCalendarService = scope.ServiceProvider.GetRequiredService<IOutlookCalendarService>();
+                var emails = await dbContext.EventEmails.Where(x => x.IsDeleted == false).Select(x => x.Email).ToListAsync();
                 logBag.AddOrUpdateParameter("ExamIsDeleted", exam.IsDeleted);
                 logBag.AddOrUpdateParameter("ExamIsVisible", exam.IsVisible);
-                logBag.AddOrUpdateParameter("ExamOutlookCalendarId", exam.OutlookCalendarId);
+                logBag.AddOrUpdateParameter("ExamCalendarEventId", exam.CalendarEventId);
+
+                var zohoCalendarService = scope.ServiceProvider.GetRequiredService<ZohoCalendarService>();
                 await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 10);
 
                 if (exam.IsVisible && !exam.IsDeleted)
@@ -79,24 +80,29 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                     var questionnaire = await dbContext.Questionnaires.FirstOrDefaultAsync(x => x.Id == exam.QuestionnaireId);
                     var subject = questionnaire?.SubjectId == null ? null : await dbContext.Subjects.FirstOrDefaultAsync(x => x.Id == questionnaire.SubjectId);
                     var body = GetBody(exam, moed, examType, questionnaire, subject, grades, classes);
-                    var eventItem = new EventInCalendar()
+                    var isAllDay = exam.StartTime.Hour == 0 && exam.StartTime.Minute == 0;
+                    var endTime = isAllDay ? exam.StartTime.DateTime.AddDays(1) : exam.StartTime.DateTime.Add(exam.DurationWithExtra);
+                    var calendarEvent = new ZohoCalendarEvent()
                     {
-                        Id = exam.OutlookCalendarId,
-                        Subject = $"{subject?.Name} ({questionnaire?.Code}) - {examType?.Name} - {exam.Duration:hh\\:mm} / {exam.DurationWithExtra:hh\\:mm}",
+                        Title = $"{subject?.Name} ({questionnaire?.Code}) - {examType?.Name} - {exam.Duration:hh\\:mm} / {exam.DurationWithExtra:hh\\:mm}",
                         Location = location,
-                        Body = body,
-                        IsAllDay = exam.StartTime.Hour == 0 && exam.StartTime.Minute == 0,
+                        Description = body,
                         StartTime = exam.StartTime.DateTime,
-                        EndTime = exam.StartTime.DateTime.Add(exam.DurationWithExtra),
+                        EndTime = endTime,
+                        IsAllDay = isAllDay,
+                        Emails = emails
                     };
-                    eventItem = await outlookCalendarService.CreateOrUpdateEventInCalendar(eventItem);
-                    exam.OutlookCalendarId = eventItem?.Id;
+
+                    logBag.Trace(string.IsNullOrWhiteSpace(exam.CalendarEventId) ? "Create" : "Update" + " event");
+                    exam.CalendarEventId = await zohoCalendarService.CreateOrUpdateEventAsync(calendarEvent, exam.CalendarEventId);
+                    logBag.Trace($"CalendarEventId: {exam.CalendarEventId}");
+                    logBag.AddOrUpdateParameter("ExamCalendarEventId", exam.CalendarEventId);
                 }
-                else if (!string.IsNullOrWhiteSpace(exam.OutlookCalendarId))
+                else if (!string.IsNullOrWhiteSpace(exam.CalendarEventId))
                 {
                     logBag.Trace("Delete event");
-                    await outlookCalendarService.DeleteEventInCalendar(exam.OutlookCalendarId);
-                    exam.OutlookCalendarId = null;
+                    await zohoCalendarService.DeleteEventAsync(exam.CalendarEventId);
+                    exam.CalendarEventId = null;
                 }
                 await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 90);
                 await dbContext.SaveChangesAsync();

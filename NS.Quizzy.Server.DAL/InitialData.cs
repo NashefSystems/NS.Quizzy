@@ -533,67 +533,7 @@ namespace NS.Quizzy.Server.DAL
                         Value = "itms-apps://apps.apple.com/app/id6745685962",
                         IsSecured = false,
                         IsDeleted = false,
-                    },
-                    new()
-                    {
-                        Id = Guid.Parse("FDCF995F-779A-4972-9850-4453633F475C"),
-                        Key =  AppSettingKeys.GraphTenantId.GetDBStringValue(),
-                        Target = DALEnums.AppSettingTargets.Server,
-                        ValueType = DALEnums.AppSettingValueTypes.String,
-                        Value = "consumers",
-                        IsSecured = false,
-                        IsDeleted = false,
-                    },
-                    new()
-                    {
-                        Id = Guid.Parse("3171793A-E0F3-4DAE-A9F7-5A1117CC5FC2"),
-                        Key =  AppSettingKeys.GraphClientId.GetDBStringValue(),
-                        Target = DALEnums.AppSettingTargets.Server,
-                        ValueType = DALEnums.AppSettingValueTypes.String,
-                        Value = "0acb772f-e573-47b4-91b8-1d85a89bebc5",
-                        IsSecured = false,
-                        IsDeleted = false,
-                    },
-                    new()
-                    {
-                        Id = Guid.Parse("5954EE58-2839-4113-8A0B-825F7E0F07E6"),
-                        Key =  AppSettingKeys.GraphRedirectUri.GetDBStringValue(),
-                        Target = DALEnums.AppSettingTargets.Server,
-                        ValueType = DALEnums.AppSettingValueTypes.String,
-                        Value = "http://localhost",
-                        IsSecured = false,
-                        IsDeleted = false,
-                    },
-                    new()
-                    {
-                        Id = Guid.Parse("DE672B80-C6F0-44BF-AD80-A482FF28545A"),
-                        Key =  AppSettingKeys.GraphScopes.GetDBStringValue(),
-                        Target = DALEnums.AppSettingTargets.Server,
-                        ValueType = DALEnums.AppSettingValueTypes.Json,
-                        Value = "[ \"Calendars.ReadWrite\" ]",
-                        IsSecured = false,
-                        IsDeleted = false,
-                    },
-                    new()
-                    {
-                        Id = Guid.Parse("64BE7431-20CC-446D-A5FB-D06F69EC8EC5"),
-                        Key =  AppSettingKeys.GraphTimeZone.GetDBStringValue(),
-                        Target = DALEnums.AppSettingTargets.Server,
-                        ValueType = DALEnums.AppSettingValueTypes.String,
-                        Value = "Israel Standard Time",
-                        IsSecured = false,
-                        IsDeleted = false,
-                    },
-                    new()
-                    {
-                        Id = Guid.Parse("EBCE4A11-04D3-4C1C-8685-E9EF8E572EE8"),
-                        Key =  AppSettingKeys.GraphAuthRecord.GetDBStringValue(),
-                        Target = DALEnums.AppSettingTargets.Server,
-                        ValueType = DALEnums.AppSettingValueTypes.String,
-                        Value = "{\"username\":\"examproduction@outlook.com\",\"authority\":\"login.microsoftonline.com\",\"homeAccountId\":\"00000000-0000-0000-1b54-45a3620d2ac5.9188040d-6c67-4c5b-b112-36a304b66dad\",\"tenantId\":\"9188040d-6c67-4c5b-b112-36a304b66dad\",\"clientId\":\"0acb772f-e573-47b4-91b8-1d85a89bebc5\",\"version\":\"1.0\"}",
-                        IsSecured = false,
-                        IsDeleted = false,
-                    }
+                    },             
                 ];
             }
         }

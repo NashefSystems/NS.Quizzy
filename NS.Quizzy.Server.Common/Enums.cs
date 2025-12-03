@@ -47,24 +47,6 @@ namespace NS.Quizzy.Server.Common
 
             [DBStringValue(nameof(StoreUrlIOS))]
             StoreUrlIOS,
-
-            [DBStringValue(nameof(GraphTenantId))]
-            GraphTenantId,
-
-            [DBStringValue(nameof(GraphClientId))]
-            GraphClientId,
-
-            [DBStringValue(nameof(GraphRedirectUri))]
-            GraphRedirectUri,
-
-            [DBStringValue(nameof(GraphScopes))]
-            GraphScopes,
-
-            [DBStringValue(nameof(GraphTimeZone))]
-            GraphTimeZone,
-
-            [DBStringValue(nameof(GraphAuthRecord))]
-            GraphAuthRecord,
         }
     }
 }
