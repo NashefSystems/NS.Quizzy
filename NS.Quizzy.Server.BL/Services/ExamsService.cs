@@ -448,5 +448,39 @@ namespace NS.Quizzy.Server.BL.Services
             });
             return true;
         }
+
+        public async Task<ReSyncEventsResponse> ReSyncEventsAsync(ReSyncEventsRequest request)
+        {
+            var query = _appDbContext.Exams.Where(x => x.IsDeleted == false);
+            if (request?.ExamIds != null && request.ExamIds.Count != 0)
+            {
+                var values = request.ExamIds.ToArray();
+                query = query.Where(x => values.Contains(x.Id));
+            }
+
+            if (request?.From != null)
+            {
+                query = query.Where(x => x.StartTime >= request.From);
+            }
+
+            if (request?.To != null)
+            {
+                query = query.Where(x => x.StartTime <= request.To);
+            }
+
+            var examIds = await query.Select(x => x.Id).ToListAsync();
+            var tasks = examIds.Select(examId => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(examId)
+            }));
+            await Task.WhenAll(tasks);
+            return new ReSyncEventsResponse()
+            {
+                Total = examIds.Count,
+                ExamIds = examIds,
+            };
+        }
     }
 }
