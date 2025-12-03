@@ -165,9 +165,10 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<INotificationTemplatesService, NotificationTemplatesService>();
             services.AddScoped<INotificationsService, NotificationsService>();
             services.AddScoped<IDevicesService, DevicesService>();
+            services.AddScoped<ISystemService, SystemService>();
             services.AddScoped<IDeveloperService, DeveloperService>();
 
-            services.AddHttpClient(); 
+            services.AddHttpClient();
             services.AddScoped<ZohoAuthService>();
             services.AddScoped<ZohoCalendarService>();
 
