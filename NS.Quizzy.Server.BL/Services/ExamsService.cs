@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph.Models;
+using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Extensions;
@@ -9,6 +11,7 @@ using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.Logging;
+using NS.Shared.QueueManager.Interfaces;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -18,13 +21,15 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly INSLogger _logger;
+        private readonly INSQueueService _queueService;
 
-        public ExamsService(AppDbContext appDbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, INSLogger logger)
+        public ExamsService(AppDbContext appDbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, INSLogger logger, INSQueueService queueService)
         {
             _appDbContext = appDbContext;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+            _queueService = queueService;
         }
 
         bool IsFilterHiddenExams()
@@ -44,7 +49,7 @@ namespace NS.Quizzy.Server.BL.Services
             var query = _appDbContext.Exams
                 .Include(x => x.GradeExams)
                 .Include(x => x.ClassExams)
-                .Where(x =>                    
+                .Where(x =>
                     x.IsDeleted == false &&
                     x.StartTime >= request.FromTime &&
                     x.StartTime <= request.ToTime
@@ -227,6 +232,12 @@ namespace NS.Quizzy.Server.BL.Services
                 });
             }
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(exam.Id)
+            });
             var res = _mapper.Map<ExamDto>(exam);
             res.ClassIds = model.ClassIds;
             res.ImprovementClassIds = model.ImprovementClassIds;
@@ -348,6 +359,12 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(item.Id)
+            });
             var res = _mapper.Map<ExamDto>(item);
             res.ClassIds = model.ClassIds;
             res.ImprovementClassIds = model.ImprovementClassIds;
@@ -365,6 +382,12 @@ namespace NS.Quizzy.Server.BL.Services
             }
             item.IsVisible = true;
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(item.Id)
+            });
             return await GetAsync(id);
         }
 
@@ -378,33 +401,33 @@ namespace NS.Quizzy.Server.BL.Services
             var examTypeIsExists = await _appDbContext.ExamTypes.AnyAsync(x => x.IsDeleted == false && x.Id == model.ExamTypeId);
             if (!examTypeIsExists)
             {
-                throw new BadRequestException("Exam type ID not found");
+                throw new BadRequestException("Exam type Id not found");
             }
 
             var moedIsExists = await _appDbContext.Moeds.AnyAsync(x => x.IsDeleted == false && x.Id == model.MoedId);
             if (!moedIsExists)
             {
-                throw new BadRequestException("Moed ID not found");
+                throw new BadRequestException("Moed Id not found");
             }
 
             var questionnaireIsExists = await _appDbContext.Questionnaires.AnyAsync(x => x.IsDeleted == false && x.Id == model.QuestionnaireId);
             if (!questionnaireIsExists)
             {
-                throw new BadRequestException("Questionnaire ID not found");
+                throw new BadRequestException("Questionnaire Id not found");
             }
 
             var dbClassIds = await _appDbContext.Classes.Where(x => x.IsDeleted == false).Select(x => x.Id).ToListAsync();
             var invalidClassIds = model.ClassIds.Union(model.ImprovementClassIds).Where(x => !dbClassIds.Contains(x)).ToList();
             if (invalidClassIds.Count != 0)
             {
-                throw new BadRequestException($"Invalid class ID's [{string.Join(", ", invalidClassIds)}]");
+                throw new BadRequestException($"Invalid class Id's [{string.Join(", ", invalidClassIds)}]");
             }
 
             var dbGradeIds = await _appDbContext.Grades.Where(x => x.IsDeleted == false).Select(x => x.Id).ToListAsync();
             var invalidGradeIds = model.GradeIds.Union(model.ImprovementGradeIds).Where(x => !dbGradeIds.Contains(x)).ToList();
             if (invalidGradeIds.Count != 0)
             {
-                throw new BadRequestException($"Invalid grade ID's [{string.Join(", ", invalidGradeIds)}]");
+                throw new BadRequestException($"Invalid grade Id's [{string.Join(", ", invalidGradeIds)}]");
             }
         }
 
@@ -418,7 +441,56 @@ namespace NS.Quizzy.Server.BL.Services
 
             item.IsDeleted = true;
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(item.Id)
+            });
             return true;
+        }
+
+        public async Task<ReSyncEventsResponse> ReSyncEventsAsync(ReSyncEventsRequest request)
+        {
+            var query = _appDbContext.Exams.Where(x => x.IsDeleted == false);
+            if (request?.ExamIds != null && request.ExamIds.Count != 0)
+            {
+                var values = request.ExamIds.ToArray();
+                query = query.Where(x => values.Contains(x.Id));
+            }
+
+            if (request?.From != null)
+            {
+                query = query.Where(x => x.StartTime >= request.From);
+            }
+
+            if (request?.To != null)
+            {
+                query = query.Where(x => x.StartTime <= request.To);
+            }
+
+            var examIds = await query.Select(x => x.Id).ToListAsync();
+
+
+            var tasks = examIds.Select(examId =>
+                _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+                {
+                    VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                    QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                    Payload = JsonConvert.SerializeObject(examId)
+                })
+            ).ToArray();
+            await Task.WhenAll(tasks);
+
+            return new ReSyncEventsResponse()
+            {
+                Total = examIds.Count,
+                ExamIds = examIds,
+                QueueMessageIds = tasks
+                    .Where(x => x.Result.MessageID.HasValue)
+                    .Select(x => x.Result.MessageID.Value)
+                    .ToList(),
+            };
         }
     }
 }

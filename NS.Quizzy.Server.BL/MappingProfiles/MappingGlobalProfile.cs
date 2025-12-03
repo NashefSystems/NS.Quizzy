@@ -7,9 +7,9 @@ using NS.Quizzy.Server.BL.Extensions;
 
 namespace NS.Quizzy.Server.BL.MappingProfiles
 {
-    internal class MappingProfile : Profile
+    internal class MappingGlobalProfile : Profile
     {
-        public MappingProfile()
+        public MappingGlobalProfile()
         {
             CreateMap<BaseEntity, IBaseEntityDto>();
             //CreateMap<AppSetting, AppSettingDto>();

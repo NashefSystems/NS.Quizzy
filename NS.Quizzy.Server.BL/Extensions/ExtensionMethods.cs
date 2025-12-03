@@ -81,6 +81,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             {
                 setup.AddSubscriptionClass<UpdateUsersQueueSubscription>();
                 setup.AddSubscriptionClass<PushNotificationsQueueSubscription>();
+                setup.AddSubscriptionClass<ExamEventsQueueSubscription>();
             });
 
             #region DbConfiguration
@@ -165,6 +166,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             services.AddScoped<INotificationsService, NotificationsService>();
             services.AddScoped<IDevicesService, DevicesService>();
             services.AddScoped<IDeveloperService, DeveloperService>();
+            services.AddScoped<IOutlookCalendarService, OutlookCalendarService>();
 
             services.AddHostedService<AppLifetimeInfoHostedService>();
 
@@ -193,7 +195,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             var mapperConfig = new MapperConfiguration(
                 mc =>
                 {
-                    mc.AddProfile(new MappingProfile());
+                    mc.AddProfile(new MappingGlobalProfile());
                 },
                 new NullLoggerFactory()
             );
@@ -212,7 +214,7 @@ namespace NS.Quizzy.Server.BL.Extensions
 
         internal static Guid? GetUserId(this HttpContext? context)
         {
-            // Retrieve the user ID from the claims
+            // Retrieve the user Id from the claims
             var userIdStr = context?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userIdStr == null)
@@ -225,7 +227,7 @@ namespace NS.Quizzy.Server.BL.Extensions
 
         internal static DAL.DALEnums.Roles? GetUserRole(this HttpContext? context)
         {
-            // Retrieve the user ID from the claims
+            // Retrieve the user Id from the claims
             var stringValue = context?.User?.FindFirst(ClaimTypes.Role)?.Value;
 
             if (stringValue == null)
@@ -238,7 +240,7 @@ namespace NS.Quizzy.Server.BL.Extensions
 
         internal static Guid? GetTokenId(this HttpContext? context)
         {
-            // Retrieve the user ID from the claims
+            // Retrieve the user Id from the claims
             var tokenIdStr = context?.User?.FindFirst(ClaimTypes.Sid)?.Value;
 
             if (tokenIdStr == null)

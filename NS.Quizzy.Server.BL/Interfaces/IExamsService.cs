@@ -8,5 +8,6 @@ namespace NS.Quizzy.Server.BL.Interfaces
         Task<List<ExamDto>> FilterAsync(ExamFilterRequest request);
         Task<List<ExamDto>> GetAllAsync(bool filterCompletedExams);
         Task<ExamDto?> SetAsVisibleAsync(Guid id);
+        Task<ReSyncEventsResponse> ReSyncEventsAsync(ReSyncEventsRequest request);
     }
 }

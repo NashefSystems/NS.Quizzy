@@ -105,5 +105,14 @@ namespace NS.Quizzy.Server.Controllers
 
             return Ok(res);
         }
+
+        [HttpPost("ReSyncEvents")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [RoleRequirement(DAL.DALEnums.Roles.Admin)]
+        public async Task<ActionResult<ReSyncEventsResponse>> ReSyncEventsAsync([FromBody] ReSyncEventsRequest request)
+        {
+            var res = await _service.ReSyncEventsAsync(request);
+            return Ok(res);
+        }
     }
 }

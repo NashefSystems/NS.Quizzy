@@ -350,7 +350,7 @@ namespace NS.Quizzy.Server.BL.Services
             var errors = new List<string>();
             if (string.IsNullOrWhiteSpace(item.IdNumber))
             {
-                errors.Add("Invalid ID number");
+                errors.Add("Invalid Id number");
             }
 
             if (string.IsNullOrWhiteSpace(item.FullName))

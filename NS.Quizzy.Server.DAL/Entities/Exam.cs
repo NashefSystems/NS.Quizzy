@@ -9,6 +9,7 @@
         public TimeSpan Duration { get; set; }
         public TimeSpan DurationWithExtra { get; set; }
         public bool IsVisible { get; set; }
+        public string? OutlookCalendarId { get; set; }
 
 
         public virtual Questionnaire Questionnaire { get; set; }
