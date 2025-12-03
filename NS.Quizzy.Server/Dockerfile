@@ -5,8 +5,9 @@ ARG APP_VERSION
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-RUN apt-get update
-RUN apt-get install libsecret-1-0
+RUN apt-get update && \
+    apt-get install -y libsecret-1-0 && \
+    rm -rf /var/lib/apt/lists/*
 USER app
 WORKDIR /app
 EXPOSE 8080
