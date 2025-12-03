@@ -20,6 +20,7 @@ namespace NS.Quizzy.Server.BL.Services
         {
             _appDbContext = appDbContext;
             _zohoCalendarService = zohoCalendarService;
+            _lockManager = lockManager;
         }
 
         public async Task ResyncEventAsync(Guid examId, INSLogBag logBag)
