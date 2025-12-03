@@ -23,9 +23,9 @@ namespace NS.Quizzy.Server.Controllers
 
         [HttpPatch("ReQueueDlqMessages")]
         [SwaggerResponse(StatusCodes.Status200OK)]
-        public async Task<ActionResult<object>> ReQueueDlqMessagesAsync([FromQuery] string queueName)
+        public async Task<ActionResult<object>> ReQueueDlqMessagesAsync([FromQuery] string queueName, [FromQuery] int limit = int.MaxValue)
         {
-            var res = await _service.ReQueueDlqMessagesAsync(queueName);
+            var res = await _service.ReQueueDlqMessagesAsync(queueName, limit);
             return Ok(res);
         }
     }

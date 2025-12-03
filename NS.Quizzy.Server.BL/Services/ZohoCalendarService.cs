@@ -21,14 +21,14 @@ namespace NS.Quizzy.Server.BL.Services
     /// </summary>
     internal class ZohoCalendarService : IZohoCalendarService
     {
-        private readonly ZohoAuthService _authService;
+        private readonly IZohoAuthService _authService;
         private readonly HttpClient _httpClient;
         private readonly string _calendarUid;
 
         private const string BaseUrl = "https://calendar.zoho.com/api/v1";
         private const string DefaultTimeZone = "Asia/Jerusalem"; // IANA timezone for Israel
 
-        public ZohoCalendarService(ZohoAuthService authService, HttpClient httpClient, IConfiguration configuration)
+        public ZohoCalendarService(IZohoAuthService authService, HttpClient httpClient, IConfiguration configuration)
         {
             _authService = authService;
             _httpClient = httpClient;

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Extensions;
+using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.BL.Services;
 using NS.Quizzy.Server.DAL;
@@ -23,6 +24,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
         public override async Task<QueueSubscriptionAcceptMethodResult> ProcessMessageAsync(Guid messageId, QueueMessage message, INSLogBag logBag, IServiceScope scope, CancellationToken cancellationToken)
         {
             var res = new QueueSubscriptionAcceptMethodResult();
+
             string messageStatusCacheKey = messageId.GetQueueMessageStatusCacheKey();
             MessageStatusInfo? messageStatusInfo = null;
             INSCacheProvider? _cacheProvider = null;
@@ -41,71 +43,12 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 #region logic
                 var examId = JsonConvert.DeserializeObject<Guid?>(message.Payload);
                 logBag.AddOrUpdateParameter(nameof(examId), examId);
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var exam = await dbContext.Exams.FirstOrDefaultAsync(x => x.Id == examId);
-                if (exam == null)
+                var _examEvents = scope.ServiceProvider.GetRequiredService<IExamEvents>();
+                if (!examId.HasValue || examId == Guid.Empty)
                 {
-                    logBag.Trace($"Exam ID '{examId}' not found");
-                    logBag.LogLevel = NSLogLevel.Error;
-                    return res.SetError($"Exam ID '{examId}' not found");
+                    throw new NullReferenceException(nameof(examId));
                 }
-                var emails = await dbContext.EventEmails.Where(x => x.IsDeleted == false).Select(x => x.Email).ToListAsync();
-                logBag.AddOrUpdateParameter("ExamIsDeleted", exam.IsDeleted);
-                logBag.AddOrUpdateParameter("ExamIsVisible", exam.IsVisible);
-                logBag.AddOrUpdateParameter("ExamCalendarEventId", exam.CalendarEventId);
-
-                var zohoCalendarService = scope.ServiceProvider.GetRequiredService<ZohoCalendarService>();
-                await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 10);
-
-                if (exam.IsVisible && !exam.IsDeleted)
-                {
-                    logBag.Trace("Create or update event");
-                    var classes = (await dbContext.ClassExams
-                        .Include(x => x.Class)
-                        .Where(x => x.IsDeleted == false && x.ExamId == exam.Id && x.Class.IsDeleted == false)
-                        .ToListAsync())
-                        .Select(x => new GradeClassInfo(x.Class.Name, x.IsImprovement))
-                        .OrderBy(x => x.Name)
-                        .ToList();
-                    var grades = (await dbContext.GradeExams
-                        .Include(x => x.Grade)
-                        .Where(x => x.IsDeleted == false && x.ExamId == exam.Id && x.Grade.IsDeleted == false)
-                        .ToListAsync())
-                        .Select(x => new GradeClassInfo(x.Grade.Name, x.IsImprovement))
-                        .OrderBy(x => x.Name)
-                        .ToList();
-                    var location = string.Join(", ", grades.Union(classes).Select(x => x.Name).ToList());
-                    var examType = await dbContext.ExamTypes.FirstOrDefaultAsync(x => x.Id == exam.ExamTypeId);
-                    var moed = await dbContext.Moeds.FirstOrDefaultAsync(x => x.Id == exam.MoedId);
-                    var questionnaire = await dbContext.Questionnaires.FirstOrDefaultAsync(x => x.Id == exam.QuestionnaireId);
-                    var subject = questionnaire?.SubjectId == null ? null : await dbContext.Subjects.FirstOrDefaultAsync(x => x.Id == questionnaire.SubjectId);
-                    var body = GetBody(exam, moed, examType, questionnaire, subject, grades, classes);
-                    var isAllDay = exam.StartTime.Hour == 0 && exam.StartTime.Minute == 0;
-                    var endTime = isAllDay ? exam.StartTime.DateTime.AddDays(1) : exam.StartTime.DateTime.Add(exam.DurationWithExtra);
-                    var calendarEvent = new ZohoCalendarEvent()
-                    {
-                        Title = $"{subject?.Name} ({questionnaire?.Code}) - {examType?.Name} - {exam.Duration:hh\\:mm} / {exam.DurationWithExtra:hh\\:mm}",
-                        Location = location,
-                        Description = body,
-                        StartTime = exam.StartTime.DateTime,
-                        EndTime = endTime,
-                        IsAllDay = isAllDay,
-                        Emails = emails
-                    };
-
-                    logBag.Trace(string.IsNullOrWhiteSpace(exam.CalendarEventId) ? "Create" : "Update" + " event");
-                    exam.CalendarEventId = await zohoCalendarService.CreateOrUpdateEventAsync(calendarEvent, exam.CalendarEventId);
-                    logBag.Trace($"CalendarEventId: {exam.CalendarEventId}");
-                    logBag.AddOrUpdateParameter("ExamCalendarEventId", exam.CalendarEventId);
-                }
-                else if (!string.IsNullOrWhiteSpace(exam.CalendarEventId))
-                {
-                    logBag.Trace("Delete event");
-                    await zohoCalendarService.DeleteEventAsync(exam.CalendarEventId);
-                    exam.CalendarEventId = null;
-                }
-                await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 90);
-                await dbContext.SaveChangesAsync();
+                await _examEvents.ResyncEventAsync(examId.Value, logBag);
                 #endregion
 
                 await SuccessHandler(_cacheProvider, messageStatusCacheKey, messageStatusInfo);
@@ -117,179 +60,6 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 await ErrorHandlerAsync(_cacheProvider, logBag.Logger, messageStatusCacheKey, messageStatusInfo, ex.Message);
                 return res.SetError(ex.Message);
             }
-        }
-
-        private string GetBody(Exam exam, Moed moed, ExamType? examType, Questionnaire? questionnaire, Subject? subject, List<GradeClassInfo> grades, List<GradeClassInfo> classes)
-        {
-            string[] days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
-            var startTimeStr = exam.StartTime.DateTime.ToString(
-                (exam.StartTime.Hour == 0 && exam.StartTime.Minute == 0) ?
-                    "dd/MM/yyyy" : "dd/MM/yyyy HH:mm"
-            );
-            var examDay = days[(int)exam.StartTime.DateTime.DayOfWeek];
-
-            var sb = new StringBuilder();
-            #region header
-            sb.AppendLine("<div dir='rtl'>");
-            sb.AppendLine("    <div>");
-            sb.AppendLine("        <div style='font-weight: 700; color: #393945;'>");
-            sb.AppendLine($"            ({questionnaire?.Code}) {questionnaire?.Name}");
-            sb.AppendLine("        </div>");
-            sb.AppendLine("        <div style='font-size: .9rem; color: #75757d;'>");
-            sb.AppendLine($"            {startTimeStr} {examDay} | {examType?.Name} - {moed?.Name}");
-            sb.AppendLine("        </div>");
-            sb.AppendLine("    </div>");
-            sb.AppendLine("    <br>");
-            sb.AppendLine("    <div");
-            sb.AppendLine("        style='border-top: 1px dotted #75757D; padding-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;'>");
-            #endregion
-
-            #region subject
-            sb.AppendLine("        <div");
-            sb.AppendLine("            style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; max-width: 100%; width: 100%;'>");
-            sb.AppendLine("            <div");
-            sb.AppendLine("                style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; width: 100%; flex-wrap: wrap;'>");
-            sb.AppendLine("                <span style='width: 1.5rem; max-width: 1.5rem;'>📚</span>");
-            sb.AppendLine("                <span style='color: #393945;'>");
-            sb.AppendLine("                    נושא:");
-            sb.AppendLine("                </span>");
-            sb.AppendLine("                <span style='color: #5538D8; font-weight: bold; text-wrap-mode: wrap;'>");
-            sb.AppendLine($"                    {subject?.Name}");
-            sb.AppendLine("                </span>");
-            sb.AppendLine("            </div>");
-            sb.AppendLine("        </div>");
-            #endregion
-
-            #region duration
-            sb.AppendLine("        <div");
-            sb.AppendLine("            style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; max-width: 100%; width: 100%;'>");
-            sb.AppendLine("            <div");
-            sb.AppendLine("                style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; width: 100%; flex-wrap: wrap;'>");
-            sb.AppendLine("                <span style='width: 1.5rem; max-width: 1.5rem;'>⏰</span>");
-            sb.AppendLine("                <span style='color: #393945;'>");
-            sb.AppendLine("                    משך הבחינה:");
-            sb.AppendLine("                </span>");
-            sb.AppendLine("                <span style='color: #5538D8; font-weight: bold; text-wrap-mode: wrap;'>");
-            sb.AppendLine(exam.Duration.ToString(@"hh\:mm"));
-            sb.AppendLine("                </span>");
-            sb.AppendLine("            </div>");
-            sb.AppendLine("        </div>");
-            #endregion
-
-            #region duration with extra
-            sb.AppendLine("        <div");
-            sb.AppendLine("            style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; max-width: 100%; width: 100%;'>");
-            sb.AppendLine("            <div");
-            sb.AppendLine("                style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; width: 100%; flex-wrap: wrap;'>");
-            sb.AppendLine("                <span style='width: 1.5rem; max-width: 1.5rem;'>⏰</span>");
-            sb.AppendLine("                <span style='color: #393945;'>");
-            sb.AppendLine("                    משך הבחינה כולל תוספת זמן:");
-            sb.AppendLine("                </span>");
-            sb.AppendLine("                <span style='color: #5538D8; font-weight: bold; text-wrap-mode: wrap;'>");
-            sb.AppendLine(exam.DurationWithExtra.ToString(@"hh\:mm"));
-            sb.AppendLine("                </span>");
-            sb.AppendLine("            </div>");
-            sb.AppendLine("        </div>");
-            #endregion
-
-            #region grades
-            {
-                var items = grades.Where(x => x.IsImprovement == false).Select(x => x.Name).ToList();
-                if (items.Count != 0)
-                {
-                    var value = string.Join(" | ", items);
-                    sb.AppendLine("        <div");
-                    sb.AppendLine("            style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; max-width: 100%; width: 100%;'>");
-                    sb.AppendLine("            <div");
-                    sb.AppendLine("                style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; width: 100%; flex-wrap: wrap;'>");
-                    sb.AppendLine("                <span style='width: 1.5rem; max-width: 1.5rem;'>👥</span>");
-                    sb.AppendLine("                <span style='color: #393945;'>");
-                    sb.AppendLine("                    שכבות:");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("                <span style='color: #5538D8; font-weight: bold; text-wrap-mode: wrap;'>");
-                    sb.AppendLine($"                    {value}");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("            </div>");
-                    sb.AppendLine("        </div>");
-                }
-            }
-            #endregion
-
-            #region improvement grades
-            {
-                var items = grades.Where(x => x.IsImprovement == true).Select(x => x.Name).ToList();
-                if (items.Count != 0)
-                {
-                    var value = string.Join(" | ", items);
-                    sb.AppendLine("        <div");
-                    sb.AppendLine("            style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; max-width: 100%; width: 100%;'>");
-                    sb.AppendLine("            <div");
-                    sb.AppendLine("                style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; width: 100%; flex-wrap: wrap;'>");
-                    sb.AppendLine("                <span style='width: 1.5rem; max-width: 1.5rem;'>👥</span>");
-                    sb.AppendLine("                <span style='color: #393945;'>");
-                    sb.AppendLine("                    שכבות (שיפור ציון):");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("                <span style='color: #5538D8; font-weight: bold; text-wrap-mode: wrap;'>");
-                    sb.AppendLine($"                    {value}");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("            </div>");
-                    sb.AppendLine("        </div>");
-                }
-            }
-            #endregion
-
-            #region classes
-            {
-                var items = classes.Where(x => x.IsImprovement == false).Select(x => x.Name).ToList();
-                if (items.Count != 0)
-                {
-                    var value = string.Join(" | ", items);
-                    sb.AppendLine("        <div");
-                    sb.AppendLine("            style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; max-width: 100%; width: 100%;'>");
-                    sb.AppendLine("            <div");
-                    sb.AppendLine("                style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; width: 100%; flex-wrap: wrap;'>");
-                    sb.AppendLine("                <span style='width: 1.5rem; max-width: 1.5rem;'>🎓</span>");
-                    sb.AppendLine("                <span style='color: #393945;'>");
-                    sb.AppendLine("                    כיתות:");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("                <span style='color: #5538D8; font-weight: bold; text-wrap-mode: wrap;'>");
-                    sb.AppendLine($"                    {value}");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("            </div>");
-                    sb.AppendLine("        </div>");
-                }
-            }
-            #endregion
-
-            #region improvement classes
-            {
-                var items = classes.Where(x => x.IsImprovement == true).Select(x => x.Name).ToList();
-                if (items.Count != 0)
-                {
-                    var value = string.Join(" | ", items);
-                    sb.AppendLine("        <div");
-                    sb.AppendLine("            style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; max-width: 100%; width: 100%;'>");
-                    sb.AppendLine("            <div");
-                    sb.AppendLine("                style='display: flex; flex-direction: row; justify-content: flex-start; gap: 0.5rem; width: 100%; flex-wrap: wrap;'>");
-                    sb.AppendLine("                <span style='width: 1.5rem; max-width: 1.5rem;'>🎓</span>");
-                    sb.AppendLine("                <span style='color: #393945;'>");
-                    sb.AppendLine("                    כיתות (שיפור ציון):");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("                <span style='color: #5538D8; font-weight: bold; text-wrap-mode: wrap;'>");
-                    sb.AppendLine($"                    {value}");
-                    sb.AppendLine("                </span>");
-                    sb.AppendLine("            </div>");
-                    sb.AppendLine("        </div>");
-                }
-            }
-            #endregion
-
-            #region footer
-            sb.AppendLine("    </div>");
-            sb.AppendLine("</div>");
-            #endregion
-
-            return sb.ToString();
         }
 
         private async Task SuccessHandler(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo? statusInfo)
@@ -335,16 +105,5 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             await cacheProvider.SetOrUpdateAsync(cacheKey, statusInfo, TimeSpan.FromDays(BLConsts.MESSAGE_STATUS_CACHE_TTL_IN_DAYS));
         }
 
-        class GradeClassInfo
-        {
-            public string Name { get; set; }
-            public bool IsImprovement { get; set; }
-
-            public GradeClassInfo(string name, bool isImprovement)
-            {
-                Name = name;
-                IsImprovement = isImprovement;
-            }
-        }
     }
 }

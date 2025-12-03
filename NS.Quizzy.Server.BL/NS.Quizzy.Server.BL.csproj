@@ -10,8 +10,8 @@
 		<PackageReference Include="AutoMapper" Version="15.1.0" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
 		<PackageReference Include="NS.Security" Version="1.0.1" />
-		<PackageReference Include="NS.Shared.CacheProvider" Version="1.0.15" />
-		<PackageReference Include="NS.Shared.QueueManager" Version="1.0.21" />
+		<PackageReference Include="NS.Shared.CacheProvider" Version="1.0.16" />
+		<PackageReference Include="NS.Shared.QueueManager" Version="1.0.22" />
 		<PackageReference Include="Otp.NET" Version="1.4.0" />
 		<PackageReference Include="QRCoder" Version="1.7.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.6" />

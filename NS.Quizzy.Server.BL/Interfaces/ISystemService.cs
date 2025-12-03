@@ -2,6 +2,6 @@
 {
     public interface ISystemService
     {
-        Task<object> ReQueueDlqMessagesAsync(string queueName);
+        Task<object> ReQueueDlqMessagesAsync(string queueName, int limit = int.MaxValue);
     }
 }
