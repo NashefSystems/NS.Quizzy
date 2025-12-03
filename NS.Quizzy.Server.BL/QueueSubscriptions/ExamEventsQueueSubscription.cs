@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Graph.Applications.GetAvailableExtensionProperties;
-using Microsoft.Graph.Drives.Item.Items.Item.Workbook.Functions.Days360;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
