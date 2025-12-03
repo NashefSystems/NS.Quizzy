@@ -6,7 +6,9 @@ ARG APP_VERSION
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 RUN apt-get update && \
-    apt-get install -y libsecret-1-0 && \
+    apt-get install -y libsecret-1-0 dbus && \
+    dbus-uuidgen > /var/lib/dbus/machine-id && \
+    mkdir -p /var/run/dbus && \
     rm -rf /var/lib/apt/lists/*
 USER app
 WORKDIR /app
