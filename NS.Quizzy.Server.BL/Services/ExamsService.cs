@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph.Models;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.DTOs;
@@ -469,17 +470,26 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             var examIds = await query.Select(x => x.Id).ToListAsync();
-            var tasks = examIds.Select(examId => _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
-            {
-                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
-                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
-                Payload = JsonConvert.SerializeObject(examId)
-            }));
+
+
+            var tasks = examIds.Select(examId =>
+                _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+                {
+                    VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                    QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                    Payload = JsonConvert.SerializeObject(examId)
+                })
+            ).ToArray();
             await Task.WhenAll(tasks);
+
             return new ReSyncEventsResponse()
             {
                 Total = examIds.Count,
                 ExamIds = examIds,
+                QueueMessageIds = tasks
+                    .Where(x => x.Result.MessageID.HasValue)
+                    .Select(x => x.Result.MessageID.Value)
+                    .ToList(),
             };
         }
     }
