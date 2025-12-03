@@ -590,7 +590,7 @@ namespace NS.Quizzy.Server.DAL
                         Key =  AppSettingKeys.GraphAuthRecord.GetDBStringValue(),
                         Target = DALEnums.AppSettingTargets.Server,
                         ValueType = DALEnums.AppSettingValueTypes.String,
-                        Value = "{\"username\":\"nashefsys@gmail.com\",\"authority\":\"login.microsoftonline.com\",\"homeAccountId\":\"00000000-0000-0000-54f1-d0995ee01681.9188040d-6c67-4c5b-b112-36a304b66dad\",\"tenantId\":\"9188040d-6c67-4c5b-b112-36a304b66dad\",\"clientId\":\"0acb772f-e573-47b4-91b8-1d85a89bebc5\",\"version\":\"1.0\"}",
+                        Value = "{\"username\":\"examproduction@outlook.com\",\"authority\":\"login.microsoftonline.com\",\"homeAccountId\":\"00000000-0000-0000-1b54-45a3620d2ac5.9188040d-6c67-4c5b-b112-36a304b66dad\",\"tenantId\":\"9188040d-6c67-4c5b-b112-36a304b66dad\",\"clientId\":\"0acb772f-e573-47b4-91b8-1d85a89bebc5\",\"version\":\"1.0\"}",
                         IsSecured = false,
                         IsDeleted = false,
                     }

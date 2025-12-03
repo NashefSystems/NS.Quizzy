@@ -66,7 +66,7 @@ namespace NS.Quizzy.Server.BL.Services
             return client;
         }
 
-        static async Task<string?> GetCalendarIdAsync(GraphServiceClient graphClient, string calendarName)
+        private async Task<string?> GetCalendarIdAsync(GraphServiceClient graphClient, string calendarName)
         {
             var calendars = await graphClient.Me.Calendars.GetAsync();
             var calendar = calendars?.Value?.FirstOrDefault(c => c.Name == calendarName);
@@ -168,6 +168,40 @@ namespace NS.Quizzy.Server.BL.Services
             catch (Exception ex)
             {
                 _logger.Fatal(ex, $"{nameof(CreateOrUpdateEventInCalendar)} exception", new { eventItem });
+                throw;
+            }
+        }
+
+        public async Task DeleteEventInCalendar(string eventId, string? calendarName = null)
+        {
+            using var logBag = _logger.CreateLogBag(nameof(DeleteEventInCalendar));
+            try
+            {
+                if (string.IsNullOrWhiteSpace(eventId))
+                {
+                    throw new ArgumentNullException(nameof(eventId));
+                }
+
+                logBag.AddOrUpdateParameter(nameof(eventId), eventId);
+
+                if (string.IsNullOrWhiteSpace(calendarName))
+                {
+                    logBag.Trace("Calendar name was null or empty. Using default calendar");
+                    calendarName = "Quizzy";
+                }
+
+                logBag.AddOrUpdateParameter(nameof(calendarName), calendarName);
+
+                var graphClient = await CreateGraphClientAsync();
+                var calendarId = await GetCalendarIdAsync(graphClient, calendarName ?? "Quizzy");
+
+                await graphClient.Me.Calendars[calendarId].Events[eventId].DeleteAsync();
+
+                logBag.Trace("Completed");
+            }
+            catch (Exception ex)
+            {
+                _logger.Fatal(ex, $"{nameof(DeleteEventInCalendar)} exception", new { eventId, calendarName });
                 throw;
             }
         }

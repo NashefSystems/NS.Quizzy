@@ -81,6 +81,7 @@ namespace NS.Quizzy.Server.BL.Extensions
             {
                 setup.AddSubscriptionClass<UpdateUsersQueueSubscription>();
                 setup.AddSubscriptionClass<PushNotificationsQueueSubscription>();
+                setup.AddSubscriptionClass<ExamEventsQueueSubscription>();
             });
 
             #region DbConfiguration

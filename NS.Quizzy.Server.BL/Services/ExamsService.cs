@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.CustomExceptions;
 using NS.Quizzy.Server.BL.DTOs;
 using NS.Quizzy.Server.BL.Extensions;
@@ -9,6 +10,7 @@ using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.Logging;
+using NS.Shared.QueueManager.Interfaces;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -18,13 +20,15 @@ namespace NS.Quizzy.Server.BL.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly INSLogger _logger;
+        private readonly INSQueueService _queueService;
 
-        public ExamsService(AppDbContext appDbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, INSLogger logger)
+        public ExamsService(AppDbContext appDbContext, IMapper mapper, IHttpContextAccessor httpContextAccessor, INSLogger logger, INSQueueService queueService)
         {
             _appDbContext = appDbContext;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
+            _queueService = queueService;
         }
 
         bool IsFilterHiddenExams()
@@ -44,7 +48,7 @@ namespace NS.Quizzy.Server.BL.Services
             var query = _appDbContext.Exams
                 .Include(x => x.GradeExams)
                 .Include(x => x.ClassExams)
-                .Where(x =>                    
+                .Where(x =>
                     x.IsDeleted == false &&
                     x.StartTime >= request.FromTime &&
                     x.StartTime <= request.ToTime
@@ -227,6 +231,12 @@ namespace NS.Quizzy.Server.BL.Services
                 });
             }
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(exam.Id)
+            });
             var res = _mapper.Map<ExamDto>(exam);
             res.ClassIds = model.ClassIds;
             res.ImprovementClassIds = model.ImprovementClassIds;
@@ -348,6 +358,12 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(item.Id)
+            });
             var res = _mapper.Map<ExamDto>(item);
             res.ClassIds = model.ClassIds;
             res.ImprovementClassIds = model.ImprovementClassIds;
@@ -365,6 +381,12 @@ namespace NS.Quizzy.Server.BL.Services
             }
             item.IsVisible = true;
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(item.Id)
+            });
             return await GetAsync(id);
         }
 
@@ -418,6 +440,12 @@ namespace NS.Quizzy.Server.BL.Services
 
             item.IsDeleted = true;
             await _appDbContext.SaveChangesAsync();
+            await _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
+            {
+                VirtualHost = BLConsts.QUEUE_VIRTUAL_HOST,
+                QueueName = BLConsts.QUEUE_EXAM_EVENTS,
+                Payload = JsonConvert.SerializeObject(item.Id)
+            });
             return true;
         }
     }
