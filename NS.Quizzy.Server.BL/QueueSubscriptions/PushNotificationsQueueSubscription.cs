@@ -18,6 +18,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
 
         public override async Task<QueueSubscriptionAcceptMethodResult> ProcessMessageAsync(Guid messageId, QueueMessage message, INSLogBag logBag, IServiceScope scope, CancellationToken cancellationToken)
         {
+            logBag.LogLevel = NSLogLevel.Info;
             var res = new QueueSubscriptionAcceptMethodResult();
             logBag.Trace("Starting ProcessMessageAsync");
             var userNotificationId = JsonConvert.DeserializeObject<Guid?>(message.Payload);
