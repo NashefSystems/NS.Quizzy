@@ -7,8 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="15.0.1" />
-		<PackageReference Include="Google.Apis.Auth" Version="1.72.0" />
+		<PackageReference Include="AutoMapper" Version="15.1.0" />
+		<PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
 		<PackageReference Include="NS.Security" Version="1.0.1" />
 		<PackageReference Include="NS.Shared.CacheProvider" Version="1.0.15" />
 		<PackageReference Include="NS.Shared.QueueManager" Version="1.0.21" />

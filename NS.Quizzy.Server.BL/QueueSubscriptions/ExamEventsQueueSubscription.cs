@@ -29,6 +29,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             try
             {
                 logBag.Trace("Starting ProcessMessageAsync");
+                logBag.AddOrUpdateParameter(nameof(messageId), messageId);
                 logBag.AddOrUpdateParameter(nameof(messageStatusCacheKey), messageStatusCacheKey);
 
                 _cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
@@ -39,10 +40,12 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
 
                 #region logic
                 var examId = JsonConvert.DeserializeObject<Guid?>(message.Payload);
+                logBag.AddOrUpdateParameter(nameof(examId), examId);
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 var exam = await dbContext.Exams.FirstOrDefaultAsync(x => x.Id == examId);
                 if (exam == null)
                 {
+                    logBag.Trace($"Exam ID '{examId}' not found");
                     logBag.LogLevel = NSLogLevel.Error;
                     return res.SetError($"Exam ID '{examId}' not found");
                 }

@@ -11,6 +11,7 @@ using NS.Quizzy.Server.BL.Models;
 using NS.Quizzy.Server.DAL;
 using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.Logging;
+using NS.Shared.Logging.Extensions;
 using NS.Shared.QueueManager.Interfaces;
 
 namespace NS.Quizzy.Server.BL.Services
@@ -452,6 +453,8 @@ namespace NS.Quizzy.Server.BL.Services
 
         public async Task<ReSyncEventsResponse> ReSyncEventsAsync(ReSyncEventsRequest request)
         {
+            using var logBag = _logger.CreateLogBag(nameof(ReSyncEventsAsync));
+            logBag.AddOrUpdateParameter(nameof(request), request.ToMaskedJson());
             var query = _appDbContext.Exams.Where(x => x.IsDeleted == false);
             if (request?.ExamIds != null && request.ExamIds.Count != 0)
             {
@@ -470,7 +473,7 @@ namespace NS.Quizzy.Server.BL.Services
             }
 
             var examIds = await query.Select(x => x.Id).ToListAsync();
-
+            logBag.AddOrUpdateParameter(nameof(examIds), examIds.ToMaskedJson());
 
             var tasks = examIds.Select(examId =>
                 _queueService.PublishMessageAsync(new Shared.QueueManager.Models.QueueMessage()
@@ -482,14 +485,17 @@ namespace NS.Quizzy.Server.BL.Services
             ).ToArray();
             await Task.WhenAll(tasks);
 
+            var queueMessageIds = tasks
+                    .Where(x => x.Result.MessageID.HasValue)
+                    .Select(x => x.Result.MessageID.Value)
+                    .ToList();
+            logBag.AddOrUpdateParameter(nameof(queueMessageIds), queueMessageIds.ToMaskedJson());
+
             return new ReSyncEventsResponse()
             {
                 Total = examIds.Count,
                 ExamIds = examIds,
-                QueueMessageIds = tasks
-                    .Where(x => x.Result.MessageID.HasValue)
-                    .Select(x => x.Result.MessageID.Value)
-                    .ToList(),
+                QueueMessageIds = queueMessageIds,
             };
         }
     }
