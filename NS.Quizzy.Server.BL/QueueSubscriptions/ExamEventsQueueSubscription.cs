@@ -1,17 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
-using NS.Quizzy.Server.BL.Services;
-using NS.Quizzy.Server.DAL;
-using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.QueueManager.Models;
 using NS.Shared.QueueManager.Services;
-using System.Text;
 
 namespace NS.Quizzy.Server.BL.QueueSubscriptions
 {
@@ -38,6 +33,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 _cacheProvider = scope.ServiceProvider.GetRequiredService<INSCacheProvider>();
                 messageStatusInfo = await _cacheProvider.GetAsync<MessageStatusInfo>(messageStatusCacheKey);
                 messageStatusInfo ??= new MessageStatusInfo();
+                messageStatusInfo.AddContextId(logBag.Logger?.GetContextId());
                 messageStatusInfo.DownloadCounter += 1;
                 await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 0);
 
@@ -52,20 +48,21 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 await _examEvents.ResyncEventAsync(examId.Value, logBag);
                 #endregion
 
-                await SuccessHandler(_cacheProvider, messageStatusCacheKey, messageStatusInfo);
+                await SuccessHandler(_cacheProvider, messageStatusCacheKey, messageStatusInfo, logBag);
                 return res.SetOk();
             }
             catch (Exception ex)
             {
                 logBag.Exception = ex;
-                await ErrorHandlerAsync(_cacheProvider, logBag.Logger, messageStatusCacheKey, messageStatusInfo, ex.Message);
+                await ErrorHandlerAsync(_cacheProvider, logBag.Logger, messageStatusCacheKey, messageStatusInfo, ex.Message, logBag);
                 return res.SetError(ex.Message);
             }
         }
 
-        private async Task SuccessHandler(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo? statusInfo)
+        private async Task SuccessHandler(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo? statusInfo, INSLogBag logBag)
         {
             statusInfo ??= new MessageStatusInfo();
+            statusInfo.AddContextId(logBag?.Logger?.GetContextId());
             statusInfo.Error = null;
             statusInfo.IsCompleted = true;
             statusInfo.IsSuccess = true;
@@ -73,7 +70,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             await UpdateMessageStatusInfoAsync(cacheProvider, cacheKey, statusInfo);
         }
 
-        private async Task ErrorHandlerAsync(INSCacheProvider? cacheProvider, INSLogger? logger, string cacheKey, MessageStatusInfo? statusInfo, string error)
+        private async Task ErrorHandlerAsync(INSCacheProvider? cacheProvider, INSLogger? logger, string cacheKey, MessageStatusInfo? statusInfo, string error, INSLogBag logBag)
         {
             try
             {
@@ -82,6 +79,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                     return;
                 }
                 statusInfo ??= new MessageStatusInfo();
+                statusInfo.AddContextId(logBag?.Logger?.GetContextId());
                 statusInfo.Error = error;
                 statusInfo.IsCompleted = true;
                 statusInfo.IsSuccess = false;
@@ -105,6 +103,5 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
         {
             await cacheProvider.SetOrUpdateAsync(cacheKey, statusInfo, TimeSpan.FromDays(BLConsts.MESSAGE_STATUS_CACHE_TTL_IN_DAYS));
         }
-
     }
 }

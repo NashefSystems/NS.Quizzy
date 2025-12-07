@@ -39,6 +39,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 _logger = scope.ServiceProvider.GetRequiredService<INSLogger>();
                 messageStatusInfo = await _cacheProvider.GetAsync<MessageStatusInfo>(messageStatusCacheKey);
                 messageStatusInfo ??= new MessageStatusInfo();
+                messageStatusInfo.AddContextId(logBag?.Logger?.GetContextId());
                 messageStatusInfo.DownloadCounter += 1;
                 await SetMessageProgressPercentageAsync(_cacheProvider, messageStatusCacheKey, messageStatusInfo, 0);
                 var items = JsonConvert.DeserializeObject<List<CsvFileItem>>(message.Payload);
@@ -97,20 +98,21 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 }
                 await dbContext.SaveChangesAsync();
                 await usersService.ClearCacheAsync();
-                await SuccessHandler(_cacheProvider, messageStatusCacheKey, messageStatusInfo);
+                await SuccessHandler(_cacheProvider, messageStatusCacheKey, messageStatusInfo, logBag);
                 return res.SetOk();
             }
             catch (Exception ex)
             {
                 logBag.Exception = ex;
-                await ErrorHandlerAsync(_cacheProvider, _logger, messageStatusCacheKey, messageStatusInfo, ex.Message);
+                await ErrorHandlerAsync(_cacheProvider, _logger, messageStatusCacheKey, messageStatusInfo, ex.Message, logBag);
                 return res.SetError(ex.Message);
             }
         }
 
-        private async Task SuccessHandler(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo? statusInfo)
+        private async Task SuccessHandler(INSCacheProvider cacheProvider, string cacheKey, MessageStatusInfo? statusInfo, INSLogBag logBag)
         {
             statusInfo ??= new MessageStatusInfo();
+            statusInfo.AddContextId(logBag?.Logger?.GetContextId());
             statusInfo.Error = null;
             statusInfo.IsCompleted = true;
             statusInfo.IsSuccess = true;
@@ -118,7 +120,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
             await UpdateMessageStatusInfoAsync(cacheProvider, cacheKey, statusInfo);
         }
 
-        private async Task ErrorHandlerAsync(INSCacheProvider? cacheProvider, INSLogger? logger, string cacheKey, MessageStatusInfo? statusInfo, string error)
+        private async Task ErrorHandlerAsync(INSCacheProvider? cacheProvider, INSLogger? logger, string cacheKey, MessageStatusInfo? statusInfo, string error, INSLogBag logBag)
         {
             try
             {
@@ -127,6 +129,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                     return;
                 }
                 statusInfo ??= new MessageStatusInfo();
+                statusInfo.AddContextId(logBag?.Logger?.GetContextId());
                 statusInfo.Error = error;
                 statusInfo.IsCompleted = true;
                 statusInfo.IsSuccess = false;

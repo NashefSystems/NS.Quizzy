@@ -1,17 +1,10 @@
-﻿using Azure;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
-using NS.Shared.Logging.Extensions;
-using Serilog;
-using System;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Cryptography;
 using System.Text.Json;
-using static QRCoder.PayloadGenerator;
 
 namespace NS.Quizzy.Server.BL.Services
 {
@@ -92,6 +85,11 @@ namespace NS.Quizzy.Server.BL.Services
             if (!response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
+                if (responseBody.Contains("CONFLICT_EVENT"))
+                {
+                    // if event ID not found
+                    return await CreateOrUpdateEventAsync(calendarEvent);
+                }
                 throw new Exception($"{response.StatusCode} - {responseBody}");
             }
 
