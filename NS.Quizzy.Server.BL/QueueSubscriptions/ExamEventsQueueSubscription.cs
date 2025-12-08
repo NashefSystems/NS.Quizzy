@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NS.Quizzy.Server.BL.Extensions;
 using NS.Quizzy.Server.BL.Interfaces;
 using NS.Quizzy.Server.BL.Models;
+using NS.Quizzy.Server.DAL.Entities;
 using NS.Shared.CacheProvider.Interfaces;
 using NS.Shared.Logging;
 using NS.Shared.QueueManager.Models;
@@ -45,6 +46,7 @@ namespace NS.Quizzy.Server.BL.QueueSubscriptions
                 {
                     throw new NullReferenceException(nameof(examId));
                 }
+                logBag.AddOrUpdateParameter(nameof(examId), examId);
                 await _examEvents.ResyncEventAsync(examId.Value, logBag);
                 #endregion
 
