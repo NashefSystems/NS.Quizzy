@@ -23,7 +23,8 @@
 		<PackageReference Include="NS.Security" Version="1.0.1" />
 		<PackageReference Include="NS.Shared.EFDBAudit" Version="1.0.6" />
 		<PackageReference Include="QRCoder" Version="1.7.0" />
-		<PackageReference Include="NS.Shared.Logging" Version="1.0.37" />
+		<PackageReference Include="NS.Shared.Logging" Version="1.0.38" />
+		<PackageReference Include="RestSharp" Version="113.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
