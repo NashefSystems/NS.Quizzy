@@ -7,7 +7,6 @@ import { LocalStorageKeys } from '../enums/local-storage-keys.enum';
   providedIn: 'root'
 })
 export class StorageService {
-  private readonly secretKey = "Lt8buvZRiEJN6wxd7atUtFGtH9BzUw4v";
   constructor() { }
 
   removeLocalStorage(key: LocalStorageKeys) {
